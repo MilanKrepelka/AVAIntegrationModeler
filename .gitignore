@@ -1,0 +1,26 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/AVAIntegrationModeler/.vs
+/AVAIntegrationModeler/tests/AVAIntegrationModeler.FunctionalTests/bin/Debug/net9.0
+/AVAIntegrationModeler/tests/AVAIntegrationModeler.FunctionalTests/obj
+/AVAIntegrationModeler/tests/AVAIntegrationModeler.IntegrationTests/bin/Debug/net9.0
+/AVAIntegrationModeler/tests/AVAIntegrationModeler.IntegrationTests/obj/Debug/net9.0
+/AVAIntegrationModeler/tests/AVAIntegrationModeler.IntegrationTests/obj
+/AVAIntegrationModeler/tests/AVAIntegrationModeler.UnitTests/bin/Debug/net9.0
+/AVAIntegrationModeler/tests/AVAIntegrationModeler.UnitTests/obj
+/AVAIntegrationModeler/docs/architecture-decisions
+/AVAIntegrationModeler/src/AVAIntegrationModeler.AspireHost/bin/Debug/net9.0
+/AVAIntegrationModeler/src/AVAIntegrationModeler.AspireHost/obj
+/AVAIntegrationModeler/src/AVAIntegrationModeler.AspireHost/appsettings.Development.json
+/AVAIntegrationModeler/src/AVAIntegrationModeler.Core/bin/Debug/net9.0
+/AVAIntegrationModeler/src/AVAIntegrationModeler.Core/obj
+/AVAIntegrationModeler/src/AVAIntegrationModeler.Infrastructure/bin/Debug/net9.0
+/AVAIntegrationModeler/src/AVAIntegrationModeler.Infrastructure/obj
+/AVAIntegrationModeler/src/AVAIntegrationModeler.ServiceDefaults/bin/Debug/net9.0
+/AVAIntegrationModeler/src/AVAIntegrationModeler.ServiceDefaults/obj
+/AVAIntegrationModeler/src/AVAIntegrationModeler.UseCases/bin/Debug/net9.0
+/AVAIntegrationModeler/src/AVAIntegrationModeler.UseCases/obj/Debug/net9.0
+/AVAIntegrationModeler/src/AVAIntegrationModeler.Web/bin/Debug/net9.0
+/AVAIntegrationModeler/src/AVAIntegrationModeler.Web/obj
