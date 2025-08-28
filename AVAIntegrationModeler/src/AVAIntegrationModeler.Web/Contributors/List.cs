@@ -1,7 +1,7 @@
 ﻿using AVAIntegrationModeler.UseCases.Contributors;
 using AVAIntegrationModeler.UseCases.Contributors.List;
 
-namespace AVAIntegrationModeler.Web.Contributors;
+namespace AVAIntegrationModeler.API.Contributors;
 
 /// <summary>
 /// List all Contributors

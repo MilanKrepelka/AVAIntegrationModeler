@@ -1,7 +1,7 @@
 ﻿using Ardalis.ListStartupServices;
 using AVAIntegrationModeler.Infrastructure.Data;
 
-namespace AVAIntegrationModeler.Web.Configurations;
+namespace AVAIntegrationModeler.API.Configurations;
 
 public static class MiddlewareConfig
 {

@@ -4,7 +4,7 @@ using AVAIntegrationModeler.UseCases.Contributors.Create;
 using MediatR;
 using System.Reflection;
 
-namespace AVAIntegrationModeler.Web.Configurations;
+namespace AVAIntegrationModeler.API.Configurations;
 
 public static class MediatrConfigs
 {

@@ -1,4 +1,4 @@
-﻿namespace AVAIntegrationModeler.Web.Contributors;
+﻿namespace AVAIntegrationModeler.API.Contributors;
 
 public class GetContributorByIdRequest
 {

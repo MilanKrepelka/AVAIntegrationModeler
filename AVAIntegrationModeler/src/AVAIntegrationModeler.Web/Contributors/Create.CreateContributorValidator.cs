@@ -2,7 +2,7 @@
 using FastEndpoints;
 using FluentValidation;
 
-namespace AVAIntegrationModeler.Web.Contributors;
+namespace AVAIntegrationModeler.API.Contributors;
 
 /// <summary>
 /// See: https://fast-endpoints.com/docs/validation

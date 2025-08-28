@@ -1,7 +1,7 @@
 ﻿using Ardalis.ListStartupServices;
 using AVAIntegrationModeler.Infrastructure.Email;
 
-namespace AVAIntegrationModeler.Web.Configurations;
+namespace AVAIntegrationModeler.API.Configurations;
 
 public static class OptionConfigs
 {

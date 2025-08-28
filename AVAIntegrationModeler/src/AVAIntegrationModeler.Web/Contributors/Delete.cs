@@ -1,6 +1,6 @@
 ﻿using AVAIntegrationModeler.UseCases.Contributors.Delete;
 
-namespace AVAIntegrationModeler.Web.Contributors;
+namespace AVAIntegrationModeler.API.Contributors;
 
 /// <summary>
 /// Delete a Contributor.

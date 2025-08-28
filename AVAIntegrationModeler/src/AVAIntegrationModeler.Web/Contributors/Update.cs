@@ -1,7 +1,7 @@
 ﻿using AVAIntegrationModeler.UseCases.Contributors.Get;
 using AVAIntegrationModeler.UseCases.Contributors.Update;
 
-namespace AVAIntegrationModeler.Web.Contributors;
+namespace AVAIntegrationModeler.API.Contributors;
 
 /// <summary>
 /// Update an existing Contributor.

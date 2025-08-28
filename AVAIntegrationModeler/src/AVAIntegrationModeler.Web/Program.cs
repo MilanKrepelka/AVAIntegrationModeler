@@ -1,5 +1,5 @@
 ﻿using AVAIntegrationModeler.UseCases.Contributors.Create;
-using AVAIntegrationModeler.Web.Configurations;
+using AVAIntegrationModeler.API.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 

@@ -1,6 +1,6 @@
 ﻿using AVAIntegrationModeler.UseCases.Contributors.Get;
 
-namespace AVAIntegrationModeler.Web.Contributors;
+namespace AVAIntegrationModeler.API.Contributors;
 
 /// <summary>
 /// Get a Contributor by integer ID.

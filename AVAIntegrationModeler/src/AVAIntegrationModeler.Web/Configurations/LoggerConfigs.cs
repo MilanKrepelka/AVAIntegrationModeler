@@ -1,6 +1,6 @@
 ﻿using Serilog;
 
-namespace AVAIntegrationModeler.Web.Configurations;
+namespace AVAIntegrationModeler.API.Configurations;
 
 public static class LoggerConfigs
 {

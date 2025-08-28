@@ -1,6 +1,6 @@
 ﻿using AVAIntegrationModeler.UseCases.Contributors.Create;
 
-namespace AVAIntegrationModeler.Web.Contributors;
+namespace AVAIntegrationModeler.API.Contributors;
 
 /// <summary>
 /// Create a new Contributor

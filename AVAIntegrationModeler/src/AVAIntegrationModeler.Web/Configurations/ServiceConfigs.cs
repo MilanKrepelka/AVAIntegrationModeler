@@ -2,7 +2,7 @@
 using AVAIntegrationModeler.Infrastructure;
 using AVAIntegrationModeler.Infrastructure.Email;
 
-namespace AVAIntegrationModeler.Web.Configurations;
+namespace AVAIntegrationModeler.API.Configurations;
 
 public static class ServiceConfigs
 {
