@@ -11,4 +11,10 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ScenarioAggregate\Events\" />
+    <Folder Include="ScenarioAggregate\Handlers\" />
+    <Folder Include="ScenarioAggregate\Specifications\" />
+  </ItemGroup>
+
 </Project>
