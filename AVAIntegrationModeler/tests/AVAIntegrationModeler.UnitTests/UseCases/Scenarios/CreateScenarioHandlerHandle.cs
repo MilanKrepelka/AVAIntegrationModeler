@@ -10,6 +10,7 @@ namespace AVAIntegrationModeler.UnitTests.UseCases.Scenarios;
 public class CreateScenarioHandlerHandle
 {
   private readonly string _testCode = "test-code";
+  private readonly Guid _testId = Guid.NewGuid();
   private readonly LocalizedValue _testName = new LocalizedValue { CzechValue = "Testovací scénář" };
   private readonly LocalizedValue _testDescription = new LocalizedValue { EnglishValue = "Popis scénáře" };
   private readonly IRepository<Scenario> _repository = Substitute.For<IRepository<Scenario>>();
@@ -22,7 +23,8 @@ public class CreateScenarioHandlerHandle
 
   private Scenario CreateScenario()
   {
-    return new Scenario(_testCode)
+    return new Scenario(_testId)
+      .SetCode(_testCode)
       .SetName(_testName)
       .SetDescription(_testDescription)
       .SetInputFeature(null)
@@ -34,9 +36,10 @@ public class CreateScenarioHandlerHandle
   {
     _repository.AddAsync(Arg.Any<Scenario>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult(CreateScenario()));
-    var command = new CreateScenarioCommand(_testCode, _testName, _testDescription, null, null);
+    var command = new CreateScenarioCommand(_testId, _testCode, _testName, _testDescription, null, null);
     var result = await _handler.Handle(command, CancellationToken.None);
 
     result.IsSuccess.ShouldBeTrue();
+    result.Value.ShouldBe(_testId);
   }
 }

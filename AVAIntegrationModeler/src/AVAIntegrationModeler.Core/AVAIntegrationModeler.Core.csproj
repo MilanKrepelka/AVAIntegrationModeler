@@ -14,7 +14,6 @@
   <ItemGroup>
     <Folder Include="ScenarioAggregate\Events\" />
     <Folder Include="ScenarioAggregate\Handlers\" />
-    <Folder Include="ScenarioAggregate\Specifications\" />
   </ItemGroup>
 
 </Project>

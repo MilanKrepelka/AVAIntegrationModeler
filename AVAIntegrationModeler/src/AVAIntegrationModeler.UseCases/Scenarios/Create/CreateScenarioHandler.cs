@@ -5,11 +5,12 @@ using Ardalis.SharedKernel;
 namespace AVAIntegrationModeler.UseCases.Scenarios.Create;
 
 public class CreateScenarioHandler(IRepository<Scenario> _scenarioRepository)
-    : ICommandHandler<CreateScenarioCommand, Result<int>>
+    : ICommandHandler<CreateScenarioCommand, Result<Guid>>
 {
-    public async Task<Result<int>> Handle(CreateScenarioCommand request, CancellationToken cancellationToken)
+    public async Task<Result<Guid>> Handle(CreateScenarioCommand request, CancellationToken cancellationToken)
     {
-        var scenario = new Scenario(request.Code)
+        var scenario = new Scenario(request.Id)
+            .SetCode(request.Code)
             .SetName(request.Name)
             .SetDescription(request.Decsription)
             .SetInputFeature(new Feature( request.InputFeatureId))

@@ -11,15 +11,15 @@ namespace AVAIntegrationModeler.Core.ScenarioAggregate;
 /// <summary>
 /// Doménový objekt pro integrační scénář.
 /// </summary>
-public class Scenario : EntityBase, IAggregateRoot
+public class Scenario : EntityBase<Guid>, IAggregateRoot
 {
   /// <summary>
   /// Konstruktor pro vytvoření nového scénáře.
   /// </summary>
-  /// <param name="code">Jedinečný kód scénáře.</param>
-  public Scenario(string code)
+  /// <param name="id">Identifikátor scénáře.</param>
+  public Scenario(Guid id)
   {
-    UpdateCode(code); // TODO: Nahradit value objectem a použít primární konstruktor pro naplnění pole.
+    SetId(id); 
   }
   
   /// <summary>
@@ -48,12 +48,22 @@ public class Scenario : EntityBase, IAggregateRoot
   public Feature? OutputFeature { get; private set; }
 
   /// <summary>
-  /// Aktualizuje kód scénáře.
+  /// Nastaví kód scénáře.
   /// </summary>
   /// <param name="newCode">Nový kód scénáře.</param>
-  public Scenario UpdateCode(string newCode)
+  public Scenario SetCode(string newCode)
   {
     Code = Guard.Against.NullOrEmpty(newCode, nameof(newCode));
+    return this;
+  }
+
+  /// <summary>
+  /// Aktualizuje identifikátor scénáře.
+  /// </summary>
+  /// <param name="newCode">Nový identifikátor.</param>
+  public Scenario SetId(Guid newId)
+  {
+    Id = newId;
     return this;
   }
 

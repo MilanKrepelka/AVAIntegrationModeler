@@ -1,4 +1,5 @@
 ﻿using AVAIntegrationModeler.Core.ContributorAggregate;
+using AVAIntegrationModeler.Core.ScenarioAggregate;
 using AVAIntegrationModeler.Infrastructure.Data;
 
 namespace AVAIntegrationModeler.IntegrationTests.Data;
@@ -35,5 +36,10 @@ public abstract class BaseEfRepoTestFixture
   protected EfRepository<Contributor> GetRepository()
   {
     return new EfRepository<Contributor>(_dbContext);
+  }
+
+  protected EfRepository<Scenario> GetScenarioRepository()
+  {
+    return new EfRepository<Scenario>(_dbContext);
   }
 }

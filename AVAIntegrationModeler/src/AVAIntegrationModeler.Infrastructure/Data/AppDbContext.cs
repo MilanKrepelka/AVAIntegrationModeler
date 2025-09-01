@@ -1,4 +1,5 @@
 ﻿using AVAIntegrationModeler.Core.ContributorAggregate;
+using AVAIntegrationModeler.Core.ScenarioAggregate;
 
 namespace AVAIntegrationModeler.Infrastructure.Data;
 public class AppDbContext(DbContextOptions<AppDbContext> options,
@@ -7,10 +8,12 @@ public class AppDbContext(DbContextOptions<AppDbContext> options,
   private readonly IDomainEventDispatcher? _dispatcher = dispatcher;
 
   public DbSet<Contributor> Contributors => Set<Contributor>();
+  public DbSet<Scenario> Scenarios => Set<Scenario>();
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     base.OnModelCreating(modelBuilder);
+    // Toto zaregistruje všechny konfigurace entit ve shodě s IEntityTypeConfiguration v aktuálním sestavení
     modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
   }
 
