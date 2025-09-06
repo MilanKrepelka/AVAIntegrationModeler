@@ -4,6 +4,7 @@ using AVAIntegrationModeler.Core.ScenarioAggregate;
 using AVAIntegrationModeler.Core.ScenarioAggregate.Specifications;
 using AVAIntegrationModeler.UseCases.Contributors;
 using AVAIntegrationModeler.UseCases.Contributors.Get;
+using AVAIntegrationModeler.UseCases.Scenarios.Mapping;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Get;
 /// <summary>
@@ -18,10 +19,7 @@ public class GetScenarioHandler(IReadRepository<Scenario> _repository)
     var entity = await _repository.FirstOrDefaultAsync(spec, cancellationToken);
     if (entity == null) return Result.NotFound();
 
-    return new ScenarioDTO()
-    {
-      
-    };
+    return ScenarioMapper.MapToDTO(entity);
   }
 }
 

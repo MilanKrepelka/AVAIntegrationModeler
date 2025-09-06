@@ -2,7 +2,6 @@
 
 public class ScenarioConstructor
 {
-  private readonly string _testCode = "TestCode";
   private readonly Guid _testId = Guid.NewGuid();
   private Scenario? _testedScenario;
 
@@ -16,6 +15,5 @@ public class ScenarioConstructor
   {
     _testedScenario = CreateScenario();
     _testedScenario.Id.ShouldBe(_testId);
-    _testedScenario.Code.ShouldBe(_testCode);
   }
 }

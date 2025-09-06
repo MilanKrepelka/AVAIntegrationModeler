@@ -3,6 +3,7 @@ using AVAIntegrationModeler.Core.Services;
 using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.Infrastructure.Data.Queries;
 using AVAIntegrationModeler.UseCases.Contributors.List;
+using AVAIntegrationModeler.UseCases.Scenarios.List;
 
 
 namespace AVAIntegrationModeler.Infrastructure;
@@ -21,6 +22,7 @@ public static class InfrastructureServiceExtensions
     services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
            .AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>))
            .AddScoped<IListContributorsQueryService, ListContributorsQueryService>()
+           .AddScoped<IListScenariosQueryService, ListScenariosQueryService>()
            .AddScoped<IDeleteContributorService, DeleteContributorService>();
 
 

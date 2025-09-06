@@ -5,9 +5,9 @@ using Ardalis.SharedKernel;
 using NSubstitute;
 using Xunit;
 
-namespace AVAIntegrationModeler.UnitTests.UseCases.Scenarios;
+namespace AVAIntegrationModeler.UnitTests.UseCases.Scenarios.Create;
 
-public class CreateScenarioHandlerHandle
+public class CreateScenarioHandlerHandleTest
 {
   private readonly string _testCode = "test-code";
   private readonly Guid _testId = Guid.NewGuid();
@@ -16,7 +16,7 @@ public class CreateScenarioHandlerHandle
   private readonly IRepository<Scenario> _repository = Substitute.For<IRepository<Scenario>>();
   private CreateScenarioHandler _handler;
 
-  public CreateScenarioHandlerHandle()
+  public CreateScenarioHandlerHandleTest()
   {
     _handler = new CreateScenarioHandler(_repository);
   }
@@ -32,14 +32,14 @@ public class CreateScenarioHandlerHandle
   }
 
   [Fact]
-  public async Task ReturnsSuccessGivenValidScenario()
-  {
-    _repository.AddAsync(Arg.Any<Scenario>(), Arg.Any<CancellationToken>())
-      .Returns(Task.FromResult(CreateScenario()));
-    var command = new CreateScenarioCommand(_testId, _testCode, _testName, _testDescription, null, null);
-    var result = await _handler.Handle(command, CancellationToken.None);
+    public async Task ReturnsSuccessGivenValidScenario()
+    {
+        _repository.AddAsync(Arg.Any<Scenario>(), Arg.Any<CancellationToken>())
+          .Returns(Task.FromResult(CreateScenario()));
+        var command = new CreateScenarioCommand(_testId, _testCode, _testName, _testDescription, null, null);
+        var result = await _handler.Handle(command, CancellationToken.None);
 
-    result.IsSuccess.ShouldBeTrue();
-    result.Value.ShouldBe(_testId);
-  }
+        result.IsSuccess.ShouldBeTrue();
+        result.Value.ShouldBe(_testId);
+    }
 }

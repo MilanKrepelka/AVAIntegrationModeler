@@ -1,5 +1,6 @@
-﻿using AVAIntegrationModeler.Core.ScenarioAggregate;
-using AVAIntegrationModeler.Core.ContributorAggregate;
+﻿using AVAIntegrationModeler.Core.ContributorAggregate;
+using AVAIntegrationModeler.Core.ScenarioAggregate;
+using Shouldly;
 
 namespace AVAIntegrationModeler.IntegrationTests.Data;
 
@@ -25,22 +26,42 @@ public class EfRepositoryAdd : BaseEfRepoTestFixture
   }
 
   [Fact]
-  public async Task AddsScenarioAndSetsId()
+  public async Task AddsScenarioAndSetsValues()
   {
     Guid testScenarioId = Guid.NewGuid();
-    var testScenarioName = "testScenario";
+    var testScenarioName = new Core.ValueObjects.LocalizedValue()
+    {
+      CzechValue = "testovací scénáč",
+      EnglishValue = "test scenario"
+    };
     var testScenarioCode = "testScenarioCode";
     var repository = GetScenarioRepository();
     var Scenario = new Scenario(testScenarioId);
 
+
+    Scenario.SetName(new Core.ValueObjects.LocalizedValue() { 
+      CzechValue = "testovací scénáč",
+      EnglishValue = "test scenario"
+    })
+            .SetCode(testScenarioCode)
+            .SetDescription(new AVAIntegrationModeler.Core.ValueObjects.LocalizedValue { CzechValue = "Popis scénáře" })
+            .SetInputFeature(null)
+            .SetOutputFeature(null);
     await repository.AddAsync(Scenario);
 
     var newScenario = (await repository.ListAsync())
                     .FirstOrDefault();
 
     newScenario.ShouldNotBeNull();
-    testScenarioName.ShouldBe(newScenario.Name.CzechValue);
+    newScenario.ShouldNotBeNull();
+    newScenario.Name.ShouldNotBeNull();
+    newScenario.Name.CzechValue.ShouldBe(testScenarioName.CzechValue);
+    newScenario.Name.EnglishValue.ShouldBe(testScenarioName.EnglishValue);
     newScenario.Code.ShouldBe(testScenarioCode);
-    newScenario.Id.ShouldBeGreaterThan(testScenarioId);
+    newScenario.Id.ShouldBe(testScenarioId);
+    newScenario.Description.ShouldNotBeNull();
+    newScenario.Description.CzechValue.ShouldBe("Popis scénáře");
+    newScenario.InputFeature.ShouldBeNull();
+    newScenario.OutputFeature.ShouldBeNull();
   }
 }
