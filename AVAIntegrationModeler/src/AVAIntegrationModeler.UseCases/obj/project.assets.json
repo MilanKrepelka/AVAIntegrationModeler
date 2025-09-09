@@ -688,7 +688,10 @@
           "Swashbuckle.AspNetCore": "6.5.0",
           "Swashbuckle.AspNetCore.Annotations": "6.5.0",
           "xunit": "2.9.3",
-          "xunit.runner.visualstudio": "3.0.2"
+          "xunit.analyzers": "1.24.0",
+          "Xunit.Microsoft.DependencyInjection": "8.1.0",
+          "xunit.runner.visualstudio": "3.1.4",
+          "xunit.v3": "3.0.1"
         },
         "imports": [
           "net461",

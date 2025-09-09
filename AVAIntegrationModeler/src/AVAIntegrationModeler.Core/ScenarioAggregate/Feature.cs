@@ -8,15 +8,11 @@ namespace AVAIntegrationModeler.Core.ScenarioAggregate;
 /// <summary>
 /// Integrační feature v agregátu scénáře.
 /// </summary>
-public class Feature
+public class Feature(Guid? id)
 {
-  public Feature(Guid? id)
-  {
-    this.Id = id;
-  }
   /// <summary>
   /// Identifikátor integrační feature.
   /// </summary>
-  public Guid? Id { get; internal set; }
-  
+  public Guid? Id { get; internal set; } = id;
+
 }
