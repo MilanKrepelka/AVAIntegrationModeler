@@ -4,7 +4,7 @@ using AVAIntegrationModeler.API.Scenarios;
 namespace AVAIntegrationModeler.FunctionalTests.ApiEndpoints.Scenarios;
 
 [Collection("Sequential")]
-public class ScenarioListTest(CustomWebApplicationFactory<Program> factory) : IClassFixture<CustomWebApplicationFactory<Program>>
+public class ScenarioDeleteTest(CustomWebApplicationFactory<Program> factory) : IClassFixture<CustomWebApplicationFactory<Program>>
 {
   private readonly HttpClient _client = factory.CreateClient();
 
@@ -14,8 +14,12 @@ public class ScenarioListTest(CustomWebApplicationFactory<Program> factory) : IC
     var result = await _client.GetAndDeserializeAsync<ScenarioListResponse>("/Scenarios");
 
     result.Scenarios.Count.ShouldBe(3);
-    result.Scenarios.ElementAt(2).Name.ShouldBe(SeedData.Scenario1.Name);
-    result.Scenarios.ElementAt(1).Name.ShouldBe(SeedData.Scenario2.Name);
-    result.Scenarios.ElementAt(0).Name.ShouldBe(SeedData.Scenario3.Name);
+
+     _=  await _client.DeleteAsync(GetScenarioByIdRequest.BuildRoute(SeedData.Scenario3.Id));
+
+    var resultAfterDelete = await _client.GetAndDeserializeAsync<ScenarioListResponse>("/Scenarios");
+
+    resultAfterDelete.Scenarios.Count.ShouldBe(2);
+
   }
 }

@@ -13,7 +13,7 @@ using Xunit.Microsoft.DependencyInjection.Abstracts;
 
 
 
-namespace AVAIntegrationModeler.IntegrationTests.Data.SqlLite.Scenario;
+namespace AVAIntegrationModeler.IntegrationTests.Data.SqlLite.Scenarios;
 
 /// <summary>
 /// Představuje testovací třídu pro ověření přidání scénářů v kontextu EF SQL klienta.
@@ -21,11 +21,8 @@ namespace AVAIntegrationModeler.IntegrationTests.Data.SqlLite.Scenario;
 /// <remarks>Tato třída je navržena pro použití s testovacím frameworkem xUnit a závisí na 
 /// Fixtures.EfSqlClientTestFixture, který poskytuje potřebné nastavení testu a závislosti.</remarks>
 [Collection("Sequential")]
-public class ScenarioGetByIdTest : TestBed<EfSqlClientTestFixture>
+public class ScenarioGetByIdTest(ITestOutputHelper testOutputHelper, EfSqlClientTestFixture fixture) : TestBed<EfSqlClientTestFixture>(testOutputHelper, fixture)
 {
-  public ScenarioGetByIdTest(ITestOutputHelper testOutputHelper, EfSqlClientTestFixture fixture) : base(testOutputHelper, fixture)
-  {
-  }
   /// <summary>
   /// Testuje přidání jednoho scénáře do databáze a ověřuje, že operace proběhne bez chyby.
   /// </summary>

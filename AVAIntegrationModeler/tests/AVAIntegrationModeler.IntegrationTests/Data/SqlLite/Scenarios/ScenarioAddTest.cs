@@ -14,7 +14,7 @@ using Xunit.Microsoft.DependencyInjection.Abstracts;
 
 
 
-namespace AVAIntegrationModeler.IntegrationTests.Data.SqlLite.Scenario;
+namespace AVAIntegrationModeler.IntegrationTests.Data.SqlLite.Scenarios;
 
 /// <summary>
 /// Představuje testovací třídu pro ověření přidání scénářů v kontextu EF SQL klienta.
@@ -23,26 +23,23 @@ namespace AVAIntegrationModeler.IntegrationTests.Data.SqlLite.Scenario;
 /// Tato třída je navržena pro použití s testovacím frameworkem xUnit a závisí na 
 /// Fixtures.EfSqlClientTestFixture, který poskytuje potřebné nastavení testu a závislosti.
 /// </remarks>
-public class ScenarioAddTest : TestBed<EfSqlClientTestFixture>
+/// <remarks>
+/// Inicializuje novou instanci třídy <see cref="ScenarioAddTest"/>.
+/// </remarks>
+/// <param name="testOutputHelper">Pomocník pro výstup testů.</param>
+/// <param name="fixture">Testovací fixture poskytující závislosti.</param>
+public class ScenarioAddTest(ITestOutputHelper testOutputHelper, EfSqlClientTestFixture fixture) : TestBed<EfSqlClientTestFixture>(testOutputHelper, fixture)
 {
-    /// <summary>
-    /// Inicializuje novou instanci třídy <see cref="ScenarioAddTest"/>.
-    /// </summary>
-    /// <param name="testOutputHelper">Pomocník pro výstup testů.</param>
-    /// <param name="fixture">Testovací fixture poskytující závislosti.</param>
-    public ScenarioAddTest(ITestOutputHelper testOutputHelper, EfSqlClientTestFixture fixture) : base(testOutputHelper, fixture)
-    {
-    }
 
-    /// <summary>
-    /// Ověřuje, že přidání jednoho scénáře nevyvolá chybu.
-    /// </summary>
-    [Fact]
+  /// <summary>
+  /// Ověřuje, že přidání jednoho scénáře nevyvolá chybu.
+  /// </summary>
+  [Fact]
     public async Task Add_Single_Scenatio_Not_Fails_Test()
     {
-        var repository = this._fixture.GetServiceProvider(this._testOutputHelper).GetRequiredService<IRepository<AVAIntegrationModeler.Core.ScenarioAggregate.Scenario>>();
+        var repository = _fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IRepository<Core.ScenarioAggregate.Scenario>>();
 
-        var context = this._fixture.GetServiceProvider(this._testOutputHelper).GetRequiredService<AppDbContext>();
+        var context = _fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<AppDbContext>();
         context.Database.EnsureCreated();
 
         await repository.AddAsync(SeedData.Scenario1);

@@ -1,7 +1,7 @@
 ﻿using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.API.Scenarios;
 
-namespace AVAIntegrationModeler.FunctionalTests.Scenarios.ApiEndpoints;
+namespace AVAIntegrationModeler.FunctionalTests.ApiEndpoints.Scenarios;
 
 [Collection("Sequential")]
 public class ScenarioByIdTest(CustomWebApplicationFactory<Program> factory) : IClassFixture<CustomWebApplicationFactory<Program>>

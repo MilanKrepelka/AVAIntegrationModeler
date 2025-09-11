@@ -11,10 +11,10 @@ public class CreateScenarioHandlerHandleTest
 {
   private readonly string _testCode = "test-code";
   private readonly Guid _testId = Guid.NewGuid();
-  private readonly LocalizedValue _testName = new LocalizedValue { CzechValue = "Testovací scénář" };
-  private readonly LocalizedValue _testDescription = new LocalizedValue { EnglishValue = "Popis scénáře" };
+  private readonly LocalizedValue _testName = new() { CzechValue = "Testovací scénář" };
+  private readonly LocalizedValue _testDescription = new() { EnglishValue = "Popis scénáře" };
   private readonly IRepository<Scenario> _repository = Substitute.For<IRepository<Scenario>>();
-  private CreateScenarioHandler _handler;
+  private readonly CreateScenarioHandler _handler;
 
   public CreateScenarioHandlerHandleTest()
   {
