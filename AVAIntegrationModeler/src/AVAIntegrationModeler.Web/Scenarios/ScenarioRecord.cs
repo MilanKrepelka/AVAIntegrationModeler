@@ -4,9 +4,9 @@ using AVAIntegrationModeler.UseCases.Scenarios;
 namespace AVAIntegrationModeler.API.Scenarios;
 
 /// <summary>
-/// Represents a record of a scenario, inheriting from <see cref="ScenarioDTO"/>.
+/// Represents a record of a Scenario, inheriting from <see cref="ScenarioDTO"/>.
 /// </summary>
-/// <remarks>This record is used to encapsulate data related to a specific scenario.  It extends the functionality
+/// <remarks>This record is used to encapsulate data related to a specific Scenario.  It extends the functionality
 /// of <see cref="ScenarioDTO"/> and is immutable by design.</remarks>
 public record ScenarioRecord : ScenarioDTO
 {

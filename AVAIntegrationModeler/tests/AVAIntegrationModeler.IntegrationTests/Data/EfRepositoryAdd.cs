@@ -32,7 +32,7 @@ public class EfRepositoryAdd : BaseEfRepoTestFixture
     var testScenarioName = new Core.ValueObjects.LocalizedValue()
     {
       CzechValue = "testovací scénáč",
-      EnglishValue = "test scenario"
+      EnglishValue = "test Scenario"
     };
     var testScenarioCode = "testScenarioCode";
     var repository = GetScenarioRepository();
@@ -41,7 +41,7 @@ public class EfRepositoryAdd : BaseEfRepoTestFixture
 
     Scenario.SetName(new Core.ValueObjects.LocalizedValue() { 
       CzechValue = "testovací scénáč",
-      EnglishValue = "test scenario"
+      EnglishValue = "test Scenario"
     })
             .SetCode(testScenarioCode)
             .SetDescription(new AVAIntegrationModeler.Core.ValueObjects.LocalizedValue { CzechValue = "Popis scénáře" })

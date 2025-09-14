@@ -11,7 +11,7 @@ public static class SqlLiteConfigs
   public static IServiceCollection AddSqlLiteDatabaseForTesting(this IServiceCollection serviceCollection)
   {
     serviceCollection.AddDbContext<AppDbContext>(options =>
-      options.UseSqlite($"Data Source={Guid.NewGuid().ToString()}.sqlite"));
+      options.UseSqlite($"Data Source={Guid.NewGuid()}.sqlite"));
     return serviceCollection;
   }
   

@@ -33,9 +33,8 @@ public class EfSqlClientTestFixture : TestBedFixture
   
   protected override IEnumerable<TestAppSettings> GetTestAppSettings()
   {
-     return new List<TestAppSettings>
-     {
-     };
+    return [];
+     
   }
 
   protected override ValueTask DisposeAsyncCore()

@@ -17,7 +17,7 @@ public class ScenarioMappingTest
         var inputScenario = new Scenario(id: Guid.NewGuid())
             .SetCode("SCEN-001")
             .SetName(new AVAIntegrationModeler.Core.ValueObjects.LocalizedValue { EnglishValue = "Test Scenario" })
-            .SetDescription(new AVAIntegrationModeler.Core.ValueObjects.LocalizedValue { EnglishValue = "This is a test scenario." })
+            .SetDescription(new AVAIntegrationModeler.Core.ValueObjects.LocalizedValue { EnglishValue = "This is a test Scenario." })
             .SetInputFeature(null)
             .SetOutputFeature(null);
 
