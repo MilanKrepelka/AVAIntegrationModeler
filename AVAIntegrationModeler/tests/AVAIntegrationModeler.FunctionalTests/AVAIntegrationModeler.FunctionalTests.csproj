@@ -21,7 +21,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\AVAIntegrationModeler.Infrastructure\AVAIntegrationModeler.Infrastructure.csproj" />
     <ProjectReference Include="..\..\src\AVAIntegrationModeler.UseCases\AVAIntegrationModeler.UseCases.csproj" />
-    <ProjectReference Include="..\..\src\AVAIntegrationModeler.Web\AVAIntegrationModeler.API.csproj" />
+    <ProjectReference Include="..\..\src\AVAIntegrationModeler.API\AVAIntegrationModeler.API.csproj" />
   </ItemGroup>
 
 </Project>

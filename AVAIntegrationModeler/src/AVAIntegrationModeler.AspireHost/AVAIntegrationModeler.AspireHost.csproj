@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AVAIntegrationModeler.Web\AVAIntegrationModeler.API.csproj" />
+    <ProjectReference Include="..\AVAIntegrationModeler.API\AVAIntegrationModeler.API.csproj" />
   </ItemGroup>
   <ItemGroup>
     <!-- The IsAspireProjectResource attribute tells .NET Aspire to treat this 
