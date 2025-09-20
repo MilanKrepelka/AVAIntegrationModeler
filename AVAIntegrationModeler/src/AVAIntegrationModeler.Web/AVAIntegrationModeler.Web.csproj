@@ -10,4 +10,8 @@
     <PackageReference Include="MudBlazor" />
     <PackageReference Include="Pathoschild.Http.FluentClient" />
   </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\AVAIntegrationModeler.API\AVAIntegrationModeler.API.csproj" />
+  </ItemGroup>
 </Project>

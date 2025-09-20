@@ -2,6 +2,7 @@
 using AVAIntegrationModeler.Core.Services;
 using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.Infrastructure.Data.Queries;
+using AVAIntegrationModeler.Infrastructure.Infrastructure.Data;
 using AVAIntegrationModeler.UseCases.Contributors.List;
 using AVAIntegrationModeler.UseCases.Scenarios.List;
 
@@ -36,11 +37,16 @@ public static class InfrastructureServiceExtensions
     ConfigurationManager config,
     ILogger logger)
   {
-
+    services.AddScoped<Infrastructure.Data.EventDispatchInterceptor>();
     string? connectionString = config.GetConnectionString("SqliteConnection");
     Guard.Against.Null(connectionString);
-    services.AddDbContext<AppDbContext>(options =>
-     options.UseSqlite(connectionString));
+
+    services.AddDbContext<AppDbContext>((provider, options) =>
+    {
+      var eventDispatchInterceptor = provider.GetRequiredService<EventDispatchInterceptor>();
+      options.UseSqlite(connectionString);
+      options.AddInterceptors(eventDispatchInterceptor);
+    });
     logger.LogInformation("{Project} services registered", "Infrastructure");
 
     return services;

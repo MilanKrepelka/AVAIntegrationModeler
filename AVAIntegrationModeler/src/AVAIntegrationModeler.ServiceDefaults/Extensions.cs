@@ -16,18 +16,6 @@ namespace Microsoft.Extensions.Hosting;
 public static class Extensions
 {
 
-  //public static TBuilder AddClientToAPI<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
-  //{
-  //  //var apiBaseUrl =  builder.Configuration["Api:BaseUrl"];
-  //  //builder.Services.AddSingleton<IFluentClientFactory>(sp =>
-  //  //    new FluentClientFactory(new FluentClientOptions
-  //  //    {
-  //  //      BaseUrl = apiBaseUrl
-  //  //    })
-  //  //);
-  //  //return services;
-  //  //return builder;
-  //}
   public static TBuilder AddServiceDefaults<TBuilder>(this TBuilder builder) where TBuilder : IHostApplicationBuilder
     {
      

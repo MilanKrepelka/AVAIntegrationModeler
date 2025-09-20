@@ -1,5 +1,8 @@
-﻿using AVAIntegrationModeler.UseCases.Contributors.Create;
+﻿
+
+using AVAIntegrationModeler.UseCases.Contributors.Create;
 using AVAIntegrationModeler.API.Configurations;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -41,4 +44,5 @@ await app.UseAppMiddlewareAndSeedDatabase();
 app.Run();
 
 // Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
+
 public partial class Program { }

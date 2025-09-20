@@ -38,6 +38,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AVAIntegrationModeler.Core\AVAIntegrationModeler.Core.csproj" />
+    <ProjectReference Include="..\..\src\AVAIntegrationModeler.ServiceDefaults\AVAIntegrationModeler.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\src\AVAIntegrationModeler.UseCases\AVAIntegrationModeler.UseCases.csproj" />
   </ItemGroup>
 

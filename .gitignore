@@ -48,3 +48,9 @@
 /AVAIntegrationModeler/src/AVAIntegrationModeler.API/database.sqlite-wal
 /.gitignore
 /.gitignore
+/AVAIntegrationModeler/src/AVAIntegrationModeler.API/app.db-shm
+/AVAIntegrationModeler/src/AVAIntegrationModeler.API/app.db-wal
+/AVAIntegrationModeler/src/AVAIntegrationModeler.API/AVAIntegrationModeler.API.csproj.user
+/.gitignore
+/.gitignore
+/.gitignore

@@ -1,0 +1,86 @@
+﻿@page "/scenarios"
+@using AVAIntegrationModeler.API.Scenarios
+
+
+
+<PageTitle>Integrační scénáře</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Integrační scénáře</MudText>
+<MudText Typo="Typo.body1" Class="mb-8">This component demonstrates fetching data from the server.</MudText>
+
+@if (ScenariosList == null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else
+{
+    <MudTable Items="ScenariosList" Hover="true" SortLabel="Sort By" Elevation="0" AllowUnsorted="false">
+        <HeaderContent>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<ScenarioRecord, object>(x => x.Code)">Kód</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioRecord, object>(x => x.Name.CzechValue)">Název - česky</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioRecord, object>(x => x.Name.EnglishValue)">Název - anglicky</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioRecord, object>(x => x.Description.CzechValue)">Popis - česky</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioRecord, object>(x => x.Description.EnglishValue)">Popis - anglicky</MudTableSortLabel></MudTh>
+
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioRecord, object>(x => x.InputFeatureId ?? Guid.Empty)">Vstupní Feature</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioRecord, object>(x => x.OutputFeatureId ?? Guid.Empty)">Výstupní Feature</MudTableSortLabel></MudTh>
+            <MudTh>...</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            
+            <MudTd DataLabel="Code">@context.Code</MudTd>
+            <MudTd DataLabel="Code">@context.Name.CzechValue</MudTd>
+            <MudTd DataLabel="Code">@context.Name.EnglishValue</MudTd>
+            <MudTd DataLabel="Code">@context.Description.CzechValue</MudTd>
+            <MudTd DataLabel="Code">@context.Description.EnglishValue</MudTd>
+            <MudTd DataLabel="Code">
+                <MudTooltip Text="@(context.InputFeatureId.HasValue? context.InputFeatureId.Value.ToString(): TextConstants.NullValue)" Placement="Placement.Top">
+                    @(context.InputFeatureCode)
+                </MudTooltip>
+            </MudTd>
+            <MudTd DataLabel="Code">
+                <MudTooltip Text="@(context.OutputFeatureId.HasValue? context.OutputFeatureId.Value.ToString(): TextConstants.NullValue)" Placement="Placement.Top">
+                    @(context.OutputFeatureCode)
+                </MudTooltip>
+            </MudTd>
+            <MudTd>
+                <MudTooltip Text="Edit" Color="Color.Tertiary" Arrow>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" Size="Size.Small"></MudIconButton>
+                </MudTooltip>
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+        </PagerContent>
+    </MudTable>
+}
+@code
+{
+}
+@* @code {
+    private WeatherForecast[]? forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate asynchronous loading to demonstrate a loading indicator
+        await Task.Delay(500);
+
+        var startDate = DateOnly.FromDateTime(DateTime.Now);
+        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        {
+            Date = startDate.AddDays(index),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = summaries[Random.Shared.Next(summaries.Length)]
+        }).ToArray();
+    }
+
+    private class WeatherForecast
+    {
+        public DateOnly Date { get; set; }
+        public int TemperatureC { get; set; }
+        public string? Summary { get; set; }
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
+}
+ *@
