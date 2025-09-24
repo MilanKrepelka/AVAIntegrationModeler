@@ -9,7 +9,6 @@ using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.IntegrationTests.Data.SqlLite.Fixtures;
 using AVAIntegrationModeler.UseCases.Contributors.List;
 using Castle.Components.DictionaryAdapter.Xml;
-using Xunit.Abstractions;
 using Xunit.Microsoft.DependencyInjection.Abstracts;
 
 
@@ -40,6 +39,7 @@ public class ScenarioUpdateTest(ITestOutputHelper testOutputHelper, EfSqlClientT
     var repository = _fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IRepository<Core.ScenarioAggregate.Scenario>>();
 
     var context = _fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<AppDbContext>();
+    context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
     await repository.AddAsync(SeedData.Scenario1);
     

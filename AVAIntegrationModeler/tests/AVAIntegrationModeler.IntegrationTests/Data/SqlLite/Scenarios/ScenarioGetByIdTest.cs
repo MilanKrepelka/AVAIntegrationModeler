@@ -8,7 +8,6 @@ using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.IntegrationTests.Data.SqlLite.Fixtures;
 using AVAIntegrationModeler.UseCases.Contributors.List;
 using Castle.Components.DictionaryAdapter.Xml;
-using Xunit.Abstractions;
 using Xunit.Microsoft.DependencyInjection.Abstracts;
 
 
@@ -36,8 +35,8 @@ public class ScenarioGetByIdTest(ITestOutputHelper testOutputHelper, EfSqlClient
     var repository = this._fixture.GetServiceProvider(this._testOutputHelper).GetRequiredService<IRepository<AVAIntegrationModeler.Core.ScenarioAggregate.Scenario>>();
 
     var context = this._fixture.GetServiceProvider(this._testOutputHelper).GetRequiredService<AppDbContext>();
+    context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
-
     await repository.AddAsync(SeedData.Scenario1);
     var result = await repository.GetByIdAsync(SeedData.Scenario1.Id);
     result!.Id.ShouldBe(SeedData.Scenario1.Id);

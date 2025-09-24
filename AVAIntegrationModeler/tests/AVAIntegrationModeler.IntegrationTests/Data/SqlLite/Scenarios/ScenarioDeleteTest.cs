@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.IntegrationTests.Data.SqlLite.Fixtures;
-using Xunit.Abstractions;
 using Xunit.Microsoft.DependencyInjection.Abstracts;
 
 namespace AVAIntegrationModeler.IntegrationTests.Data.SqlLite.Scenarios;
@@ -16,6 +15,7 @@ public class ScenarioDeleteTest(ITestOutputHelper testOutputHelper, EfSqlClientT
   {
     var repository = _fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IRepository<Core.ScenarioAggregate.Scenario>>();
     var context = _fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<AppDbContext>();
+    context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
     await repository.AddAsync(SeedData.Scenario1);
     var result = await repository.GetByIdAsync(SeedData.Scenario1.Id);

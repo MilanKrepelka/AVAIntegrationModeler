@@ -12,12 +12,12 @@ public class EfRepositoryAdd : BaseEfRepoTestFixture
     var testContributorName = "testContributor";
     var testContributorStatus = ContributorStatus.NotSet;
     var repository = GetRepository();
-    var Contributor = new Contributor(testContributorName);
+    var contributor = new Contributor(testContributorName);
 
-    await repository.AddAsync(Contributor);
+    await repository.AddAsync(contributor);
 
-    var newContributor = (await repository.ListAsync())
-                    .FirstOrDefault();
+    var newContributor = (await repository.ListAsync()).Where(item=>item.Id == contributor.Id).FirstOrDefault();
+
 
     newContributor.ShouldNotBeNull();
     testContributorName.ShouldBe(newContributor.Name);
@@ -50,7 +50,7 @@ public class EfRepositoryAdd : BaseEfRepoTestFixture
     await repository.AddAsync(Scenario);
 
     var newScenario = (await repository.ListAsync())
-                    .FirstOrDefault();
+                    .Where(item=> item.Id == Scenario.Id).FirstOrDefault();
 
     newScenario.ShouldNotBeNull();
     newScenario.ShouldNotBeNull();

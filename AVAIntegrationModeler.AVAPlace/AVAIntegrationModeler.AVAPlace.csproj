@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Providers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="ASOL.DataService.Connector" />
+    <PackageReference Include="ASOL.Core.Multitenancy.AspNetCore" />
+    <PackageReference Include="ASOL.IdentityProvider.Connector" />
+    <PackageReference Include="ASOL.IdentityProvider.Contracts" />
+  </ItemGroup>
+
+</Project>
