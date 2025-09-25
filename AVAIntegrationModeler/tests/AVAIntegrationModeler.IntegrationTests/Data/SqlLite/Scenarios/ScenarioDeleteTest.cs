@@ -17,11 +17,11 @@ public class ScenarioDeleteTest(ITestOutputHelper testOutputHelper, EfSqlClientT
     var context = _fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<AppDbContext>();
     context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
-    await repository.AddAsync(SeedData.Scenario1);
-    var result = await repository.GetByIdAsync(SeedData.Scenario1.Id);
+    await repository.AddAsync(SeedData.Scenario1, CancellationToken.None);
+    var result = await repository.GetByIdAsync(SeedData.Scenario1.Id, CancellationToken.None);
     result!.Id.ShouldBe(SeedData.Scenario1.Id);
-    await repository.DeleteAsync(result);
-    var deletedResult = await repository.GetByIdAsync(SeedData.Scenario1.Id);
+    await repository.DeleteAsync(result, CancellationToken.None);
+    var deletedResult = await repository.GetByIdAsync(SeedData.Scenario1.Id, CancellationToken.None);
     deletedResult.ShouldBeNull();
   }
 }

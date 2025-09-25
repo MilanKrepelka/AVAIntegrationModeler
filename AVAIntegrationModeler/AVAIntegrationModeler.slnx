@@ -11,15 +11,17 @@
     <File Path="Directory.Packages.props" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="src/AVAIntegrationModeler.API/AVAIntegrationModeler.API.csproj" />
     <Project Path="src/AVAIntegrationModeler.AspireHost/AVAIntegrationModeler.AspireHost.csproj" />
-    <Project Path="src/AVAIntegrationModeler.ServiceDefaults/AVAIntegrationModeler.ServiceDefaults.csproj" />
+    <Project Path="src/AVAIntegrationModeler.AVAPlace/AVAIntegrationModeler.AVAPlace.csproj" />
     <Project Path="src/AVAIntegrationModeler.Core/AVAIntegrationModeler.Core.csproj" />
     <Project Path="src/AVAIntegrationModeler.Infrastructure/AVAIntegrationModeler.Infrastructure.csproj" />
+    <Project Path="src/AVAIntegrationModeler.ServiceDefaults/AVAIntegrationModeler.ServiceDefaults.csproj" />
     <Project Path="src/AVAIntegrationModeler.UseCases/AVAIntegrationModeler.UseCases.csproj" />
-    <Project Path="src/AVAIntegrationModeler.API/AVAIntegrationModeler.API.csproj" />
     <Project Path="src/AVAIntegrationModeler.Web/AVAIntegrationModeler.Web.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="AVAIntegrationModeler.AVAPlaceTests/AVAIntegrationModeler.AVAPlaceTests.csproj" Id="69b6a761-0c70-4f06-b58b-5a0ef4b0b5e6" />
     <Project Path="tests/AVAIntegrationModeler.FunctionalTests/AVAIntegrationModeler.FunctionalTests.csproj">
       <BuildDependency Project="src/AVAIntegrationModeler.API/AVAIntegrationModeler.API.csproj" />
     </Project>

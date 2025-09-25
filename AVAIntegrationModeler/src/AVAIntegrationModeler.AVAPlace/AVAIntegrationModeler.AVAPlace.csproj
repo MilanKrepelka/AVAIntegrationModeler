@@ -11,8 +11,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ASOL.DataService.Connector" />
     <PackageReference Include="ASOL.Core.Multitenancy.AspNetCore" />
+    <PackageReference Include="ASOL.DataService.Connector" />
     <PackageReference Include="ASOL.IdentityProvider.Connector" />
     <PackageReference Include="ASOL.IdentityProvider.Contracts" />
   </ItemGroup>

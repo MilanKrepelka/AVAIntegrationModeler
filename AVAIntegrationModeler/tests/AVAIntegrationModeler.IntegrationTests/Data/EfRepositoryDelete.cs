@@ -11,12 +11,12 @@ public class EfRepositoryDelete : BaseEfRepoTestFixture
     var repository = GetRepository();
     var initialName = Guid.NewGuid().ToString();
     var Contributor = new Contributor(initialName);
-    await repository.AddAsync(Contributor);
+    await repository.AddAsync(Contributor, CancellationToken.None);
 
     // delete the item
-    await repository.DeleteAsync(Contributor);
+    await repository.DeleteAsync(Contributor, CancellationToken.None);
 
     // verify it's no longer there
-    (await repository.ListAsync()).ShouldNotContain(Contributor => Contributor.Name == initialName);
+    (await repository.ListAsync(CancellationToken.None)).ShouldNotContain(Contributor => Contributor.Name == initialName);
   }
 }

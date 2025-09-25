@@ -37,8 +37,8 @@ public class ScenarioGetByIdTest(ITestOutputHelper testOutputHelper, EfSqlClient
     var context = this._fixture.GetServiceProvider(this._testOutputHelper).GetRequiredService<AppDbContext>();
     context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
-    await repository.AddAsync(SeedData.Scenario1);
-    var result = await repository.GetByIdAsync(SeedData.Scenario1.Id);
+    await repository.AddAsync(SeedData.Scenario1, CancellationToken.None);
+    var result = await repository.GetByIdAsync(SeedData.Scenario1.Id, CancellationToken.None);
     result!.Id.ShouldBe(SeedData.Scenario1.Id);
   }
 }

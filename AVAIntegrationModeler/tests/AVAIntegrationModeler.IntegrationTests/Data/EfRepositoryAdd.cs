@@ -14,9 +14,9 @@ public class EfRepositoryAdd : BaseEfRepoTestFixture
     var repository = GetRepository();
     var contributor = new Contributor(testContributorName);
 
-    await repository.AddAsync(contributor);
+    await repository.AddAsync(contributor, CancellationToken.None);
 
-    var newContributor = (await repository.ListAsync()).Where(item=>item.Id == contributor.Id).FirstOrDefault();
+    var newContributor = (await repository.ListAsync(CancellationToken.None)).Where(item=>item.Id == contributor.Id).FirstOrDefault();
 
 
     newContributor.ShouldNotBeNull();
@@ -47,9 +47,9 @@ public class EfRepositoryAdd : BaseEfRepoTestFixture
             .SetDescription(new AVAIntegrationModeler.Core.ValueObjects.LocalizedValue { CzechValue = "Popis scénáře" })
             .SetInputFeature(null)
             .SetOutputFeature(null);
-    await repository.AddAsync(Scenario);
+    await repository.AddAsync(Scenario, CancellationToken.None);
 
-    var newScenario = (await repository.ListAsync())
+    var newScenario = (await repository.ListAsync(CancellationToken.None))
                     .Where(item=> item.Id == Scenario.Id).FirstOrDefault();
 
     newScenario.ShouldNotBeNull();

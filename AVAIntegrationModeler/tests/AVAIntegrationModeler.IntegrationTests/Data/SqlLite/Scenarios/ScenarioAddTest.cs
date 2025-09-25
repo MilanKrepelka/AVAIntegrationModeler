@@ -42,6 +42,6 @@ public class ScenarioAddTest(ITestOutputHelper testOutputHelper, EfSqlClientTest
         context.Database.EnsureDeleted();
         context.Database.EnsureCreated();
 
-    await repository.AddAsync(SeedData.Scenario1);
+    await repository.AddAsync(SeedData.Scenario1, CancellationToken.None);
     }
 }

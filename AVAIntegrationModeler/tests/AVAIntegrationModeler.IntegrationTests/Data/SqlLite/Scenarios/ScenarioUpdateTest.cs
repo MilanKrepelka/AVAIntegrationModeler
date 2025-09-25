@@ -41,15 +41,15 @@ public class ScenarioUpdateTest(ITestOutputHelper testOutputHelper, EfSqlClientT
     var context = _fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<AppDbContext>();
     context.Database.EnsureDeleted();
     context.Database.EnsureCreated();
-    await repository.AddAsync(SeedData.Scenario1);
+    await repository.AddAsync(SeedData.Scenario1, CancellationToken.None);
     
-    var foundedScenario = await repository.GetByIdAsync(SeedData.Scenario1.Id);
+    var foundedScenario = await repository.GetByIdAsync(SeedData.Scenario1.Id, CancellationToken.None);
     string newCode = "NewCode"+Guid.NewGuid();
     
     foundedScenario!.SetCode(newCode);
-    await repository.UpdateAsync(foundedScenario);
+    await repository.UpdateAsync(foundedScenario, CancellationToken.None);
 
-    var updatedScenario = await repository.GetByIdAsync(SeedData.Scenario1.Id);
+    var updatedScenario = await repository.GetByIdAsync(SeedData.Scenario1.Id, CancellationToken.None);
 
     updatedScenario!.Code.ShouldBe(newCode);
 

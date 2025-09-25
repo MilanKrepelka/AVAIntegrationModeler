@@ -13,7 +13,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Pathoschild.Http.Client;
 
-namespace ASOL.DataIntegrationExternalAgent.API.Connectors;
+namespace AVAIntegrationModeler.AVAPlace.API.Connectors;
 
   /// <inheritdoc cref="ICustomDataServiceClient"/>
   public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClient
