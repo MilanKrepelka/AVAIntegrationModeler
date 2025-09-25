@@ -57,3 +57,6 @@
 /AVAIntegrationModeler/src/AVAIntegrationModeler.AVAPlace/bin/Debug/net9.0
 /AVAIntegrationModeler/src/AVAIntegrationModeler.AVAPlace/obj
 /AVAIntegrationModeler.AVAPlace/obj
+/AVAIntegrationModeler/AVAIntegrationModeler.AVAPlaceTests/bin/Debug/net9.0
+/AVAIntegrationModeler/AVAIntegrationModeler.AVAPlaceTests/obj
+/AVAIntegrationModeler/AVAIntegrationModeler.AVAPlaceTests/appsettings.demo.json
