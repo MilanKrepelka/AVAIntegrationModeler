@@ -60,3 +60,6 @@
 /AVAIntegrationModeler/AVAIntegrationModeler.AVAPlaceTests/bin/Debug/net9.0
 /AVAIntegrationModeler/AVAIntegrationModeler.AVAPlaceTests/obj
 /AVAIntegrationModeler/AVAIntegrationModeler.AVAPlaceTests/appsettings.demo.json
+/AVAIntegrationModeler/AVAIntegrationModeler.AVAPlace.Test/obj
+/AVAIntegrationModeler/AVAIntegrationModeler.Contracts/obj
+/AVAIntegrationModeler/AVAIntegrationModeler.Contracts/bin/Debug/net9.0
