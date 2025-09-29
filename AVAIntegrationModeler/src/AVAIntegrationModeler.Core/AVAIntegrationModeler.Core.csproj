@@ -16,4 +16,8 @@
     <Folder Include="ScenarioAggregate\Handlers\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\..\AVAIntegrationModeler.Contracts\AVAIntegrationModeler.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

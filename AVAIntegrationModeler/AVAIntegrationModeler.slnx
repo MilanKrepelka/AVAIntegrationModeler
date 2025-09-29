@@ -11,6 +11,7 @@
     <File Path="Directory.Packages.props" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="AVAIntegrationModeler.Contracts/AVAIntegrationModeler.Contracts.csproj" Id="2fc4949f-fe08-4684-88a4-4218281ac664" />
     <Project Path="src/AVAIntegrationModeler.API/AVAIntegrationModeler.API.csproj" />
     <Project Path="src/AVAIntegrationModeler.AspireHost/AVAIntegrationModeler.AspireHost.csproj" />
     <Project Path="src/AVAIntegrationModeler.AVAPlace/AVAIntegrationModeler.AVAPlace.csproj" />
