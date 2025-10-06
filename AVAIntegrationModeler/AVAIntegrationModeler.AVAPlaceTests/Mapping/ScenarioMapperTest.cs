@@ -24,7 +24,6 @@ public class ScenarioMapperTest
       OutputFeatureCodeOrId = Guid.NewGuid().ToString()
     };
 
-
     ScenarioMapper.MapToDTO(integrationScenarioDefinition).Id.ShouldBe(Guid.Parse(integrationScenarioDefinition.Id));
     ScenarioMapper.MapToDTO(integrationScenarioDefinition).Code.ShouldBe(integrationScenarioDefinition.Code);
     ScenarioMapper.MapToDTO(integrationScenarioDefinition).InputFeatureId.ShouldBe(Guid.Parse(integrationScenarioDefinition.InputFeatureCodeOrId));
@@ -34,7 +33,5 @@ public class ScenarioMapperTest
     ScenarioMapper.MapToDTO(integrationScenarioDefinition).Name.EnglishValue.ShouldNotBeNullOrEmpty();
     ScenarioMapper.MapToDTO(integrationScenarioDefinition).Description.CzechValue.ShouldNotBeNullOrEmpty();
     ScenarioMapper.MapToDTO(integrationScenarioDefinition).Description.EnglishValue.ShouldNotBeNullOrEmpty();
-
-
   }
 }

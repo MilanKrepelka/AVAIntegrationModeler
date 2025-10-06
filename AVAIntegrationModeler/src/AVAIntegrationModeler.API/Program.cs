@@ -1,7 +1,9 @@
 ﻿
 
-using AVAIntegrationModeler.UseCases.Contributors.Create;
+using System.Text.Json.Serialization;
 using AVAIntegrationModeler.API.Configurations;
+using AVAIntegrationModeler.AVAPlace.Extensions;
+using AVAIntegrationModeler.UseCases.Contributors.Create;
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -21,10 +23,15 @@ var appLogger = new SerilogLoggerFactory(logger)
 builder.Services.AddOptionConfigs(builder.Configuration, appLogger, builder);
 builder.Services.AddServiceConfigs(appLogger, builder);
 
+builder.Services.ConfigureHttpJsonOptions(opt =>
+{
+  opt.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 builder.Services.AddFastEndpoints()
                 .SwaggerDocument(o =>
                 {
+                  
                   o.ShortSchemaNames = true;
                 })
                 .AddCommandMiddleware(c =>
@@ -37,9 +44,14 @@ builder.Services.AddFastEndpoints()
 
 builder.AddServiceDefaults();
 
+
+builder.Services.AddAVAPlaceServices(builder.Configuration);
+
 var app = builder.Build();
 
 await app.UseAppMiddlewareAndSeedDatabase();
+
+
 
 app.Run();
 

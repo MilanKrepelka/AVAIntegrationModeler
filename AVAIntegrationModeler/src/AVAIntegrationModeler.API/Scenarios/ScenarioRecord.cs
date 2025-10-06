@@ -1,4 +1,5 @@
-﻿using AVAIntegrationModeler.Core.ValueObjects;
+﻿using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Core.ValueObjects;
 using AVAIntegrationModeler.UseCases.Scenarios;
 
 namespace AVAIntegrationModeler.API.Scenarios;

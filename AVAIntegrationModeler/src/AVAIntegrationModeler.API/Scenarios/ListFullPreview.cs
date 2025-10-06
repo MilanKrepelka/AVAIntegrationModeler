@@ -10,7 +10,7 @@ namespace AVAIntegrationModeler.API.Scenarios;
 /// <remarks>
 /// List all contributors - returns a ContributorListResponse containing the Scenarios.
 /// </remarks>
-public class ListFullPreview(IMediator _mediator) : EndpointWithoutRequest<ScenarioListFullPreviewResponse>
+public class ListFullPreview(IMediator _mediator) : Endpoint<ScenarioListFullPreviewRequest,ScenarioListFullPreviewResponse>
 {
   public override void Configure()
   {
@@ -18,11 +18,11 @@ public class ListFullPreview(IMediator _mediator) : EndpointWithoutRequest<Scena
     AllowAnonymous();
   }
 
-  public override async Task HandleAsync(CancellationToken cancellationToken)
+  public override async Task HandleAsync(ScenarioListFullPreviewRequest request, CancellationToken cancellationToken)
   {
-    var result = await _mediator.Send(new ListScenariosQuery(null, null), cancellationToken);
+    var result = await _mediator.Send(new ListScenariosQuery( request.Datasource, null, null), cancellationToken);
 
-    var result2 = await new ListScenariosQuery2(null, null)
+    var result2 = await new ListScenariosQuery2(request.Datasource,  null, null)
       .ExecuteAsync(cancellationToken);
 
     if (result.IsSuccess)

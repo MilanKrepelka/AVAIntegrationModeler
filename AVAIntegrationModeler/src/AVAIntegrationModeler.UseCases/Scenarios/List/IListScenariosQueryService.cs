@@ -1,4 +1,6 @@
-﻿namespace AVAIntegrationModeler.UseCases.Scenarios.List;
+﻿using AVAIntegrationModeler.Contracts.DTO;
+
+namespace AVAIntegrationModeler.UseCases.Scenarios.List;
 
 /// <summary>
 /// Represents a service that will actually fetch the necessary data
@@ -6,5 +8,5 @@
 /// </summary>
 public interface IListScenariosQueryService
 {
-  Task<IEnumerable<ScenarioDTO>> ListAsync();
+  Task<IEnumerable<ScenarioDTO>> ListAsync(Contracts.Datasource dataSource);
 }

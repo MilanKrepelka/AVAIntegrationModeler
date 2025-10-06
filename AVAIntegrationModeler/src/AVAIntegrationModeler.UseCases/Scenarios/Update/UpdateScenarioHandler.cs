@@ -1,5 +1,7 @@
 ﻿using Ardalis.GuardClauses;
+using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Core.ScenarioAggregate;
+using AVAIntegrationModeler.UseCases.Scenarios.Mapping;
 using AVAIntegrationModeler.UseCases.Scenarios.Update;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Update;
@@ -21,8 +23,8 @@ public class UpdateScenarioHandler(
       return Result.NotFound();
     }
 
-    existingScenario.SetName(request.Scenario.Name);
-    existingScenario.SetDescription(request.Scenario.Description);
+    existingScenario.SetName(LocalizedValueMapper.MapToEntity(request.Scenario.Name));
+    existingScenario.SetDescription(LocalizedValueMapper.MapToEntity(request.Scenario.Description));
     existingScenario.SetCode(request.Scenario.Code);
 
     existingScenario.SetInputFeature(new Feature(request?.Scenario.InputFeatureId));

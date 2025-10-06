@@ -17,12 +17,7 @@ public class AVAPlaceDemoFixture : TestBedFixture
 {
   protected override void AddServices(IServiceCollection services, IConfiguration? configuration)
   {
-    services.AddOptions();
-    services.AddRuntimeContexts();
-    services.AddRuntimeContextScope();
-    services.AddMultitenancySetup();
-    services.AddApiConnectors(configuration!);
-    //services.AddDataServiceClientExtended();
+    services.AddAVAPlaceServices(configuration!);
   }
 
   protected override ValueTask DisposeAsyncCore()

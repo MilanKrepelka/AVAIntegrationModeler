@@ -23,6 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\AVAIntegrationModeler.AVAPlace\AVAIntegrationModeler.AVAPlace.csproj" />
     <ProjectReference Include="..\AVAIntegrationModeler.Infrastructure\AVAIntegrationModeler.Infrastructure.csproj" />
     <ProjectReference Include="..\AVAIntegrationModeler.UseCases\AVAIntegrationModeler.UseCases.csproj" />
     <ProjectReference Include="..\AVAIntegrationModeler.ServiceDefaults\AVAIntegrationModeler.ServiceDefaults.csproj" />

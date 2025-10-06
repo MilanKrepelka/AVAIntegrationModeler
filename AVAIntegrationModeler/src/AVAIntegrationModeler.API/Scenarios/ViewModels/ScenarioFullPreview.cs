@@ -1,4 +1,5 @@
-﻿using AVAIntegrationModeler.UseCases.Scenarios;
+﻿using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.UseCases.Scenarios;
 
 namespace AVAIntegrationModeler.API.Scenarios.ViewModels;
 

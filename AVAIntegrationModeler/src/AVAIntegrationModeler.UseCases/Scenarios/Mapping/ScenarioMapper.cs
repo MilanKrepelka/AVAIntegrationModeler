@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
+using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Core.ScenarioAggregate;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Mapping;
@@ -24,8 +25,8 @@ public class ScenarioMapper : IMapper<Scenario, ScenarioDTO, ScenarioMapper>
         var scenario = new Scenario(dto.Id)
             .SetCode(dto.Code)
             .SetId(dto.Id)
-            .SetName(dto.Name)
-            .SetDescription(dto.Description);
+            .SetName(LocalizedValueMapper.MapToEntity(dto.Name))
+            .SetDescription(LocalizedValueMapper.MapToEntity(dto.Description));
 
         if (dto.InputFeatureId.HasValue)
             scenario.SetInputFeature(new Feature(dto.InputFeatureId));

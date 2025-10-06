@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ASOL.Core.ApiConnector;
 using ASOL.Core.ApiConnector.Extensions;
+using ASOL.Core.Identity.Extensions;
 using ASOL.Core.Identity.Options;
 using ASOL.Core.Multitenancy.AspNetCore.Extensions;
 using ASOL.DataService.Connector;
@@ -13,6 +14,7 @@ using ASOL.IdentityProvider.AspNetCore.Extensions;
 using ASOL.IdentityProvider.Connector.Options;
 using AVAIntegrationModeler.AVAPlace.API.Connectors;
 using AVAIntegrationModeler.AVAPlace.Options;
+using AVAIntegrationModeler.AVAPlace.Providers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -79,6 +81,19 @@ public static class ServiceCollectionExtension
     services.AddTransient<NonTenantIdentityProviderClient>();
     services.AddTransient<IDataSynchronizationService, ExampleDataSynchronizationService>(); //TODO
     */
+    return services;
+  }
+
+  public static IServiceCollection AddAVAPlaceServices(this IServiceCollection services, IConfiguration configuration)
+  {
+    services.AddRuntimeContexts();
+    services.AddRuntimeContextScope();
+
+    AddMultitenancySetup(services);
+    AddApiConnectors(services, configuration);
+    services.Configure<AVAPlaceOptions>(configuration.GetSection(nameof(AVAPlaceOptions)));
+    services.AddScoped<IIntegrationDataProvider, IntegrationDataProvider>();
+
     return services;
   }
 }

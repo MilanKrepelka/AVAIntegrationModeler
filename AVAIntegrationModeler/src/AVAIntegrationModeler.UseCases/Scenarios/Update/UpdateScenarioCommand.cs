@@ -1,4 +1,6 @@
-﻿namespace AVAIntegrationModeler.UseCases.Scenarios.Update;
+﻿using AVAIntegrationModeler.Contracts.DTO;
+
+namespace AVAIntegrationModeler.UseCases.Scenarios.Update;
 
 
 /// <summary>
@@ -6,4 +8,4 @@
 /// </summary>
 /// <param name="ContributorId">Identifikátor přispěvatele, který má být aktualizován.</param>
 /// <param name="NewName">Nové jméno přispěvatele.</param>
-public record UpdateScenarioCommand(Scenarios.ScenarioDTO Scenario) : ICommand<Result<ScenarioDTO>>;
+public record UpdateScenarioCommand(ScenarioDTO Scenario) : ICommand<Result<ScenarioDTO>>;

@@ -1,4 +1,5 @@
-﻿using AVAIntegrationModeler.UseCases.Scenarios;
+﻿using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.UseCases.Scenarios;
 using AVAIntegrationModeler.UseCases.Scenarios.List;
 
 namespace AVAIntegrationModeler.API.Scenarios;
@@ -9,7 +10,7 @@ namespace AVAIntegrationModeler.API.Scenarios;
 /// <remarks>
 /// List all contributors - returns a ContributorListResponse containing the Scenarios.
 /// </remarks>
-public class List(IMediator _mediator) : EndpointWithoutRequest<ScenarioListResponse>
+public class List(IMediator _mediator) : Endpoint<ScenarioListRequest,ScenarioListResponse>
 {
   public override void Configure()
   {
@@ -17,11 +18,11 @@ public class List(IMediator _mediator) : EndpointWithoutRequest<ScenarioListResp
     AllowAnonymous();
   }
 
-  public override async Task HandleAsync(CancellationToken cancellationToken)
+  public override async Task HandleAsync(ScenarioListRequest request, CancellationToken cancellationToken)
   {
-    Result<IEnumerable<ScenarioDTO>> result = await _mediator.Send(new ListScenariosQuery(null, null), cancellationToken);
+    Result<IEnumerable<ScenarioDTO>> result = await _mediator.Send(new ListScenariosQuery(request.Datasouce, null, null), cancellationToken);
 
-    var result2 = await new ListScenariosQuery2(null, null)
+    var result2 = await new ListScenariosQuery2(request.Datasouce, null, null)
       .ExecuteAsync(cancellationToken);
 
     if (result.IsSuccess)

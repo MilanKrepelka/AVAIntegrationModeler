@@ -6,8 +6,10 @@ using System.Threading.Tasks;
 using ASOL.Core.Identity;
 using ASOL.Core.Identity.Options;
 using AVAIntegrationModeler.AVAPlace;
+using AVAIntegrationModeler.AVAPlace.Options;
 using AVAIntegrationModeler.Contracts.DTO;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using RTX = AVAIntegrationModeler.AVAPlace.ServiceRuntimeTenantContext;
 
 namespace AVAIntegrationModeler.AVAPlace.Providers;
@@ -18,7 +20,7 @@ namespace AVAIntegrationModeler.AVAPlace.Providers;
 public class IntegrationDataProvider : IIntegrationDataProvider
 {
   private readonly IServiceProvider _serviceProvider;
-
+  private readonly IOptions<AVAPlaceOptions> _avaPlaceOptions;
   private readonly IRuntimeContext _runtimeContext;
   
 
@@ -29,10 +31,11 @@ public class IntegrationDataProvider : IIntegrationDataProvider
   /// <exception cref="ArgumentNullException"></exception>
   public IntegrationDataProvider(
     IServiceProvider serviceProvider,
-    Options.AVAPlaceOptions avaPlaceOptions
+    IOptions< Options.AVAPlaceOptions> avaPlaceOptions
     )
   {
     _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
+    _avaPlaceOptions = avaPlaceOptions;
     _runtimeContext = _serviceProvider.GetRequiredService<IRuntimeContext>() ?? throw new ArgumentNullException(nameof(IRuntimeContext));
   }
   /// <inheritdoc/>
@@ -41,7 +44,11 @@ public class IntegrationDataProvider : IIntegrationDataProvider
     // Assuming you have access to a serviceProvider and tenantId in your context.
     // You may need to inject these via constructor or other means.
 
-    string tenantId = /* get or inject tenant id */ _runtimeContext.Security.TenantId;
+    string tenantId =  _runtimeContext?.Security?.TenantId!;
+    if (string.IsNullOrEmpty(tenantId))
+    {
+      tenantId = _avaPlaceOptions.Value.TenantId;
+    };
 
     return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<ScenarioDTO>>(
       _serviceProvider,
@@ -64,7 +71,14 @@ public class IntegrationDataProvider : IIntegrationDataProvider
            Deleted = false,
          },
          ct);
-        return scenarios;
+        if (dataServiceResult != null && dataServiceResult.Any())
+        {
+          foreach (var scenario in dataServiceResult)
+          {
+           scenarios.Add(Mapping.ScenarioMapper.MapToDTO(scenario));
+          }
+        }
+          return scenarios;
       }
     );
   }

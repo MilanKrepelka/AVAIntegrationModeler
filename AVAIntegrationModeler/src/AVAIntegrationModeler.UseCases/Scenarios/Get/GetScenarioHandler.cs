@@ -1,4 +1,5 @@
-﻿using AVAIntegrationModeler.Core.ContributorAggregate;
+﻿using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Core.ContributorAggregate;
 using AVAIntegrationModeler.Core.ContributorAggregate.Specifications;
 using AVAIntegrationModeler.Core.ScenarioAggregate;
 using AVAIntegrationModeler.Core.ScenarioAggregate.Specifications;
