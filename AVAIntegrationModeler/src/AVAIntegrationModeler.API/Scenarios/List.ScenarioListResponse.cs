@@ -1,6 +1,14 @@
-﻿namespace AVAIntegrationModeler.API.Scenarios;
+﻿using AVAIntegrationModeler.Contracts.DTO;
 
+namespace AVAIntegrationModeler.API.Scenarios;
+
+/// <summary>
+/// Odpověď na požadavek <see cref="ScenarioListRequest"/>
+/// </summary>
 public class ScenarioListResponse
 {
-  public List<ScenarioRecord> Scenarios { get; set; } = [];
+  /// <summary>
+  /// Seznam <see cref="ScenarioDTO"/>
+  /// </summary>
+  public List<ScenarioDTO> Scenarios { get; set; } = [];
 }

@@ -20,16 +20,16 @@ public class List(IMediator _mediator) : Endpoint<ScenarioListRequest,ScenarioLi
 
   public override async Task HandleAsync(ScenarioListRequest request, CancellationToken cancellationToken)
   {
-    Result<IEnumerable<ScenarioDTO>> result = await _mediator.Send(new ListScenariosQuery(request.Datasouce, null, null), cancellationToken);
+    Result<IEnumerable<ScenarioDTO>> result = await _mediator.Send(new ListScenariosQuery(request.Datasource, null, null), cancellationToken);
 
-    var result2 = await new ListScenariosQuery2(request.Datasouce, null, null)
+    var result2 = await new ListScenariosQuery2(request.Datasource, null, null)
       .ExecuteAsync(cancellationToken);
 
     if (result.IsSuccess)
     {
       Response = new ScenarioListResponse
       {
-        Scenarios = result.Value.Select(scenatioDTO => new ScenarioRecord(scenatioDTO)).ToList()
+        Scenarios = result.Value.ToList()
       };
     }
   }

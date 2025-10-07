@@ -14,4 +14,8 @@
   <ItemGroup>
     <ProjectReference Include="..\AVAIntegrationModeler.API\AVAIntegrationModeler.API.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="ViewModels\Scenarios\" />
+  </ItemGroup>
 </Project>

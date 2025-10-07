@@ -34,4 +34,6 @@ public class ScenarioMapperTest
     ScenarioMapper.MapToDTO(integrationScenarioDefinition).Description.CzechValue.ShouldNotBeNullOrEmpty();
     ScenarioMapper.MapToDTO(integrationScenarioDefinition).Description.EnglishValue.ShouldNotBeNullOrEmpty();
   }
+
+  // Udělat testy na MapToEntity i pro IntegrationScenarioSummary
 }

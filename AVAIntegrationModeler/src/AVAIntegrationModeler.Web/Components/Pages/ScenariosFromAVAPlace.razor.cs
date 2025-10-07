@@ -1,5 +1,5 @@
 ﻿using AVAIntegrationModeler.API.Scenarios;
-using AVAIntegrationModeler.Web.ViewModels.List;
+using AVAIntegrationModeler.Contracts.DTO;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using static System.Net.WebRequestMethods;
@@ -7,11 +7,11 @@ using static MudBlazor.CategoryTypes;
 
 namespace AVAIntegrationModeler.Web.Components.Pages;
 
-public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase
+public partial class ScenariosFromAVAPlace : Microsoft.AspNetCore.Components.ComponentBase
 {
   protected bool IsLoading { get; set; } = false;
 
-  protected List<ScenarioListViewModel> ScenariosList { get; set; } = new();
+  protected List<ScenarioDTO> ScenariosList { get; set; } = new();
 
 
   protected async Task LoadItemsAsync()
@@ -22,20 +22,11 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase
 
       // Načtení scénářů z AVAIntegrationModeler.API
       using var httpClient = new HttpClient();
-      var response = await httpClient.GetAsync("http://localhost:57679/Scenarios");
+      var response = await httpClient.GetAsync("http://localhost:57679/scenarios?datasource=AVAPlace");
       response.EnsureSuccessStatusCode();
 
       var scenarioListResponse = await response.Content.ReadFromJsonAsync<ScenarioListResponse>();
-      
-      if (scenarioListResponse?.Scenarios != null)
-      {
-        foreach (var scenario in scenarioListResponse?.Scenarios!)
-        {
-          ScenarioListViewModel scenarioListViewModel = new ScenarioListViewModel();
-          Mapping.ScenarioMapper.MapToViewModel(scenario!, out scenarioListViewModel);
-          ScenariosList.Add(scenarioListViewModel);
-        }
-      }
+      ScenariosList = scenarioListResponse?.Scenarios!;
     }
     
     catch (HttpRequestException httpEx)
