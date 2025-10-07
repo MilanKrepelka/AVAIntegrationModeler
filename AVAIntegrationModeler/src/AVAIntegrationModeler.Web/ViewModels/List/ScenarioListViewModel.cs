@@ -26,6 +26,14 @@ public class ScenarioListViewModel
   /// Lokalizovaný popis scénáře (např. v češtině a angličtině).
   /// </summary>
   public LocalizedValue Description { get; init; } = new();
+  
+  /// <summary>
+  /// Vstupní feature scénáře.
+  /// </summary>
   public List.FeatureViewModel InputFeature { get; set; } = List.FeatureViewModel.Empty;
+  
+  /// <summary>
+  /// Výstupní feature scénáře.
+  /// </summary>
   public List.FeatureViewModel OutputFeature { get; set; } = List.FeatureViewModel.Empty;
 }

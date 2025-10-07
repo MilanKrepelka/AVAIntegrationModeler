@@ -7,6 +7,12 @@ namespace AVAIntegrationModeler.Contracts;
 /// </summary>
 public enum Datasource
 {
+  /// <summary>
+  /// Data pochází z lokální databáze
+  /// </summary>
   Database = 0,
+  /// <summary>
+  /// Data pochází z AVA Place
+  /// </summary>
   AVAPlace = 1,
 }

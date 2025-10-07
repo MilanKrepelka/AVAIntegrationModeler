@@ -6,7 +6,7 @@ public interface IViewModelMapper<DTO, ViewModel, TSelf>
   /// <summary>
   /// Namapuje datový přenosový objekt (DTO) na ViewModel.
   /// </summary>
-  /// <param name="dto">Zdrojový DTO</param>
+  /// <param name="sourceDto">Zdrojový DTO</param>
   /// <returns>Výsledný <typeparamref name="ViewModel"/></returns>
-  static abstract void MapToViewModel(DTO dto, out ViewModel result);
+  static abstract void MapToViewModel(DTO sourceDto, out ViewModel result);
 }

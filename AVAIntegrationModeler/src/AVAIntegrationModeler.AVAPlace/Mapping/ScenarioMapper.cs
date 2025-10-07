@@ -19,11 +19,11 @@ public class ScenarioMapper
   : IMapper<IntegrationScenarioDefinition, ScenarioDTO, ScenarioMapper>
   , IMapper<IntegrationScenarioSummary, ScenarioDTO,ScenarioMapper>
 {
+  /// <inheritdoc/>
   public static ScenarioDTO MapToDTO(IntegrationScenarioDefinition domainEntity)
   {
     Guard.Against.Null(domainEntity, $"{nameof(ScenarioMapper)} - {nameof(domainEntity)}");
     Guard.Against.NullOrEmpty(domainEntity.Id, $"{nameof(ScenarioMapper)} - {nameof(domainEntity)} - {nameof(domainEntity.Id)} ");
-
 
     return new ScenarioDTO()
     {
@@ -36,6 +36,7 @@ public class ScenarioMapper
     };
   }
 
+  /// <inheritdoc/>
   public static ScenarioDTO MapToDTO(IntegrationScenarioSummary domainEntity)
   {
     return new ScenarioDTO()
@@ -49,6 +50,7 @@ public class ScenarioMapper
     };
   }
 
+  /// <inheritdoc/>
   public static IntegrationScenarioDefinition MapToEntity(ScenarioDTO dto)
   {
     IntegrationScenarioDefinition result = new IntegrationScenarioDefinition();
@@ -61,6 +63,7 @@ public class ScenarioMapper
     return result;
   }
 
+  /// <inheritdoc/>
   static IntegrationScenarioSummary IMapper<IntegrationScenarioSummary, ScenarioDTO, ScenarioMapper>.MapToEntity(ScenarioDTO dto)
   {
     return new IntegrationScenarioSummary()

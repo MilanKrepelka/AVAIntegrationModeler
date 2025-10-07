@@ -14,6 +14,8 @@ public class LocalizedValueMapper : IMapper<LocalizedValue<string>, AVAIntegrati
 {
   private const string czechLocale = "cs-CZ";
   private const string englishLocale = "en-US";
+  
+  /// <inheritdoc/>
   public static LocalizedValue MapToDTO(LocalizedValue<string> domainEntity)
   {
     LocalizedValue result = new LocalizedValue();
@@ -29,6 +31,7 @@ public class LocalizedValueMapper : IMapper<LocalizedValue<string>, AVAIntegrati
     return result;
   }
 
+  /// <inheritdoc/>
   public static LocalizedValue<string> MapToEntity(LocalizedValue dto)
   {
     LocalizedValue<string> result = new LocalizedValue<string>();

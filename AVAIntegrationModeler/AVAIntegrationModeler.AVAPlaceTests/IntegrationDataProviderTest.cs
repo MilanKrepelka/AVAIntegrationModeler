@@ -12,6 +12,10 @@ public class IntegrationDataProvider : TestBed<Fixtures.AVAPlaceDemoFixture>
   {
   }
 
+  /// <summary>
+  /// Test který načte integrační scénáře
+  /// </summary>
+  /// <returns></returns>
   [Fact]
   public async Task GetIntegrationScenariosAsyncTest()
   {
