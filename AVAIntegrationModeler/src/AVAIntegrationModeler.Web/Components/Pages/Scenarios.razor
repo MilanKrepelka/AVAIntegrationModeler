@@ -14,7 +14,18 @@
 }
 else
 {
+        <MudRadioGroup T="DataGridFilterMode" Class="mb-4">
+            <MudRadio Dense="true" Value="@DataGridFilterMode.Simple" Color="Color.Primary">Lokální vývoj</MudRadio>
+            <MudRadio Dense="true" Value="@DataGridFilterMode.ColumnFilterMenu" Color="Color.Tertiary">AVA Place</MudRadio>
+        </MudRadioGroup>
+        
     <MudTable Items="ScenariosList" Hover="true" SortLabel="Sort By" Elevation="0" AllowUnsorted="false">
+        <ToolBarContent>
+            <MudText>Scenarios</MudText>
+            <MudSpacer></MudSpacer>
+            <MudTextField T="string"  Placeholder="Search" Adornment="Adornment.Start"
+                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
         <HeaderContent>
             <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<ScenarioListViewModel, object>(x => x.Code)">Kód</MudTableSortLabel></MudTh>
             <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioListViewModel, object>(x => x.Name.CzechValue)">Název - česky</MudTableSortLabel></MudTh>

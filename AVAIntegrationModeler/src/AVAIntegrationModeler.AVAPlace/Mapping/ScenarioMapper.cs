@@ -15,9 +15,8 @@ namespace AVAIntegrationModeler.AVAPlace.Mapping;
 /// Statická třída pro mapování mezi doménovým objektem scénáře (<see cref="Scenario"/>) a jeho datovým přenosovým objektem (<see cref="ScenarioDTO"/>).
 /// Poskytuje metody pro převod mezi těmito dvěma reprezentacemi.
 /// </summary>
-public class ScenarioMapper 
-  : IMapper<IntegrationScenarioDefinition, ScenarioDTO, ScenarioMapper>
-  , IMapper<IntegrationScenarioSummary, ScenarioDTO,ScenarioMapper>
+public static class ScenarioMapper 
+  
 {
   /// <inheritdoc/>
   public static ScenarioDTO MapToDTO(IntegrationScenarioDefinition domainEntity)
@@ -64,7 +63,7 @@ public class ScenarioMapper
   }
 
   /// <inheritdoc/>
-  static IntegrationScenarioSummary IMapper<IntegrationScenarioSummary, ScenarioDTO, ScenarioMapper>.MapToEntity(ScenarioDTO dto)
+  public static IntegrationScenarioSummary MapToIntegrationScenarioSummary(ScenarioDTO dto)
   {
     return new IntegrationScenarioSummary()
     {
