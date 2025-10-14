@@ -36,4 +36,9 @@ public class ScenarioListViewModel
   /// Výstupní feature scénáře.
   /// </summary>
   public List.FeatureViewModel OutputFeature { get; set; } = List.FeatureViewModel.Empty;
+
+  /// <summary>
+  /// Příznak, že se v Gridu bude zobrazovat detail <see cref="ScenarioListViewModel"/>
+  /// </summary>
+  public bool ShowDetails { get; set; } = false;
 }

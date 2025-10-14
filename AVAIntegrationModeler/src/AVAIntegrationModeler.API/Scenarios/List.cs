@@ -16,10 +16,12 @@ public class List(IMediator _mediator) : Endpoint<ScenarioListRequest,ScenarioLi
   {
     Get("/Scenarios");
     AllowAnonymous();
+    Options(x => x.CacheOutput(p => p.Expire(TimeSpan.FromSeconds(5))));
   }
 
   public override async Task HandleAsync(ScenarioListRequest request, CancellationToken cancellationToken)
   {
+
     Result<IEnumerable<ScenarioDTO>> result = await _mediator.Send(new ListScenariosQuery(request.Datasource, null, null), cancellationToken);
 
     var result2 = await new ListScenariosQuery2(request.Datasource, null, null)

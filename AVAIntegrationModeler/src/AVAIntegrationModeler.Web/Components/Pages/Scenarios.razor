@@ -1,5 +1,6 @@
 ﻿@page "/scenarios"
 @using AVAIntegrationModeler.Web.ViewModels.List;
+@inject ISnackbar Snackbar
 
 
 
@@ -14,58 +15,91 @@
 }
 else
 {
-        <MudRadioGroup T="DataGridFilterMode" Class="mb-4">
-            <MudRadio Dense="true" Value="@DataGridFilterMode.Simple" Color="Color.Primary">Lokální vývoj</MudRadio>
-            <MudRadio Dense="true" Value="@DataGridFilterMode.ColumnFilterMenu" Color="Color.Tertiary">AVA Place</MudRadio>
-        </MudRadioGroup>
+    <MudRadioGroup T="AVAIntegrationModeler.Contracts.Datasource" Class="mb-4" Value="Datasource" ValueChanged="onDatasourceChanded">
+        <MudRadio  Dense="true" Value="AVAIntegrationModeler.Contracts.Datasource.Database" Color="Color.Primary">Lokální vývoj</MudRadio>
+        <MudRadio  Dense="true" Value="AVAIntegrationModeler.Contracts.Datasource.AVAPlace" Color="Color.Secondary">AVA place</MudRadio>
+    </MudRadioGroup>
+
+    <MudDataGrid Items="@ScenariosList" Filterable="false" QuickFilter="FilterFunc" ExpandSingleRow="false">
         
-    <MudTable Items="ScenariosList" Hover="true" SortLabel="Sort By" Elevation="0" AllowUnsorted="false">
         <ToolBarContent>
-            <MudText>Scenarios</MudText>
-            <MudSpacer></MudSpacer>
-            <MudTextField T="string"  Placeholder="Search" Adornment="Adornment.Start"
+            
+            <MudSpacer />
+            <MudTextField @bind-Value="this.filterString" Placeholder="Hledat" Adornment="Adornment.Start" Immediate="true"
                           AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
         </ToolBarContent>
-        <HeaderContent>
-            <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<ScenarioListViewModel, object>(x => x.Code)">Kód</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioListViewModel, object>(x => x.Name.CzechValue)">Název - česky</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioListViewModel, object>(x => x.Name.EnglishValue)">Název - anglicky</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioListViewModel, object>(x => x.Description.CzechValue)">Popis - česky</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioListViewModel, object>(x => x.Description.EnglishValue)">Popis - anglicky</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioListViewModel, object>(x => x.InputFeature.Id.ToString()!)">Vstupní Feature</MudTableSortLabel></MudTh>
-            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioListViewModel, object>(x => x.OutputFeature.Id.ToString()!)">Výstupní Feature</MudTableSortLabel></MudTh>
-            <MudTh>...</MudTh>
-        </HeaderContent>
-        <RowTemplate>
+        <Columns>
+            <HierarchyColumn T="ScenarioListViewModel" EnableHeaderToggle=true />
+            <PropertyColumn Property="x => x.Code" Title="Kód">
+                
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.Name.EnglishValue" Title="Název - anglicky" />
+            <PropertyColumn Property="x => x.Description.EnglishValue" Title="Popis - anglicky" />
+            <PropertyColumn Property="x => x.InputFeature.Code" Title="Vstupní Feature" />
+            <PropertyColumn Property="x => x.OutputFeature.Code" Title="Výstupní Feature" />
+            <PropertyColumn Property="x => x.Id" Title="Identifikátor">
+                <CellTemplate>
+                    @context.Item.Id
+                    <MudTooltip Text="Vložit do schránky" Color="Color.Info" Arrow>
+                        <MudIconButton Icon="@Icons.Material.Filled.ContentCopy"
+                                       Color="Color.Primary"
+                                       Size="Size.Small"
+                                       OnClick="@(() => CopyToClipboard(context.Item.Id.ToString()))" />
+                    </MudTooltip>
+                </CellTemplate>
+            </PropertyColumn>
             
-            <MudTd DataLabel="Code">@context.Code</MudTd>
-            <MudTd DataLabel="Code">@context.Name.CzechValue</MudTd>
-            <MudTd DataLabel="Code">@context.Name.EnglishValue</MudTd>
-            <MudTd DataLabel="Code">@context.Description.CzechValue</MudTd>
-            <MudTd DataLabel="Code">@context.Description.EnglishValue</MudTd>
-            <MudTd DataLabel="Code">
-                <MudTooltip Text="@(!string.IsNullOrEmpty(context.InputFeature.Code) ? context.InputFeature.Code : TextConstants.NullValue)" Placement="Placement.Top">
-                    @(context.Code)
-                </MudTooltip>
-            </MudTd>
-            <MudTd DataLabel="Code">
-                <MudTooltip Text="@(!string.IsNullOrEmpty(context.OutputFeature.Code)? context.OutputFeature.Code : TextConstants.NullValue)" Placement="Placement.Top">
-                    @(context.Code)
-                </MudTooltip>
-            </MudTd>
-            <MudTd>
-                <MudTooltip Text="Edit" Color="Color.Tertiary" Arrow>
-                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" Size="Size.Small"></MudIconButton>
-                </MudTooltip>
-            </MudTd>
-        </RowTemplate>
-        <PagerContent>
-            <MudTablePager PageSizeOptions="new int[]{50, 100}" />
-        </PagerContent>
-    </MudTable>
+        </Columns>
+        <ChildRowContent>
+            <MudPaper Class="pa-6 ma-2" Elevation="2">
+            <MudForm Spacing="4">
+            <MudGrid>
+                <MudItem xs="12" sm="6" md="4" >
+                    <MudField Label="Identifikátor" Variant="Variant.Text">@context.Item.Id</MudField>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4" >
+                    <MudField Label="Kód" Variant="Variant.Text">@context.Item.Code</MudField>
+                </MudItem>
+            </MudGrid>
+            <MudGrid>
+                <MudItem xs="12" sm="6" md="4" >
+                    <MudField Label="Název - anglicky" Variant="Variant.Text">@context.Item.Name.EnglishValue</MudField>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4">
+                    <MudField Label="Popis - anglicky" Variant="Variant.Text">@context.Item.Description.EnglishValue</MudField>
+                </MudItem>
+            </MudGrid>
+            <MudGrid>
+                <MudItem xs="12" sm="6" md="4" >
+                    <MudField Label="Název - česky" Variant="Variant.Text">@context.Item.Name.CzechValue</MudField>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4" >
+                    <MudField Label="Popis - česky" Variant="Variant.Text">@context.Item.Description.CzechValue</MudField>
+                </MudItem>
+            </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Vstupní feature" Variant="Variant.Text">@context.Item.InputFeature.Code</MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Výstupní feature" Variant="Variant.Text">@context.Item.OutputFeature.Code</MudField>
+                        </MudItem>
+                    </MudGrid>
+            </MudForm>
+            </MudPaper>
+        </ChildRowContent>
+    </MudDataGrid>
+    
 }
 @code
 {
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    private async Task CopyToClipboard(string text)
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
+        Snackbar.Add($"Zkopírováno do schránky: {text}", Severity.Success);
+    }
 }
 @* @code {
     private WeatherForecast[]? forecasts;

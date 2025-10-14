@@ -38,6 +38,8 @@ builder.Services.AddFastEndpoints()
                 {
                   c.Register(typeof(CommandLogger<,>));
                 });
+builder.Services.AddResponseCaching();
+builder.Services.AddMemoryCache();
 
 // wire up commands
 //builder.Services.AddTransient<ICommandHandler<CreateContributorCommand2,Result<int>>, CreateContributorCommandHandler2>();
