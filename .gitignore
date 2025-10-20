@@ -47,3 +47,7 @@
 /AVAIntegrationModeler/src/AVAIntegrationModeler.API/AVAIntegrationModeler.API.csproj.user
 /AVAIntegrationModeler/src/AVAIntegrationModeler.API/database.sqlite-shm
 /AVAIntegrationModeler/src/AVAIntegrationModeler.API/database.sqlite-wal
+/AVAIntegrationModeler/src/AVAIntegrationModeler.Web/database.sqlite
+/AVAIntegrationModeler/src/AVAIntegrationModeler.Web/database.sqlite-shm
+/AVAIntegrationModeler/src/AVAIntegrationModeler.Web/database.sqlite-wal
+/AVAIntegrationModeler/src/AVAIntegrationModeler.Web/log20251020.txt
