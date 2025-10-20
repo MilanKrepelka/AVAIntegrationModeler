@@ -23,7 +23,8 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="ReportGenerator" />
-    <PackageReference Include="xunit" />
+    <PackageReference Include="xunit.v3.assert" />
+    <PackageReference Include="xunit.v3.core" />
   </ItemGroup>
 
   <ItemGroup>
@@ -38,6 +39,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\AVAIntegrationModeler.Core\AVAIntegrationModeler.Core.csproj" />
+    <ProjectReference Include="..\..\src\AVAIntegrationModeler.ServiceDefaults\AVAIntegrationModeler.ServiceDefaults.csproj" />
     <ProjectReference Include="..\..\src\AVAIntegrationModeler.UseCases\AVAIntegrationModeler.UseCases.csproj" />
   </ItemGroup>
 

@@ -1,5 +1,5 @@
 ﻿using AVAIntegrationModeler.Infrastructure.Data;
-using AVAIntegrationModeler.Web.Contributors;
+using AVAIntegrationModeler.API.Contributors;
 
 namespace AVAIntegrationModeler.FunctionalTests.ApiEndpoints;
 

@@ -1,44 +1,32 @@
-﻿using AVAIntegrationModeler.UseCases.Contributors.Create;
-using AVAIntegrationModeler.Web.Configurations;
+using MudBlazor.Services;
+using AVAIntegrationModeler.Web.Components;
 
 var builder = WebApplication.CreateBuilder(args);
 
-var logger = Log.Logger = new LoggerConfiguration()
-  .Enrich.FromLogContext()
-  .WriteTo.Console()
-  .CreateLogger();
+// Add MudBlazor services
+builder.Services.AddMudServices();
 
-logger.Information("Starting web host");
-
-builder.AddLoggerConfigs();
-
-var appLogger = new SerilogLoggerFactory(logger)
-    .CreateLogger<Program>();
-
-builder.Services.AddOptionConfigs(builder.Configuration, appLogger, builder);
-builder.Services.AddServiceConfigs(appLogger, builder);
-
-
-builder.Services.AddFastEndpoints()
-                .SwaggerDocument(o =>
-                {
-                  o.ShortSchemaNames = true;
-                })
-                .AddCommandMiddleware(c =>
-                {
-                  c.Register(typeof(CommandLogger<,>));
-                });
-
-// wire up commands
-//builder.Services.AddTransient<ICommandHandler<CreateContributorCommand2,Result<int>>, CreateContributorCommandHandler2>();
-
-builder.AddServiceDefaults();
+// Add services to the container.
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
 
 var app = builder.Build();
 
-await app.UseAppMiddlewareAndSeedDatabase();
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+    app.UseExceptionHandler("/Error", createScopeForErrors: true);
+    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+    app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+
+
+app.UseAntiforgery();
+
+app.MapStaticAssets();
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
 
 app.Run();
-
-// Make the implicit Program.cs class public, so integration tests can reference the correct assembly for host building
-public partial class Program { }

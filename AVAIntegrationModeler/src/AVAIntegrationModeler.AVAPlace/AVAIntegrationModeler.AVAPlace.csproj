@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Ardalis.GuardClauses" />
+    <PackageReference Include="ASOL.Core.Multitenancy.AspNetCore" />
+    <PackageReference Include="ASOL.DataService.Connector" />
+    <PackageReference Include="ASOL.IdentityProvider.Connector" />
+    <PackageReference Include="ASOL.IdentityProvider.Contracts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AVAIntegrationModeler.Contracts\AVAIntegrationModeler.Contracts.csproj" />
+  </ItemGroup>
+
+</Project>

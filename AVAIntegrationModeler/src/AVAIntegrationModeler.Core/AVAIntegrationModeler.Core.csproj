@@ -11,4 +11,13 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="ScenarioAggregate\Events\" />
+    <Folder Include="ScenarioAggregate\Handlers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\AVAIntegrationModeler.Contracts\AVAIntegrationModeler.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>

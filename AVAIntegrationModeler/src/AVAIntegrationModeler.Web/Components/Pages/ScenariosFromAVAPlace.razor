@@ -1,0 +1,59 @@
+﻿@page "/scenariosFromAVAPlace"
+@using AVAIntegrationModeler.Web.ViewModels.List;
+
+
+
+<PageTitle>Integrační scénáře</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Integrační scénáře</MudText>
+<MudText Typo="Typo.body1" Class="mb-8">Integrační scénáře načtené z AVA Place</MudText>
+
+@if (ScenariosList == null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else
+{
+    <MudTable Items="ScenariosList" Hover="true" SortLabel="Sort By" Elevation="0" AllowUnsorted="false">
+        <HeaderContent>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.Ascending" SortBy="new Func<ScenarioListViewModel, object>(x => x.Code)">Kód</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioListViewModel, object>(x => x.Name.CzechValue)">Název - česky</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioListViewModel, object>(x => x.Name.EnglishValue)">Název - anglicky</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioListViewModel, object>(x => x.Description.CzechValue)">Popis - česky</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioListViewModel, object>(x => x.Description.EnglishValue)">Popis - anglicky</MudTableSortLabel></MudTh>
+
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioListViewModel, object>(x => x.InputFeature.Id)">Vstupní Feature</MudTableSortLabel></MudTh>
+            <MudTh><MudTableSortLabel InitialDirection="SortDirection.None" SortBy="new Func<ScenarioListViewModel, object>(x => x.OutputFeature.Id)">Výstupní Feature</MudTableSortLabel></MudTh>
+            <MudTh>...</MudTh>
+        </HeaderContent>
+        <RowTemplate>
+            
+            <MudTd DataLabel="Code">@context.Code</MudTd>
+            <MudTd DataLabel="Code">@context.Name.CzechValue</MudTd>
+            <MudTd DataLabel="Code">@context.Name.EnglishValue</MudTd>
+            <MudTd DataLabel="Code">@context.Description.CzechValue</MudTd>
+            <MudTd DataLabel="Code">@context.Description.EnglishValue</MudTd>
+            <MudTd DataLabel="Code">
+                <MudTooltip Text="@(context.InputFeatureId.HasValue? context.InputFeatureId.Value.ToString(): TextConstants.NullValue)" Placement="Placement.Top">
+                    @(context.Code)
+                </MudTooltip>
+            </MudTd>
+            <MudTd DataLabel="Code">
+                <MudTooltip Text="@(context.OutputFeatureId.HasValue? context.OutputFeatureId.Value.ToString(): TextConstants.NullValue)" Placement="Placement.Top">
+                    @(context.Code)
+                </MudTooltip>
+            </MudTd>
+            <MudTd>
+                <MudTooltip Text="Edit" Color="Color.Tertiary" Arrow>
+                    <MudIconButton Icon="@Icons.Material.Filled.Edit" Color="Color.Success" Size="Size.Small"></MudIconButton>
+                </MudTooltip>
+            </MudTd>
+        </RowTemplate>
+        <PagerContent>
+            <MudTablePager PageSizeOptions="new int[]{50, 100}" />
+        </PagerContent>
+    </MudTable>
+}
+@code
+{
+}

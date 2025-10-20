@@ -4,6 +4,9 @@
     <Platform Name="x64" />
     <Platform Name="x86" />
   </Configurations>
+  <Folder Name="/docs/">
+    <File Path="docs/AVAIntegrationsModeler.md" />
+  </Folder>
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
     <File Path="CleanArchitecture.nuspec" />
@@ -11,16 +14,20 @@
     <File Path="Directory.Packages.props" />
   </Folder>
   <Folder Name="/src/">
+    <Project Path="AVAIntegrationModeler.Contracts/AVAIntegrationModeler.Contracts.csproj" Id="2fc4949f-fe08-4684-88a4-4218281ac664" />
+    <Project Path="src/AVAIntegrationModeler.API/AVAIntegrationModeler.API.csproj" />
     <Project Path="src/AVAIntegrationModeler.AspireHost/AVAIntegrationModeler.AspireHost.csproj" />
-    <Project Path="src/AVAIntegrationModeler.ServiceDefaults/AVAIntegrationModeler.ServiceDefaults.csproj" />
+    <Project Path="src/AVAIntegrationModeler.AVAPlace/AVAIntegrationModeler.AVAPlace.csproj" />
     <Project Path="src/AVAIntegrationModeler.Core/AVAIntegrationModeler.Core.csproj" />
     <Project Path="src/AVAIntegrationModeler.Infrastructure/AVAIntegrationModeler.Infrastructure.csproj" />
+    <Project Path="src/AVAIntegrationModeler.ServiceDefaults/AVAIntegrationModeler.ServiceDefaults.csproj" />
     <Project Path="src/AVAIntegrationModeler.UseCases/AVAIntegrationModeler.UseCases.csproj" />
     <Project Path="src/AVAIntegrationModeler.Web/AVAIntegrationModeler.Web.csproj" />
   </Folder>
   <Folder Name="/tests/">
+    <Project Path="AVAIntegrationModeler.AVAPlaceTests/AVAIntegrationModeler.AVAPlaceTests.csproj" Id="69b6a761-0c70-4f06-b58b-5a0ef4b0b5e6" />
     <Project Path="tests/AVAIntegrationModeler.FunctionalTests/AVAIntegrationModeler.FunctionalTests.csproj">
-      <BuildDependency Project="src/AVAIntegrationModeler.Web/AVAIntegrationModeler.Web.csproj" />
+      <BuildDependency Project="src/AVAIntegrationModeler.API/AVAIntegrationModeler.API.csproj" />
     </Project>
     <Project Path="tests/AVAIntegrationModeler.IntegrationTests/AVAIntegrationModeler.IntegrationTests.csproj">
       <BuildDependency Project="src/AVAIntegrationModeler.Infrastructure/AVAIntegrationModeler.Infrastructure.csproj" />

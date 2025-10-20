@@ -1,4 +1,5 @@
-﻿using AVAIntegrationModeler.Infrastructure.Data;
+﻿using AVAIntegrationModeler.AVAPlace.Extensions;
+using AVAIntegrationModeler.Infrastructure.Data;
 
 namespace AVAIntegrationModeler.FunctionalTests;
 
@@ -18,6 +19,7 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
 
     // Get service provider.
     var serviceProvider = host.Services;
+    
 
     // Create a scope to obtain a reference to the database
     // context (AppDbContext).
@@ -57,9 +59,12 @@ public class CustomWebApplicationFactory<TProgram> : WebApplicationFactory<TProg
 
   protected override void ConfigureWebHost(IWebHostBuilder builder)
   {
+    
     builder
-        .ConfigureServices(services =>
+        .ConfigureServices((context, services) =>
         {
+          services.AddAVAPlaceServices(context.Configuration);
+
           // Configure test dependencies here
 
           //// Remove the app's ApplicationDbContext registration.

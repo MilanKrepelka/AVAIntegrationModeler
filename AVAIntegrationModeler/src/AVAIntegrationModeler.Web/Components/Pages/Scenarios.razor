@@ -1,0 +1,130 @@
+﻿@page "/scenarios"
+@using AVAIntegrationModeler.Web.ViewModels.List;
+@inject ISnackbar Snackbar
+
+
+
+<PageTitle>Integrační scénáře</PageTitle>
+
+<MudText Typo="Typo.h3" GutterBottom="true">Integrační scénáře</MudText>
+<MudText Typo="Typo.body1" Class="mb-8">This component demonstrates fetching data from the server.</MudText>
+
+@if (ScenariosList == null)
+{
+    <MudProgressCircular Color="Color.Default" Indeterminate="true" />
+}
+else
+{
+    <MudRadioGroup T="AVAIntegrationModeler.Contracts.Datasource" Class="mb-4" Value="Datasource" ValueChanged="onDatasourceChanded">
+        <MudRadio  Dense="true" Value="AVAIntegrationModeler.Contracts.Datasource.Database" Color="Color.Primary">Lokální vývoj</MudRadio>
+        <MudRadio  Dense="true" Value="AVAIntegrationModeler.Contracts.Datasource.AVAPlace" Color="Color.Secondary">AVA place</MudRadio>
+    </MudRadioGroup>
+
+    <MudDataGrid Items="@ScenariosList" Filterable="false" QuickFilter="FilterFunc" ExpandSingleRow="false">
+        
+        <ToolBarContent>
+            
+            <MudSpacer />
+            <MudTextField @bind-Value="this.filterString" Placeholder="Hledat" Adornment="Adornment.Start" Immediate="true"
+                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+        </ToolBarContent>
+        <Columns>
+            <HierarchyColumn T="ScenarioListViewModel" EnableHeaderToggle=true />
+            <PropertyColumn Property="x => x.Code" Title="Kód">
+                
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.Name.EnglishValue" Title="Název - anglicky" />
+            <PropertyColumn Property="x => x.Description.EnglishValue" Title="Popis - anglicky" />
+            <PropertyColumn Property="x => x.InputFeature.Code" Title="Vstupní Feature" />
+            <PropertyColumn Property="x => x.OutputFeature.Code" Title="Výstupní Feature" />
+            <PropertyColumn Property="x => x.Id" Title="Identifikátor">
+                <CellTemplate>
+                    @context.Item.Id
+                    <MudTooltip Text="Vložit do schránky" Color="Color.Info" Arrow>
+                        <MudIconButton Icon="@Icons.Material.Filled.ContentCopy"
+                                       Color="Color.Primary"
+                                       Size="Size.Small"
+                                       OnClick="@(() => CopyToClipboard(context.Item.Id.ToString()))" />
+                    </MudTooltip>
+                </CellTemplate>
+            </PropertyColumn>
+            
+        </Columns>
+        <ChildRowContent>
+            <MudPaper Class="pa-6 ma-2" Elevation="2">
+            <MudForm Spacing="4">
+            <MudGrid>
+                <MudItem xs="12" sm="6" md="4" >
+                    <MudField Label="Identifikátor" Variant="Variant.Text">@context.Item.Id</MudField>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4" >
+                    <MudField Label="Kód" Variant="Variant.Text">@context.Item.Code</MudField>
+                </MudItem>
+            </MudGrid>
+            <MudGrid>
+                <MudItem xs="12" sm="6" md="4" >
+                    <MudField Label="Název - anglicky" Variant="Variant.Text">@context.Item.Name.EnglishValue</MudField>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4">
+                    <MudField Label="Popis - anglicky" Variant="Variant.Text">@context.Item.Description.EnglishValue</MudField>
+                </MudItem>
+            </MudGrid>
+            <MudGrid>
+                <MudItem xs="12" sm="6" md="4" >
+                    <MudField Label="Název - česky" Variant="Variant.Text">@context.Item.Name.CzechValue</MudField>
+                </MudItem>
+                <MudItem xs="12" sm="6" md="4" >
+                    <MudField Label="Popis - česky" Variant="Variant.Text">@context.Item.Description.CzechValue</MudField>
+                </MudItem>
+            </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Vstupní feature" Variant="Variant.Text">@context.Item.InputFeature.Code</MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Výstupní feature" Variant="Variant.Text">@context.Item.OutputFeature.Code</MudField>
+                        </MudItem>
+                    </MudGrid>
+            </MudForm>
+            </MudPaper>
+        </ChildRowContent>
+    </MudDataGrid>
+    
+}
+@code
+{
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    private async Task CopyToClipboard(string text)
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
+        Snackbar.Add($"Zkopírováno do schránky: {text}", Severity.Success);
+    }
+}
+@* @code {
+    private WeatherForecast[]? forecasts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate asynchronous loading to demonstrate a loading indicator
+        await Task.Delay(500);
+
+        var startDate = DateOnly.FromDateTime(DateTime.Now);
+        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
+        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
+        {
+            Date = startDate.AddDays(index),
+            TemperatureC = Random.Shared.Next(-20, 55),
+            Summary = summaries[Random.Shared.Next(summaries.Length)]
+        }).ToArray();
+    }
+
+    private class WeatherForecast
+    {
+        public DateOnly Date { get; set; }
+        public int TemperatureC { get; set; }
+        public string? Summary { get; set; }
+        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
+    }
+}
+ *@

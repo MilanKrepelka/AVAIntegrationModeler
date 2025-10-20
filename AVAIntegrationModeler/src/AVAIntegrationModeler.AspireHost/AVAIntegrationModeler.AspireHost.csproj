@@ -16,14 +16,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AVAIntegrationModeler.Web\AVAIntegrationModeler.Web.csproj" />
+    <ProjectReference Include="..\AVAIntegrationModeler.API\AVAIntegrationModeler.API.csproj" />
   </ItemGroup>
   <ItemGroup>
     <!-- The IsAspireProjectResource attribute tells .NET Aspire to treat this 
         reference as a standard project reference and not attempt to generate
         a metadata file -->
-    <ProjectReference Include="..\AVAIntegrationModeler.ServiceDefaults\AVAIntegrationModeler.ServiceDefaults.csproj"
-                      IsAspireProjectResource="false" />
+    <ProjectReference Include="..\AVAIntegrationModeler.ServiceDefaults\AVAIntegrationModeler.ServiceDefaults.csproj" IsAspireProjectResource="false" />
   </ItemGroup>
 
 </Project>

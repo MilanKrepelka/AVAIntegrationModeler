@@ -1,16 +1,36 @@
 ﻿using AVAIntegrationModeler.Core.ContributorAggregate;
+using AVAIntegrationModeler.Core.ScenarioAggregate;
+using Microsoft.AspNetCore.Components;
+using Microsoft.Extensions.Options;
 
 namespace AVAIntegrationModeler.Infrastructure.Data;
-public class AppDbContext(DbContextOptions<AppDbContext> options,
-  IDomainEventDispatcher? dispatcher) : DbContext(options)
+
+
+public class AppDbContext : DbContext
 {
-  private readonly IDomainEventDispatcher? _dispatcher = dispatcher;
+  private readonly IDomainEventDispatcher? _dispatcher;
+  private readonly DbContextOptions<AppDbContext>? _options;
+
+  public AppDbContext()
+  {
+    // Optionally, you can assign null explicitly for clarity
+    _options = null!;
+    _dispatcher = null!;
+  }
+  public AppDbContext(DbContextOptions<AppDbContext> options,IDomainEventDispatcher? dispatcher)
+  {
+    this._options = options;
+    this._dispatcher = dispatcher;
+  }
+  
 
   public DbSet<Contributor> Contributors => Set<Contributor>();
+  public DbSet<Scenario> Scenarios => Set<Scenario>();
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     base.OnModelCreating(modelBuilder);
+    // Toto zaregistruje všechny konfigurace entit ve shodě s IEntityTypeConfiguration v aktuálním sestavení
     modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
   }
 
@@ -30,6 +50,14 @@ public class AppDbContext(DbContextOptions<AppDbContext> options,
     await _dispatcher.DispatchAndClearEvents(entitiesWithEvents);
 
     return result;
+  }
+
+  protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+  {
+    if (!optionsBuilder.IsConfigured)
+    {
+      optionsBuilder.UseSqlite("Data Source=app.db");
+    }
   }
 
   public override int SaveChanges() =>

@@ -12,13 +12,13 @@ public class EfRepositoryUpdate : BaseEfRepoTestFixture
     var initialName = Guid.NewGuid().ToString();
     var Contributor = new Contributor(initialName);
 
-    await repository.AddAsync(Contributor);
+    await repository.AddAsync(Contributor, CancellationToken.None);
 
     // detach the item so we get a different instance
     _dbContext.Entry(Contributor).State = EntityState.Detached;
 
     // fetch the item and update its title
-    var newContributor = (await repository.ListAsync())
+    var newContributor = (await repository.ListAsync(CancellationToken.None))
         .FirstOrDefault(Contributor => Contributor.Name == initialName);
     newContributor.ShouldNotBeNull();
 
@@ -27,10 +27,10 @@ public class EfRepositoryUpdate : BaseEfRepoTestFixture
     newContributor.UpdateName(newName);
 
     // Update the item
-    await repository.UpdateAsync(newContributor);
+    await repository.UpdateAsync(newContributor, CancellationToken.None);
 
     // Fetch the updated item
-    var updatedItem = (await repository.ListAsync())
+    var updatedItem = (await repository.ListAsync(CancellationToken.None))
         .FirstOrDefault(Contributor => Contributor.Name == newName);
 
     updatedItem.ShouldNotBeNull();
