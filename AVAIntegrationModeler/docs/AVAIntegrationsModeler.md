@@ -1,5 +1,5 @@
 # AVA Integration Modeler
 
-# Z�kladn� popis
+# Základní popis
 
-## Z
+## Práce z Features a integračními scénáři
