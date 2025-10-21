@@ -20,7 +20,7 @@ jobs:
 
     - name: Add public Azure Artifacts feed
       run: |
-        dotnet nuget add source "https://pkgs.dev.azure.com/avaspace/feed/_packaging/feed/nuget/v3/index.json" --name AVAFeed
+        dotnet nuget add source "https://pkgs.dev.azure.com/avaspace/feed/_packaging/feed/nuget/v3/index.json" --name AVAPlace
 
     - name: Restore dependencies
       run: dotnet restore AVAIntegrationModeler/AVAIntegrationModeler.sln
