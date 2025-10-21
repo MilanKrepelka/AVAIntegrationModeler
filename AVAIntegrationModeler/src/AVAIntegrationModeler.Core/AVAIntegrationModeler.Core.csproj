@@ -1,6 +1,4 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <Sdk Name="Microsoft.Build.CentralPackageVersions" Version="2.1.3" />
-
   <ItemGroup>
     <PackageReference Include="Ardalis.GuardClauses" />
     <PackageReference Include="Ardalis.Result" />
@@ -17,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\AVAIntegrationModeler.Contracts\AVAIntegrationModeler.Contracts.csproj" />
+    <ProjectReference Include="..\AVAIntegrationModeler.Contracts\AVAIntegrationModeler.Contracts.csproj" />
   </ItemGroup>
-
 </Project>
