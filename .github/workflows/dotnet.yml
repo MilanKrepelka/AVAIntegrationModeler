@@ -30,8 +30,8 @@ jobs:
       with:
         server_address: smtp.office365.com
         server_port: 587
-        username: ${{ secrets.MAIL_USERNAME }}
-        password: ${{ secrets.MAIL_APP_PASSWORD }}
+        username: ${{ secrets.SMTP_USERNAME }}
+        password: ${{ secrets.SMTP_PASSWORD }}
         subject: "Build ${{ github.workflow }} #${{ github.run_number }} – ${{ job.status }}"
         body: |
           Build projektu AVAIntegrationModeler proběhl.
@@ -40,4 +40,4 @@ jobs:
           Run: ${{ github.run_id }}
           Zkontrolovat výsledky: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         to: krepelka@milankrepelka.cz
-        from: ${{ secrets.MAIL_USERNAME }}
+        from: ${{ secrets.SMTP_USERNAME }}
