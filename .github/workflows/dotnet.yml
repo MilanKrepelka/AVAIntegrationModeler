@@ -24,20 +24,4 @@ jobs:
     - name: Build
       run: dotnet build AVAIntegrationModeler/AVAIntegrationModeler.sln --no-restore
 
-    - name: Send email notification
-      if: always()  # spustí se vždy, i při selhání buildu nebo testů
-      uses: dawidd6/action-send-mail@v3
-      with:
-        server_address: smtp.office365.com
-        server_port: 587
-        username: ${{ secrets.SMTP_USERNAME }}
-        password: ${{ secrets.SMTP_PASSWORD }}
-        subject: "Build ${{ github.workflow }} #${{ github.run_number }} – ${{ job.status }}"
-        body: |
-          Build projektu AVAIntegrationModeler proběhl.
-          Build status: ${{ job.status }}
-          Testy: ${{ steps.tests.outcome }}
-          Run: ${{ github.run_id }}
-          Zkontrolovat výsledky: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
-        to: krepelka@milankrepelka.cz
-        from: ${{ secrets.SMTP_USERNAME }}
+  
