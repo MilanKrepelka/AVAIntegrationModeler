@@ -19,7 +19,7 @@ jobs:
         dotnet-version: 9.0.x
 
     - name: Restore dependencies
-      run: dotnet restore AVAIntegrationModeler/AVAIntegrationModeler.sln --configfile AVAIntegrationModeler/NuGet.Config
+      run: dotnet restore AVAIntegrationModeler/AVAIntegrationModeler.sln --configfile AVAIntegrationModeler/nuget.config
 
     - name: Build
       run: dotnet build AVAIntegrationModeler/AVAIntegrationModeler.sln --no-restore
