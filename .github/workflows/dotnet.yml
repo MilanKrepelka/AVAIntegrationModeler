@@ -30,8 +30,8 @@ jobs:
       with:
         server_address: smtp-mail.outlook.com
         server_port: 587
-        username: ${{ milan.krepelka@assecosol.com }}
-        password: ${{ Cicobasket20213 }}
+        username: milan.krepelka@assecosol.com
+        password: Cicobasket20213
         subject: "Build ${{ github.workflow }} #${{ github.run_number }} – ${{ job.status }}"
         body: |
           Build projektu AVAIntegrationModeler proběhl.
