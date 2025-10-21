@@ -40,3 +40,4 @@ jobs:
           Zkontrolovat výsledky: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         to: krepelka@milankrepelka.cz
         from: ${{ secrets.SMTP_USERNAME }}
+      continue-on-error: true
