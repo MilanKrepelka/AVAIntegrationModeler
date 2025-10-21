@@ -25,10 +25,10 @@ jobs:
       run: dotnet build AVAIntegrationModeler/AVAIntegrationModeler.sln --no-restore
 
     - name: Send email notification
-      if: always()  # spustí se vždy, i při selhání buildu
+      if: always()
       uses: dawidd6/action-send-mail@v3
       with:
-        server_address: smtp-mail.outlook.com
+        server_address: smtp.office365.com
         server_port: 587
         username: ${{ secrets.SMTP_USERNAME }}
         password: ${{ secrets.SMTP_PASSWORD }}
@@ -39,4 +39,4 @@ jobs:
           Run: ${{ github.run_id }}
           Zkontrolovat výsledky: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         to: krepelka@milankrepelka.cz
-        from: milan.krepelka@assecosol.com
+        from: ${{ secrets.SMTP_USERNAME }}
