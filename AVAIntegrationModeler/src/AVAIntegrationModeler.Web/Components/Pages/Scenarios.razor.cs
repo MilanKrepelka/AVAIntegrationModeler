@@ -51,7 +51,7 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase
       ScenariosList.Clear();
       // Načtení scénářů z AVAIntegrationModeler.API
       using var httpClient = new HttpClient();
-      var response = await httpClient.GetAsync($"http://localhost:57679/Scenarios?datasource={this.Datasource}");
+      var response = await httpClient.GetAsync($"http://localhost:57679/Features?datasource={this.Datasource}");
       response.EnsureSuccessStatusCode();
 
       var scenarioListResponse = await response.Content.ReadFromJsonAsync<ScenarioListResponse>();
@@ -60,6 +60,7 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase
       {
         foreach (var scenario in scenarioListResponse?.Scenarios!)
         {
+
           ScenarioListViewModel scenarioListViewModel = new ScenarioListViewModel();
           Mapping.ScenarioMapper.MapToViewModel(scenario!, out scenarioListViewModel);
           ScenariosList.Add(scenarioListViewModel);

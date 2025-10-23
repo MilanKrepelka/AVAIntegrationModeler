@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 using AVAIntegrationModeler.Contracts.DTO;
 
 namespace AVAIntegrationModeler.Contracts.DTO;
+// TODO Začni rovnou s agregátem Feature, přidej potřebné vlastnosti podle doménového modelu Feature.
+
 /// <summary>
 /// DTO pro integrační scénář.
 /// </summary>
@@ -30,5 +32,15 @@ public record FeatureDTO
   /// Lokalizovaný popis scénáře (např. v češtině a angličtině).
   /// </summary>
   public LocalizedValue Description { get; init; } = new();
+
+  /// <summary>
+  /// Seznam featur zahrnutých v této integrační feature.
+  /// </summary>
+  public List<(Guid FeatureId, bool ConsumeOnly)> IncludedFeatures { get; init; } = new();
+
+  /// <summary>
+  /// Seznam modelů zahrnutých v této integrační feature.
+  /// </summary>
+  public List<Guid> IncludedModels { get; init; } = new();
 }
 

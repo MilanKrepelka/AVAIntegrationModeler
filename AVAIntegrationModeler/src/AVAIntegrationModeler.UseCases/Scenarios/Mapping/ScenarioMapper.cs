@@ -51,6 +51,7 @@ public class ScenarioMapper : IMapper<Scenario, ScenarioDTO, ScenarioMapper>
             Name = scenario.Name,
             Description = scenario.Description,
             InputFeatureId = scenario.InputFeature?.Id,
+            
             OutputFeatureId = scenario.OutputFeature?.Id
         };
     }

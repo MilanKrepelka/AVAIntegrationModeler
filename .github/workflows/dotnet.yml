@@ -27,3 +27,9 @@ jobs:
 
     - name: Build
       run: dotnet build AVAIntegrationModeler/AVAIntegrationModeler.sln --no-restore
+    - name: Run tests
+      id: tests
+      run: |
+        set -e
+        dotnet test AVAIntegrationModeler/AVAIntegrationModeler.sln --no-build --logger "trx;LogFileName=test_results.trx"
+      continue-on-error: false

@@ -40,5 +40,16 @@ public record ScenarioDTO
   /// Identifikátor výstupní feature, která je součástí scénáře.
   /// </summary>
   public Guid? OutputFeatureId { get; init; }
+
+  /// <summary>
+  /// Souhrnné informace o vstupní feature (volitelně plně vyplněno pokud klient požádá o include).
+  /// </summary>
+  public FeatureSummaryDTO? InputFeatureSummary { get; init; }
+
+  /// <summary>
+  /// Souhrnné informace o výstupní feature (volitelně plně vyplněno pokud klient požádá o include).
+  /// </summary>
+  public FeatureSummaryDTO? OutputFeatureSummary { get; init; }
 }
+
 

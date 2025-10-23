@@ -4,7 +4,7 @@ namespace AVAIntegrationModeler.API.Contributors;
 
 public class CreateContributorRequest
 {
-  public const string Route = "/Scenarios";
+  public const string Route = "/Features";
 
   [Required]
   public string? Name { get; set; }

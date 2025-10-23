@@ -5,7 +5,7 @@
 /// </summary>
 public record DeleteScenarioRequest
 {
-  public const string Route = "/Scenarios/{ScenarioId:guid}";
+  public const string Route = "/Features/{ScenarioId:guid}";
   public static string BuildRoute(int scenarioId) => Route.Replace("{ScenarioId:guid}", scenarioId.ToString());
   /// <summary>
   /// Identifikátor scénáře, který má být smazán.
