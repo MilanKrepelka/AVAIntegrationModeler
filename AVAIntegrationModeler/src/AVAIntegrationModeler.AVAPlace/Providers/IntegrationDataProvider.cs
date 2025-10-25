@@ -38,6 +38,12 @@ public class IntegrationDataProvider : IIntegrationDataProvider
     _avaPlaceOptions = avaPlaceOptions;
     _runtimeContext = _serviceProvider.GetRequiredService<IRuntimeContext>() ?? throw new ArgumentNullException(nameof(IRuntimeContext));
   }
+
+  public Task<IEnumerable<FeatureDTO>> GetIntegrationFeaturesAsync(CancellationToken ct = default)
+  {
+    throw new NotImplementedException();
+  }
+
   /// <inheritdoc/>
   public async Task<IEnumerable<ScenarioDTO>> GetIntegrationScenariosAsync(CancellationToken ct = default)
   {

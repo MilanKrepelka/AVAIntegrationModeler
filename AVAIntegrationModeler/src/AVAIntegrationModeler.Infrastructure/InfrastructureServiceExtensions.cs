@@ -18,6 +18,7 @@ public static class InfrastructureServiceExtensions
             .AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>))
             .AddScoped<IListContributorsQueryService, ListContributorsQueryService>()
             .AddScoped<IListScenariosQueryService, ListScenariosQueryService>()
+            .AddScoped<UseCases.Features.List.IListFeaturesQueryService, ListFeaturesQueryService>()
             .AddScoped<IDeleteContributorService, DeleteContributorService>();
 
     logger.LogInformation("{Project} services registered", "Infrastructure");

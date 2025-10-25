@@ -25,4 +25,25 @@ public static class FeatureMapper
     };
     return result;
   }
+
+  /// <summary>
+  /// Mapuje doménový objekt feature (<see cref="Core.FeatureAggregate.Feature"/>) na jeho datový přenosový objekt (<see cref="FeatureDTO"/>).
+  /// </summary>
+  /// <param name="feature"><see cref="Core.FeatureAggregate.Feature"/></param>
+  /// <returns><see cref="FeatureSummaryDTO"/></returns>
+  public static FeatureDTO? MapToFeatureDTO(Core.FeatureAggregate.Feature? feature)
+  {
+    if (feature == default) return default;
+
+    FeatureDTO result = new FeatureDTO()
+    {
+      Id = feature.Id,
+      Code = feature.Code,
+      Name = LocalizedValueMapper.MapToDTO(feature.Name),
+      Description = LocalizedValueMapper.MapToDTO(feature.Description),
+      
+    };
+    return result;
+  }
+
 }
