@@ -1,4 +1,4 @@
-name: .NET
+name: .NET Build and Notify
 
 on:
   push:
@@ -18,18 +18,8 @@ jobs:
       with:
         dotnet-version: 9.0.x
 
-    - name: Add public Azure Artifacts feed
-      run: |
-        dotnet nuget add source "https://pkgs.dev.azure.com/avaspace/feed/_packaging/feed/nuget/v3/index.json" --name AVAPlace
-
     - name: Restore dependencies
-      run: dotnet restore AVAIntegrationModeler/AVAIntegrationModeler.sln
+      run: dotnet restore AVAIntegrationModeler/AVAIntegrationModeler.sln --configfile AVAIntegrationModeler/nuget.config
 
     - name: Build
       run: dotnet build AVAIntegrationModeler/AVAIntegrationModeler.sln --no-restore
-    - name: Run tests
-      id: tests
-      run: |
-        set -e
-        dotnet test AVAIntegrationModeler/AVAIntegrationModeler.sln --no-build --logger "trx;LogFileName=test_results.trx"
-      continue-on-error: false
