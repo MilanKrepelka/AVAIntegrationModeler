@@ -10,13 +10,33 @@ namespace AVAIntegrationModeler.Domain.AreaAggregate;
 /// </summary>
 public class Area : EntityBase<Guid>, IAggregateRoot
 {
+  public Area() { } // EF Core
+  
+  public Area(Guid id, string code)
+  {
+    Id = id;
+    SetCode(code);
+  }
+
   /// <summary>
   /// Kód oblasti.
   /// </summary>
-  public string Code { get; set; } = string.Empty;
+  public string Code { get; private set; } = string.Empty;
 
   /// <summary>
   /// Název oblasti.
   /// </summary>
-  public string Name { get; set; } = string.Empty;
+  public string Name { get; private set; } = string.Empty;
+
+  public Area SetCode(string code)
+  {
+    Code = Guard.Against.NullOrEmpty(code, nameof(code));
+    return this;
+  }
+
+  public Area SetName(string name)
+  {
+    Name = Guard.Against.NullOrEmpty(name, nameof(name));
+    return this;
+  }
 }

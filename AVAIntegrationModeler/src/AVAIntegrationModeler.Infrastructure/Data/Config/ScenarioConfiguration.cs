@@ -1,5 +1,7 @@
-﻿using AVAIntegrationModeler.Domain.ContributorAggregate;
+﻿using System.Net.NetworkInformation;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AVAIntegrationModeler.Infrastructure.Data.Config;
 

@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AVAIntegrationModeler.Domain.DataModelAggregate;
 
@@ -68,14 +66,21 @@ public class DataModelField : EntityBase<Guid>
   public DataModelFieldType FieldType { get; private set; }
 
   /// <summary>
-  /// Identifikátory typů entit, na které toto pole odkazuje (pouze pro typy LookupEntity a NestedEntity).
+  /// Privátní kolekce odkazů na typy entit.
   /// </summary>
-  private readonly List<Guid> _referencedEntityTypeIds = new();
-  
+  private readonly List<DataModelFieldEntityTypeReference> _entityTypeReferences = new();
+
   /// <summary>
-  /// Read-only kolekce identifikátorů odkazovaných typů entit.
+  /// Read-only kolekce odkazů na typy entit.
   /// </summary>
-  public IReadOnlyCollection<Guid> ReferencedEntityTypeIds => _referencedEntityTypeIds.AsReadOnly();
+  public IReadOnlyCollection<DataModelFieldEntityTypeReference> EntityTypeReferences 
+    => _entityTypeReferences.AsReadOnly();
+
+  /// <summary>
+  /// Helper property pro získání pouze ID odkazovaných typů (pro zpětnou kompatibilitu).
+  /// </summary>
+  public IEnumerable<Guid> ReferencedEntityTypeIds 
+    => _entityTypeReferences.Select(r => r.ReferencedEntityTypeId);
 
   /// <summary>
   /// Nastaví název pole.
@@ -156,33 +161,45 @@ public class DataModelField : EntityBase<Guid>
   /// <summary>
   /// Přidá odkaz na typ entity (pro LookupEntity nebo NestedEntity).
   /// </summary>
-  /// <param name="entityTypeId">Identifikátor typu entity.</param>
   public DataModelField AddReferencedEntityType(Guid entityTypeId)
   {
     Guard.Against.Default(entityTypeId, nameof(entityTypeId));
 
-    // Business rule: LookupEntity a NestedEntity vyžadují reference
     if (FieldType != DataModelFieldType.LookupEntity && FieldType != DataModelFieldType.NestedEntity)
     {
       throw new InvalidOperationException(
         $"Referenced entity types can only be added for FieldType LookupEntity or NestedEntity. Current type: {FieldType}");
     }
 
-    if (!_referencedEntityTypeIds.Contains(entityTypeId))
+    // Kontrola duplicit
+    if (_entityTypeReferences.Any(r => r.ReferencedEntityTypeId == entityTypeId))
     {
-      _referencedEntityTypeIds.Add(entityTypeId);
+      return this; // již existuje
     }
 
+    var reference = new DataModelFieldEntityTypeReference(
+      Guid.NewGuid(), 
+      this.Id, 
+      entityTypeId
+    );
+    
+    _entityTypeReferences.Add(reference);
     return this;
   }
 
   /// <summary>
   /// Odebere odkaz na typ entity.
   /// </summary>
-  /// <param name="entityTypeId">Identifikátor typu entity k odebrání.</param>
   public DataModelField RemoveReferencedEntityType(Guid entityTypeId)
   {
-    _referencedEntityTypeIds.Remove(entityTypeId);
+    var reference = _entityTypeReferences
+      .FirstOrDefault(r => r.ReferencedEntityTypeId == entityTypeId);
+    
+    if (reference != null)
+    {
+      _entityTypeReferences.Remove(reference);
+    }
+    
     return this;
   }
 }

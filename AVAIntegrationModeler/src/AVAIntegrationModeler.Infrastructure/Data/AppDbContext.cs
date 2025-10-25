@@ -1,4 +1,6 @@
-﻿using AVAIntegrationModeler.Domain.ContributorAggregate;
+﻿using AVAIntegrationModeler.Domain.AreaAggregate;
+using AVAIntegrationModeler.Domain.ContributorAggregate;
+using AVAIntegrationModeler.Domain.DataModelAggregate;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
@@ -26,6 +28,10 @@ public class AppDbContext : DbContext
 
   public DbSet<Contributor> Contributors => Set<Contributor>();
   public DbSet<Scenario> Scenarios => Set<Scenario>();
+  public DbSet<DataModel> DataModels => Set<DataModel>();
+  public DbSet<Area> Areas => Set<Area>();
+  public DbSet<DataModelField> DataModelFields => Set<DataModelField>(); // ✅
+  public DbSet<DataModelFieldEntityTypeReference> DataModelFieldEntityTypeReferences => Set<DataModelFieldEntityTypeReference>(); // ✅ NOVÉ
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {

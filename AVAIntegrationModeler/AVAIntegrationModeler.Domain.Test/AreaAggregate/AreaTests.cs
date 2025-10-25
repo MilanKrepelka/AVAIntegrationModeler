@@ -26,8 +26,8 @@ public class AreaTests
     var area = new Area();
 
     // Act
-    area.Code = "AREA-001";
-    area.Name = "Test Area";
+    area.SetCode("AREA-001");
+    area.SetName("Test Area");
 
     // Assert
     area.Code.ShouldBe("AREA-001");
