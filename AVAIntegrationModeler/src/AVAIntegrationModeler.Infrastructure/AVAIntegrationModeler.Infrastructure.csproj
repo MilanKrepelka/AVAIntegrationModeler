@@ -16,7 +16,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <ProjectReference Include="..\AVAIntegrationModeler.Core\AVAIntegrationModeler.Domain.csproj" />
+    <ProjectReference Include="..\AVAIntegrationModeler.Domain\AVAIntegrationModeler.Domain.csproj" />
     <ProjectReference Include="..\AVAIntegrationModeler.UseCases\AVAIntegrationModeler.UseCases.csproj" />
   </ItemGroup>
 </Project>

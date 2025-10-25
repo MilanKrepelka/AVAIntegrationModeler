@@ -8,7 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AVAIntegrationModeler.Contracts\AVAIntegrationModeler.Contracts.csproj" />
-    <ProjectReference Include="..\AVAIntegrationModeler.Core\AVAIntegrationModeler.Domain.csproj" />
+    <ProjectReference Include="..\AVAIntegrationModeler.Domain\AVAIntegrationModeler.Domain.csproj" />
   </ItemGroup>
 
 </Project>
