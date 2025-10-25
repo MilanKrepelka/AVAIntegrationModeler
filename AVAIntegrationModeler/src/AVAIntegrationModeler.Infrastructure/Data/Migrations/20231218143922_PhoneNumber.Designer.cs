@@ -19,7 +19,7 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.0");
 
-            modelBuilder.Entity("AVAIntegrationModeler.Core.ContributorAggregate.Contributor", b =>
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.ContributorAggregate.Contributor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -38,9 +38,9 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.ToTable("Contributors");
                 });
 
-            modelBuilder.Entity("AVAIntegrationModeler.Core.ContributorAggregate.Contributor", b =>
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.ContributorAggregate.Contributor", b =>
                 {
-                    b.OwnsOne("AVAIntegrationModeler.Core.ContributorAggregate.PhoneNumber", "PhoneNumber", b1 =>
+                    b.OwnsOne("AVAIntegrationModeler.Domain.ContributorAggregate.PhoneNumber", "PhoneNumber", b1 =>
                         {
                             b1.Property<int>("ContributorId")
                                 .HasColumnType("INTEGER");

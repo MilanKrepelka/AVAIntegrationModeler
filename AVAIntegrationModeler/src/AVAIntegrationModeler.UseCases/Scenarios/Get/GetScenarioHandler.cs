@@ -1,8 +1,8 @@
 ﻿using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.Core.ContributorAggregate;
-using AVAIntegrationModeler.Core.ContributorAggregate.Specifications;
-using AVAIntegrationModeler.Core.ScenarioAggregate;
-using AVAIntegrationModeler.Core.ScenarioAggregate.Specifications;
+using AVAIntegrationModeler.Domain.ContributorAggregate;
+using AVAIntegrationModeler.Domain.ContributorAggregate.Specifications;
+using AVAIntegrationModeler.Domain.ScenarioAggregate;
+using AVAIntegrationModeler.Domain.ScenarioAggregate.Specifications;
 using AVAIntegrationModeler.UseCases.Contributors;
 using AVAIntegrationModeler.UseCases.Contributors.Get;
 using AVAIntegrationModeler.UseCases.Scenarios.Mapping;

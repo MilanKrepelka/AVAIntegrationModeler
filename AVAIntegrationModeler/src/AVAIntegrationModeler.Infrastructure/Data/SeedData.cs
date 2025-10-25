@@ -1,5 +1,5 @@
-﻿using AVAIntegrationModeler.Core.ContributorAggregate;
-using AVAIntegrationModeler.Core.ScenarioAggregate;
+﻿using AVAIntegrationModeler.Domain.ContributorAggregate;
+using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using Org.BouncyCastle.Bcpg.Sig;
 
 namespace AVAIntegrationModeler.Infrastructure.Data;
@@ -18,23 +18,23 @@ public static class SeedData
   static SeedData()
   {
     Scenario1.SetCode("scenario1Code")
-     .SetName(new Core.ValueObjects.LocalizedValue() { CzechValue = "Organization přijímač", EnglishValue = "Organization consumer" })
-     .SetDescription(new Core.ValueObjects.LocalizedValue() { CzechValue = "Organization přijímač popisek", EnglishValue = "Organization consumer description" })
+     .SetName(new Domain.ValueObjects.LocalizedValue() { CzechValue = "Organization přijímač", EnglishValue = "Organization consumer" })
+     .SetDescription(new Domain.ValueObjects.LocalizedValue() { CzechValue = "Organization přijímač popisek", EnglishValue = "Organization consumer description" })
      .SetInputFeature(null)
      .SetOutputFeature(null);
 
     Scenario2.SetCode("scenario2Code")
-      .SetName(new Core.ValueObjects.LocalizedValue() { CzechValue = "Faktury přijímač", EnglishValue = "Invoices consumer" })
-      .SetDescription(new Core.ValueObjects.LocalizedValue() { CzechValue = "Faktury přijímač popisek", EnglishValue = "Invoice consumer description" })
+      .SetName(new Domain.ValueObjects.LocalizedValue() { CzechValue = "Faktury přijímač", EnglishValue = "Invoices consumer" })
+      .SetDescription(new Domain.ValueObjects.LocalizedValue() { CzechValue = "Faktury přijímač popisek", EnglishValue = "Invoice consumer description" })
       .SetInputFeature(null)
-      .SetOutputFeature(new Feature(Guid.Parse("b36e1803-a6e7-4841-8de6-859a6dee43bf"))
+      .SetOutputFeature(Guid.Parse("b36e1803-a6e7-4841-8de6-859a6dee43bf")
       );
 
     Scenario3.SetCode("scenario3Code")
-      .SetName(new Core.ValueObjects.LocalizedValue() { CzechValue = "Osoby přijímač", EnglishValue = "Person consumer" })
-      .SetDescription(new Core.ValueObjects.LocalizedValue() { CzechValue = "Osoby přijímač popisek", EnglishValue = "Person consumer description" })
+      .SetName(new Domain.ValueObjects.LocalizedValue() { CzechValue = "Osoby přijímač", EnglishValue = "Person consumer" })
+      .SetDescription(new Domain.ValueObjects.LocalizedValue() { CzechValue = "Osoby přijímač popisek", EnglishValue = "Person consumer description" })
       .SetInputFeature(null)
-      .SetOutputFeature(new Feature(Guid.Parse("b36e1803-a6e7-4841-8de6-859a6dee43bf"))
+      .SetOutputFeature(Guid.Parse("b36e1803-a6e7-4841-8de6-859a6dee43bf")
       );
   }
 

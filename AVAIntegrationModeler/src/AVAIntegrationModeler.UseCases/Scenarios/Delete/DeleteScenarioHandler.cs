@@ -1,5 +1,5 @@
-﻿using AVAIntegrationModeler.Core.Interfaces;
-using AVAIntegrationModeler.Core.ScenarioAggregate;
+﻿using AVAIntegrationModeler.Domain.Interfaces;
+using AVAIntegrationModeler.Domain.ScenarioAggregate;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Delete;
 
@@ -9,7 +9,7 @@ public class DeleteScenarioHandler(IRepository<Scenario> repository) : ICommandH
 
   public async Task<Result> Handle(DeleteScenarioCommand request, CancellationToken cancellationToken) 
     {
-    // This Approach: Keep Domain Events in the Domain Model / Core project; this becomes a pass-through
+    // This Approach: Keep Domain Events in the Domain Model / Domain project; this becomes a pass-through
     // This is @ardalis's preferred approach
     
     // Another Approach: Do the real work here including dispatching domain events - change the event from internal to public

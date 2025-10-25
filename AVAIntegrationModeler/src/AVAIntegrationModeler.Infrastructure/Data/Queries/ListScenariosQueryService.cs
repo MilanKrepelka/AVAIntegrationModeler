@@ -37,8 +37,10 @@ public class ListScenariosQueryService(
         else
         {
           result = await _db.Scenarios
-                .Select(s => UseCases.Scenarios.Mapping.ScenarioMapper.MapToDTO(s))
-                .ToListAsync();
+          .Include(s => s.InputFeature)
+          .Include(s => s.OutputFeature)
+          .Select(s => UseCases.Scenarios.Mapping.ScenarioMapper.MapToDTO(s))
+          .ToListAsync();
         }
         return result;
       });

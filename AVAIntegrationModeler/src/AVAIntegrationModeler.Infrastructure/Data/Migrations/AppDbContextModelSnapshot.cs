@@ -17,7 +17,7 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
 
-            modelBuilder.Entity("AVAIntegrationModeler.Core.ContributorAggregate.Contributor", b =>
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.ContributorAggregate.Contributor", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -36,7 +36,7 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.ToTable("Contributors");
                 });
 
-            modelBuilder.Entity("AVAIntegrationModeler.Core.ScenarioAggregate.Scenario", b =>
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.ScenarioAggregate.Scenario", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -58,9 +58,9 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.ToTable("Scenarios");
                 });
 
-            modelBuilder.Entity("AVAIntegrationModeler.Core.ContributorAggregate.Contributor", b =>
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.ContributorAggregate.Contributor", b =>
                 {
-                    b.OwnsOne("AVAIntegrationModeler.Core.ContributorAggregate.PhoneNumber", "PhoneNumber", b1 =>
+                    b.OwnsOne("AVAIntegrationModeler.Domain.ContributorAggregate.PhoneNumber", "PhoneNumber", b1 =>
                         {
                             b1.Property<int>("ContributorId")
                                 .HasColumnType("INTEGER");
@@ -87,9 +87,9 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.Navigation("PhoneNumber");
                 });
 
-            modelBuilder.Entity("AVAIntegrationModeler.Core.ScenarioAggregate.Scenario", b =>
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.ScenarioAggregate.Scenario", b =>
                 {
-                    b.OwnsOne("AVAIntegrationModeler.Core.ValueObjects.LocalizedValue", "Description", b1 =>
+                    b.OwnsOne("AVAIntegrationModeler.Domain.ValueObjects.LocalizedValue", "Description", b1 =>
                         {
                             b1.Property<Guid>("ScenarioId")
                                 .HasColumnType("TEXT");
@@ -110,7 +110,7 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                                 .HasForeignKey("ScenarioId");
                         });
 
-                    b.OwnsOne("AVAIntegrationModeler.Core.ValueObjects.LocalizedValue", "Name", b1 =>
+                    b.OwnsOne("AVAIntegrationModeler.Domain.ValueObjects.LocalizedValue", "Name", b1 =>
                         {
                             b1.Property<Guid>("ScenarioId")
                                 .HasColumnType("TEXT");

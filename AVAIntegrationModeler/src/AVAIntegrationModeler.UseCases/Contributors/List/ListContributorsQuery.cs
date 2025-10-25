@@ -1,5 +1,5 @@
 ﻿using Ardalis.SharedKernel;
-using AVAIntegrationModeler.Core.ContributorAggregate;
+using AVAIntegrationModeler.Domain.ContributorAggregate;
 using AVAIntegrationModeler.UseCases.Contributors.Create;
 using FastEndpoints;
 

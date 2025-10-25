@@ -1,8 +1,8 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using AVAIntegrationModeler.Core.ContributorAggregate;
-using AVAIntegrationModeler.Core.ValueObjects;
-using AVAIntegrationModeler.Core.ScenarioAggregate;
+using AVAIntegrationModeler.Domain.ContributorAggregate;
+using AVAIntegrationModeler.Domain.ValueObjects;
+using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using FastEndpoints;
 using MediatR;
 using Microsoft.Extensions.Logging;

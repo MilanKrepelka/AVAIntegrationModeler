@@ -1,4 +1,4 @@
-﻿using AVAIntegrationModeler.Core.ContributorAggregate;
+﻿using AVAIntegrationModeler.Domain.ContributorAggregate;
 
 namespace AVAIntegrationModeler.UseCases.Contributors.Update;
 

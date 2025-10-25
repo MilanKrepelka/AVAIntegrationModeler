@@ -1,5 +1,5 @@
-﻿using AVAIntegrationModeler.Core.ContributorAggregate;
-using AVAIntegrationModeler.Core.ContributorAggregate.Specifications;
+﻿using AVAIntegrationModeler.Domain.ContributorAggregate;
+using AVAIntegrationModeler.Domain.ContributorAggregate.Specifications;
 
 namespace AVAIntegrationModeler.UseCases.Contributors.Get;
 

@@ -1,4 +1,4 @@
-﻿using AVAIntegrationModeler.Core.Interfaces;
+﻿using AVAIntegrationModeler.Domain.Interfaces;
 
 namespace AVAIntegrationModeler.UseCases.Contributors.Delete;
 
@@ -6,7 +6,7 @@ public class DeleteContributorHandler(IDeleteContributorService _deleteContribut
   : ICommandHandler<DeleteContributorCommand, Result>
 {
   public async Task<Result> Handle(DeleteContributorCommand request, CancellationToken cancellationToken) =>
-    // This Approach: Keep Domain Events in the Domain Model / Core project; this becomes a pass-through
+    // This Approach: Keep Domain Events in the Domain Model / Domain project; this becomes a pass-through
     // This is @ardalis's preferred approach
     await _deleteContributorService.DeleteContributor(request.ContributorId);
     // Another Approach: Do the real work here including dispatching domain events - change the event from internal to public

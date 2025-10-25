@@ -1,6 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.Core.ScenarioAggregate;
+using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using AVAIntegrationModeler.UseCases.Scenarios.Mapping;
 using AVAIntegrationModeler.UseCases.Scenarios.Update;
 
@@ -27,8 +27,8 @@ public class UpdateScenarioHandler(
     existingScenario.SetDescription(LocalizedValueMapper.MapToEntity(request.Scenario.Description));
     existingScenario.SetCode(request.Scenario.Code);
 
-    existingScenario.SetInputFeature(new Feature(request?.Scenario.InputFeatureId));
-    existingScenario.SetOutputFeature(new Feature(request?.Scenario.OutputFeatureId));
+    existingScenario.SetInputFeature(request?.Scenario.InputFeatureId);
+    existingScenario.SetOutputFeature(request?.Scenario.OutputFeatureId);
 
     await _repository.UpdateAsync(existingScenario, cancellationToken);
     

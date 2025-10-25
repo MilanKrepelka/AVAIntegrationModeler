@@ -1,5 +1,5 @@
-﻿using AVAIntegrationModeler.Core.ScenarioAggregate;
-using AVAIntegrationModeler.Core.ValueObjects;
+﻿using AVAIntegrationModeler.Domain.ScenarioAggregate;
+using AVAIntegrationModeler.Domain.ValueObjects;
 using Ardalis.SharedKernel;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Create;
@@ -13,8 +13,8 @@ public class CreateScenarioHandler(IRepository<Scenario> _scenarioRepository)
         .SetCode(request.Code)
         .SetName(request.Name)
         .SetDescription(request.Decsription)
-        .SetInputFeature(new Feature(request.InputFeatureId))
-        .SetOutputFeature(new Feature(request.OutputFeatureId));
+        .SetInputFeature(request.InputFeatureId)
+        .SetOutputFeature(request.OutputFeatureId);
     var created = await _scenarioRepository.AddAsync(scenario, cancellationToken);
 
     if (created == null)
