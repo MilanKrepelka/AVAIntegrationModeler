@@ -71,3 +71,5 @@
 /AVAIntegrationModeler/src/AVAIntegrationModeler.Domain/bin/Debug/net9.0
 /AVAIntegrationModeler/src/AVAIntegrationModeler.Domain/obj/Debug/net9.0
 /AVAIntegrationModeler/src/AVAIntegrationModeler.Domain/obj
+/AVAIntegrationModeler/AVAIntegrationModeler.Domain.Test/bin/Debug/net9.0
+/AVAIntegrationModeler/AVAIntegrationModeler.Domain.Test/obj
