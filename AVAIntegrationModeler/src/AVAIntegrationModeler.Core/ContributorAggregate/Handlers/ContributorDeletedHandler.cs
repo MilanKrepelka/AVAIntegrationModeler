@@ -1,7 +1,7 @@
-﻿using AVAIntegrationModeler.Core.ContributorAggregate.Events;
-using AVAIntegrationModeler.Core.Interfaces;
+﻿using AVAIntegrationModeler.Domain.ContributorAggregate.Events;
+using AVAIntegrationModeler.Domain.Interfaces;
 
-namespace AVAIntegrationModeler.Core.ContributorAggregate.Handlers;
+namespace AVAIntegrationModeler.Domain.ContributorAggregate.Handlers;
 
 /// <summary>
 /// NOTE: Internal because ContributorDeleted is also marked as internal.

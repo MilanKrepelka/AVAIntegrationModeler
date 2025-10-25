@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AVAIntegrationModeler.Core.ValueObjects;
+using AVAIntegrationModeler.Domain.ValueObjects;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios;
 ///// <summary>

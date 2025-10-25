@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AVAIntegrationModeler.Core.ValueObjects;
+namespace AVAIntegrationModeler.Domain.ValueObjects;
 
 /// <summary>
 /// Reprezentuje hodnotu, kterou lze lokalizovat do více jazyků.

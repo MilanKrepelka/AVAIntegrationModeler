@@ -1,4 +1,4 @@
-﻿namespace AVAIntegrationModeler.Core.ContributorAggregate.Events;
+﻿namespace AVAIntegrationModeler.Domain.ContributorAggregate.Events;
 
 /// <summary>
 /// A domain event that is dispatched whenever a contributor is deleted.

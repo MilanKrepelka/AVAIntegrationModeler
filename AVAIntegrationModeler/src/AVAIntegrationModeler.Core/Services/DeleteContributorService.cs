@@ -1,9 +1,9 @@
-﻿using AVAIntegrationModeler.Core.ContributorAggregate;
-using AVAIntegrationModeler.Core.ContributorAggregate.Events;
-using AVAIntegrationModeler.Core.Interfaces;
+﻿using AVAIntegrationModeler.Domain.ContributorAggregate;
+using AVAIntegrationModeler.Domain.ContributorAggregate.Events;
+using AVAIntegrationModeler.Domain.Interfaces;
 
 
-namespace AVAIntegrationModeler.Core.Services;
+namespace AVAIntegrationModeler.Domain.Services;
 
 /// <summary>
 /// This is here mainly so there's an example of a domain service

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using System.Reflection;
-using AVAIntegrationModeler.Core.ContributorAggregate;
+using AVAIntegrationModeler.Domain.ContributorAggregate;
 using FastEndpoints;
 using MediatR;
 using Microsoft.Extensions.Logging;

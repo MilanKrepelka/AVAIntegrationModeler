@@ -10,11 +10,11 @@ namespace AVAIntegrationModeler.UseCases.Scenarios.Mapping;
 public static class FeatureMapper
 {
   /// <summary>
-  /// Mapuje doménový objekt feature (<see cref="Core.FeatureAggregate.Feature"/>) na jeho datový přenosový objekt (<see cref="FeatureSummaryDTO"/>).
+  /// Mapuje doménový objekt feature (<see cref="Domain.FeatureAggregate.Feature"/>) na jeho datový přenosový objekt (<see cref="FeatureSummaryDTO"/>).
   /// </summary>
-  /// <param name="feature"><see cref="Core.FeatureAggregate.Feature"/></param>
+  /// <param name="feature"><see cref="Domain.FeatureAggregate.Feature"/></param>
   /// <returns><see cref="FeatureSummaryDTO"/></returns>
-  public static FeatureSummaryDTO? MapToFeatureSummaryDTO(Core.FeatureAggregate.Feature? feature)
+  public static FeatureSummaryDTO? MapToFeatureSummaryDTO(Domain.FeatureAggregate.Feature? feature)
   {
     if (feature == default) return default;
 
@@ -27,11 +27,11 @@ public static class FeatureMapper
   }
 
   /// <summary>
-  /// Mapuje doménový objekt feature (<see cref="Core.FeatureAggregate.Feature"/>) na jeho datový přenosový objekt (<see cref="FeatureDTO"/>).
+  /// Mapuje doménový objekt feature (<see cref="Domain.FeatureAggregate.Feature"/>) na jeho datový přenosový objekt (<see cref="FeatureDTO"/>).
   /// </summary>
-  /// <param name="feature"><see cref="Core.FeatureAggregate.Feature"/></param>
+  /// <param name="feature"><see cref="Domain.FeatureAggregate.Feature"/></param>
   /// <returns><see cref="FeatureSummaryDTO"/></returns>
-  public static FeatureDTO? MapToFeatureDTO(Core.FeatureAggregate.Feature? feature)
+  public static FeatureDTO? MapToFeatureDTO(Domain.FeatureAggregate.Feature? feature)
   {
     if (feature == default) return default;
 

@@ -1,5 +1,5 @@
-﻿using AVAIntegrationModeler.Core.ContributorAggregate;
-using AVAIntegrationModeler.Core.ScenarioAggregate;
+﻿using AVAIntegrationModeler.Domain.ContributorAggregate;
+using AVAIntegrationModeler.Domain.ScenarioAggregate;
 
 namespace AVAIntegrationModeler.Infrastructure.Data.Config;
 

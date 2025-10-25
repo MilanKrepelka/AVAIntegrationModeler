@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AVAIntegrationModeler.Core.DataModelAggregate;
+namespace AVAIntegrationModeler.Domain.DataModelAggregate;
 
 /// <summary>
 /// Aggregate root pro datový model.
 /// </summary>
 public class DataModel : EntityBase<Guid>, IAggregateRoot
 {
-  // Privátní konstruktor pro EF Core
+  // Privátní konstruktor pro EF Domain
   private DataModel() { }
 
   /// <summary>

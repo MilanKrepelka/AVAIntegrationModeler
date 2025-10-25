@@ -1,7 +1,7 @@
 ﻿using Ardalis.SharedKernel;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.Core.ContributorAggregate;
+using AVAIntegrationModeler.Domain.ContributorAggregate;
 using AVAIntegrationModeler.UseCases.Scenarios.Create;
 using FastEndpoints;
 

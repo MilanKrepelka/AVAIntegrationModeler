@@ -1,5 +1,5 @@
 ﻿using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.Core.ScenarioAggregate;
+using AVAIntegrationModeler.Domain.ScenarioAggregate;
 
 namespace AVAIntegrationModeler.API.Features;
 

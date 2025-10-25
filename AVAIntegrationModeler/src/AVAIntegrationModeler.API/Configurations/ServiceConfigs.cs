@@ -1,4 +1,4 @@
-﻿using AVAIntegrationModeler.Core.Interfaces;
+﻿using AVAIntegrationModeler.Domain.Interfaces;
 using AVAIntegrationModeler.Infrastructure;
 using AVAIntegrationModeler.Infrastructure.Email;
 

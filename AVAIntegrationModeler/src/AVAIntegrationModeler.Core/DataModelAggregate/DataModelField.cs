@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AVAIntegrationModeler.Core.DataModelAggregate;
+namespace AVAIntegrationModeler.Domain.DataModelAggregate;
 
 /// <summary>
 /// Entita představující pole datového modelu. V klasickém pojetí tříd je to atribut nebo property.
 /// </summary>
 public class DataModelField : EntityBase<Guid>
 {
-  // Privátní konstruktor pro EF Core
+  // Privátní konstruktor pro EF Domain
   private DataModelField() { }
 
   /// <summary>

@@ -1,4 +1,4 @@
-﻿namespace AVAIntegrationModeler.Core.ContributorAggregate.Specifications;
+﻿namespace AVAIntegrationModeler.Domain.ContributorAggregate.Specifications;
 
 public class ContributorByIdSpec : Specification<Contributor>
 {

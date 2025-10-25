@@ -1,5 +1,5 @@
-﻿using AVAIntegrationModeler.Core.ScenarioAggregate;
-using AVAIntegrationModeler.Core.ValueObjects;
+﻿using AVAIntegrationModeler.Domain.ScenarioAggregate;
+using AVAIntegrationModeler.Domain.ValueObjects;
 using Ardalis.SharedKernel;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Create;

@@ -14,7 +14,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVAIntegrationModeler.AVAPl
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVAIntegrationModeler.AVAPlaceTests", "src\AVAIntegrationModeler.AVAPlaceTests\AVAIntegrationModeler.AVAPlaceTests.csproj", "{342B5405-9652-A34C-C7D8-D21D9F200B26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVAIntegrationModeler.Core", "src\AVAIntegrationModeler.Core\AVAIntegrationModeler.Core.csproj", "{A2866CE7-C69B-936C-BBCB-957A7E6D4E7E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVAIntegrationModeler.Domain", "src\AVAIntegrationModeler.Core\AVAIntegrationModeler.Domain.csproj", "{A2866CE7-C69B-936C-BBCB-957A7E6D4E7E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVAIntegrationModeler.UseCases", "src\AVAIntegrationModeler.UseCases\AVAIntegrationModeler.UseCases.csproj", "{385C0FE4-490E-07F8-804C-49BB1D74A796}"
 EndProject

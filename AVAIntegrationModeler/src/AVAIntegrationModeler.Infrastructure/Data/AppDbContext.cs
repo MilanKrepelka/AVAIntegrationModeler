@@ -1,5 +1,5 @@
-﻿using AVAIntegrationModeler.Core.ContributorAggregate;
-using AVAIntegrationModeler.Core.ScenarioAggregate;
+﻿using AVAIntegrationModeler.Domain.ContributorAggregate;
+using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 

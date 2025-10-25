@@ -1,4 +1,4 @@
-﻿namespace AVAIntegrationModeler.Core.Interfaces;
+﻿namespace AVAIntegrationModeler.Domain.Interfaces;
 
 public interface IEmailSender
 {

@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AVAIntegrationModeler.Core.FeatureAggregate;
+namespace AVAIntegrationModeler.Domain.FeatureAggregate;
 
 /// <summary>
 /// Reprezentuje zahrnutou (vnořenou) featureId v rámci většího systému.

@@ -1,5 +1,5 @@
-﻿using AVAIntegrationModeler.Core.Interfaces;
-using AVAIntegrationModeler.Core.Services;
+﻿using AVAIntegrationModeler.Domain.Interfaces;
+using AVAIntegrationModeler.Domain.Services;
 using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.Infrastructure.Data.Queries;
 using AVAIntegrationModeler.Infrastructure.Infrastructure.Data;

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using AVAIntegrationModeler.Core.ContributorAggregate;
-using AVAIntegrationModeler.Core.ValueObjects;
+using AVAIntegrationModeler.Domain.ContributorAggregate;
+using AVAIntegrationModeler.Domain.ValueObjects;
 
-namespace AVAIntegrationModeler.Core.ScenarioAggregate;
+namespace AVAIntegrationModeler.Domain.ScenarioAggregate;
 
 /// <summary>
 /// Doménový objekt pro integrační scénář.

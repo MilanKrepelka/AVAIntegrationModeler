@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
 using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.Core.ScenarioAggregate;
+using AVAIntegrationModeler.Domain.ScenarioAggregate;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Mapping;
 /// <summary>

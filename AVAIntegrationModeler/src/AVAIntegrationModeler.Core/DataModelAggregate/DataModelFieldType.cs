@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AVAIntegrationModeler.Core.DataModelAggregate;
+namespace AVAIntegrationModeler.Domain.DataModelAggregate;
 /// <summary>
 /// Výčtový typ pro typy polí datového modelu.
 /// </summary>

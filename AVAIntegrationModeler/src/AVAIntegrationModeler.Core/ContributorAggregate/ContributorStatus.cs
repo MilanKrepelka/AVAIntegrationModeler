@@ -1,4 +1,4 @@
-﻿namespace AVAIntegrationModeler.Core.ContributorAggregate;
+﻿namespace AVAIntegrationModeler.Domain.ContributorAggregate;
 
 public class ContributorStatus : SmartEnum<ContributorStatus>
 {

@@ -1,6 +1,6 @@
-﻿using AVAIntegrationModeler.Core.ScenarioAggregate;
+﻿using AVAIntegrationModeler.Domain.ScenarioAggregate;
 
-namespace AVAIntegrationModeler.Core.ScenarioAggregate.Specifications;
+namespace AVAIntegrationModeler.Domain.ScenarioAggregate.Specifications;
 
 public class ScenarioByIdSpec : Specification<Scenario>
 {

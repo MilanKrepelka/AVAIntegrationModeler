@@ -8,11 +8,11 @@ using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Mapping;
-public class LocalizedValueMapper : IMapper<Core.ValueObjects.LocalizedValue , LocalizedValue, LocalizedValueMapper>
+public class LocalizedValueMapper : IMapper<Domain.ValueObjects.LocalizedValue , LocalizedValue, LocalizedValueMapper>
 {
   private const string czechLocale = "cs-CZ";
   private const string englishLocale = "en-US";
-  public static LocalizedValue MapToDTO(Core.ValueObjects.LocalizedValue domainEntity)
+  public static LocalizedValue MapToDTO(Domain.ValueObjects.LocalizedValue domainEntity)
   {
     var result = new LocalizedValue();
     //LocalizedValue result = new LocalizedValue();
@@ -28,9 +28,9 @@ public class LocalizedValueMapper : IMapper<Core.ValueObjects.LocalizedValue , L
     return result;
   }
 
-  public static Core.ValueObjects.LocalizedValue MapToEntity(LocalizedValue dto)
+  public static Domain.ValueObjects.LocalizedValue MapToEntity(LocalizedValue dto)
   {
-    var result = new Core.ValueObjects.LocalizedValue();
+    var result = new Domain.ValueObjects.LocalizedValue();
     //LocalizedValue<string> result = new LocalizedValue<string>();
     //result.Values = new List<LocalizedValueItem<string>>();
     //if (!string.IsNullOrEmpty(dto.CzechValue))
