@@ -37,7 +37,7 @@ public class Feature : EntityBase<Guid>, IAggregateRoot
   public LocalizedValue Description { get; internal set; } = new();
 
   /// <summary>
-  /// Feature zahrnuté v této integrační feature. Featury mohou být použity jako součást této feature.
+  /// FeatureId zahrnuté v této integrační feature. Featury mohou být použity jako součást této feature.
   /// </summary>
   public List<IncludedFeature> IncludedFeatures { get; internal set; } = new();
 

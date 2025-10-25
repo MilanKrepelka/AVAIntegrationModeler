@@ -40,12 +40,12 @@ public class Scenario : EntityBase<Guid>, IAggregateRoot
   /// <summary>
   /// Vstupní feature integračního scénáře.
   /// </summary>
-  public Feature? InputFeature { get; private set; }
+  public Guid? InputFeature { get; private set; }
 
   /// <summary>
   /// Výstupní feature integračního scénáře.
   /// </summary>
-  public Feature? OutputFeature { get; private set; }
+  public Guid? OutputFeature { get; private set; }
 
   /// <summary>
   /// Nastaví kód scénáře.
@@ -91,7 +91,7 @@ public class Scenario : EntityBase<Guid>, IAggregateRoot
   /// Nastaví vstupní feature scénáře.
   /// </summary>
   /// <param name="feature">Vstupní feature.</param>
-  public Scenario SetInputFeature(Feature? feature)
+  public Scenario SetInputFeature(Guid? feature)
   {
     InputFeature = feature;
     return this;
@@ -101,7 +101,7 @@ public class Scenario : EntityBase<Guid>, IAggregateRoot
   /// Nastaví výstupní feature scénáře.
   /// </summary>
   /// <param name="feature">Výstupní feature.</param>
-  public Scenario SetOutputFeature(Feature? feature)
+  public Scenario SetOutputFeature(Guid? feature)
   {
     OutputFeature = feature;
     return this;

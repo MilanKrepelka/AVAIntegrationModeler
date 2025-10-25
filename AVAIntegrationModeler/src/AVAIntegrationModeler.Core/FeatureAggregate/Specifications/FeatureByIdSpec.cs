@@ -2,9 +2,9 @@
 
 namespace AVAIntegrationModeler.Core.ScenarioAggregate.Specifications;
 
-public class FeatureByIdSpec : Specification<Feature>
+public class FeatureByIdSpec : Specification<Guid>
 {
   public FeatureByIdSpec(Guid featureId) =>
     Query
-        .Where(feature => feature.Id == featureId);
+        .Where( feature => feature == featureId);
 }

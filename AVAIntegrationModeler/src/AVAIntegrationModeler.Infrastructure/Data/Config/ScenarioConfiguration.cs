@@ -20,17 +20,18 @@ public class ScenarioConfiguration : IEntityTypeConfiguration<Scenario>
 
     // Lokalizovaný popis (value object)
     builder.OwnsOne(p => p.Description);
-
+    /*
     // Vstupní feature - pouze Id
     builder.Property(p => p.InputFeature)
         .HasConversion(
-            v => v != null ? v.Id : null,
-            v => v != null ? new Feature(v) : null);
+            v => v != null ? Ind : null,
+            v => v != null ? new FeatureId(v) : null);
 
     // Výstupní feature - pouze Id
     builder.Property(p => p.OutputFeature)
         .HasConversion(
             v => v != null ? v.Id : null,
-            v => v != null ? new Feature(v) : null);
+            v => v != null ? new FeatureId(v) : null);
+    */
   }
 }

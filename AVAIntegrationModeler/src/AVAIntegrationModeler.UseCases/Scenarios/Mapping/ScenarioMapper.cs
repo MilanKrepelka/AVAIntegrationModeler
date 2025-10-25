@@ -29,9 +29,9 @@ public class ScenarioMapper : IMapper<Scenario, ScenarioDTO, ScenarioMapper>
             .SetDescription(LocalizedValueMapper.MapToEntity(dto.Description));
 
         if (dto.InputFeatureId.HasValue)
-            scenario.SetInputFeature(new Feature(dto.InputFeatureId));
+            scenario.SetInputFeature(dto.InputFeatureId);
         if (dto.OutputFeatureId.HasValue)
-            scenario.SetOutputFeature(new Feature(dto.OutputFeatureId));
+            scenario.SetOutputFeature(dto.OutputFeatureId);
 
         return scenario;
     }
@@ -50,9 +50,9 @@ public class ScenarioMapper : IMapper<Scenario, ScenarioDTO, ScenarioMapper>
             Code = scenario.Code,
             Name = scenario.Name,
             Description = scenario.Description,
-            InputFeatureId = scenario.InputFeature?.Id,
-            
-            OutputFeatureId = scenario.OutputFeature?.Id
+
+            InputFeatureId = scenario.InputFeature,
+            OutputFeatureId = scenario.OutputFeature
         };
     }
 }

@@ -13,8 +13,8 @@ public class CreateScenarioHandler(IRepository<Scenario> _scenarioRepository)
         .SetCode(request.Code)
         .SetName(request.Name)
         .SetDescription(request.Decsription)
-        .SetInputFeature(new Feature(request.InputFeatureId))
-        .SetOutputFeature(new Feature(request.OutputFeatureId));
+        .SetInputFeature(request.InputFeatureId)
+        .SetOutputFeature(request.OutputFeatureId);
     var created = await _scenarioRepository.AddAsync(scenario, cancellationToken);
 
     if (created == null)

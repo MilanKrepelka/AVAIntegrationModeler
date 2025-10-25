@@ -27,14 +27,14 @@ public static class SeedData
       .SetName(new Core.ValueObjects.LocalizedValue() { CzechValue = "Faktury přijímač", EnglishValue = "Invoices consumer" })
       .SetDescription(new Core.ValueObjects.LocalizedValue() { CzechValue = "Faktury přijímač popisek", EnglishValue = "Invoice consumer description" })
       .SetInputFeature(null)
-      .SetOutputFeature(new Feature(Guid.Parse("b36e1803-a6e7-4841-8de6-859a6dee43bf"))
+      .SetOutputFeature(Guid.Parse("b36e1803-a6e7-4841-8de6-859a6dee43bf")
       );
 
     Scenario3.SetCode("scenario3Code")
       .SetName(new Core.ValueObjects.LocalizedValue() { CzechValue = "Osoby přijímač", EnglishValue = "Person consumer" })
       .SetDescription(new Core.ValueObjects.LocalizedValue() { CzechValue = "Osoby přijímač popisek", EnglishValue = "Person consumer description" })
       .SetInputFeature(null)
-      .SetOutputFeature(new Feature(Guid.Parse("b36e1803-a6e7-4841-8de6-859a6dee43bf"))
+      .SetOutputFeature(Guid.Parse("b36e1803-a6e7-4841-8de6-859a6dee43bf")
       );
   }
 

@@ -7,30 +7,30 @@ using System.Threading.Tasks;
 namespace AVAIntegrationModeler.Core.FeatureAggregate;
 
 /// <summary>
-/// Reprezentuje zahrnutou (vnořenou) feature v rámci většího systému.
+/// Reprezentuje zahrnutou (vnořenou) featureId v rámci většího systému.
 /// </summary>
-/// <remarks>Třída slouží jako zástupce nebo označení pro feature, které jsou součástí většího systému. Sama o sobě neobsahuje žádnou funkcionalitu,
-/// ale může být použita k identifikaci nebo kategorizaci zahrnutých feature v aplikaci.</remarks>
+/// <remarks>Třída slouží jako zástupce nebo označení pro featureId, které jsou součástí většího systému. Sama o sobě neobsahuje žádnou funkcionalitu,
+/// ale může být použita k identifikaci nebo kategorizaci zahrnutých featureId v aplikaci.</remarks>
 public class IncludedFeature
 {
   /// <summary>
   /// Základní konstruktor.
   /// </summary>
-  /// <param name="feature">Instanční objekt <see cref="Feature"/> představující zahrnutou feature.</param>
-  /// <param name="consumeOnly">Indikuje, zda je feature pouze pro konzumaci.</param>
-  public IncludedFeature(Feature feature, bool consumeOnly)
+  /// <param name="featureId">Instanční objekt <see cref="FeatureId"/> představující zahrnutou featureId.</param>
+  /// <param name="consumeOnly">Indikuje, zda je featureId pouze pro konzumaci.</param>
+  public IncludedFeature(Guid featureId, bool consumeOnly)
   {
-    this.Feature = feature;
+    this.FeatureId = featureId;
     this.ConsumeOnly = consumeOnly;
   }
 
   /// <summary>
-  /// Propojená feature (<see cref="Feature"/>).
+  /// Propojená featureId (<see cref="FeatureId"/>).
   /// </summary>
-  public Feature Feature { get; init; }
+  public Guid FeatureId { get; init; }
 
   /// <summary>
-  /// Příznak určující, zda je feature pouze pro konzumaci.
+  /// Příznak určující, zda je featureId pouze pro konzumaci.
   /// </summary>
   public bool ConsumeOnly { get; init; }
 }

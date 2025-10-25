@@ -3,12 +3,12 @@
 namespace AVAIntegrationModeler.Web.ViewModels.List;
 
 /// <summary>
-/// ViewModel pro Feature v Scenario přehledu.
+/// ViewModel pro FeatureId v Scenario přehledu.
 /// </summary>
 public class FeatureViewModel
 {
   /// <summary>
-  /// View Model představující prázdnou/nezadanou Feature.
+  /// View Model představující prázdnou/nezadanou FeatureId.
   /// </summary>
   public static FeatureViewModel Empty => new FeatureViewModel
   {
