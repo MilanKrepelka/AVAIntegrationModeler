@@ -75,3 +75,5 @@
 /AVAIntegrationModeler/AVAIntegrationModeler.Domain.Test/obj
 /AVAIntegrationModeler/src/AVAIntegrationModeler.Domain.Test/bin/Debug/net9.0
 /AVAIntegrationModeler/src/AVAIntegrationModeler.Domain.Test/obj
+/AVAIntegrationModeler/src/AVAIntegrationModeler.UseCases.Test/bin/Debug/net9.0
+/AVAIntegrationModeler/src/AVAIntegrationModeler.UseCases.Test/obj
