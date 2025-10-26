@@ -28,6 +28,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVAIntegrationModeler.Web",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVAIntegrationModeler.Domain.Test", "src\AVAIntegrationModeler.Domain.Test\AVAIntegrationModeler.Domain.Test.csproj", "{9052BB29-64E7-7C4C-B0C8-A9F939E3B16A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVAIntegrationModeler.UseCases.Test", "src\AVAIntegrationModeler.UseCases.Test\AVAIntegrationModeler.UseCases.Test.csproj", "{F2BEF360-9CE3-4791-85C6-F37A98B4CEA5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -74,6 +76,10 @@ Global
 		{9052BB29-64E7-7C4C-B0C8-A9F939E3B16A}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9052BB29-64E7-7C4C-B0C8-A9F939E3B16A}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9052BB29-64E7-7C4C-B0C8-A9F939E3B16A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F2BEF360-9CE3-4791-85C6-F37A98B4CEA5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F2BEF360-9CE3-4791-85C6-F37A98B4CEA5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F2BEF360-9CE3-4791-85C6-F37A98B4CEA5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F2BEF360-9CE3-4791-85C6-F37A98B4CEA5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
