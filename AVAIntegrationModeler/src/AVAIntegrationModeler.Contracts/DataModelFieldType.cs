@@ -4,70 +4,80 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AVAIntegrationModeler.Domain.DataModelAggregate;
+namespace AVAIntegrationModeler.Contracts;
+
 /// <summary>
 /// Výčtový typ pro typy polí datového modelu.
 /// </summary>
 public enum DataModelFieldType
 {
   /// <summary>
-  /// Obyčejný text
+  /// Obyčejný text.
   /// </summary>
   Text = 1,
+
   /// <summary>
   /// Představuje textový prvek, který podporuje víceřádkový obsah.
   /// </summary>
-  /// <remarks>Tento typ se obvykle používá k zpracování a zobrazování textu, který přesahuje více řádků, například v
-  /// textových editorech, víceřádkových vstupních polích nebo při formátovaném zobrazování textu.</remarks>
-  MultilineText,
+  MultilineText = 2,
+
   /// <summary>
-  /// Představuje výběr mezi dvěma možnostmi.
+  /// Představuje výběr mezi dvěma možnostmi (Ano/Ne).
   /// </summary>
-  /// <remarks>Tento typ se obvykle používá k modelování binárního rozhodnutí nebo přepínače, například "Ano/Ne" nebo
-  /// "Povoleno/Zakázáno".</remarks>
-  TwoOptions,
+  TwoOptions = 3,
+
   /// <summary>
   /// Představuje celé číslo bez desetinných míst.
   /// </summary>
-  WholeNumber,
+  WholeNumber = 4,
+
   /// <summary>
   /// Představuje číslo s desetinnými místy.
   /// </summary>
-  DecimalNumber,
+  DecimalNumber = 5,
+
   /// <summary>
   /// Představuje jedinečný identifikátor (GUID).
   /// </summary>
-  UniqueIdentifier,
+  UniqueIdentifier = 6,
+
   /// <summary>
   /// Představuje datum a čas v koordinovaném světovém čase (UTC).
   /// </summary>
-  UtcDateTime,
+  UtcDateTime = 7,
+
   /// <summary>
   /// Představuje odkaz na jinou entitu v datovém modelu.
   /// </summary>
-  LookupEntity,
+  LookupEntity = 8,
+
   /// <summary>
   /// Představuje vnořenou entitu v datovém modelu.
   /// </summary>
-  NestedEntity,
+  NestedEntity = 9,
+
   /// <summary>
   /// Představuje pouze datum bez časové složky.
   /// </summary>
-  Date,
+  Date = 10,
+
   /// <summary>
   /// Představuje odkaz na soubor nebo dokument.
   /// </summary>
-  FileReference,
+  FileReference = 11,
+
   /// <summary>
   /// Představuje měnovou hodnotu.
   /// </summary>
-  CurrencyNumber,
+  CurrencyNumber = 12,
+
   /// <summary>
   /// Představuje jednohodnotový výběr z předdefinovaného seznamu možností.
   /// </summary>
-  SingleSelectOptionSet,
+  SingleSelectOptionSet = 13,
+
   /// <summary>
   /// Představuje vícehodnotový výběr z předdefinovaného seznamu možností.
   /// </summary>
-  MultiSelectOptionSet
+  MultiSelectOptionSet = 14
 }

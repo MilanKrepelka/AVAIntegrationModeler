@@ -1,4 +1,5 @@
-﻿using AVAIntegrationModeler.Domain.DataModelAggregate;
+﻿using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Domain.DataModelAggregate;
 using Shouldly;
 
 namespace AVAIntegrationModeler.Domain.Test.DataModelAggregate;
