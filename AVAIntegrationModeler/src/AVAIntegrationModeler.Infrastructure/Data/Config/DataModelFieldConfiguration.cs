@@ -31,6 +31,9 @@ public class DataModelFieldConfiguration : IEntityTypeConfiguration<DataModelFie
       .IsRequired()
       .HasConversion<int>();
     
+    // ✅ Ignorovat readonly property EntityTypeReferences
+    builder.Ignore(e => e.EntityTypeReferences);
+    
     // ✅ Mapování private kolekce _entityTypeReferences
     var navigation = builder.Metadata.FindNavigation(nameof(DataModelField.EntityTypeReferences));
     if (navigation != null)

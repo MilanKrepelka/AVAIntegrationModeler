@@ -14,24 +14,19 @@ public class DataModelFieldEntityTypeReferenceConfiguration
   {
     builder.ToTable("DataModelFieldEntityTypeReferences");
     builder.HasKey(e => e.Id);
-    
+
     builder.Property(e => e.DataModelFieldId)
       .IsRequired();
-    
+
     builder.Property(e => e.ReferencedEntityTypeId)
       .IsRequired();
-    
+
     // Index pro rychlé vyhledávání
+    builder.HasIndex(e => e.DataModelFieldId);
+    builder.HasIndex(e => e.ReferencedEntityTypeId);
+
+    // Unique constraint - nemůže existovat duplicitní odkaz
     builder.HasIndex(e => new { e.DataModelFieldId, e.ReferencedEntityTypeId })
-      .IsUnique(); // Zamezí duplicitám
-    
-    // Foreign key na DataModelField (cascade delete)
-    builder.HasOne<DataModelField>()
-      .WithMany()
-      .HasForeignKey(e => e.DataModelFieldId)
-      .OnDelete(DeleteBehavior.Cascade);
-    
-    // Poznámka: Foreign key na ReferencedEntityTypeId nelze vytvořit,
-    // protože odkazuje na DataModel.Id (jiná tabulka) - musí se řešit aplikační logikou
+      .IsUnique();
   }
 }
