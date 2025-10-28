@@ -89,4 +89,52 @@ public class IntegrationDataProvider : IIntegrationDataProvider
       }
     );
   }
+
+  public async Task<IEnumerable<ScenarioDTO>> GetAreasAsync(CancellationToken ct = default)
+  {
+
+    // Assuming you have access to a serviceProvider and tenantId in your context.
+    // You may need to inject these via constructor or other means.
+
+    string tenantId = _runtimeContext?.Security?.TenantId!;
+    if (string.IsNullOrEmpty(tenantId))
+    {
+      tenantId = _avaPlaceOptions.Value.TenantId;
+    }
+    ;
+
+    return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<ScenarioDTO>>(
+      _serviceProvider,
+      tenantId,
+      async client =>
+      {
+        //ASOL.DataService.Contracts.IntegrationMapByAreaDefinition
+        //client.Are
+        List<ScenarioDTO> scenarios = new List<ScenarioDTO>();
+        // Replace with actual logic to get scenarios, e.g.:
+        var dataServiceResult = await client.IntegrationScenarios.GetScenariosAsync(
+         new ASOL.DataService.Contracts.Filters.IntegrationScenarioFilter()
+         {
+         },
+         new ASOL.Core.Paging.Contracts.Filters.PagingFilter()
+         {
+           Offset = 0,
+           Limit = int.MaxValue
+         }, new ASOL.Core.Domain.Contracts.BaseEntityFilter()
+         {
+           Released = true,
+           Deleted = false,
+         },
+         ct);
+        if (dataServiceResult != null && dataServiceResult.Any())
+        {
+          foreach (var scenario in dataServiceResult)
+          {
+            scenarios.Add(Mapping.ScenarioMapper.MapToDTO(scenario));
+          }
+        }
+        return scenarios;
+      }
+    );
+  }
 }
