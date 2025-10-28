@@ -13,95 +13,58 @@ public class FeatureConfiguration : IEntityTypeConfiguration<Feature>
   public void Configure(EntityTypeBuilder<Feature> builder)
   {
     builder.ToTable("Features");
-    builder.HasKey(e => e.Id);
     
-    builder.Property(e => e.Code)
+    builder.HasKey(f => f.Id);
+    
+    builder.Property(f => f.Code)
       .IsRequired()
       .HasMaxLength(100);
-    
-    // Mapování LocalizedValue pro Name (owned type)
-    builder.OwnsOne(e => e.Name, name =>
+
+    // Konfigurace lokalizovaných value objects
+    builder.OwnsOne(f => f.Name, name =>
     {
-      name.Property(n => n.CzechValue)
-        .HasColumnName("Name_CzechValue")
-        .IsRequired();
+      name.Property(n => n.CzechValue).HasColumnName("Name_CZ");
+      name.Property(n => n.EnglishValue).HasColumnName("Name_EN");
+    });
+
+    builder.OwnsOne(f => f.Description, desc =>
+    {
+      desc.Property(d => d.CzechValue).HasColumnName("Description_CZ");
+      desc.Property(d => d.EnglishValue).HasColumnName("Description_EN");
+    });
+
+    // ⚠️ KLÍČOVÁ KONFIGURACE - vztah k IncludedFeatures
+    builder.OwnsMany(f => f.IncludedFeatures, includedFeature =>
+    {
+      includedFeature.ToTable("FeatureIncludedFeatures");
+      includedFeature.WithOwner().HasForeignKey("OwnerFeatureId");
+      includedFeature.Property<int>("Id").ValueGeneratedOnAdd();
+      includedFeature.HasKey("Id");
       
-      name.Property(n => n.EnglishValue)
-        .HasColumnName("Name_EnglishValue")
-        .IsRequired();
-    });
-    
-    // Mapování LocalizedValue pro Description (owned type)
-    builder.OwnsOne(e => e.Description, desc =>
-    {
-      desc.Property(d => d.CzechValue)
-        .HasColumnName("Description_CzechValue")
-        .IsRequired();
+      includedFeature.Property(i => i.FeatureId)
+        .IsRequired()
+        .HasColumnName("IncludedFeatureId");
       
-      desc.Property(d => d.EnglishValue)
-        .HasColumnName("Description_EnglishValue")
-        .IsRequired();
-    });
-    
-    // ✅ Ignorovat readonly properties
-    builder.Ignore(e => e.IncludedFeatures);
-    builder.Ignore(e => e.IncludedModels);
-    
-    // ✅ Mapování private kolekce _includedFeatures
-    var includedFeaturesNav = builder.Metadata.FindNavigation(nameof(Feature.IncludedFeatures));
-    if (includedFeaturesNav != null)
-    {
-      includedFeaturesNav.SetPropertyAccessMode(PropertyAccessMode.Field);
-      includedFeaturesNav.SetField("_includedFeatures");
-    }
-    
-    // ✅ Mapování private kolekce _includedModels
-    var includedModelsNav = builder.Metadata.FindNavigation(nameof(Feature.IncludedModels));
-    if (includedModelsNav != null)
-    {
-      includedModelsNav.SetPropertyAccessMode(PropertyAccessMode.Field);
-      includedModelsNav.SetField("_includedModels");
-    }
-    
-    // Mapování kolekce IncludedFeatures (owned type collection)
-    builder.OwnsMany(typeof(IncludedFeature), "_includedFeatures", includedFeatures =>
-    {
-      includedFeatures.ToTable("IncludedFeatures");
-
-      includedFeatures.WithOwner()
-        .HasForeignKey("FeatureId");
-
-      includedFeatures.Property<Guid>("Id")
-        .ValueGeneratedOnAdd();
-
-      includedFeatures.HasKey("Id");
-
-      includedFeatures.Property<Guid>("FeatureId")
-        .HasColumnName("ReferencedFeatureId")
-        .IsRequired();
-
-      includedFeatures.Property<bool>("ConsumeOnly")
-        .IsRequired();
+      includedFeature.Property(i => i.ConsumeOnly)
+        .IsRequired()
+        .HasColumnName("ConsumeOnly");
     });
 
-    // Mapování kolekce IncludedModels (owned type collection)
-    builder.OwnsMany(typeof(IncludedModel), "_includedModels", includedModels =>
+    // Konfigurace pro IncludedModels (podobně)
+    builder.OwnsMany(f => f.IncludedModels, includedModel =>
     {
-      includedModels.ToTable("IncludedModels");
-
-      includedModels.WithOwner()
-        .HasForeignKey("FeatureId");
-
-      includedModels.Property<Guid>("Id")
-        .ValueGeneratedOnAdd();
-
-      includedModels.HasKey("Id");
-
-      includedModels.Property<Guid>("ModelId")
-        .IsRequired();
-
-      includedModels.Property<bool>("ConsumeOnly")
-        .IsRequired();
+      includedModel.ToTable("FeatureIncludedModels");
+      includedModel.WithOwner().HasForeignKey("OwnerFeatureId");
+      includedModel.Property<int>("Id").ValueGeneratedOnAdd();
+      includedModel.HasKey("Id");
+      
+      includedModel.Property(i => i.ModelId)
+        .IsRequired()
+        .HasColumnName("IncludedModelId");
+      
+      includedModel.Property(i => i.ConsumeOnly)
+        .IsRequired()
+        .HasColumnName("ConsumeOnly");
     });
   }
 }

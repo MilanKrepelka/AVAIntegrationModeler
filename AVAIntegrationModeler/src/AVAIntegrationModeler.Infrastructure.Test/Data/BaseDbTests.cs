@@ -17,14 +17,22 @@ public abstract class BaseDbTests : TestBed<EfSqlClientTestFixture>
   protected BaseDbTests(ITestOutputHelper testOutputHelper, EfSqlClientTestFixture fixture)
     : base(testOutputHelper, fixture)
   {
-    var serviceProvider = fixture.GetServiceProvider(testOutputHelper);
-    DbContext = serviceProvider.GetRequiredService<AppDbContext>();
-
-    // Vytvoření databáze
-    DbContext.Database.EnsureCreated();
-
-    // Vyčištění databáze před každým testem
-    ClearDatabaseAsync().GetAwaiter().GetResult();
+    DbContext = fixture.GetService<AppDbContext>(testOutputHelper) ?? throw new InvalidOperationException();
+    
+    // ✅ DIAGNOSTIKA
+    testOutputHelper.WriteLine($"Database: {DbContext.Database.GetConnectionString()}");
+    testOutputHelper.WriteLine($"Can connect: {DbContext.Database.CanConnect()}");
+    
+    // Vytvoření databázového schématu
+    DbContext.Database.EnsureDeleted();
+    var created = DbContext.Database.EnsureCreated();
+    testOutputHelper.WriteLine($"Database created: {created}");
+    
+    // Výpis tabulek
+    var tables = DbContext.Model.GetEntityTypes().Select(t => t.GetTableName()).ToList();
+    testOutputHelper.WriteLine($"Expected tables: {string.Join(", ", tables)}");
+    
+    ClearDatabaseAsync().Wait();
   }
 
   /// <summary>
