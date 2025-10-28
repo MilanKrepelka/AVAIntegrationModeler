@@ -32,3 +32,13 @@ public class FeatureTestCollection : ICollectionFixture<EfSqlClientTestFixture>
     // Tato třída se nikdy neinstancuje.
     // Slouží pouze pro registraci collection fixture.
 }
+
+/// <summary>
+/// Test collection pro FeatureTests - izolovaná databáze.
+/// </summary>
+[CollectionDefinition("ScenarioTestCollection")]
+public class ScenarioTestCollection : ICollectionFixture<EfSqlClientTestFixture>
+{
+  // Tato třída se nikdy neinstancuje.
+  // Slouží pouze pro registraci collection fixture.
+}
