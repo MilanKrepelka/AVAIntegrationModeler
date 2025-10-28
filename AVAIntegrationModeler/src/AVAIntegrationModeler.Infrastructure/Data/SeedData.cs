@@ -1,4 +1,7 @@
-﻿using AVAIntegrationModeler.Domain.ContributorAggregate;
+﻿using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Domain.AreaAggregate;
+using AVAIntegrationModeler.Domain.ContributorAggregate;
+using AVAIntegrationModeler.Domain.DataModelAggregate;
 using AVAIntegrationModeler.Domain.FeatureAggregate;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using AVAIntegrationModeler.Domain.ValueObjects;
@@ -24,6 +27,58 @@ public static class SeedData
     "ORDER_EXPORT"
   );
 
+  // Areas
+  public static Area Area1 { get; set; } = new(
+    Guid.Parse("a1000000-0000-0000-0000-000000000001"),
+    "SALES"
+  );
+
+  public static Area Area2 { get; set; } = new(
+    Guid.Parse("a1000000-0000-0000-0000-000000000002"),
+    "FINANCE"
+  );
+
+  public static Area Area3 { get; set; } = new(
+    Guid.Parse("a1000000-0000-0000-0000-000000000003"),
+    "LOGISTICS"
+  );
+
+  public static Area Area4 { get; set; } = new(
+    Guid.Parse("a1000000-0000-0000-0000-000000000004"),
+    "HR"
+  );
+
+  public static Area Area5 { get; set; } = new(
+    Guid.Parse("a1000000-0000-0000-0000-000000000005"),
+    "PRODUCTION"
+  );
+
+  // DataModels
+  public static DataModel DataModel1 { get; set; } = new(
+    Guid.Parse("d1000000-0000-0000-0000-000000000001"),
+    "CUSTOMER"
+  );
+
+  public static DataModel DataModel2 { get; set; } = new(
+    Guid.Parse("d1000000-0000-0000-0000-000000000002"),
+    "ORDER"
+  );
+
+  public static DataModel DataModel3 { get; set; } = new(
+    Guid.Parse("d1000000-0000-0000-0000-000000000003"),
+    "INVOICE"
+  );
+
+  public static DataModel DataModel4 { get; set; } = new(
+    Guid.Parse("d1000000-0000-0000-0000-000000000004"),
+    "PRODUCT"
+  );
+
+  public static DataModel DataModel5 { get; set; } = new(
+    Guid.Parse("d1000000-0000-0000-0000-000000000005"),
+    "EMPLOYEE"
+  );
+
   static SeedData()
   {
     // Scenarios
@@ -44,6 +99,242 @@ public static class SeedData
       .SetDescription(new LocalizedValue() { CzechValue = "Osoby přijímač popisek", EnglishValue = "Person consumer description" })
       .SetInputFeature(null)
       .SetOutputFeature(Guid.Parse("b36e1803-a6e7-4841-8de6-859a6dee43bf"));
+
+    // Features
+    Feature1
+      .SetName(new LocalizedValue() { CzechValue = "Synchronizace zákazníků", EnglishValue = "Customer Synchronization" })
+      .SetDescription(new LocalizedValue() { CzechValue = "Synchronizace zákaznických dat mezi systémy", EnglishValue = "Customer data synchronization between systems" })
+      .AddIncludedModel(DataModel1.Id, consumeOnly: false)
+      .AddIncludedModel(DataModel2.Id, consumeOnly: true);
+
+    Feature2
+      .SetName(new LocalizedValue() { CzechValue = "Export objednávek", EnglishValue = "Order Export" })
+      .SetDescription(new LocalizedValue() { CzechValue = "Export objednávek do externího systému", EnglishValue = "Export orders to external system" })
+      .AddIncludedModel(DataModel2.Id, consumeOnly: false)
+      .AddIncludedModel(DataModel3.Id, consumeOnly: false)
+      .AddIncludedFeature(Feature1.Id, consumeOnly: true);
+
+    // Areas
+    Area1.SetName("Sales");
+    Area2.SetName("Finance");
+    Area3.SetName("Logistics");
+    Area4.SetName("Human Resources");
+    Area5.SetName("Production");
+
+    // ============================================
+    // DataModel 1: CUSTOMER (Zákazník)
+    // ============================================
+    DataModel1
+      .SetName("Customer")
+      .SetDescription("Zákaznický datový model pro evidenci klientů a obchodních partnerů")
+      .SetNotes("Hlavní agregát pro správu zákaznických dat. Obsahuje kontaktní údaje, adresy a předvolby.")
+      .MarkAsAggregateRoot()
+      .SetArea(Area1.Id)
+      // Základní identifikační údaje
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000001"), "CustomerId", DataModelFieldType.UniqueIdentifier)
+        .SetLabel("Customer ID")
+        .SetDescription("Unique identifier for the customer")
+        .MarkAsPublishedForLookup())
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000002"), "CustomerNumber", DataModelFieldType.Text)
+        .SetLabel("Customer Number")
+        .SetDescription("Business customer number")
+        .MarkAsPublishedForLookup())
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000003"), "CustomerName", DataModelFieldType.Text)
+        .SetLabel("Customer Name")
+        .SetDescription("Full name or company name of the customer")
+        .MarkAsPublishedForLookup())
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000004"), "LegalName", DataModelFieldType.Text)
+        .SetLabel("Legal Name")
+        .SetDescription("Official legal name of the customer")
+        .MarkAsNullable())
+      // Kontaktní údaje
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000005"), "Email", DataModelFieldType.Text)
+        .SetLabel("Email Address")
+        .SetDescription("Primary email address"))
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000006"), "Phone", DataModelFieldType.Text)
+        .SetLabel("Phone Number")
+        .SetDescription("Primary phone number")
+        .MarkAsNullable())
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000007"), "Mobile", DataModelFieldType.Text)
+        .SetLabel("Mobile Number")
+        .SetDescription("Mobile phone number")
+        .MarkAsNullable())
+      // Adresa
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000008"), "Street", DataModelFieldType.Text)
+        .SetLabel("Street")
+        .SetDescription("Street address")
+        .MarkAsNullable())
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000009"), "City", DataModelFieldType.Text)
+        .SetLabel("City")
+        .SetDescription("City name")
+        .MarkAsNullable())
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-00000000000a"), "PostalCode", DataModelFieldType.Text)
+        .SetLabel("Postal Code")
+        .SetDescription("ZIP/Postal code")
+        .MarkAsNullable())
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-00000000000b"), "Country", DataModelFieldType.Text)
+        .SetLabel("Country")
+        .SetDescription("Country code or name")
+        .MarkAsNullable())
+      // Finanční údaje
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-00000000000c"), "CreditLimit", DataModelFieldType.CurrencyNumber)
+        .SetLabel("Credit Limit")
+        .SetDescription("Maximum credit limit for the customer")
+        .MarkAsNullable())
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-00000000000d"), "PaymentTerms", DataModelFieldType.WholeNumber)
+        .SetLabel("Payment Terms (Days)")
+        .SetDescription("Number of days for payment terms")
+        .MarkAsNullable())
+      // Kategorizace
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-00000000000e"), "CustomerType", DataModelFieldType.SingleSelectOptionSet)
+        .SetLabel("Customer Type")
+        .SetDescription("Type of customer (B2B, B2C, etc.)"))
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-00000000000f"), "Industry", DataModelFieldType.SingleSelectOptionSet)
+        .SetLabel("Industry")
+        .SetDescription("Industry sector")
+        .MarkAsNullable())
+      // Stavy a příznaky
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000010"), "IsActive", DataModelFieldType.TwoOptions)
+        .SetLabel("Is Active")
+        .SetDescription("Whether the customer is active"))
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000011"), "IsVIP", DataModelFieldType.TwoOptions)
+        .SetLabel("Is VIP")
+        .SetDescription("VIP customer flag"))
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000012"), "AcceptsMarketing", DataModelFieldType.TwoOptions)
+        .SetLabel("Accepts Marketing")
+        .SetDescription("Marketing consent flag"))
+      // Datumy
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000013"), "CreatedOn", DataModelFieldType.UtcDateTime)
+        .SetLabel("Created On")
+        .SetDescription("Date when customer was created"))
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000014"), "ModifiedOn", DataModelFieldType.UtcDateTime)
+        .SetLabel("Modified On")
+        .SetDescription("Last modification date")
+        .MarkAsNullable())
+      // Poznámky
+      .AddField(new DataModelField(Guid.Parse("f0000001-0000-0000-0000-000000000015"), "Notes", DataModelFieldType.MultilineText)
+        .SetLabel("Notes")
+        .SetDescription("Additional notes about the customer")
+        .MarkAsNullable());
+
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    DataModel2
+      .SetName("Order")
+      .SetDescription("Objednávkový datový model")
+      .SetNotes("Obsahuje údaje o objednávkách")
+      .MarkAsAggregateRoot()
+      .SetArea(Area1.Id)
+      .AddField(new DataModelField(Guid.Parse("f0000002-0000-0000-0000-000000000001"), "OrderNumber", DataModelFieldType.Text)
+        .SetLabel("Order Number")
+        .SetDescription("Unique order number")
+        .MarkAsPublishedForLookup())
+      .AddField(new DataModelField(Guid.Parse("f0000002-0000-0000-0000-000000000002"), "OrderDate", DataModelFieldType.UtcDateTime)
+        .SetLabel("Order Date")
+        .SetDescription("Date when order was created"))
+      .AddField(new DataModelField(Guid.Parse("f0000002-0000-0000-0000-000000000003"), "TotalAmount", DataModelFieldType.CurrencyNumber)
+        .SetLabel("Total Amount")
+        .SetDescription("Total order amount"));
+
+    DataModel3
+      .SetName("Invoice")
+      .SetDescription("Fakturační datový model")
+      .SetNotes("Obsahuje fakturační údaje")
+      .MarkAsAggregateRoot()
+      .SetArea(Area2.Id)
+      .AddField(new DataModelField(Guid.Parse("f0000003-0000-0000-0000-000000000001"), "InvoiceNumber", DataModelFieldType.Text)
+        .SetLabel("Invoice Number")
+        .SetDescription("Unique invoice number")
+        .MarkAsPublishedForLookup())
+      .AddField(new DataModelField(Guid.Parse("f0000003-0000-0000-0000-000000000002"), "InvoiceDate", DataModelFieldType.Date)
+        .SetLabel("Invoice Date")
+        .SetDescription("Invoice issue date"))
+      .AddField(new DataModelField(Guid.Parse("f0000003-0000-0000-0000-000000000003"), "DueDate", DataModelFieldType.Date)
+        .SetLabel("Due Date")
+        .SetDescription("Payment due date"))
+      .AddField(new DataModelField(Guid.Parse("f0000003-0000-0000-0000-000000000004"), "IsPaid", DataModelFieldType.TwoOptions)
+        .SetLabel("Is Paid")
+        .SetDescription("Payment status"));
+
+    DataModel4
+      .SetName("Product")
+      .SetDescription("Produktový datový model")
+      .SetNotes("Katalog produktů")
+      .MarkAsAggregateRoot()
+      .SetArea(Area5.Id)
+      .AddField(new DataModelField(Guid.Parse("f0000004-0000-0000-0000-000000000001"), "ProductCode", DataModelFieldType.Text)
+        .SetLabel("Product Code")
+        .SetDescription("Unique product code")
+        .MarkAsPublishedForLookup())
+      .AddField(new DataModelField(Guid.Parse("f0000004-0000-0000-0000-000000000002"), "ProductName", DataModelFieldType.Text)
+        .SetLabel("Product Name")
+        .SetDescription("Name of the product"))
+      .AddField(new DataModelField(Guid.Parse("f0000004-0000-0000-0000-000000000003"), "Price", DataModelFieldType.CurrencyNumber)
+        .SetLabel("Price")
+        .SetDescription("Product price"))
+      .AddField(new DataModelField(Guid.Parse("f0000004-0000-0000-0000-000000000004"), "InStock", DataModelFieldType.WholeNumber)
+        .SetLabel("In Stock")
+        .SetDescription("Quantity in stock"));
+
+    DataModel5
+      .SetName("Employee")
+      .SetDescription("Zaměstnanecký datový model")
+      .SetNotes("Evidence zaměstnanců")
+      .MarkAsAggregateRoot()
+      .SetArea(Area4.Id)
+      .AddField(new DataModelField(Guid.Parse("f0000005-0000-0000-0000-000000000001"), "EmployeeNumber", DataModelFieldType.Text)
+        .SetLabel("Employee Number")
+        .SetDescription("Unique employee number")
+        .MarkAsPublishedForLookup())
+      .AddField(new DataModelField(Guid.Parse("f0000005-0000-0000-0000-000000000002"), "FullName", DataModelFieldType.Text)
+        .SetLabel("Full Name")
+        .SetDescription("Employee full name"))
+      .AddField(new DataModelField(Guid.Parse("f0000005-0000-0000-0000-000000000003"), "HireDate", DataModelFieldType.Date)
+        .SetLabel("Hire Date")
+        .SetDescription("Date of employment"))
+      .AddField(new DataModelField(Guid.Parse("f0000005-0000-0000-0000-000000000004"), "IsActive", DataModelFieldType.TwoOptions)
+        .SetLabel("Is Active")
+        .SetDescription("Employment status"));
   }
 
   public static async Task InitializeAsync(AppDbContext dbContext)
@@ -56,7 +347,9 @@ public static class SeedData
   {
     dbContext.Scenarios.AddRange([Scenario1, Scenario2, Scenario3]);
     dbContext.Contributors.AddRange([Contributor1, Contributor2]);
-    dbContext.Features.AddRange([Feature1, Feature2]); // ✅ PŘIDÁNO
+    dbContext.Features.AddRange([Feature1, Feature2]);
+    dbContext.Areas.AddRange([Area1, Area2, Area3, Area4, Area5]);
+    dbContext.DataModels.AddRange([DataModel1, DataModel2, DataModel3, DataModel4, DataModel5]);
     
     await dbContext.SaveChangesAsync();
   }
