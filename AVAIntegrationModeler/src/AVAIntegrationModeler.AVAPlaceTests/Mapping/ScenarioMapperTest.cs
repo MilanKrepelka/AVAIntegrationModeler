@@ -71,6 +71,7 @@ public class ScenarioMapperTest
       Description = new LocalizedValue<string>() { Values = new LocalizedValueItem<string>[] { new() { Locale = "cs-CZ", Value = "Popis scénáře" }, new() { Locale = "en-US", Value = "Scenario description" } } },
       InputFeatureId = Guid.NewGuid().ToString(),
       OutputFeatureId = Guid.NewGuid().ToString(),
+      
     };
 
     ScenarioMapper.MapToDTO(integrationScenarioSummary).Id.ShouldBe(Guid.Parse(integrationScenarioSummary.Id));

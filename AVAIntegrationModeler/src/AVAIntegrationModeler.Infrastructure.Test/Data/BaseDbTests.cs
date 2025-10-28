@@ -1,4 +1,5 @@
 ﻿using Ardalis.SharedKernel;
+using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
 using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.Integration.Test.Data.SqlLite.Fixtures;
 using Microsoft.EntityFrameworkCore;
@@ -66,5 +67,11 @@ public abstract class BaseDbTests : TestBed<EfSqlClientTestFixture>
   protected EfRepository<T> GetRepository<T>() where T : class, IAggregateRoot
   {
     return new EfRepository<T>(DbContext);
+  }
+
+  // Přidat pomocnou metodu pro IntegrationsMap repository:
+  protected EfRepository<IntegrationsMap> GetIntegrationMapRepository()
+  {
+    return new EfRepository<IntegrationsMap>(DbContext);
   }
 }

@@ -1,28 +1,53 @@
 ﻿using Ardalis.GuardClauses;
-using ASOL.DataService.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Web.ViewModels.List;
 
 namespace AVAIntegrationModeler.Web.Mapping;
 
 /// <summary>
-/// Implementuje mapování mezi datovým přenosovým objektem funkce (<see cref="FeatureDTO"/>) a jeho zobrazeními ve webovém rozhraní.
+/// Statická třída pro mapování mezi datovým přenosovým objektem scénáře (<see cref="ScenarioDTO"/>) a jeho zobrazeními ve webovém rozhraní.
 /// </summary>
-public class ScenarioMapper :
-  IViewModelMapper<ScenarioDTO, ViewModels.List.ScenarioListViewModel, ScenarioMapper>
+public static class ScenarioMapper
 {
-  /// <inheritdoc/>
-  public static void MapToViewModel(ScenarioDTO dto, out ScenarioListViewModel result)
+  /// <summary>
+  /// Mapuje <see cref="ScenarioDTO"/> na <see cref="ScenarioListViewModel"/>.
+  /// </summary>
+  /// <param name="dto">Zdrojový DTO objekt scénáře.</param>
+  /// <returns><see cref="ScenarioListViewModel"/> nebo null, pokud je vstup null.</returns>
+  public static ScenarioListViewModel? MapToScenarioListViewModel(ScenarioDTO? dto)
   {
-    Guard.Against.Null(dto, $"{nameof(FeatureMapper)} - {nameof(dto)}");
+    if (dto == default) return default;
 
-    result = new ScenarioListViewModel
+    ScenarioListViewModel result = new ScenarioListViewModel
     {
       Id = dto.Id,
-      Description = dto.Description,
+      Code = dto.Code,
       Name = dto.Name,
-      Code = dto.Code
-      
+      Description = dto.Description,
+      InputFeature = dto.InputFeatureSummary != null 
+        ? MapFeatureSummaryToViewModel(dto.InputFeatureSummary)
+        : FeatureViewModel.Empty,
+      OutputFeature = dto.OutputFeatureSummary != null
+        ? MapFeatureSummaryToViewModel(dto.OutputFeatureSummary)
+        : FeatureViewModel.Empty
+    };
+
+    return result;
+  }
+
+  /// <summary>
+  /// Mapuje <see cref="FeatureSummaryDTO"/> na <see cref="FeatureViewModel"/>.
+  /// </summary>
+  /// <param name="featureSummary">Souhrnné informace o feature.</param>
+  /// <returns><see cref="FeatureViewModel"/>.</returns>
+  private static FeatureViewModel MapFeatureSummaryToViewModel(FeatureSummaryDTO featureSummary)
+  {
+    return new FeatureViewModel
+    {
+      Id = featureSummary.Id,
+      Code = featureSummary.Code,
+      Name = new Domain.ValueObjects.LocalizedValue(), // prázdná hodnota, protože FeatureSummaryDTO neobsahuje Name
+      Description = new Domain.ValueObjects.LocalizedValue() // prázdná hodnota
     };
   }
 }

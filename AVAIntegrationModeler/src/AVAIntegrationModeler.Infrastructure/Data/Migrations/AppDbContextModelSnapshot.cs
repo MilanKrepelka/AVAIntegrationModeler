@@ -184,7 +184,26 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Code")
+                        .IsUnique();
+
                     b.ToTable("Features", (string)null);
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.IntegrationMapAggregate.IntegrationsMap", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AreaId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AreaId");
+
+                    b.ToTable("IntegrationMaps", (string)null);
                 });
 
             modelBuilder.Entity("AVAIntegrationModeler.Domain.ScenarioAggregate.Scenario", b =>
@@ -206,7 +225,10 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Scenarios");
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Scenarios", (string)null);
                 });
 
             modelBuilder.Entity("AVAIntegrationModeler.Domain.ContributorAggregate.Contributor", b =>
@@ -273,11 +295,13 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                             b1.Property<string>("CzechValue")
                                 .IsRequired()
+                                .HasMaxLength(1000)
                                 .HasColumnType("TEXT")
                                 .HasColumnName("Description_CZ");
 
                             b1.Property<string>("EnglishValue")
                                 .IsRequired()
+                                .HasMaxLength(1000)
                                 .HasColumnType("TEXT")
                                 .HasColumnName("Description_EN");
 
@@ -296,11 +320,13 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                             b1.Property<string>("CzechValue")
                                 .IsRequired()
+                                .HasMaxLength(200)
                                 .HasColumnType("TEXT")
                                 .HasColumnName("Name_CZ");
 
                             b1.Property<string>("EnglishValue")
                                 .IsRequired()
+                                .HasMaxLength(200)
                                 .HasColumnType("TEXT")
                                 .HasColumnName("Name_EN");
 
@@ -314,12 +340,14 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                     b.OwnsMany("AVAIntegrationModeler.Domain.FeatureAggregate.IncludedFeature", "IncludedFeatures", b1 =>
                         {
-                            b1.Property<int>("Id")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("INTEGER");
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Id");
 
                             b1.Property<bool>("ConsumeOnly")
+                                .ValueGeneratedOnAdd()
                                 .HasColumnType("INTEGER")
+                                .HasDefaultValue(false)
                                 .HasColumnName("ConsumeOnly");
 
                             b1.Property<Guid>("FeatureId")
@@ -331,6 +359,8 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                             b1.HasKey("Id");
 
+                            b1.HasIndex("FeatureId");
+
                             b1.HasIndex("OwnerFeatureId");
 
                             b1.ToTable("FeatureIncludedFeatures", (string)null);
@@ -341,12 +371,14 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                     b.OwnsMany("AVAIntegrationModeler.Domain.FeatureAggregate.IncludedModel", "IncludedModels", b1 =>
                         {
-                            b1.Property<int>("Id")
+                            b1.Property<Guid>("Id")
                                 .ValueGeneratedOnAdd()
-                                .HasColumnType("INTEGER");
+                                .HasColumnType("TEXT");
 
                             b1.Property<bool>("ConsumeOnly")
+                                .ValueGeneratedOnAdd()
                                 .HasColumnType("INTEGER")
+                                .HasDefaultValue(false)
                                 .HasColumnName("ConsumeOnly");
 
                             b1.Property<Guid>("ModelId")
@@ -357,6 +389,8 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                                 .HasColumnType("TEXT");
 
                             b1.HasKey("Id");
+
+                            b1.HasIndex("ModelId");
 
                             b1.HasIndex("OwnerFeatureId");
 
@@ -377,6 +411,61 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .IsRequired();
                 });
 
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.IntegrationMapAggregate.IntegrationsMap", b =>
+                {
+                    b.OwnsMany("AVAIntegrationModeler.Domain.IntegrationMapAggregate.IntegrationMapItem", "Items", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<Guid>("IntegrationsMapId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<Guid>("ScenarioId")
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("IntegrationsMapId");
+
+                            b1.HasIndex("ScenarioId");
+
+                            b1.ToTable("IntegrationMapItems", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("IntegrationsMapId");
+
+                            b1.OwnsMany("AVAIntegrationModeler.Domain.IntegrationMapAggregate.ActivationKey", "Keys", b2 =>
+                                {
+                                    b2.Property<Guid>("Id")
+                                        .HasColumnType("TEXT");
+
+                                    b2.Property<Guid>("IntegrationMapItemId")
+                                        .HasColumnType("TEXT");
+
+                                    b2.Property<string>("Key")
+                                        .IsRequired()
+                                        .HasMaxLength(200)
+                                        .HasColumnType("TEXT");
+
+                                    b2.HasKey("Id");
+
+                                    b2.HasIndex("IntegrationMapItemId");
+
+                                    b2.HasIndex("Key");
+
+                                    b2.ToTable("IntegrationMapActivationKeys", (string)null);
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("IntegrationMapItemId");
+                                });
+
+                            b1.Navigation("Keys");
+                        });
+
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("AVAIntegrationModeler.Domain.ScenarioAggregate.Scenario", b =>
                 {
                     b.OwnsOne("AVAIntegrationModeler.Domain.ValueObjects.LocalizedValue", "Description", b1 =>
@@ -386,11 +475,15 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                             b1.Property<string>("CzechValue")
                                 .IsRequired()
-                                .HasColumnType("TEXT");
+                                .HasMaxLength(1000)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Description_CzechValue");
 
                             b1.Property<string>("EnglishValue")
                                 .IsRequired()
-                                .HasColumnType("TEXT");
+                                .HasMaxLength(1000)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Description_EnglishValue");
 
                             b1.HasKey("ScenarioId");
 
@@ -407,11 +500,15 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                             b1.Property<string>("CzechValue")
                                 .IsRequired()
-                                .HasColumnType("TEXT");
+                                .HasMaxLength(200)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Name_CzechValue");
 
                             b1.Property<string>("EnglishValue")
                                 .IsRequired()
-                                .HasColumnType("TEXT");
+                                .HasMaxLength(200)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Name_EnglishValue");
 
                             b1.HasKey("ScenarioId");
 

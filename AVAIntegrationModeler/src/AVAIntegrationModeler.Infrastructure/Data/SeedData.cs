@@ -3,6 +3,7 @@ using AVAIntegrationModeler.Domain.AreaAggregate;
 using AVAIntegrationModeler.Domain.ContributorAggregate;
 using AVAIntegrationModeler.Domain.DataModelAggregate;
 using AVAIntegrationModeler.Domain.FeatureAggregate;
+using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using AVAIntegrationModeler.Domain.ValueObjects;
 
@@ -14,8 +15,33 @@ public static class SeedData
   public static readonly Contributor Contributor2 = new("Snowfrog");
 
   public static Scenario Scenario1 { get; set; } = new(Guid.Parse("d19b810a-b0d9-4863-82cb-c0f3e71bf02d"));
+  public static Feature InputFeatureToScenario1 { get; set; } = new(
+    Guid.Parse("da7dafab-d17e-4f09-85d1-83d8f6fc4f4f"),
+    "InputFeatureToScenario1"
+  );
+
+  public static Feature OutputFeatureToScenario1{ get; set; } = new(
+    Guid.Parse("53e2999b-e028-41b1-930b-ac483cf7809e"),
+    "OutputFeatureToScenario1"
+  );
+
+
   public static Scenario Scenario2 { get; set; } = new(Guid.Parse("c7d23c5d-e30f-4001-bd75-c651ec24254d"));
+  public static Feature InputFeatureToScenario2 { get; set; } = new(
+    Guid.Parse("a2b3c4d5-e6f7-4a8b-9c0d-1e2f3a4b5c6d"),
+    "InputFeatureToScenario2"
+  );
+  public static Feature OutputFeatureToScenario2 { get; set; } = new(
+   Guid.Parse("b3c4d5e6-f7a8-4b9c-0d1e-2f3a4b5c6d7e"),
+   "OutputFeatureToScenario2"
+ );
+
   public static Scenario Scenario3 { get; set; } = new(Guid.Parse("b36e1803-a6e7-4841-8de6-859a6dee43bf"));
+
+  public static Feature OutputFeatureToScenario3 { get; set; } = new(
+   Guid.Parse("d5e6f7a8-b9c0-4d1e-2f3a-4b5c6d7e8f9a"),
+   "OutputFeatureToScenario3"
+ );
 
   public static Feature Feature1 { get; set; } = new(
     Guid.Parse("f1000000-0000-0000-0000-000000000001"), 
@@ -79,26 +105,38 @@ public static class SeedData
     "EMPLOYEE"
   );
 
+  // Integrations Maps
+  public static IntegrationsMap IntegrationMap1 { get; set; } = new(
+    Guid.Parse("302fc93b-01bb-4fc3-ac36-11aa30977c8c"),
+    Area1.Id // SALES area
+  );
+
+  public static IntegrationsMap IntegrationMap2 { get; set; } = new(
+    Guid.Parse("191124fe-6def-48e5-90cc-d532e450c604"),
+    Area2.Id // FINANCE area
+  );
+
   static SeedData()
   {
     // Scenarios
     Scenario1.SetCode("scenario1Code")
      .SetName(new LocalizedValue() { CzechValue = "Organization přijímač", EnglishValue = "Organization consumer" })
      .SetDescription(new LocalizedValue() { CzechValue = "Organization přijímač popisek", EnglishValue = "Organization consumer description" })
-     .SetInputFeature(null)
-     .SetOutputFeature(null);
+     .SetInputFeature(InputFeatureToScenario1.Id)
+     .SetOutputFeature(OutputFeatureToScenario1.Id);
 
     Scenario2.SetCode("scenario2Code")
       .SetName(new LocalizedValue() { CzechValue = "Faktury přijímač", EnglishValue = "Invoices consumer" })
       .SetDescription(new LocalizedValue() { CzechValue = "Faktury přijímač popisek", EnglishValue = "Invoice consumer description" })
-      .SetInputFeature(null)
-      .SetOutputFeature(Guid.Parse("b36e1803-a6e7-4841-8de6-859a6dee43bf"));
+      .SetInputFeature(InputFeatureToScenario2.Id)
+      .SetOutputFeature(OutputFeatureToScenario2.Id);
+
 
     Scenario3.SetCode("scenario3Code")
       .SetName(new LocalizedValue() { CzechValue = "Osoby přijímač", EnglishValue = "Person consumer" })
       .SetDescription(new LocalizedValue() { CzechValue = "Osoby přijímač popisek", EnglishValue = "Person consumer description" })
       .SetInputFeature(null)
-      .SetOutputFeature(Guid.Parse("b36e1803-a6e7-4841-8de6-859a6dee43bf"));
+      .SetOutputFeature(OutputFeatureToScenario3.Id);
 
     // Features
     Feature1
@@ -259,6 +297,36 @@ public static class SeedData
     // ============================================
     // DataModel 2: ORDER (Objednávka)
     // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
+    // ============================================
+    // DataModel 2: ORDER (Objednávka)
+    // ============================================
     DataModel2
       .SetName("Order")
       .SetDescription("Objednávkový datový model")
@@ -335,11 +403,30 @@ public static class SeedData
       .AddField(new DataModelField(Guid.Parse("f0000005-0000-0000-0000-000000000004"), "IsActive", DataModelFieldType.TwoOptions)
         .SetLabel("Is Active")
         .SetDescription("Employment status"));
+
+    // ============================================
+    // Integration Maps
+    // ============================================
+    
+    // Integration Map 1: SALES area
+    var scenario1Item = IntegrationMap1.AddItem(Scenario1.Id);
+    scenario1Item.AddKey("ORGANIZATION_CREATED");
+    scenario1Item.AddKey("ORGANIZATION_UPDATED");
+
+    var scenario2Item = IntegrationMap1.AddItem(Scenario2.Id);
+    scenario2Item.AddKey("INVOICE_CREATED");
+    scenario2Item.AddKey("INVOICE_UPDATED");
+
+    // Integration Map 2: FINANCE area
+    var scenario3Item = IntegrationMap2.AddItem(Scenario3.Id);
+    scenario3Item.AddKey("PERSON_CREATED");
+    scenario3Item.AddKey("PERSON_UPDATED");
+    scenario3Item.AddKey("PERSON_DELETED");
   }
 
   public static async Task InitializeAsync(AppDbContext dbContext)
   {
-    if (await dbContext.Contributors.AnyAsync()) return;
+    if (await dbContext.Scenarios.AnyAsync()) return;
     await PopulateTestDataAsync(dbContext);
   }
 
@@ -347,9 +434,12 @@ public static class SeedData
   {
     dbContext.Scenarios.AddRange([Scenario1, Scenario2, Scenario3]);
     dbContext.Contributors.AddRange([Contributor1, Contributor2]);
-    dbContext.Features.AddRange([Feature1, Feature2]);
+    dbContext.Features.AddRange([Feature1, Feature2, InputFeatureToScenario1, OutputFeatureToScenario1, InputFeatureToScenario2, OutputFeatureToScenario2, OutputFeatureToScenario3]);
     dbContext.Areas.AddRange([Area1, Area2, Area3, Area4, Area5]);
     dbContext.DataModels.AddRange([DataModel1, DataModel2, DataModel3, DataModel4, DataModel5]);
+    
+    // ✅ PŘIDAT INTEGRATION MAPS
+    dbContext.IntegrationMaps.AddRange([IntegrationMap1, IntegrationMap2]);
     
     await dbContext.SaveChangesAsync();
   }

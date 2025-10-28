@@ -20,7 +20,7 @@ public class GetScenarioHandler(IReadRepository<Scenario> _repository)
     var entity = await _repository.FirstOrDefaultAsync(spec, cancellationToken);
     if (entity == null) return Result.NotFound();
 
-    return ScenarioMapper.MapToDTO(entity);
+    return ScenarioMapper.MapToScenarioDTO(entity);
   }
 }
 

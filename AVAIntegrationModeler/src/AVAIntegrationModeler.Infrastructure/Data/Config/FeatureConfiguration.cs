@@ -1,5 +1,4 @@
 ﻿using AVAIntegrationModeler.Domain.FeatureAggregate;
-using AVAIntegrationModeler.Domain.ValueObjects;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -20,43 +19,63 @@ public class FeatureConfiguration : IEntityTypeConfiguration<Feature>
       .IsRequired()
       .HasMaxLength(100);
 
+    builder.HasIndex(f => f.Code)
+      .IsUnique();
+
     // Konfigurace lokalizovaných value objects
     builder.OwnsOne(f => f.Name, name =>
     {
-      name.Property(n => n.CzechValue).HasColumnName("Name_CZ");
-      name.Property(n => n.EnglishValue).HasColumnName("Name_EN");
+      name.Property(n => n.CzechValue).HasColumnName("Name_CZ").HasMaxLength(200);
+      name.Property(n => n.EnglishValue).HasColumnName("Name_EN").HasMaxLength(200);
     });
 
     builder.OwnsOne(f => f.Description, desc =>
     {
-      desc.Property(d => d.CzechValue).HasColumnName("Description_CZ");
-      desc.Property(d => d.EnglishValue).HasColumnName("Description_EN");
+      desc.Property(d => d.CzechValue).HasColumnName("Description_CZ").HasMaxLength(1000);
+      desc.Property(d => d.EnglishValue).HasColumnName("Description_EN").HasMaxLength(1000);
     });
 
-    // ⚠️ KLÍČOVÁ KONFIGURACE - vztah k IncludedFeatures
+    // ✅ AKTUALIZOVANÁ KONFIGURACE - IncludedFeatures jako vlastní entita s Guid PK
     builder.OwnsMany(f => f.IncludedFeatures, includedFeature =>
     {
       includedFeature.ToTable("FeatureIncludedFeatures");
-      includedFeature.WithOwner().HasForeignKey("OwnerFeatureId");
-      includedFeature.Property<int>("Id").ValueGeneratedOnAdd();
-      includedFeature.HasKey("Id");
       
+      // Primární klíč typu Guid
+      includedFeature.HasKey(i => i.Id);
+      includedFeature.Property(i => i.Id)
+        .HasColumnName("Id")
+        .ValueGeneratedNever(); // Guid je generován v konstruktoru
+      
+      // Foreign key k vlastnící Feature
+      includedFeature.WithOwner().HasForeignKey("OwnerFeatureId");
+      includedFeature.Property<Guid>("OwnerFeatureId").IsRequired();
+      
+      // Vlastnosti
       includedFeature.Property(i => i.FeatureId)
         .IsRequired()
         .HasColumnName("IncludedFeatureId");
       
       includedFeature.Property(i => i.ConsumeOnly)
         .IsRequired()
-        .HasColumnName("ConsumeOnly");
+        .HasColumnName("ConsumeOnly")
+        .HasDefaultValue(false);
+
+      // Indexy
+      includedFeature.HasIndex("OwnerFeatureId");
+      includedFeature.HasIndex(i => i.FeatureId);
     });
 
-    // Konfigurace pro IncludedModels (podobně)
+    // Konfigurace pro IncludedModels (stejný pattern)
     builder.OwnsMany(f => f.IncludedModels, includedModel =>
     {
       includedModel.ToTable("FeatureIncludedModels");
-      includedModel.WithOwner().HasForeignKey("OwnerFeatureId");
-      includedModel.Property<int>("Id").ValueGeneratedOnAdd();
+      
+      // Pokud IncludedModel také potřebuje Guid PK
+      includedModel.Property<Guid>("Id").ValueGeneratedOnAdd();
       includedModel.HasKey("Id");
+      
+      includedModel.WithOwner().HasForeignKey("OwnerFeatureId");
+      includedModel.Property<Guid>("OwnerFeatureId").IsRequired();
       
       includedModel.Property(i => i.ModelId)
         .IsRequired()
@@ -64,7 +83,11 @@ public class FeatureConfiguration : IEntityTypeConfiguration<Feature>
       
       includedModel.Property(i => i.ConsumeOnly)
         .IsRequired()
-        .HasColumnName("ConsumeOnly");
+        .HasColumnName("ConsumeOnly")
+        .HasDefaultValue(false);
+
+      includedModel.HasIndex("OwnerFeatureId");
+      includedModel.HasIndex(i => i.ModelId);
     });
   }
 }

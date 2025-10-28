@@ -14,10 +14,10 @@ public class ListFeaturesQueryService(
   private readonly IMemoryCache _memoryCache = memoryCache;
 
   private string createChacheKey(Datasource datasource) => $"{primaryKeyName}-{datasource}";
-  public async Task<IEnumerable<FeatureDTO>> ListAsync(Datasource datasouce) 
+  public async Task<IEnumerable<FeatureSummaryDTO>> ListSummaryAsync(Datasource datasouce) 
   {
     datasouce.GetHashCode();
-    List<FeatureDTO> result = new List<FeatureDTO>();
+    List<FeatureSummaryDTO> result = new List<FeatureSummaryDTO>();
     var x = await _memoryCache.GetOrCreateAsync(
       createChacheKey(datasouce),
       async entry =>
@@ -25,14 +25,14 @@ public class ListFeaturesQueryService(
         entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
         entry.SlidingExpiration = TimeSpan.FromMinutes(2);
         entry.Priority = CacheItemPriority.Normal;
-        List<FeatureDTO> result = new List<FeatureDTO>();
+        List<FeatureSummaryDTO> result = new List<FeatureSummaryDTO>();
         if (datasouce == Datasource.AVAPlace)
         {
-          result = (await integrationDataProvider.GetIntegrationFeaturesAsync(CancellationToken.None)).ToList();
+          result = (await integrationDataProvider.GetFeaturesSummaryAsync(CancellationToken.None)).ToList();
         }
         else
         {
-          throw new NotImplementedException();
+          //throw new NotImplementedException();
           //result = await _db.Features
           //.Select(s => UseCases.Scenarios.Mapping.ScenarioMapper.MapToDTO(s))
           //.ToListAsync();
@@ -42,5 +42,9 @@ public class ListFeaturesQueryService(
     return await Task.FromResult(result);
     //return x!;
   }
-    
+
+  public Task<IEnumerable<FeatureDTO>> ListAsync(Datasource dataSource)
+  {
+    throw new NotImplementedException();
+  }
 }

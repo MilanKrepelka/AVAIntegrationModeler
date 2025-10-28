@@ -42,3 +42,15 @@ public class ScenarioTestCollection : ICollectionFixture<EfSqlClientTestFixture>
   // Tato třída se nikdy neinstancuje.
   // Slouží pouze pro registraci collection fixture.
 }
+
+/// <summary>
+/// Test collection pro IntegrationMapTests - izolovaná databáze.
+/// </summary>
+[CollectionDefinition("IntegrationMapTestCollection")]
+public class IntegrationMapTestCollection : ICollectionFixture<EfSqlClientTestFixture>
+{
+  // Tato třída se nikdy neinstancuje.
+  // Slouží pouze pro registraci collection fixture.
+}
+
+

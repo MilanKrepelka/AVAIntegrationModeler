@@ -1,8 +1,11 @@
-﻿using AVAIntegrationModeler.Domain.AreaAggregate;
+﻿using System.Reflection;
+using AVAIntegrationModeler.Domain.AreaAggregate;
 using AVAIntegrationModeler.Domain.ContributorAggregate;
 using AVAIntegrationModeler.Domain.DataModelAggregate;
 using AVAIntegrationModeler.Domain.FeatureAggregate;
+using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
+using AVAIntegrationModeler.Infrastructure.Data.Config;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 
@@ -36,11 +39,22 @@ public class AppDbContext : DbContext
   public DbSet<DataModelFieldEntityTypeReference> DataModelFieldEntityTypeReferences => Set<DataModelFieldEntityTypeReference>(); // ✅ NOVÉ
   public DbSet<Feature> Features => Set<Feature>(); // ✅ PŘIDÁNO
 
+  /// <summary>
+  /// Integration maps - mapování integračních scénářů k oblastem.
+  /// </summary>
+  public DbSet<IntegrationsMap> IntegrationMaps => Set<IntegrationsMap>();
+
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     base.OnModelCreating(modelBuilder);
-    // Toto zaregistruje všechny konfigurace entit ve shodě s IEntityTypeConfiguration v aktuálním sestavení
+
+    // ✅ Ignorovat SmartEnum typy jako entity
+    modelBuilder.Ignore<ContributorStatus>();
+
+    // ✅ Aplikovat všechny konfigurace najednou z aktuálního sestavení
     modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    
+    
   }
 
   public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

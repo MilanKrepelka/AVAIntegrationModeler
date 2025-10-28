@@ -8,5 +8,7 @@ namespace AVAIntegrationModeler.UseCases.Features.List;
 /// </summary>
 public interface IListFeaturesQueryService
 {
+  Task<IEnumerable<FeatureSummaryDTO>> ListSummaryAsync(Contracts.Datasource dataSource);
+
   Task<IEnumerable<FeatureDTO>> ListAsync(Contracts.Datasource dataSource);
 }

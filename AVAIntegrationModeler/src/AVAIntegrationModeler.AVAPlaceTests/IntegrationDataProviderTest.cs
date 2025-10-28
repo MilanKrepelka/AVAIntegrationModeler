@@ -21,7 +21,21 @@ public class IntegrationDataProvider : TestBed<Fixtures.AVAPlaceDemoFixture>
   {
     var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
 
-    var result = await integrationDataProvider.GetIntegrationScenariosAsync(CancellationToken.None);
+    var result = await integrationDataProvider.GetScenariosAsync(CancellationToken.None);
+    result.ShouldNotBeNull();
+    result.ShouldNotBeEmpty();
+  }
+
+  /// <summary>
+  /// Test který načte integrační feature.
+  /// </summary>
+  /// <returns></returns>
+  [Fact]
+  public async Task GetFeaturesSummaryAsyncTest()
+  {
+    var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
+
+    var result = await integrationDataProvider.GetFeaturesSummaryAsync(CancellationToken.None);
     result.ShouldNotBeNull();
     result.ShouldNotBeEmpty();
   }
