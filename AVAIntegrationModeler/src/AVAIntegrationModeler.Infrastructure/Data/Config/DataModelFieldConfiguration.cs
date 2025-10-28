@@ -21,7 +21,7 @@ public class DataModelFieldConfiguration : IEntityTypeConfiguration<DataModelFie
     
     builder.Property(e => e.Description)
       .HasMaxLength(1000);
-    
+builder.HasKey(e => e.Id);    
     builder.Property(e => e.IsPublishedForLookup).IsRequired();
     builder.Property(e => e.IsCollection).IsRequired();
     builder.Property(e => e.IsLocalized).IsRequired();
@@ -31,25 +31,22 @@ public class DataModelFieldConfiguration : IEntityTypeConfiguration<DataModelFie
       .IsRequired()
       .HasConversion<int>();
     
-    // ✅ Ignorovat readonly property EntityTypeReferences
-    builder.Ignore(e => e.EntityTypeReferences);
-    
-    // ✅ Mapování private kolekce _entityTypeReferences
-    var navigation = builder.Metadata.FindNavigation(nameof(DataModelField.EntityTypeReferences));
-    if (navigation != null)
-    {
-      navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
-      navigation.SetField("_entityTypeReferences");
-    }
-    
-    // Explicitní konfigurace vztahu
-    builder.HasMany(typeof(DataModelFieldEntityTypeReference), "_entityTypeReferences")
+    // 🔥 KLÍČOVÁ OPRAVA: Správná konfigurace pro EntityTypeReferences
+    builder.HasMany<DataModelFieldEntityTypeReference>(e => e.EntityTypeReferences)
       .WithOne()
       .HasForeignKey("DataModelFieldId")
       .OnDelete(DeleteBehavior.Cascade);
+
+    // 🔥 Nastavení přístupu k private backing field
+    builder.Navigation(e => e.EntityTypeReferences)
+      .UsePropertyAccessMode(PropertyAccessMode.Field)
+      .AutoInclude(); // 🔥 Automaticky načíst i vnořené entity!
     
     // Ignorovat computed property (není v DB)
     builder.Ignore(e => e.ReferencedEntityTypeIds);
+
+    // Shadow property pro foreign key do DataModel
+    builder.Property<Guid>("DataModelId").IsRequired();
   }
 }
 

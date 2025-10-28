@@ -7,12 +7,14 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Xunit;
 
 namespace AVAIntegrationModeler.Infrastructure.Test.Data;
 
 /// <summary>
 /// Integrační testy pro databázovou vrstvu Area aggregate.
 /// </summary>
+[Collection("AreaTestCollection")] // 🔥 PŘIDAT
 public class AreaTests : BaseDbTests
 {
   private readonly EfRepository<Area> _repository;
@@ -259,3 +261,4 @@ public class AreaTests : BaseDbTests
     savedArea.Name.ShouldBe("Fluent API Test");
   }
 }
+

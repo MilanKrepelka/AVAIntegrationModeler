@@ -3,6 +3,8 @@ using AVAIntegrationModeler.Domain.DataModelAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
+namespace AVAIntegrationModeler.Infrastructure.Data.Config;
+
 /// <summary>
 /// EF Core konfigurace pro agregát DataModel.
 /// </summary>
@@ -41,22 +43,19 @@ public class DataModelConfiguration : IEntityTypeConfiguration<DataModel>
       .OnDelete(DeleteBehavior.SetNull)
       .IsRequired(false);
 
-    // ✅ KLÍČ: Ignorovat readonly property Fields
-    builder.Ignore(e => e.Fields);
-
-    // ✅ Mapování private kolekce _fields pomocí reflection
-    var navigation = builder.Metadata.FindNavigation(nameof(DataModel.Fields));
-    if (navigation != null)
-    {
-      navigation.SetPropertyAccessMode(PropertyAccessMode.Field);
-      navigation.SetField("_fields");
-    }
-
-    // Explicitní konfigurace vztahu k DataModelField
-    builder.HasMany(typeof(DataModelField), "_fields")
+    // Konfigurace pro tracking změn
+    builder.HasMany<DataModelField>(e => e.Fields)
       .WithOne()
       .HasForeignKey("DataModelId")
       .OnDelete(DeleteBehavior.Cascade);
+
+    // Nastavení přístupu k private backing field "_fields"
+    builder.Navigation(e => e.Fields)
+      .UsePropertyAccessMode(PropertyAccessMode.Field)
+      .AutoInclude(); // 🔥 KLÍČOVÉ: Automatické includování!
   }
 }
+
+
+
 
