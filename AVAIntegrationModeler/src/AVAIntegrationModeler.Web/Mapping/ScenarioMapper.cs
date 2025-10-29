@@ -26,23 +26,23 @@ public static class ScenarioMapper
       Description = dto.Description,
       InputFeature = dto.InputFeatureSummary != null 
         ? MapFeatureSummaryToViewModel(dto.InputFeatureSummary)
-        : FeatureViewModel.Empty,
+        : FeatureListViewModel.Empty,
       OutputFeature = dto.OutputFeatureSummary != null
         ? MapFeatureSummaryToViewModel(dto.OutputFeatureSummary)
-        : FeatureViewModel.Empty
+        : FeatureListViewModel.Empty
     };
 
     return result;
   }
 
   /// <summary>
-  /// Mapuje <see cref="FeatureSummaryDTO"/> na <see cref="FeatureViewModel"/>.
+  /// Mapuje <see cref="FeatureSummaryDTO"/> na <see cref="FeatureListViewModel"/>.
   /// </summary>
   /// <param name="featureSummary">Souhrnné informace o feature.</param>
-  /// <returns><see cref="FeatureViewModel"/>.</returns>
-  private static FeatureViewModel MapFeatureSummaryToViewModel(FeatureSummaryDTO featureSummary)
+  /// <returns><see cref="FeatureListViewModel"/>.</returns>
+  private static FeatureListViewModel MapFeatureSummaryToViewModel(FeatureSummaryDTO featureSummary)
   {
-    return new FeatureViewModel
+    return new FeatureListViewModel
     {
       Id = featureSummary.Id,
       Code = featureSummary.Code,

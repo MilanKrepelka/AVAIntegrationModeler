@@ -83,6 +83,49 @@ public class IntegrationDataProvider : IIntegrationDataProvider
   }
 
   /// <inheritdoc/>
+  public async Task<IEnumerable<FeatureDTO>> GetFeaturesAsync(CancellationToken ct = default)
+  {
+    List<FeatureDTO> features = new List<FeatureDTO>();
+
+    string tenantId = _runtimeContext?.Security?.TenantId!;
+    if (string.IsNullOrEmpty(tenantId))
+    {
+      tenantId = _avaPlaceOptions.Value.TenantId;
+    }
+    return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<FeatureDTO>>(
+      _serviceProvider,
+      tenantId,
+      async client =>
+      {
+        List<FeatureDTO> featureSummaries = new List<FeatureDTO>();
+        // Replace with actual logic to get featureSummaries, e.g.:
+        var dataServiceResult = await client.IntegrationFeatures.GetFeaturesAsync(
+         new ASOL.DataService.Contracts.Filters.IntegrationFeatureFilter()
+         {
+         },
+         new ASOL.Core.Paging.Contracts.Filters.PagingFilter()
+         {
+           Offset = 0,
+           Limit = int.MaxValue
+         }, new ASOL.Core.Domain.Contracts.BaseEntityFilter()
+         {
+           Released = true,
+           Deleted = false,
+         },
+         ct);
+        if (dataServiceResult != null && dataServiceResult.Any())
+        {
+          foreach (var scenario in dataServiceResult)
+          {
+            featureSummaries.Add(Mapping.FeatureMapper.FeatureDTO(scenario));
+          }
+        }
+        return featureSummaries;
+      }
+    );
+  }
+
+  /// <inheritdoc/>
   public async Task<IEnumerable<ScenarioDTO>> GetScenariosAsync(CancellationToken ct = default)
   {
 

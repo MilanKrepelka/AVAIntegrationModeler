@@ -1,4 +1,5 @@
-﻿using AVAIntegrationModeler.API.Scenarios;
+﻿using AVAIntegrationModeler.API.Features;
+using AVAIntegrationModeler.API.Scenarios;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Web.ViewModels.List;
 using Microsoft.AspNetCore.Components;
@@ -18,7 +19,7 @@ public partial class Features : Microsoft.AspNetCore.Components.ComponentBase, I
   /// <inheritdoc/>
   public string FilterString { get; set; } = string.Empty;
 
-  public List<ScenarioListViewModel> ScenariosList { get; set; } = new();
+  public List<FeatureListViewModel> FeatureList { get; set; } = new();
 
   protected async Task onDatasourceChanded(Datasource datasource)
   {
@@ -27,46 +28,45 @@ public partial class Features : Microsoft.AspNetCore.Components.ComponentBase, I
   }
 
 
-
-  protected bool FilterFunc(ScenarioListViewModel scenario)
+  /// <summary>
+  /// Vyhledávací funkce pro filtrování funkcí na základě filtračního řetězce.
+  /// </summary>
+  /// <param name="feature">Feature</param>
+  /// <returns>Příznak, že <paramref name="feature"/> patří do filtru</returns>
+  protected bool FilterFunc(FeatureListViewModel feature)
   {
     if (string.IsNullOrEmpty(FilterString)) return true;
 
-    return scenario.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-      || scenario.Id.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+    return feature.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+      || feature.Id.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
 
-      || scenario.Name.CzechValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-      || scenario.Name.EnglishValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+      || feature.Name.CzechValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+      || feature.Name.EnglishValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
 
-      || scenario.Description.CzechValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-      || scenario.Description.EnglishValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-
-      || scenario.InputFeature.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-      || scenario.OutputFeature.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-
-      ;
+      || feature.Description.CzechValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+      || feature.Description.EnglishValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase);
   }
   protected async Task LoadItemsAsync()
   {
     try
     {
       IsLoading = true;
-      ScenariosList.Clear();
+      FeatureList.Clear();
       // Načtení scénářů z AVAIntegrationModeler.API
       using var httpClient = new HttpClient();
       var response = await httpClient.GetAsync($"http://localhost:57679/Scenarios?datasource={this.Datasource}");
       response.EnsureSuccessStatusCode();
 
-      var scenarioListResponse = await response.Content.ReadFromJsonAsync<ScenarioListResponse>();
+      var scenarioListResponse = await response.Content.ReadFromJsonAsync<FeatureListResponse>();
 
-      if (scenarioListResponse?.Scenarios != null)
+      if (scenarioListResponse?.Features!= null)
       {
-        foreach (var scenario in scenarioListResponse?.Scenarios!)
+        foreach (var feature in scenarioListResponse?.Features!)
         {
 
-          ScenarioListViewModel? scenarioListViewModel = new ScenarioListViewModel();
-          scenarioListViewModel = Mapping.ScenarioMapper.MapToScenarioListViewModel(scenario);
-          if (scenarioListViewModel != null) ScenariosList.Add(scenarioListViewModel);
+          FeatureListViewModel? featureListViewModel = new FeatureListViewModel();
+          featureListViewModel = Mapping.FeatureMapper.MapToViewModel(feature);
+          if (featureListViewModel != null) FeatureList.Add(featureListViewModel);
         }
       }
     }
@@ -81,7 +81,7 @@ public partial class Features : Microsoft.AspNetCore.Components.ComponentBase, I
     {
       Console.WriteLine($"Chyba při načítání scénářů: {ex.Message}");
       // fallback na lokální data
-      ScenariosList = new();
+      FeatureList = new();
     }
     finally
     {

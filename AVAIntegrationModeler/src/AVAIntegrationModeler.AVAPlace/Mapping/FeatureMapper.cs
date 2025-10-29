@@ -33,4 +33,21 @@ public static class FeatureMapper
       Id = Guid.Parse(integrationDefenitionSummary.Id),
     };
   }
+
+  /// <summary>
+  /// Převede datový přenosový objekt feature (<see cref="IntegrationFeatureSummary"/>) na jeho datový přenosový objekt (<see cref="FeatureSummaryDTO"/>).
+  /// </summary>
+  /// <param name="integrationDefenitionSummary"><see cref="IntegrationFeatureSummary"/></param>
+  /// <returns><see cref="FeatureSummaryDTO"/></returns>
+  public static FeatureDTO FeatureDTO(IntegrationFeatureSummary integrationDefenitionSummary)
+  {
+    Guard.Against.Null(integrationDefenitionSummary, $"{nameof(FeatureMapper)} - {nameof(integrationDefenitionSummary)}");
+    Guard.Against.NullOrEmpty(integrationDefenitionSummary.Id, $"{nameof(FeatureMapper)} - {nameof(integrationDefenitionSummary)} - {nameof(integrationDefenitionSummary.Id)}");
+
+    return new FeatureDTO()
+    {
+      Code = integrationDefenitionSummary.Code,
+      Id = Guid.Parse(integrationDefenitionSummary.Id),
+    };
+  }
 }

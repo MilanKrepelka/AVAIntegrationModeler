@@ -30,12 +30,12 @@ public class ScenarioListViewModel
   /// <summary>
   /// Vstupní feature scénáře.
   /// </summary>
-  public List.FeatureViewModel InputFeature { get; set; } = List.FeatureViewModel.Empty;
+  public List.FeatureListViewModel InputFeature { get; set; } = List.FeatureListViewModel.Empty;
   
   /// <summary>
   /// Výstupní feature scénáře.
   /// </summary>
-  public List.FeatureViewModel OutputFeature { get; set; } = List.FeatureViewModel.Empty;
+  public List.FeatureListViewModel OutputFeature { get; set; } = List.FeatureListViewModel.Empty;
 
   /// <summary>
   /// Příznak, že se v Gridu bude zobrazovat detail <see cref="ScenarioListViewModel"/>
