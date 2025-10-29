@@ -1,4 +1,4 @@
-﻿@page "/scenarios"
+﻿@page "/features"
 @using AVAIntegrationModeler.Web.ViewModels.List;
 @inject ISnackbar Snackbar
 
@@ -16,14 +16,14 @@
 else
 {
     <MudRadioGroup T="AVAIntegrationModeler.Contracts.Datasource" Class="mb-4" Value="Datasource" ValueChanged="onDatasourceChanded">
-        <MudRadio  Dense="true" Value="AVAIntegrationModeler.Contracts.Datasource.Database" Color="Color.Primary">Lokální vývoj</MudRadio>
-        <MudRadio  Dense="true" Value="AVAIntegrationModeler.Contracts.Datasource.AVAPlace" Color="Color.Secondary">AVA place</MudRadio>
+        <MudRadio Dense="true" Value="AVAIntegrationModeler.Contracts.Datasource.Database" Color="Color.Primary">Lokální vývoj</MudRadio>
+        <MudRadio Dense="true" Value="AVAIntegrationModeler.Contracts.Datasource.AVAPlace" Color="Color.Secondary">AVA place</MudRadio>
     </MudRadioGroup>
 
     <MudDataGrid Items="@ScenariosList" Filterable="false" QuickFilter="FilterFunc" ExpandSingleRow="false">
-        
+
         <ToolBarContent>
-            
+
             <MudSpacer />
             <MudTextField @bind-Value="this.FilterString" Placeholder="Hledat" Adornment="Adornment.Start" Immediate="true"
                           AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
@@ -31,7 +31,7 @@ else
         <Columns>
             <HierarchyColumn T="ScenarioListViewModel" EnableHeaderToggle=true />
             <PropertyColumn Property="x => x.Code" Title="Kód">
-                
+
             </PropertyColumn>
             <PropertyColumn Property="x => x.Name.EnglishValue" Title="Název - anglicky" />
             <PropertyColumn Property="x => x.Description.EnglishValue" Title="Popis - anglicky" />
@@ -48,35 +48,35 @@ else
                     </MudTooltip>
                 </CellTemplate>
             </PropertyColumn>
-            
+
         </Columns>
         <ChildRowContent>
             <MudPaper Class="pa-6 ma-2" Elevation="2">
-            <MudForm Spacing="4">
-            <MudGrid>
-                <MudItem xs="12" sm="6" md="4" >
-                    <MudField Label="Identifikátor" Variant="Variant.Text">@context.Item.Id</MudField>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="4" >
-                    <MudField Label="Kód" Variant="Variant.Text">@context.Item.Code</MudField>
-                </MudItem>
-            </MudGrid>
-            <MudGrid>
-                <MudItem xs="12" sm="6" md="4" >
-                    <MudField Label="Název - anglicky" Variant="Variant.Text">@context.Item.Name.EnglishValue</MudField>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="4">
-                    <MudField Label="Popis - anglicky" Variant="Variant.Text">@context.Item.Description.EnglishValue</MudField>
-                </MudItem>
-            </MudGrid>
-            <MudGrid>
-                <MudItem xs="12" sm="6" md="4" >
-                    <MudField Label="Název - česky" Variant="Variant.Text">@context.Item.Name.CzechValue</MudField>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="4" >
-                    <MudField Label="Popis - česky" Variant="Variant.Text">@context.Item.Description.CzechValue</MudField>
-                </MudItem>
-            </MudGrid>
+                <MudForm Spacing="4">
+                    <MudGrid>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Identifikátor" Variant="Variant.Text">@context.Item.Id</MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Kód" Variant="Variant.Text">@context.Item.Code</MudField>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Název - anglicky" Variant="Variant.Text">@context.Item.Name.EnglishValue</MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Popis - anglicky" Variant="Variant.Text">@context.Item.Description.EnglishValue</MudField>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Název - česky" Variant="Variant.Text">@context.Item.Name.CzechValue</MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Popis - česky" Variant="Variant.Text">@context.Item.Description.CzechValue</MudField>
+                        </MudItem>
+                    </MudGrid>
                     <MudGrid>
                         <MudItem xs="12" sm="6" md="4">
                             <MudField Label="Vstupní feature" Variant="Variant.Text">@context.Item.InputFeature.Code</MudField>
@@ -85,11 +85,11 @@ else
                             <MudField Label="Výstupní feature" Variant="Variant.Text">@context.Item.OutputFeature.Code</MudField>
                         </MudItem>
                     </MudGrid>
-            </MudForm>
+                </MudForm>
             </MudPaper>
         </ChildRowContent>
     </MudDataGrid>
-    
+
 }
 @code
 {

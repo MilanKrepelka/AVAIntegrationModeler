@@ -9,7 +9,7 @@ using static MudBlazor.Colors;
 
 namespace AVAIntegrationModeler.Web.Components.Pages;
 
-public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, IPageListBase
+public partial class Features : Microsoft.AspNetCore.Components.ComponentBase, IPageListBase
 {
   /// <inheritdoc/>
   public bool IsLoading { get; set; } = false;
@@ -26,7 +26,7 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
     await LoadItemsAsync();
   }
 
-  
+
 
   protected bool FilterFunc(ScenarioListViewModel scenario)
   {
@@ -34,7 +34,7 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
 
     return scenario.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)
       || scenario.Id.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-      
+
       || scenario.Name.CzechValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
       || scenario.Name.EnglishValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
 
@@ -58,7 +58,7 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
       response.EnsureSuccessStatusCode();
 
       var scenarioListResponse = await response.Content.ReadFromJsonAsync<ScenarioListResponse>();
-      
+
       if (scenarioListResponse?.Scenarios != null)
       {
         foreach (var scenario in scenarioListResponse?.Scenarios!)
@@ -66,16 +66,16 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
 
           ScenarioListViewModel? scenarioListViewModel = new ScenarioListViewModel();
           scenarioListViewModel = Mapping.ScenarioMapper.MapToScenarioListViewModel(scenario);
-          if (scenarioListViewModel != null)ScenariosList.Add(scenarioListViewModel);
+          if (scenarioListViewModel != null) ScenariosList.Add(scenarioListViewModel);
         }
       }
     }
-    
+
     catch (HttpRequestException httpEx)
     {
       Console.WriteLine($"Chyba HTTP požadavku: {httpEx.Message}");
       // fallback na lokální data
-      
+
     }
     catch (Exception ex)
     {
@@ -88,7 +88,7 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
       IsLoading = false;
     }
   }
-  protected void ShowBtnPress(ScenarioListViewModel scenarioListViewModel )
+  protected void ShowBtnPress(ScenarioListViewModel scenarioListViewModel)
   {
     scenarioListViewModel.ShowDetails = !scenarioListViewModel.ShowDetails;
   }
