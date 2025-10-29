@@ -32,9 +32,12 @@ public class ListScenariosQueryService(
         
         if (datasouce == Datasource.AVAPlace)
         {
-          var scenarios = (await integrationDataProvider.GetScenariosAsync(CancellationToken.None)).ToList();
-          var features = (await integrationDataProvider.GetFeaturesSummaryAsync(CancellationToken.None))
-            .ToDictionary(f => f.Id);
+          var scenariosTask = integrationDataProvider.GetScenariosAsync();
+          var featuresTask = integrationDataProvider.GetFeaturesSummaryAsync();
+          await Task.WhenAll(scenariosTask, featuresTask);
+
+          var scenarios = scenariosTask.Result.ToList();
+          var features = featuresTask.Result.ToDictionary(f => f.Id);
 
           result = scenarios.Select(s => new ScenarioDTO
           {
@@ -55,17 +58,12 @@ public class ListScenariosQueryService(
         else
         {
           // ✅ Explicitní join pomocí LINQ bez navigačních vlastností
-          var scenarios = await _db.Scenarios.ToListAsync();
-          var featureIds = scenarios
-            .SelectMany(s => new[] { s.InputFeature, s.OutputFeature })
-            .Where(id => id.HasValue)
-            .Select(id => id!.Value)
-            .Distinct()
-            .ToList();
+          var scenariosTask = _db.Scenarios.ToListAsync();
+          var allFeaturesTask = _db.Features.ToListAsync();
+          await Task.WhenAll(scenariosTask, allFeaturesTask);
 
-          var features = await _db.Features
-            .Where(f => featureIds.Contains(f.Id))
-            .ToListAsync();
+          var scenarios = scenariosTask.Result;
+          var features = allFeaturesTask.Result;
 
           var featureDict = features.ToDictionary(f => f.Id);
 
