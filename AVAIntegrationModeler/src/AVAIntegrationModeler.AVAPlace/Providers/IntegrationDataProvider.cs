@@ -22,7 +22,7 @@ public class IntegrationDataProvider : IIntegrationDataProvider
   private readonly IServiceProvider _serviceProvider;
   private readonly IOptions<AVAPlaceOptions> _avaPlaceOptions;
   private readonly IRuntimeContext _runtimeContext;
-  
+
 
   /// <summary>
   /// Základní konstruktor.
@@ -31,7 +31,7 @@ public class IntegrationDataProvider : IIntegrationDataProvider
   /// <exception cref="ArgumentNullException"></exception>
   public IntegrationDataProvider(
     IServiceProvider serviceProvider,
-    IOptions< Options.AVAPlaceOptions> avaPlaceOptions
+    IOptions<Options.AVAPlaceOptions> avaPlaceOptions
     )
   {
     _serviceProvider = serviceProvider ?? throw new ArgumentNullException(nameof(serviceProvider));
@@ -132,11 +132,12 @@ public class IntegrationDataProvider : IIntegrationDataProvider
     // Assuming you have access to a serviceProvider and tenantId in your context.
     // You may need to inject these via constructor or other means.
 
-    string tenantId =  _runtimeContext?.Security?.TenantId!;
+    string tenantId = _runtimeContext?.Security?.TenantId!;
     if (string.IsNullOrEmpty(tenantId))
     {
       tenantId = _avaPlaceOptions.Value.TenantId;
-    };
+    }
+    ;
 
     return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<ScenarioDTO>>(
       _serviceProvider,
@@ -163,10 +164,10 @@ public class IntegrationDataProvider : IIntegrationDataProvider
         {
           foreach (var scenario in dataServiceResult)
           {
-           scenarios.Add(Mapping.ScenarioMapper.MapToDTO(scenario));
+            scenarios.Add(Mapping.ScenarioMapper.MapToDTO(scenario));
           }
         }
-          return scenarios;
+        return scenarios;
       }
     );
   }
@@ -213,6 +214,80 @@ public class IntegrationDataProvider : IIntegrationDataProvider
           foreach (var scenario in dataServiceResult)
           {
             scenarios.Add(Mapping.ScenarioMapper.MapToDTO(scenario));
+          }
+        }
+        return scenarios;
+      }
+    );
+  }
+
+  /// <inheritdoc/>
+  public async Task<IEnumerable<DataModelDTO>> GetDataModelsAsync(CancellationToken ct = default)
+  {
+    string tenantId = _runtimeContext?.Security?.TenantId!;
+    if (string.IsNullOrEmpty(tenantId))
+    {
+      tenantId = _avaPlaceOptions.Value.TenantId;
+    }
+
+    return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<DataModelDTO>>(
+      _serviceProvider,
+      tenantId,
+      async client =>
+      {
+        List<DataModelDTO> scenarios = new List<DataModelDTO>();
+        // Replace with actual logic to get featureSummaries, e.g.:
+        var dataServiceResult = await client.GetDataModelsAsync(
+
+         new ASOL.Core.Paging.Contracts.Filters.PagingFilter()
+         {
+           Offset = 0,
+           Limit = int.MaxValue
+         },
+         ct);
+
+        if (dataServiceResult != null && dataServiceResult.Any())
+        {
+          foreach (var dataModel in dataServiceResult)
+          {
+            scenarios.Add(Mapping.DataModelMapper.MapToDTO(dataModel));
+          }
+        }
+        return scenarios;
+      }
+    );
+  }
+
+  /// <inheritdoc/>
+  public async Task<IEnumerable<DataModelSummaryDTO>> GetDataModelsSummaryAsync(CancellationToken ct = default)
+  {
+    string tenantId = _runtimeContext?.Security?.TenantId!;
+    if (string.IsNullOrEmpty(tenantId))
+    {
+      tenantId = _avaPlaceOptions.Value.TenantId;
+    }
+
+    return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<DataModelSummaryDTO>>(
+      _serviceProvider,
+      tenantId,
+      async client =>
+      {
+        List<DataModelSummaryDTO> scenarios = new List<DataModelSummaryDTO>();
+        // Replace with actual logic to get featureSummaries, e.g.:
+        var dataServiceResult = await client.GetDataModelsAsync(
+
+         new ASOL.Core.Paging.Contracts.Filters.PagingFilter()
+         {
+           Offset = 0,
+           Limit = int.MaxValue
+         },
+         ct);
+
+        if (dataServiceResult != null && dataServiceResult.Any())
+        {
+          foreach (var dataModel in dataServiceResult)
+          {
+            scenarios.Add(Mapping.DataModelMapper.MapToSummaryDTO(dataModel));
           }
         }
         return scenarios;

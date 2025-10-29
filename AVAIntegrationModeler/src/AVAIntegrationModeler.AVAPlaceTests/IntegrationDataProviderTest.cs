@@ -39,4 +39,34 @@ public class IntegrationDataProvider : TestBed<Fixtures.AVAPlaceDemoFixture>
     result.ShouldNotBeNull();
     result.ShouldNotBeEmpty();
   }
+
+  /// <summary>
+  /// Test který načte integrační feature.
+  /// </summary>
+  /// <returns></returns>
+  [Fact]
+  public async Task GetDataModelsSummaryAsync()
+  {
+    var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
+
+    var result = await integrationDataProvider.GetDataModelsSummaryAsync(CancellationToken.None);
+    result.ShouldNotBeNull();
+    result.ShouldNotBeEmpty();
+  }
+
+  /// <summary>
+  /// Test který načte integrační feature.
+  /// </summary>
+  /// <returns></returns>
+  [Fact]
+  public async Task GetDataModelsAsync()
+  {
+    var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
+
+    var result = await integrationDataProvider.GetDataModelsAsync(CancellationToken.None);
+    
+    result.ShouldNotBeNull();
+    result.ShouldNotBeEmpty();
+    result.ShouldAllBe(x => x.Fields != null && x.Fields.Count() > 1);
+  }
 }
