@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using Ardalis.GuardClauses;
 using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.UseCases.Scenarios.Mapping;
 using Microsoft.AspNetCore.Mvc.Formatters;
 
 namespace AVAIntegrationModeler.UseCases.Features.Mapping;

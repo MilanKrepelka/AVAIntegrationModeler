@@ -1,7 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
-using AVAIntegrationModeler.UseCases.Scenarios.Mapping;
 using AVAIntegrationModeler.UseCases.Scenarios.Update;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Update;

@@ -11,4 +11,8 @@
     <ProjectReference Include="..\AVAIntegrationModeler.Domain\AVAIntegrationModeler.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="LocalizedValue\Mapping\" />
+  </ItemGroup>
+
 </Project>

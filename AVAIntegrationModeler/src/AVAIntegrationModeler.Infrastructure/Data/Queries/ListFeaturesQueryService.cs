@@ -78,8 +78,7 @@ public class ListFeaturesQueryService(
         }
         return result;
       });
-    return await Task.FromResult(result);
-    //return x!;
+    return x!;
   }
 
 }

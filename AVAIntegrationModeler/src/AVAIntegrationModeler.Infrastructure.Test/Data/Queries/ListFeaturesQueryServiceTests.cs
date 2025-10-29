@@ -1,27 +1,25 @@
 ﻿using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.Contracts;
-using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.Core.FeatureAggregate;
+using AVAIntegrationModeler.Domain.FeatureAggregate;
 using AVAIntegrationModeler.Domain.ValueObjects;
 using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.Infrastructure.Data.Queries;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Moq;
-using Xunit;
+using NSubstitute;
 
 namespace AVAIntegrationModeler.Infrastructure.Tests.Data.Queries;
 
 /// <summary>
 /// Testy pro ListFeaturesQueryService - testování metody ListAsync pro načítání features z různých zdrojů dat.
 /// </summary>
-public class ListFeaturesQueryServiceTests : IDisposable
+public class ListFeaturesQueryServiceTests : IAsyncLifetime, IAsyncDisposable
 {
   private readonly AppDbContext _dbContext;
-  private readonly Mock<IIntegrationDataProvider> _mockIntegrationDataProvider;
+  private readonly IIntegrationDataProvider _mockIntegrationDataProvider;
   private readonly IMemoryCache _memoryCache;
   private readonly ListFeaturesQueryService _sut;
-
+  
   public ListFeaturesQueryServiceTests()
   {
     var options = new DbContextOptionsBuilder<AppDbContext>()
@@ -29,13 +27,32 @@ public class ListFeaturesQueryServiceTests : IDisposable
         .Options;
 
     _dbContext = new AppDbContext(options, null);
-    _mockIntegrationDataProvider = new Mock<IIntegrationDataProvider>();
+    
+    // ✅ Vyčistit databázi před každým testem
+    _dbContext.Database.EnsureDeleted();
+    _dbContext.Database.EnsureCreated();
+    
+    _mockIntegrationDataProvider = Substitute.For<IIntegrationDataProvider>();
     _memoryCache = new MemoryCache(new MemoryCacheOptions());
 
     _sut = new ListFeaturesQueryService(
         _dbContext,
-        _mockIntegrationDataProvider.Object,
+        _mockIntegrationDataProvider,
         _memoryCache);
+  }
+
+  public async ValueTask InitializeAsync()
+  {
+    // Ensure database is created and ready
+    await _dbContext.Database.EnsureCreatedAsync();
+  }
+
+  public async ValueTask DisposeAsync()
+  {
+    // Clean up resources
+    await _dbContext.Database.EnsureDeletedAsync();
+    await _dbContext.DisposeAsync();
+    _memoryCache?.Dispose();
   }
 
   #region Database Datasource Tests
@@ -69,7 +86,7 @@ public class ListFeaturesQueryServiceTests : IDisposable
     });
 
     _dbContext.Features.Add(feature);
-    await _dbContext.SaveChangesAsync();
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
 
     // Act
     var result = await _sut.ListAsync(Datasource.Database);
@@ -103,7 +120,7 @@ public class ListFeaturesQueryServiceTests : IDisposable
     feature3.SetDescription(new LocalizedValue { CzechValue = "Třetí popis", EnglishValue = "Third description" });
 
     _dbContext.Features.AddRange(feature1, feature2, feature3);
-    await _dbContext.SaveChangesAsync();
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
 
     // Act
     var result = await _sut.ListAsync(Datasource.Database);
@@ -134,7 +151,7 @@ public class ListFeaturesQueryServiceTests : IDisposable
     });
 
     _dbContext.Features.Add(feature);
-    await _dbContext.SaveChangesAsync();
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
 
     // Act
     var result = await _sut.ListAsync(Datasource.Database);
@@ -142,7 +159,7 @@ public class ListFeaturesQueryServiceTests : IDisposable
     // Assert
     var features = result.ToList();
     Assert.Single(features);
-    
+
     var featureDto = features[0];
     Assert.Equal(featureId, featureDto.Id);
     Assert.Equal("COMPLETE-FEAT", featureDto.Code);
@@ -162,9 +179,9 @@ public class ListFeaturesQueryServiceTests : IDisposable
   public async Task ListAsync_WithAVAPlaceDatasource_CallsIntegrationProvider()
   {
     // Arrange
-    var expectedFeatures = new List<FeatureDTO>
+    var expectedFeatures = new List<Contracts.DTO.FeatureDTO>
     {
-      new FeatureDTO
+      new Contracts.DTO.FeatureDTO
       {
         Id = Guid.NewGuid(),
         Code = "AVA-FEAT-001",
@@ -182,8 +199,8 @@ public class ListFeaturesQueryServiceTests : IDisposable
     };
 
     _mockIntegrationDataProvider
-        .Setup(x => x.GetFeaturesAsync(It.IsAny<CancellationToken>()))
-        .ReturnsAsync(expectedFeatures);
+        .GetFeaturesAsync(Arg.Any<CancellationToken>())
+        .Returns(expectedFeatures);
 
     // Act
     var result = await _sut.ListAsync(Datasource.AVAPlace);
@@ -195,25 +212,25 @@ public class ListFeaturesQueryServiceTests : IDisposable
     Assert.Equal("AVA-FEAT-001", features[0].Code);
     Assert.Equal("AVA feature", features[0].Name.CzechValue);
 
-    _mockIntegrationDataProvider.Verify(
-        x => x.GetFeaturesAsync(It.IsAny<CancellationToken>()),
-        Times.Once);
+    await _mockIntegrationDataProvider
+        .Received(1)
+        .GetFeaturesAsync(Arg.Any<CancellationToken>());
   }
 
   [Fact]
   public async Task ListAsync_WithAVAPlaceDatasource_ReturnsMultipleFeatures()
   {
     // Arrange
-    var expectedFeatures = new List<FeatureDTO>
+    var expectedFeatures = new List<Contracts.DTO.FeatureDTO>
     {
-      new FeatureDTO { Id = Guid.NewGuid(), Code = "AVA-001" },
-      new FeatureDTO { Id = Guid.NewGuid(), Code = "AVA-002" },
-      new FeatureDTO { Id = Guid.NewGuid(), Code = "AVA-003" }
+      new Contracts.DTO.FeatureDTO { Id = Guid.NewGuid(), Code = "AVA-001" },
+      new Contracts.DTO.FeatureDTO { Id = Guid.NewGuid(), Code = "AVA-002" },
+      new Contracts.DTO.FeatureDTO { Id = Guid.NewGuid(), Code = "AVA-003" }
     };
 
     _mockIntegrationDataProvider
-        .Setup(x => x.GetFeaturesAsync(It.IsAny<CancellationToken>()))
-        .ReturnsAsync(expectedFeatures);
+        .GetFeaturesAsync(Arg.Any<CancellationToken>())
+        .Returns(expectedFeatures);
 
     // Act
     var result = await _sut.ListAsync(Datasource.AVAPlace);
@@ -228,9 +245,9 @@ public class ListFeaturesQueryServiceTests : IDisposable
   {
     // Arrange
     var featureId = Guid.NewGuid();
-    var expectedFeatures = new List<FeatureDTO>
+    var expectedFeatures = new List<Contracts.DTO.FeatureDTO>
     {
-      new FeatureDTO
+      new Contracts.DTO.FeatureDTO
       {
         Id = featureId,
         Code = "MAP-TEST",
@@ -248,8 +265,8 @@ public class ListFeaturesQueryServiceTests : IDisposable
     };
 
     _mockIntegrationDataProvider
-        .Setup(x => x.GetFeaturesAsync(It.IsAny<CancellationToken>()))
-        .ReturnsAsync(expectedFeatures);
+        .GetFeaturesAsync(Arg.Any<CancellationToken>())
+        .Returns(expectedFeatures);
 
     // Act
     var result = await _sut.ListAsync(Datasource.AVAPlace);
@@ -257,7 +274,7 @@ public class ListFeaturesQueryServiceTests : IDisposable
     // Assert
     var features = result.ToList();
     Assert.Single(features);
-    
+
     var feature = features[0];
     Assert.Equal(featureId, feature.Id);
     Assert.Equal("MAP-TEST", feature.Code);
@@ -272,8 +289,8 @@ public class ListFeaturesQueryServiceTests : IDisposable
   {
     // Arrange
     _mockIntegrationDataProvider
-        .Setup(x => x.GetFeaturesAsync(It.IsAny<CancellationToken>()))
-        .ReturnsAsync(new List<FeatureDTO>());
+        .GetFeaturesAsync(Arg.Any<CancellationToken>())
+        .Returns(new List<Contracts.DTO.FeatureDTO>());
 
     // Act
     var result = await _sut.ListAsync(Datasource.AVAPlace);
@@ -291,14 +308,14 @@ public class ListFeaturesQueryServiceTests : IDisposable
   public async Task ListAsync_UsesCaching_OnSecondCall()
   {
     // Arrange
-    var expectedFeatures = new List<FeatureDTO>
+    var expectedFeatures = new List<Contracts.DTO.FeatureDTO>
     {
-      new FeatureDTO { Id = Guid.NewGuid(), Code = "AVA-CACHE-TEST" }
+      new Contracts.DTO.FeatureDTO { Id = Guid.NewGuid(), Code = "AVA-CACHE-TEST" }
     };
 
     _mockIntegrationDataProvider
-        .Setup(x => x.GetFeaturesAsync(It.IsAny<CancellationToken>()))
-        .ReturnsAsync(expectedFeatures);
+        .GetFeaturesAsync(Arg.Any<CancellationToken>())
+        .Returns(expectedFeatures);
 
     // Act
     var result1 = await _sut.ListAsync(Datasource.AVAPlace);
@@ -307,27 +324,27 @@ public class ListFeaturesQueryServiceTests : IDisposable
     // Assert
     Assert.Equal(result1, result2);
 
-    _mockIntegrationDataProvider.Verify(
-        x => x.GetFeaturesAsync(It.IsAny<CancellationToken>()),
-        Times.Once);
+    await _mockIntegrationDataProvider
+        .Received(1)
+        .GetFeaturesAsync(Arg.Any<CancellationToken>());
   }
 
   [Fact]
   public async Task ListAsync_UsesDifferentCacheKeys_ForDifferentDatasources()
   {
     // Arrange
-    var avaPlaceFeatures = new List<FeatureDTO>
+    var avaPlaceFeatures = new List<Contracts.DTO.FeatureDTO>
     {
-      new FeatureDTO { Id = Guid.NewGuid(), Code = "AVA-001" }
+      new Contracts.DTO.FeatureDTO { Id = Guid.NewGuid(), Code = "AVA-001" }
     };
-
+    
     _mockIntegrationDataProvider
-        .Setup(x => x.GetFeaturesAsync(It.IsAny<CancellationToken>()))
-        .ReturnsAsync(avaPlaceFeatures);
+        .GetFeaturesAsync(Arg.Any<CancellationToken>())
+        .Returns(avaPlaceFeatures);
 
-    var dbFeature = new Feature(Guid.NewGuid(), "DB-001");
+    var dbFeature = new Feature(Guid.NewGuid(), $"DB-CACHE-{Guid.NewGuid()}");
     _dbContext.Features.Add(dbFeature);
-    await _dbContext.SaveChangesAsync();
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
 
     // Act
     var avaPlaceResult = await _sut.ListAsync(Datasource.AVAPlace);
@@ -337,8 +354,9 @@ public class ListFeaturesQueryServiceTests : IDisposable
     Assert.Single(avaPlaceResult);
     Assert.Single(databaseResult);
     Assert.NotEqual(avaPlaceResult.First().Code, databaseResult.First().Code);
-    Assert.Equal("AVA-001", avaPlaceResult.First().Code);
-    Assert.Equal("DB-001", databaseResult.First().Code);
+    
+    Assert.Equal(avaPlaceFeatures.ElementAt(0).Code, avaPlaceResult.First().Code);
+    Assert.Equal(dbFeature.Code, databaseResult.First().Code);
   }
 
   [Fact]
@@ -347,14 +365,14 @@ public class ListFeaturesQueryServiceTests : IDisposable
     // Arrange
     var feature = new Feature(Guid.NewGuid(), "CACHE-TEST");
     _dbContext.Features.Add(feature);
-    await _dbContext.SaveChangesAsync();
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
 
     // Act
     var result1 = await _sut.ListAsync(Datasource.Database);
 
     var newFeature = new Feature(Guid.NewGuid(), "NEW-FEATURE");
     _dbContext.Features.Add(newFeature);
-    await _dbContext.SaveChangesAsync();
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
 
     var result2 = await _sut.ListAsync(Datasource.Database);
 
@@ -368,14 +386,14 @@ public class ListFeaturesQueryServiceTests : IDisposable
   public async Task ListAsync_CacheExpiration_IsSetCorrectly()
   {
     // Arrange
-    var expectedFeatures = new List<FeatureDTO>
+    var expectedFeatures = new List<Contracts.DTO.FeatureDTO>
     {
-      new FeatureDTO { Id = Guid.NewGuid(), Code = "CACHE-EXPIRY-TEST" }
+      new Contracts.DTO.FeatureDTO { Id = Guid.NewGuid(), Code = "CACHE-EXPIRY-TEST" }
     };
 
     _mockIntegrationDataProvider
-        .Setup(x => x.GetFeaturesAsync(It.IsAny<CancellationToken>()))
-        .ReturnsAsync(expectedFeatures);
+        .GetFeaturesAsync(Arg.Any<CancellationToken>())
+        .Returns(expectedFeatures);
 
     // Act
     await _sut.ListAsync(Datasource.AVAPlace);
@@ -399,7 +417,7 @@ public class ListFeaturesQueryServiceTests : IDisposable
     // Nastavíme pouze povinné vlastnosti, bez Name a Description
 
     _dbContext.Features.Add(feature);
-    await _dbContext.SaveChangesAsync();
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
 
     // Act
     var result = await _sut.ListAsync(Datasource.Database);
@@ -415,9 +433,9 @@ public class ListFeaturesQueryServiceTests : IDisposable
   public async Task ListAsync_WithAVAPlaceDatasource_HandlesNullValues()
   {
     // Arrange
-    var expectedFeatures = new List<FeatureDTO>
+    var expectedFeatures = new List<Contracts.DTO.FeatureDTO>
     {
-      new FeatureDTO
+      new Contracts.DTO.FeatureDTO
       {
         Id = Guid.NewGuid(),
         Code = "NULL-TEST",
@@ -427,8 +445,8 @@ public class ListFeaturesQueryServiceTests : IDisposable
     };
 
     _mockIntegrationDataProvider
-        .Setup(x => x.GetFeaturesAsync(It.IsAny<CancellationToken>()))
-        .ReturnsAsync(expectedFeatures);
+        .GetFeaturesAsync(Arg.Any<CancellationToken>())
+        .Returns(expectedFeatures);
 
     // Act
     var result = await _sut.ListAsync(Datasource.AVAPlace);
@@ -448,7 +466,7 @@ public class ListFeaturesQueryServiceTests : IDisposable
     var feature3 = new Feature(Guid.NewGuid(), "FEAT-B");
 
     _dbContext.Features.AddRange(feature1, feature2, feature3);
-    await _dbContext.SaveChangesAsync();
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
 
     // Act
     var result = await _sut.ListAsync(Datasource.Database);
@@ -463,10 +481,4 @@ public class ListFeaturesQueryServiceTests : IDisposable
   }
 
   #endregion
-
-  public void Dispose()
-  {
-    _dbContext?.Dispose();
-    _memoryCache?.Dispose();
-  }
 }
