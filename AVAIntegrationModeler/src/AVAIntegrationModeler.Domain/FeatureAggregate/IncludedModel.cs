@@ -35,7 +35,7 @@ public class IncludedModel : EntityBase<Guid>
   public Guid ModelId { get; private set; }
 
   /// <summary>
-  /// Příznak určující, zda je model pouze pro konzumaci
+  /// Příznak určující, zda je model pouze ke čtení
   /// </summary>
-  public bool ConsumeOnly { get; set; }
+  public bool ReadOnly { get; set; }
 }

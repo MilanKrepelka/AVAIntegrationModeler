@@ -193,11 +193,11 @@ public class FeatureTests : BaseDbTests
 
     var model1 = savedFeature.GetIncludedModel(model1Id);
     model1.ShouldNotBeNull();
-    model1.ConsumeOnly.ShouldBeFalse();
+    model1.ReadOnly.ShouldBeFalse();
 
     var model2 = savedFeature.GetIncludedModel(model2Id);
     model2.ShouldNotBeNull();
-    model2.ConsumeOnly.ShouldBeTrue();
+    model2.ReadOnly.ShouldBeTrue();
   }
 
   [Fact]

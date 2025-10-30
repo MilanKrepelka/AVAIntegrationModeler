@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using Ardalis.GuardClauses;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Domain.DataModelAggregate;
 
@@ -15,9 +16,9 @@ public static class DataModelMapper
   /// </summary>
   /// <param name="dataModel"><see cref="DataModel"/></param>
   /// <returns><see cref="DataModelDTO"/></returns>
-  public static DataModelDTO? MapToDataModelDTO(DataModel? dataModel)
+  public static DataModelDTO MapToDataModelDTO(DataModel dataModel)
   {
-    if (dataModel == default) return default;
+    Guard.Against.Null(dataModel, nameof(dataModel));
 
     DataModelDTO result = new DataModelDTO()
     {
@@ -39,9 +40,9 @@ public static class DataModelMapper
   /// </summary>
   /// <param name="dto"><see cref="DataModelDTO"/></param>
   /// <returns><see cref="DataModel"/></returns>
-  public static DataModel? MapToEntity(DataModelDTO? dto)
+  public static DataModel MapToEntity(DataModelDTO dto)
   {
-    if (dto == default) return default;
+    Guard.Against.Null(dto, nameof(dto));
 
     var dataModel = new DataModel(dto.Id, dto.Code);
     
@@ -69,5 +70,24 @@ public static class DataModelMapper
     }
     
     return dataModel;
+  }
+
+  /// <summary>
+  /// Mapuje doménový objekt datového modelu (<see cref="DataModel"/>) na jeho sumarizační DTO (<see cref="DataModelSummaryDTO"/>).
+  /// </summary>
+  /// <param name="dataModel"><see cref="DataModel"/></param>
+  /// <returns><see cref="DataModelSummaryDTO"/></returns>
+  public static DataModelSummaryDTO MapToDataModelSummaryDTO(DataModel dataModel)
+  {
+    Guard.Against.Null(dataModel, nameof(dataModel));
+
+    DataModelSummaryDTO result = new DataModelSummaryDTO()
+    {
+      Id = dataModel.Id,
+      Code = dataModel.Code,
+      Name = dataModel.Name,
+    };
+    
+    return result;
   }
 }

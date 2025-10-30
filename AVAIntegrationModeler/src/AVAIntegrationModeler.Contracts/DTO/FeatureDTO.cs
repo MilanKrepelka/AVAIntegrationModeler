@@ -13,6 +13,16 @@ namespace AVAIntegrationModeler.Contracts.DTO;
 /// </summary>
 public record FeatureDTO
 {
+  public static FeatureDTO Empty => new FeatureDTO
+  {
+    Id = Guid.Empty,
+    Code = string.Empty,
+    Name = new LocalizedValue(),
+    Description = new LocalizedValue(),
+    IncludedFeatures = new List<IncludedFeatureDTO>(),
+    IncludedModels = new List<IncludedDataModelDTO>(),
+  };
+
   /// <summary>
   /// Jedinečný identifikátor scénáře.
   /// </summary>
@@ -36,11 +46,13 @@ public record FeatureDTO
   /// <summary>
   /// Seznam featur zahrnutých v této integrační feature.
   /// </summary>
-  public List<(Guid FeatureId, bool ConsumeOnly)> IncludedFeatures { get; init; } = new();
+  public List<IncludedFeatureDTO> IncludedFeatures { get; init; } = new();
 
   /// <summary>
   /// Seznam modelů zahrnutých v této integrační feature.
   /// </summary>
-  public List<Guid> IncludedModels { get; init; } = new();
+  public List<IncludedDataModelDTO> IncludedModels { get; init; } = new();
+
+  
 }
 

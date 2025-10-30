@@ -148,7 +148,7 @@ public class Feature : EntityBase<Guid>, IAggregateRoot
 
     var includedModel = new IncludedModel(modelId)
     {
-      ConsumeOnly = consumeOnly
+      ReadOnly = consumeOnly
     };
     
     _includedModels.Add(includedModel);

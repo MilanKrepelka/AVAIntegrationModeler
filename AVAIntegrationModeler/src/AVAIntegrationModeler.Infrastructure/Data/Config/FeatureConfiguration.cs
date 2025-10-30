@@ -69,11 +69,11 @@ public class FeatureConfiguration : IEntityTypeConfiguration<Feature>
     builder.OwnsMany(f => f.IncludedModels, includedModel =>
     {
       includedModel.ToTable("FeatureIncludedModels");
-      
+
       // Pokud IncludedModel také potřebuje Guid PK
-      includedModel.Property<Guid>("Id").ValueGeneratedOnAdd();
-      includedModel.HasKey("Id");
-      
+      includedModel.HasKey(i => i.Id);
+      includedModel.Property(i => i.Id).ValueGeneratedNever();
+
       includedModel.WithOwner().HasForeignKey("OwnerFeatureId");
       includedModel.Property<Guid>("OwnerFeatureId").IsRequired();
       
@@ -81,9 +81,9 @@ public class FeatureConfiguration : IEntityTypeConfiguration<Feature>
         .IsRequired()
         .HasColumnName("IncludedModelId");
       
-      includedModel.Property(i => i.ConsumeOnly)
+      includedModel.Property(i => i.ReadOnly)
         .IsRequired()
-        .HasColumnName("ConsumeOnly")
+        .HasColumnName("ReadOnly")
         .HasDefaultValue(false);
 
       includedModel.HasIndex("OwnerFeatureId");

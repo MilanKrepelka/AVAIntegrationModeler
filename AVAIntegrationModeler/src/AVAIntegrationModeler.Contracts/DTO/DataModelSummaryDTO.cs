@@ -6,6 +6,12 @@
 /// </summary>
 public record DataModelSummaryDTO
 {
+  public static DataModelSummaryDTO Empty => new DataModelSummaryDTO
+  {
+    Id = Guid.Empty,
+    Code = string.Empty,
+    Name = string.Empty
+  };
   /// <summary>
   /// Jedinečný identifikátor datového modelu.
   /// </summary>

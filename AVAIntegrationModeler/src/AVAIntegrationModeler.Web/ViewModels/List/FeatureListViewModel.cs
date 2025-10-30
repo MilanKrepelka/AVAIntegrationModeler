@@ -37,4 +37,7 @@ public class FeatureListViewModel
   /// <see cref="FeatureDTO.Description"/>
   /// </summary>
   public LocalizedValue Description { get; set; } = LocalizedValue.Empty;
+
+  public List<DataModelSummaryDTO> IncludedModels { get; set; } = new();
+  public List<FeatureSummaryDTO> IncludedFeatures { get; set; } = new();
 }

@@ -8,10 +8,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
 
-namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
+namespace AVAIntegrationModeler.Infrastructure.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20251028110035_InitialCreate")]
+    [Migration("20251030155151_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -375,14 +375,7 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.OwnsMany("AVAIntegrationModeler.Domain.FeatureAggregate.IncludedModel", "IncludedModels", b1 =>
                         {
                             b1.Property<Guid>("Id")
-                                .ValueGeneratedOnAdd()
                                 .HasColumnType("TEXT");
-
-                            b1.Property<bool>("ConsumeOnly")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("INTEGER")
-                                .HasDefaultValue(false)
-                                .HasColumnName("ConsumeOnly");
 
                             b1.Property<Guid>("ModelId")
                                 .HasColumnType("TEXT")
@@ -390,6 +383,12 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                             b1.Property<Guid>("OwnerFeatureId")
                                 .HasColumnType("TEXT");
+
+                            b1.Property<bool>("ReadOnly")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("INTEGER")
+                                .HasDefaultValue(false)
+                                .HasColumnName("ReadOnly");
 
                             b1.HasKey("Id");
 

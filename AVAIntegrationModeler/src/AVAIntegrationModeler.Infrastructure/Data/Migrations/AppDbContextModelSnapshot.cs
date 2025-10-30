@@ -372,14 +372,7 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.OwnsMany("AVAIntegrationModeler.Domain.FeatureAggregate.IncludedModel", "IncludedModels", b1 =>
                         {
                             b1.Property<Guid>("Id")
-                                .ValueGeneratedOnAdd()
                                 .HasColumnType("TEXT");
-
-                            b1.Property<bool>("ConsumeOnly")
-                                .ValueGeneratedOnAdd()
-                                .HasColumnType("INTEGER")
-                                .HasDefaultValue(false)
-                                .HasColumnName("ConsumeOnly");
 
                             b1.Property<Guid>("ModelId")
                                 .HasColumnType("TEXT")
@@ -387,6 +380,12 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                             b1.Property<Guid>("OwnerFeatureId")
                                 .HasColumnType("TEXT");
+
+                            b1.Property<bool>("ReadOnly")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("INTEGER")
+                                .HasDefaultValue(false)
+                                .HasColumnName("ReadOnly");
 
                             b1.HasKey("Id");
 
