@@ -18,9 +18,13 @@ public class LocalizedValueMapper : IMapper<LocalizedValue<string>, AVAIntegrati
   /// <inheritdoc/>
   public static LocalizedValue MapToDTO(LocalizedValue<string> domainEntity)
   {
+    if (domainEntity == default)
+    {
+      return LocalizedValue.Empty;
+    }
     LocalizedValue result = new LocalizedValue();
     //Guard.Against.NullOrEmpty(domainEntity.Values, $"{nameof(LocalizedValueMapper)} - {nameof(domainEntity)} - {nameof(domainEntity.Values)}");
-    if (domainEntity.Values == null || domainEntity.Values.Count == 0)
+    if (domainEntity.Values == null || domainEntity.Values.Count == 0)  // ← Tady dochází k NullReferenceException
     {
       result.CzechValue = string.Empty;
       result.EnglishValue = string.Empty;

@@ -48,6 +48,10 @@ public static class FeatureMapper
     {
       Code = integrationDefenitionSummary.Code,
       Id = Guid.Parse(integrationDefenitionSummary.Id),
+      Name = LocalizedValueMapper.MapToDTO(integrationDefenitionSummary.Name),
+      Description = LocalizedValueMapper.MapToDTO(integrationDefenitionSummary.Description),
+      IncludedFeatures = new List<IncludedFeatureDTO>(),
+      IncludedModels = new List<IncludedDataModelDTO>()
     };
   }
 
@@ -56,8 +60,12 @@ public static class FeatureMapper
   /// </summary>
   /// <param name="integrationFeatureDefenition"><see cref="IntegrationFeatureDefinition"/></param>
   /// <param name="features">Features které se používají k doplňování</param>
+  /// <param name="dataModels">Datové modely které se používají k doplňování</param>
   /// <returns><see cref="FeatureDTO"/></returns>
-  public static FeatureDTO FeatureDTO(IntegrationFeatureDefinition integrationFeatureDefenition, IEnumerable<FeatureSummaryDTO> features, IEnumerable<DataModelSummaryDTO> dataModels)
+  public static FeatureDTO FeatureDTO(
+    IntegrationFeatureDefinition integrationFeatureDefenition, 
+    IEnumerable<FeatureSummaryDTO> features, 
+    IEnumerable<DataModelSummaryDTO> dataModels)
   {
     Guard.Against.Null(integrationFeatureDefenition, $"{nameof(FeatureMapper)} - {nameof(integrationFeatureDefenition)}");
     Guard.Against.NullOrEmpty(integrationFeatureDefenition.Id, $"{nameof(FeatureMapper)} - {nameof(integrationFeatureDefenition)} - {nameof(integrationFeatureDefenition.Id)}");
@@ -69,10 +77,56 @@ public static class FeatureMapper
       Name = LocalizedValueMapper.MapToDTO(integrationFeatureDefenition.Name),
       Description = LocalizedValueMapper.MapToDTO(integrationFeatureDefenition.Description),
 
-      IncludedFeatures = integrationFeatureDefenition.IncludedFeatures?.Select(inc => IncludedFeatureMapper.IncludedFeatureDTO(inc, features)
+      IncludedFeatures = integrationFeatureDefenition.IncludedFeatures?.Select(inc => 
+        IncludedFeatureMapper.IncludedFeatureDTO(inc, features)
       ).ToList() ?? new List<IncludedFeatureDTO>(),
 
-      IncludedModels = integrationFeatureDefenition.IncludedModels?.Select(inc => IncludedModelMapper.IncludedDataModelDTO(inc, dataModels)
+      IncludedModels = integrationFeatureDefenition.IncludedModels?.Select(inc => 
+        IncludedModelMapper.IncludedDataModelDTO(inc, dataModels)
+      ).ToList() ?? new List<IncludedDataModelDTO>()
+    };
+  }
+
+  /// <summary>
+  /// Převede datový přenosový objekt feature (<see cref="IntegrationFeatureModel"/>) na jeho datový přenosový objekt (<see cref="FeatureDTO"/>).
+  /// </summary>
+  /// <param name="integrationFeatureModel"><see cref="IntegrationFeatureModel"/></param>
+  /// <param name="features">Features které se používají k doplňování</param>
+  /// <param name="dataModels">Datové modely které se používají k doplňování</param>
+  /// <returns><see cref="FeatureDTO"/></returns>
+  public static FeatureDTO FeatureDTO(
+    IntegrationFeatureModel integrationFeatureModel,
+    IEnumerable<FeatureSummaryDTO> features,
+    IEnumerable<DataModelSummaryDTO> dataModels)
+  {
+    Guard.Against.Null(integrationFeatureModel, $"{nameof(FeatureMapper)} - {nameof(integrationFeatureModel)}");
+    Guard.Against.NullOrEmpty(integrationFeatureModel.Id, $"{nameof(FeatureMapper)} - {nameof(integrationFeatureModel)} - {nameof(integrationFeatureModel.Id)}");
+
+    return new FeatureDTO()
+    {
+      Code = integrationFeatureModel.Code,
+      Id = Guid.Parse(integrationFeatureModel.Id),
+      Name = LocalizedValueMapper.MapToDTO(integrationFeatureModel.Name),
+      Description = LocalizedValueMapper.MapToDTO(integrationFeatureModel.Description),
+
+      IncludedFeatures = integrationFeatureModel.IncludedFeatures?.Select(inc =>
+        IncludedFeatureMapper.IncludedFeatureDTO(
+          new IntegrationFeatureDefinition.IncludedFeature 
+          { 
+            CodeOrId = inc.FeatureId, 
+            ConsumeOnly = inc.ConsumeOnly 
+          }, 
+          features)
+      ).ToList() ?? new List<IncludedFeatureDTO>(),
+
+      IncludedModels = integrationFeatureModel.IncludedModels?.Select(inc =>
+        IncludedModelMapper.IncludedDataModelDTO(
+          new IntegrationFeatureDefinition.IncludedModel 
+          { 
+            CodeOrId = inc.ModelId, 
+            ReadOnly = inc.ReadOnly 
+          }, 
+          dataModels)
       ).ToList() ?? new List<IncludedDataModelDTO>()
     };
   }

@@ -12,7 +12,7 @@ namespace AVAIntegrationModeler.Contracts.DTO;
 /// <remarks>Tato třída poskytuje vlastnosti pro ukládání lokalizovaných hodnot v konkrétních jazycích, jako je čeština a angličtina. Je určena pro scénáře, kde je vyžadována vícejazyčná podpora.</remarks>
 public class LocalizedValue : IEquatable<LocalizedValue>
 {
-    public static LocalizedValue Empty => new LocalizedValue() { CzechValue = "Nezadáno", EnglishValue = "Not set" };
+    public static LocalizedValue Empty => new LocalizedValue() { CzechValue = string.Empty, EnglishValue = string.Empty };
   /// <summary>
   /// Lokalizovaná hodnota v češtině.
   /// </summary>

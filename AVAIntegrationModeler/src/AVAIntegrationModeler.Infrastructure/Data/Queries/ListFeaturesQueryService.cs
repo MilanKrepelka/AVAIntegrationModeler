@@ -67,15 +67,17 @@ public class ListFeaturesQueryService(
         List<FeatureDTO> result = new List<FeatureDTO>();
         if (datasouce == Datasource.AVAPlace)
         {
-          var featuresTask = integrationDataProvider.GetFeaturesAsync(CancellationToken.None);
+          var featuresSummaryTask = integrationDataProvider.GetFeaturesAsync(CancellationToken.None);
           var modelsTask = integrationDataProvider.GetDataModelsSummaryAsync(CancellationToken.None);
 
-          await Task.WhenAll(featuresTask, modelsTask);
+          await Task.WhenAll(featuresSummaryTask, modelsTask);
 
-          var featuresResult = featuresTask.Result.ToList();
+          var featuresSummaryResult = featuresSummaryTask.Result.ToList();
+
+          
           var modelsResult = modelsTask.Result.ToList();
 
-          result = featuresResult.Select(f => new FeatureDTO
+          result = featuresSummaryResult.Select(f => new FeatureDTO
           {
             Id = f.Id,
             Code = f.Code,
@@ -84,7 +86,7 @@ public class ListFeaturesQueryService(
             IncludedFeatures = f.IncludedFeatures?.Select(inc => new IncludedFeatureDTO()
             {
               Feature = FeatureMapper.MapToFeatureSummaryDTO(
-                featuresResult.FirstOrDefault(item => item.Code == inc.Feature.Code) ?? FeatureDTO.Empty),
+                featuresSummaryResult.FirstOrDefault(item => item.Code == inc.Feature.Code) ?? FeatureDTO.Empty),
               ConsumeOnly = inc.ConsumeOnly
             }).ToList() ?? new List<IncludedFeatureDTO>(),
 

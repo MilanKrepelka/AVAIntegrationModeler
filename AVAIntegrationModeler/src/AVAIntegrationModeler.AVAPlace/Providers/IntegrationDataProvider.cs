@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using ASOL.Core.Identity;
 using ASOL.Core.Identity.Options;
+using ASOL.DataService.Contracts;
 using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.AVAPlace.Options;
 using AVAIntegrationModeler.Contracts.DTO;
@@ -55,7 +56,7 @@ public class IntegrationDataProvider : IIntegrationDataProvider
       async client =>
       {
         List<FeatureSummaryDTO> featureSummaries = new List<FeatureSummaryDTO>();
-        // Replace with actual logic to get featureSummaries, e.g.:
+        // Replace with actual logic to get features, e.g.:
         var dataServiceResult = await client.IntegrationFeatures.GetFeaturesAsync(
          new ASOL.DataService.Contracts.Filters.IntegrationFeatureFilter()
          {
@@ -97,8 +98,23 @@ public class IntegrationDataProvider : IIntegrationDataProvider
       tenantId,
       async client =>
       {
-        List<FeatureDTO> featureSummaries = new List<FeatureDTO>();
-        // Replace with actual logic to get featureSummaries, e.g.:
+        List<DataModelSummaryDTO> modelSummaryDTOs = new List<DataModelSummaryDTO>();
+        var modelResult = await client.GetDataModelsAsync(
+         new ASOL.Core.Paging.Contracts.Filters.PagingFilter()
+         {
+           Offset = 0,
+           Limit = int.MaxValue
+         },
+         ct);
+        
+        modelResult.ToList().ForEach(model =>
+        {
+          modelSummaryDTOs.Add(Mapping.DataModelMapper.MapToSummaryDTO(model));
+        });
+
+        List<FeatureDTO> features = new List<FeatureDTO>();
+        
+        // Replace with actual logic to get features, e.g.:
         var dataServiceResult = await client.IntegrationFeatures.GetFeaturesAsync(
          new ASOL.DataService.Contracts.Filters.IntegrationFeatureFilter()
          {
@@ -113,14 +129,28 @@ public class IntegrationDataProvider : IIntegrationDataProvider
            Deleted = false,
          },
          ct);
+
+        List<FeatureSummaryDTO> featureSummaryDTOs = new List<FeatureSummaryDTO>();
+        dataServiceResult.ToList().ForEach(feature =>
+        {
+          featureSummaryDTOs.Add(Mapping.FeatureMapper.FeatureSummaryDTO(feature));
+        });
+
         if (dataServiceResult != null && dataServiceResult.Any())
         {
-          foreach (var scenario in dataServiceResult)
+
+          List< IntegrationFeatureModel > integrationFeatures = new List<IntegrationFeatureModel>();
+          foreach (var featureSummary in dataServiceResult)
           {
-            featureSummaries.Add(Mapping.FeatureMapper.FeatureDTO(scenario));
+              integrationFeatures.Add(await client.IntegrationFeatures.GetFeatureAsync(featureSummary.Id, true, ct));
+          }
+
+          foreach (var integrationFeatureModel in integrationFeatures)
+          {
+            features.Add(Mapping.FeatureMapper.FeatureDTO(integrationFeatureModel, featureSummaryDTOs, modelSummaryDTOs));
           }
         }
-        return featureSummaries;
+        return features;
       }
     );
   }
@@ -145,7 +175,7 @@ public class IntegrationDataProvider : IIntegrationDataProvider
       async client =>
       {
         List<ScenarioDTO> scenarios = new List<ScenarioDTO>();
-        // Replace with actual logic to get featureSummaries, e.g.:
+        // Replace with actual logic to get features, e.g.:
         var dataServiceResult = await client.IntegrationScenarios.GetScenariosAsync(
          new ASOL.DataService.Contracts.Filters.IntegrationScenarioFilter()
          {
@@ -194,7 +224,7 @@ public class IntegrationDataProvider : IIntegrationDataProvider
         //ASOL.DataService.Contracts.IntegrationMapByAreaDefinition
         //client.Are
         List<ScenarioDTO> scenarios = new List<ScenarioDTO>();
-        // Replace with actual logic to get featureSummaries, e.g.:
+        // Replace with actual logic to get features, e.g.:
         var dataServiceResult = await client.IntegrationScenarios.GetScenariosAsync(
          new ASOL.DataService.Contracts.Filters.IntegrationScenarioFilter()
          {
@@ -236,7 +266,7 @@ public class IntegrationDataProvider : IIntegrationDataProvider
       async client =>
       {
         List<DataModelDTO> scenarios = new List<DataModelDTO>();
-        // Replace with actual logic to get featureSummaries, e.g.:
+        // Replace with actual logic to get features, e.g.:
         var dataServiceResult = await client.GetDataModelsAsync(
 
          new ASOL.Core.Paging.Contracts.Filters.PagingFilter()
@@ -273,7 +303,7 @@ public class IntegrationDataProvider : IIntegrationDataProvider
       async client =>
       {
         List<DataModelSummaryDTO> scenarios = new List<DataModelSummaryDTO>();
-        // Replace with actual logic to get featureSummaries, e.g.:
+        // Replace with actual logic to get features, e.g.:
         var dataServiceResult = await client.GetDataModelsAsync(
 
          new ASOL.Core.Paging.Contracts.Filters.PagingFilter()
