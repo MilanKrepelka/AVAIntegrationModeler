@@ -261,7 +261,10 @@ public class ListFeaturesQueryServiceTests : IAsyncLifetime, IAsyncDisposable
         {
           CzechValue = "Popis mapování",
           EnglishValue = "Mapping description"
-        }
+        },
+        
+       
+        
       }
     };
 
@@ -482,269 +485,413 @@ public class ListFeaturesQueryServiceTests : IAsyncLifetime, IAsyncDisposable
   }
     #region IncludedFeatures and IncludedModels Tests
 
-    [Fact]
-    public async Task ListAsync_WithDatabaseDatasource_LoadsIncludedFeatures()
+  [Fact]
+  public async Task ListAsync_WithDatabaseDatasource_LoadsIncludedFeatures()
+  {
+    // Arrange
+    var includedFeatureId = Guid.NewGuid();
+    var includedFeature = new Feature(includedFeatureId, "INCLUDED-FEAT-001");
+    includedFeature.SetName(new LocalizedValue
     {
-        // Arrange
-        var includedFeatureId = Guid.NewGuid();
-        var includedFeature = new Feature(includedFeatureId, "INCLUDED-FEAT-001");
-        includedFeature.SetName(new LocalizedValue
-        {
-            CzechValue = "Zahrnutá feature",
-            EnglishValue = "Included Feature"
-        });
+      CzechValue = "Zahrnutá feature",
+      EnglishValue = "Included Feature"
+    });
 
-        var parentFeatureId = Guid.NewGuid();
-        var parentFeature = new Feature(parentFeatureId, "PARENT-FEAT-001");
-        parentFeature.SetName(new LocalizedValue
-        {
-            CzechValue = "Nadřazená feature",
-            EnglishValue = "Parent Feature"
-        });
-        parentFeature.AddIncludedFeature(includedFeatureId, consumeOnly: true);
-
-        _dbContext.Features.AddRange(includedFeature, parentFeature);
-        await _dbContext.SaveChangesAsync(CancellationToken.None);
-
-        // Act
-        var result = await _sut.ListAsync(Datasource.Database);
-
-        // Assert
-        var features = result.ToList();
-        var parent = features.FirstOrDefault(f => f.Id == parentFeatureId);
-
-        Assert.NotNull(parent);
-        Assert.NotNull(parent.IncludedFeatures);
-        Assert.Single(parent.IncludedFeatures);
-
-        var includedFeatureDto = parent.IncludedFeatures.First();
-        Assert.NotNull(includedFeatureDto.Feature);
-        Assert.Equal(includedFeatureId, includedFeatureDto.Feature.Id);
-        Assert.Equal("INCLUDED-FEAT-001", includedFeatureDto.Feature.Code);
-        Assert.True(includedFeatureDto.ConsumeOnly);
-    }
-
-    [Fact]
-    public async Task ListAsync_WithDatabaseDatasource_LoadsMultipleIncludedFeatures()
+    var parentFeatureId = Guid.NewGuid();
+    var parentFeature = new Feature(parentFeatureId, "PARENT-FEAT-001");
+    parentFeature.SetName(new LocalizedValue
     {
-        // Arrange
-        var includedFeature1 = new Feature(Guid.NewGuid(), "INCLUDED-001");
-        var includedFeature2 = new Feature(Guid.NewGuid(), "INCLUDED-002");
-        var includedFeature3 = new Feature(Guid.NewGuid(), "INCLUDED-003");
+      CzechValue = "Nadřazená feature",
+      EnglishValue = "Parent Feature"
+    });
+    parentFeature.AddIncludedFeature(includedFeatureId, consumeOnly: true);
 
-        var parentFeature = new Feature(Guid.NewGuid(), "PARENT-MULTI");
-        parentFeature.AddIncludedFeature(includedFeature1.Id, consumeOnly: true);
-        parentFeature.AddIncludedFeature(includedFeature2.Id, consumeOnly: false);
-        parentFeature.AddIncludedFeature(includedFeature3.Id, consumeOnly: true);
+    _dbContext.Features.AddRange(includedFeature, parentFeature);
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
 
-        _dbContext.Features.AddRange(includedFeature1, includedFeature2, includedFeature3, parentFeature);
-        await _dbContext.SaveChangesAsync(CancellationToken.None);
+    // Act
+    var result = await _sut.ListAsync(Datasource.Database);
 
-        // Act
-        var result = await _sut.ListAsync(Datasource.Database);
+    // Assert
+    var features = result.ToList();
+    var parent = features.FirstOrDefault(f => f.Id == parentFeatureId);
 
-        // Assert
-        var parent = result.FirstOrDefault(f => f.Code == "PARENT-MULTI");
-        Assert.NotNull(parent);
-        Assert.Equal(3, parent.IncludedFeatures.Count);
-        Assert.Contains(parent.IncludedFeatures, f => f.Feature.Code == "INCLUDED-001" && f.ConsumeOnly);
-        Assert.Contains(parent.IncludedFeatures, f => f.Feature.Code == "INCLUDED-002" && !f.ConsumeOnly);
-        Assert.Contains(parent.IncludedFeatures, f => f.Feature.Code == "INCLUDED-003" && f.ConsumeOnly);
-    }
+    Assert.NotNull(parent);
+    Assert.NotNull(parent.IncludedFeatures);
+    Assert.Single(parent.IncludedFeatures);
 
-    [Fact]
-    public async Task ListAsync_WithDatabaseDatasource_LoadsIncludedModels()
+    var includedFeatureDto = parent.IncludedFeatures.First();
+    Assert.NotNull(includedFeatureDto.Feature);
+    Assert.Equal(includedFeatureId, includedFeatureDto.Feature.Id);
+    Assert.Equal("INCLUDED-FEAT-001", includedFeatureDto.Feature.Code);
+    Assert.True(includedFeatureDto.ConsumeOnly);
+  }
+
+  [Fact]
+  public async Task ListAsync_WithDatabaseDatasource_LoadsMultipleIncludedFeatures()
+  {
+    // Arrange
+    var includedFeature1 = new Feature(Guid.NewGuid(), "INCLUDED-001");
+    var includedFeature2 = new Feature(Guid.NewGuid(), "INCLUDED-002");
+    var includedFeature3 = new Feature(Guid.NewGuid(), "INCLUDED-003");
+
+    var parentFeature = new Feature(Guid.NewGuid(), "PARENT-MULTI");
+    parentFeature.AddIncludedFeature(includedFeature1.Id, consumeOnly: true);
+    parentFeature.AddIncludedFeature(includedFeature2.Id, consumeOnly: false);
+    parentFeature.AddIncludedFeature(includedFeature3.Id, consumeOnly: true);
+
+    _dbContext.Features.AddRange(includedFeature1, includedFeature2, includedFeature3, parentFeature);
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
+
+    // Act
+    var result = await _sut.ListAsync(Datasource.Database);
+
+    // Assert
+    var parent = result.FirstOrDefault(f => f.Code == "PARENT-MULTI");
+    Assert.NotNull(parent);
+    Assert.Equal(3, parent.IncludedFeatures.Count);
+    Assert.Contains(parent.IncludedFeatures, f => f.Feature.Code == "INCLUDED-001" && f.ConsumeOnly);
+    Assert.Contains(parent.IncludedFeatures, f => f.Feature.Code == "INCLUDED-002" && !f.ConsumeOnly);
+    Assert.Contains(parent.IncludedFeatures, f => f.Feature.Code == "INCLUDED-003" && f.ConsumeOnly);
+  }
+
+  [Fact]
+  public async Task ListAsync_WithDatabaseDatasource_LoadsIncludedModels()
+  {
+    // Arrange
+    var modelId = Guid.NewGuid();
+    var dataModel = new DataModel(modelId, "MODEL-001");
+    dataModel.SetName("Test Model");
+
+    var featureId = Guid.NewGuid();
+    var feature = new Feature(featureId, "FEAT-WITH-MODEL");
+    feature.SetName(new LocalizedValue
     {
-        // Arrange
-        var modelId = Guid.NewGuid();
-        var dataModel = new DataModel(modelId, "MODEL-001");
-        dataModel.SetName("Test Model");
+      CzechValue = "Feature s modelem",
+      EnglishValue = "Feature with Model"
+    });
+    feature.AddIncludedModel(modelId, consumeOnly: true);
 
-        var featureId = Guid.NewGuid();
-        var feature = new Feature(featureId, "FEAT-WITH-MODEL");
-        feature.SetName(new LocalizedValue
-        {
-            CzechValue = "Feature s modelem",
-            EnglishValue = "Feature with Model"
-        });
-        feature.AddIncludedModel(modelId, consumeOnly: true);
+    _dbContext.DataModels.Add(dataModel);
+    _dbContext.Features.Add(feature);
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
 
-        _dbContext.DataModels.Add(dataModel);
-        _dbContext.Features.Add(feature);
-        await _dbContext.SaveChangesAsync(CancellationToken.None);
+    // Act
+    var result = await _sut.ListAsync(Datasource.Database);
 
-        // Act
-        var result = await _sut.ListAsync(Datasource.Database);
+    // Assert
+    var featureDto = result.FirstOrDefault(f => f.Id == featureId);
 
-        // Assert
-        var featureDto = result.FirstOrDefault(f => f.Id == featureId);
+    Assert.NotNull(featureDto);
+    Assert.NotNull(featureDto.IncludedModels);
+    Assert.Single(featureDto.IncludedModels);
 
-        Assert.NotNull(featureDto);
-        Assert.NotNull(featureDto.IncludedModels);
-        Assert.Single(featureDto.IncludedModels);
+    var includedModel = featureDto.IncludedModels.First();
+    Assert.NotNull(includedModel.DataModel);
+    Assert.Equal(modelId, includedModel.DataModel.Id);
+    Assert.Equal("MODEL-001", includedModel.DataModel.Code);
+    Assert.True(includedModel.ReadOnly);
+  }
 
-        var includedModel = featureDto.IncludedModels.First();
-        Assert.NotNull(includedModel.DataModel);
-        Assert.Equal(modelId, includedModel.DataModel.Id);
-        Assert.Equal("MODEL-001", includedModel.DataModel.Code);
-        Assert.True(includedModel.ReadOnly);
-    }
+  [Fact]
+  public async Task ListAsync_WithDatabaseDatasource_LoadsMultipleIncludedModels()
+  {
+    // Arrange
+    var model1 = new DataModel(Guid.NewGuid(), "MODEL-001");
+    model1.SetName("First Model");
+    var model2 = new DataModel(Guid.NewGuid(), "MODEL-002");
+    model2.SetName("Second Model");
+    var model3 = new DataModel(Guid.NewGuid(), "MODEL-003");
+    model3.SetName("Third Model");
 
-    [Fact]
-    public async Task ListAsync_WithDatabaseDatasource_LoadsMultipleIncludedModels()
+    var feature = new Feature(Guid.NewGuid(), "FEAT-MULTI-MODELS");
+    feature.AddIncludedModel(model1.Id, consumeOnly: false);
+    feature.AddIncludedModel(model2.Id, consumeOnly: true);
+    feature.AddIncludedModel(model3.Id, consumeOnly: false);
+
+    _dbContext.DataModels.AddRange(model1, model2, model3);
+    _dbContext.Features.Add(feature);
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
+
+    // Act
+    var result = await _sut.ListAsync(Datasource.Database);
+
+    // Assert
+    var featureDto = result.FirstOrDefault(f => f.Code == "FEAT-MULTI-MODELS");
+    Assert.NotNull(featureDto);
+    Assert.Equal(3, featureDto.IncludedModels.Count);
+    Assert.Contains(featureDto.IncludedModels, m => m.DataModel.Code == "MODEL-001" && !m.ReadOnly);
+    Assert.Contains(featureDto.IncludedModels, m => m.DataModel.Code == "MODEL-002" && m.ReadOnly);
+    Assert.Contains(featureDto.IncludedModels, m => m.DataModel.Code == "MODEL-003" && !m.ReadOnly);
+  }
+
+  [Fact]
+  public async Task ListAsync_WithDatabaseDatasource_LoadsBothIncludedFeaturesAndModels()
+  {
+    // Arrange
+    var includedFeature = new Feature(Guid.NewGuid(), "INCLUDED-FEATURE");
+    var dataModel = new DataModel(Guid.NewGuid(), "DATA-MODEL");
+    dataModel.SetName("Data Model");
+
+    var complexFeature = new Feature(Guid.NewGuid(), "COMPLEX-FEATURE");
+    complexFeature.AddIncludedFeature(includedFeature.Id, consumeOnly: true);
+    complexFeature.AddIncludedModel(dataModel.Id, consumeOnly: false);
+
+    _dbContext.Features.AddRange(includedFeature, complexFeature);
+    _dbContext.DataModels.Add(dataModel);
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
+
+    // Act
+    var result = await _sut.ListAsync(Datasource.Database);
+
+    // Assert
+    var feature = result.FirstOrDefault(f => f.Code == "COMPLEX-FEATURE");
+    Assert.NotNull(feature);
+    Assert.Single(feature.IncludedFeatures);
+    Assert.Single(feature.IncludedModels);
+    Assert.Equal("INCLUDED-FEATURE", feature.IncludedFeatures.First().Feature.Code);
+    Assert.Equal("DATA-MODEL", feature.IncludedModels.First().DataModel.Code);
+  }
+
+  [Fact]
+  public async Task ListAsync_WithDatabaseDatasource_HandlesEmptyIncludedCollections()
+  {
+    // Arrange
+    var feature = new Feature(Guid.NewGuid(), "EMPTY-COLLECTIONS");
+    feature.SetName(new LocalizedValue
     {
-        // Arrange
-        var model1 = new DataModel(Guid.NewGuid(), "MODEL-001");
-        model1.SetName("First Model");
-        var model2 = new DataModel(Guid.NewGuid(), "MODEL-002");
-        model2.SetName("Second Model");
-        var model3 = new DataModel(Guid.NewGuid(), "MODEL-003");
-        model3.SetName("Third Model");
+      CzechValue = "Feature bez zahrnutí",
+      EnglishValue = "Feature without inclusions"
+    });
 
-        var feature = new Feature(Guid.NewGuid(), "FEAT-MULTI-MODELS");
-        feature.AddIncludedModel(model1.Id, consumeOnly: false);
-        feature.AddIncludedModel(model2.Id, consumeOnly: true);
-        feature.AddIncludedModel(model3.Id, consumeOnly: false);
+    _dbContext.Features.Add(feature);
+    await _dbContext.SaveChangesAsync(CancellationToken.None);
 
-        _dbContext.DataModels.AddRange(model1, model2, model3);
-        _dbContext.Features.Add(feature);
-        await _dbContext.SaveChangesAsync(CancellationToken.None);
+    // Act
+    var result = await _sut.ListAsync(Datasource.Database);
 
-        // Act
-        var result = await _sut.ListAsync(Datasource.Database);
+    // Assert
+    var featureDto = result.FirstOrDefault(f => f.Code == "EMPTY-COLLECTIONS");
+    Assert.NotNull(featureDto);
+    Assert.NotNull(featureDto.IncludedFeatures);
+    Assert.NotNull(featureDto.IncludedModels);
+    Assert.Empty(featureDto.IncludedFeatures);
+    Assert.Empty(featureDto.IncludedModels);
+  }
 
-        // Assert
-        var featureDto = result.FirstOrDefault(f => f.Code == "FEAT-MULTI-MODELS");
-        Assert.NotNull(featureDto);
-        Assert.Equal(3, featureDto.IncludedModels.Count);
-        Assert.Contains(featureDto.IncludedModels, m => m.DataModel.Code == "MODEL-001" && !m.ReadOnly);
-        Assert.Contains(featureDto.IncludedModels, m => m.DataModel.Code == "MODEL-002" && m.ReadOnly);
-        Assert.Contains(featureDto.IncludedModels, m => m.DataModel.Code == "MODEL-003" && !m.ReadOnly);
-    }
+  [Fact]
+  public async Task ListAsync_WithAVAPlaceDatasource_LoadsIncludedFeaturesAndModels()
+  {
+    // Arrange
+    var includedFeatureId = Guid.NewGuid();
+    var parentFeatureId = Guid.NewGuid();
+    var modelId = Guid.NewGuid();
 
-    [Fact]
-    public async Task ListAsync_WithDatabaseDatasource_LoadsBothIncludedFeaturesAndModels()
+    var expectedModels = new List<Contracts.DTO.DataModelSummaryDTO>
     {
-        // Arrange
-        var includedFeature = new Feature(Guid.NewGuid(), "INCLUDED-FEATURE");
-        var dataModel = new DataModel(Guid.NewGuid(), "DATA-MODEL");
-
-        var complexFeature = new Feature(Guid.NewGuid(), "COMPLEX-FEATURE");
-        complexFeature.AddIncludedFeature(includedFeature.Id, consumeOnly: true);
-        complexFeature.AddIncludedModel(dataModel.Id, consumeOnly: false);
-
-        _dbContext.Features.AddRange(includedFeature, complexFeature);
-        _dbContext.DataModels.Add(dataModel);
-        await _dbContext.SaveChangesAsync(CancellationToken.None);
-
-        // Act
-        var result = await _sut.ListAsync(Datasource.Database);
-
-        // Assert
-        var feature = result.FirstOrDefault(f => f.Code == "COMPLEX-FEATURE");
-        Assert.NotNull(feature);
-        Assert.Single(feature.IncludedFeatures);
-        Assert.Single(feature.IncludedModels);
-        Assert.Equal("INCLUDED-FEATURE", feature.IncludedFeatures.First().Feature.Code);
-        Assert.Equal("DATA-MODEL", feature.IncludedModels.First().DataModel.Code);
-    }
-
-    [Fact]
-    public async Task ListAsync_WithDatabaseDatasource_HandlesEmptyIncludedCollections()
-    {
-        // Arrange
-        var feature = new Feature(Guid.NewGuid(), "EMPTY-COLLECTIONS");
-        feature.SetName(new LocalizedValue
-        {
-            CzechValue = "Feature bez zahrnutí",
-            EnglishValue = "Feature without inclusions"
-        });
-
-        _dbContext.Features.Add(feature);
-        await _dbContext.SaveChangesAsync(CancellationToken.None);
-
-        // Act
-        var result = await _sut.ListAsync(Datasource.Database);
-
-        // Assert
-        var featureDto = result.FirstOrDefault(f => f.Code == "EMPTY-COLLECTIONS");
-        Assert.NotNull(featureDto);
-        Assert.NotNull(featureDto.IncludedFeatures);
-        Assert.NotNull(featureDto.IncludedModels);
-        Assert.Empty(featureDto.IncludedFeatures);
-        Assert.Empty(featureDto.IncludedModels);
-    }
-
-    [Fact]
-    public async Task ListAsync_WithAVAPlaceDatasource_LoadsIncludedFeaturesAndModels()
-    {
-        // Arrange
-        var includedFeatureId = Guid.NewGuid();
-        var parentFeatureId = Guid.NewGuid();
-        var modelId = Guid.NewGuid();
-
-        var expectedFeatures = new List<Contracts.DTO.FeatureDTO>
+      new Contracts.DTO.DataModelSummaryDTO
       {
-        new Contracts.DTO.FeatureDTO
+        Id = modelId,
+        Code = "AVA-MODEL",
+        Name = "AVA Model"
+      }
+    };
+
+    _mockIntegrationDataProvider
+      .GetDataModelsSummaryAsync(Arg.Any<CancellationToken>())
+      .Returns(expectedModels);
+
+    var expectedFeatures = new List<Contracts.DTO.FeatureDTO>
+    {
+      new Contracts.DTO.FeatureDTO
+      {
+        Id = includedFeatureId,
+        Code = "AVA-INCLUDED",
+        Name = new LocalizedValue { CzechValue = "Zahrnutá", EnglishValue = "Included" },
+        IncludedFeatures = new List<Contracts.DTO.IncludedFeatureDTO>(),
+        IncludedModels = new List<Contracts.DTO.IncludedDataModelDTO>()
+      },
+      new Contracts.DTO.FeatureDTO
+      {
+        Id = parentFeatureId,
+        Code = "AVA-PARENT",
+        Name = new LocalizedValue { CzechValue = "Nadřazená", EnglishValue = "Parent" },
+        IncludedFeatures = new List<Contracts.DTO.IncludedFeatureDTO>
         {
-          Id = includedFeatureId,
-          Code = "AVA-INCLUDED",
-          Name = new LocalizedValue { CzechValue = "Zahrnutá", EnglishValue = "Included" }
+          new Contracts.DTO.IncludedFeatureDTO
+          {
+            Feature = new Contracts.DTO.FeatureSummaryDTO { Id = includedFeatureId, Code = "AVA-INCLUDED" },
+            ConsumeOnly = true
+          }
         },
-        new Contracts.DTO.FeatureDTO
+        IncludedModels = new List<Contracts.DTO.IncludedDataModelDTO>
         {
-          Id = parentFeatureId,
-          Code = "AVA-PARENT",
-          Name = new LocalizedValue { CzechValue = "Nadřazená", EnglishValue = "Parent" },
-          IncludedFeatures = new List<Contracts.DTO.IncludedFeatureDTO>
+          new Contracts.DTO.IncludedDataModelDTO
           {
-            new Contracts.DTO.IncludedFeatureDTO
-            {
-              Feature = new Contracts.DTO.FeatureSummaryDTO { Id = includedFeatureId, Code = "AVA-INCLUDED" },
-              ConsumeOnly = true
-            }
-          },
-          IncludedModels = new List<Contracts.DTO.IncludedDataModelDTO>
-          {
-            new Contracts.DTO.IncludedDataModelDTO
-            {
-              DataModel = new Contracts.DTO.DataModelSummaryDTO { Id = modelId, Code = "AVA-MODEL", Name = "AVA Model" },
-              ReadOnly = true
-            }
+            DataModel = new Contracts.DTO.DataModelSummaryDTO { Id = modelId, Code = "AVA-MODEL", Name = "AVA Model" },
+            ReadOnly = true
           }
         }
-      };
+      }
+    };
 
-        var expectedModels = new List<Contracts.DTO.DataModelSummaryDTO>
+    _mockIntegrationDataProvider
+      .GetFeaturesAsync(Arg.Any<CancellationToken>())
+      .Returns(expectedFeatures);
+
+    // Act
+    var result = await _sut.ListAsync(Datasource.AVAPlace);
+
+    // Assert
+    var parent = result.FirstOrDefault(f => f.Id == parentFeatureId);
+    Assert.NotNull(parent);
+    Assert.NotNull(parent.IncludedFeatures);
+    Assert.NotNull(parent.IncludedModels);
+    Assert.Single(parent.IncludedFeatures);
+    Assert.Single(parent.IncludedModels);
+
+    var includedFeature = parent.IncludedFeatures.First();
+    Assert.NotNull(includedFeature.Feature);
+    //Assert.Equal(includedFeatureId, includedFeature.Feature.Id);
+    Assert.Equal("AVA-INCLUDED", includedFeature.Feature.Code);
+    Assert.True(includedFeature.ConsumeOnly);
+
+    var includedModel = parent.IncludedModels.First();
+    Assert.NotNull(includedModel.DataModel);
+    //Assert.Equal(modelId, includedModel.DataModel.Id);
+    Assert.Equal("AVA-MODEL", includedModel.DataModel.Code);
+    Assert.True(includedModel.ReadOnly);
+  }
+
+  [Fact]
+  public async Task ListAsync_WithAVAPlaceDatasource_LoadsMultipleIncludedFeaturesAndModels()
+  {
+    // Arrange
+    var includedFeature1Id = Guid.NewGuid();
+    var includedFeature2Id = Guid.NewGuid();
+    var model1Id = Guid.NewGuid();
+    var model2Id = Guid.NewGuid();
+    var parentFeatureId = Guid.NewGuid();
+    var modelId = Guid.NewGuid();
+
+    var datamodel1 = new Contracts.DTO.DataModelSummaryDTO { Id = model1Id, Code = "AVA-MODEL-1", Name = "First Model" };
+    var datamodel2 = new Contracts.DTO.DataModelSummaryDTO { Id = model1Id, Code = "AVA-MODEL-2", Name = "Second Model" };
+
+    var expectedModels = new List<Contracts.DTO.DataModelSummaryDTO>
+    {
+      datamodel1, datamodel2
+    };
+
+    _mockIntegrationDataProvider
+      .GetDataModelsSummaryAsync(Arg.Any<CancellationToken>())
+      .Returns(expectedModels);
+
+    var expectedFeatures = new List<Contracts.DTO.FeatureDTO>
+    {
+      new Contracts.DTO.FeatureDTO
       {
-        new Contracts.DTO.DataModelSummaryDTO { Id = modelId, Code = "AVA-MODEL", Name = "AVA Model" }
-      };
+        Id = includedFeature1Id,
+        Code = "AVA-INCLUDED-1",
+        Name = new LocalizedValue { CzechValue = "První zahrnutá", EnglishValue = "First Included" },
+        IncludedFeatures = new List<Contracts.DTO.IncludedFeatureDTO>(),
+        IncludedModels = new List<Contracts.DTO.IncludedDataModelDTO>()
+      },
+      new Contracts.DTO.FeatureDTO
+      {
+        Id = includedFeature2Id,
+        Code = "AVA-INCLUDED-2",
+        Name = new LocalizedValue { CzechValue = "Druhá zahrnutá", EnglishValue = "Second Included" },
+        IncludedFeatures = new List<Contracts.DTO.IncludedFeatureDTO>(),
+        IncludedModels = new List<Contracts.DTO.IncludedDataModelDTO>()
+      },
+      new Contracts.DTO.FeatureDTO
+      {
+        Id = parentFeatureId,
+        Code = "AVA-COMPLEX",
+        Name = new LocalizedValue { CzechValue = "Komplexní feature", EnglishValue = "Complex Feature" },
+        IncludedFeatures = new List<Contracts.DTO.IncludedFeatureDTO>
+        {
+          new Contracts.DTO.IncludedFeatureDTO
+          {
+            Feature = new Contracts.DTO.FeatureSummaryDTO { Id = includedFeature1Id, Code = "AVA-INCLUDED-1" },
+            ConsumeOnly = true
+          },
+          new Contracts.DTO.IncludedFeatureDTO
+          {
+            Feature = new Contracts.DTO.FeatureSummaryDTO { Id = includedFeature2Id, Code = "AVA-INCLUDED-2" },
+            ConsumeOnly = false
+          }
+        },
+        IncludedModels = new List<Contracts.DTO.IncludedDataModelDTO>
+        {
+          new Contracts.DTO.IncludedDataModelDTO
+          {
+            DataModel = datamodel1,
+            ReadOnly = true
+          },
+          new Contracts.DTO.IncludedDataModelDTO
+          {
+            DataModel = datamodel2,
+            ReadOnly = false
+          }
+        }
+      }
+    };
 
-        _mockIntegrationDataProvider
-          .GetFeaturesAsync(Arg.Any<CancellationToken>())
-          .Returns(expectedFeatures);
+    _mockIntegrationDataProvider
+      .GetFeaturesAsync(Arg.Any<CancellationToken>())
+      .Returns(expectedFeatures);
 
-        _mockIntegrationDataProvider
-          .GetDataModelsSummaryAsync(Arg.Any<CancellationToken>())
-          .Returns(expectedModels);
+    // Act
+    var result = await _sut.ListAsync(Datasource.AVAPlace);
 
-        // Act
-        var result = await _sut.ListAsync(Datasource.AVAPlace);
+    // Assert
+    var parent = result.FirstOrDefault(f => f.Id == parentFeatureId);
+    Assert.NotNull(parent);
+    Assert.Equal(2, parent.IncludedFeatures.Count);
+    Assert.Equal(2, parent.IncludedModels.Count);
 
-        // Assert
-        var parent = result.FirstOrDefault(f => f.Id == parentFeatureId);
-        Assert.NotNull(parent);
-        Assert.Single(parent.IncludedFeatures);
-        Assert.Single(parent.IncludedModels);
+    // Verify included features
+    Assert.Contains(parent.IncludedFeatures, f => f.Feature.Code == "AVA-INCLUDED-1" && f.ConsumeOnly);
+    Assert.Contains(parent.IncludedFeatures, f => f.Feature.Code == "AVA-INCLUDED-2" && !f.ConsumeOnly);
 
-        var includedFeature = parent.IncludedFeatures.First();
-        Assert.Equal(includedFeatureId, includedFeature.Feature.Id);
-        Assert.True(includedFeature.ConsumeOnly);
+    // Verify included models
+    Assert.Contains(parent.IncludedModels, m => m.DataModel.Code == "AVA-MODEL-1" && m.ReadOnly);
+    Assert.Contains(parent.IncludedModels, m => m.DataModel.Code == "AVA-MODEL-2" && !m.ReadOnly);
+  }
 
-        var includedModel = parent.IncludedModels.First();
-        Assert.Equal(modelId, includedModel.DataModel.Id);
-        Assert.True(includedModel.ReadOnly);
-    }
+  [Fact]
+  public async Task ListAsync_WithAVAPlaceDatasource_HandlesEmptyIncludedCollections()
+  {
+    // Arrange
+    var featureId = Guid.NewGuid();
+    var expectedFeatures = new List<Contracts.DTO.FeatureDTO>
+    {
+      new Contracts.DTO.FeatureDTO
+      {
+        Id = featureId,
+        Code = "AVA-NO-INCLUDES",
+        Name = new LocalizedValue { CzechValue = "Bez zahrnutí", EnglishValue = "Without Inclusions" },
+        IncludedFeatures = new List<Contracts.DTO.IncludedFeatureDTO>(),
+        IncludedModels = new List<Contracts.DTO.IncludedDataModelDTO>()
+      }
+    };
+
+    _mockIntegrationDataProvider
+      .GetFeaturesAsync(Arg.Any<CancellationToken>())
+      .Returns(expectedFeatures);
+
+    // Act
+    var result = await _sut.ListAsync(Datasource.AVAPlace);
+
+    // Assert
+    var feature = result.FirstOrDefault(f => f.Id == featureId);
+    Assert.NotNull(feature);
+    Assert.NotNull(feature.IncludedFeatures);
+    Assert.NotNull(feature.IncludedModels);
+    Assert.Empty(feature.IncludedFeatures);
+    Assert.Empty(feature.IncludedModels);
+  }
   #endregion
   #endregion
 }

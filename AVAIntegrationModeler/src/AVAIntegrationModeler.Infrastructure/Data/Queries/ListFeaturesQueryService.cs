@@ -84,17 +84,18 @@ public class ListFeaturesQueryService(
             IncludedFeatures = f.IncludedFeatures?.Select(inc => new IncludedFeatureDTO()
             {
               Feature = FeatureMapper.MapToFeatureSummaryDTO(
-                featuresResult.FirstOrDefault(item => item.Id == inc.Feature.Id) ?? FeatureDTO.Empty),
+                featuresResult.FirstOrDefault(item => item.Code == inc.Feature.Code) ?? FeatureDTO.Empty),
               ConsumeOnly = inc.ConsumeOnly
             }).ToList() ?? new List<IncludedFeatureDTO>(),
 
             IncludedModels = f.IncludedModels?.Select(inc => new IncludedDataModelDTO
             {
-              DataModel = modelsResult.FirstOrDefault(m => m.Id == inc.DataModel.Id)
+              DataModel = modelsResult.FirstOrDefault(m => m.Code == inc.DataModel.Code)
                           ?? DataModelSummaryDTO.Empty,
               ReadOnly = inc.ReadOnly
             }).ToList() ?? new List<IncludedDataModelDTO>()
           }).ToList();
+          
         }
         else
         {
