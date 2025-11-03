@@ -265,7 +265,7 @@ public class IntegrationDataProvider : IIntegrationDataProvider
       tenantId,
       async client =>
       {
-        List<DataModelDTO> scenarios = new List<DataModelDTO>();
+        List<DataModelDTO> dataModels = new List<DataModelDTO>();
         // Replace with actual logic to get features, e.g.:
         var dataServiceResult = await client.GetDataModelsAsync(
 
@@ -280,10 +280,10 @@ public class IntegrationDataProvider : IIntegrationDataProvider
         {
           foreach (var dataModel in dataServiceResult)
           {
-            scenarios.Add(Mapping.DataModelMapper.MapToDTO(dataModel));
+            dataModels.Add(Mapping.DataModelMapper.MapToDTO(dataModel));
           }
         }
-        return scenarios;
+        return dataModels;
       }
     );
   }

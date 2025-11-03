@@ -4,7 +4,7 @@ namespace AVAIntegrationModeler.API.Contributors;
 
 public class CreateContributorRequest
 {
-  public const string Route = "/Features";
+  public const string Route = "/DataModels";
 
   [Required]
   public string? Name { get; set; }
