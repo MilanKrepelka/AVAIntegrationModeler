@@ -14,9 +14,9 @@ public class ListFeaturesQueryService(
   IMemoryCache memoryCache) : AVAIntegrationModeler.UseCases.Features.List.IListFeaturesQueryService
 {
 
-  private const string primaryKeyName = "FeatureListQuery";
+  private const string PrimaryKeyName = "FeatureListQuery";
   private readonly IMemoryCache _memoryCache = memoryCache;
-  private string createChacheKey(Datasource datasource, string methodName) => $"{primaryKeyName}-{datasource}-{methodName}";
+  private static string createChacheKey(Datasource datasource, string methodName) => $"{PrimaryKeyName}-{datasource}-{methodName}";
 
   /// <inheritdoc/>
   public async Task<IEnumerable<FeatureSummaryDTO>> ListSummaryAsync(Datasource datasouce)
@@ -24,15 +24,13 @@ public class ListFeaturesQueryService(
     datasouce.GetHashCode();
 
     var x = await _memoryCache.GetOrCreateAsync(
-
       createChacheKey(datasouce, nameof(ListSummaryAsync)),
       async entry =>
       {
-
         entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
         entry.SlidingExpiration = TimeSpan.FromMinutes(2);
         entry.Priority = CacheItemPriority.Normal;
-        List<FeatureSummaryDTO> result = new List<FeatureSummaryDTO>();
+        var result = new List<FeatureSummaryDTO>();
         if (datasouce == Datasource.AVAPlace)
         {
           result = (await integrationDataProvider.GetFeaturesSummaryAsync(CancellationToken.None)).ToList();
@@ -40,11 +38,11 @@ public class ListFeaturesQueryService(
         else
         {
           result = (await _db.Features
-  .Include(f => f.IncludedFeatures)
-  .Include(f => f.IncludedModels)
-  .ToListAsync())
-  .Select(s => UseCases.Features.Mapping.FeatureMapper.MapToFeatureSummaryDTO(s))
-  .ToList();
+            .Include(f => f.IncludedFeatures)
+            .Include(f => f.IncludedModels)
+            .ToListAsync())
+            .Select(s => UseCases.Features.Mapping.FeatureMapper.MapToFeatureSummaryDTO(s))
+            .ToList();
         }
         return result;
       });
@@ -56,7 +54,6 @@ public class ListFeaturesQueryService(
   public async Task<IEnumerable<FeatureDTO>> ListAsync(Datasource datasouce)
   {
     datasouce.GetHashCode();
-    List<FeatureDTO> result = new List<FeatureDTO>();
     var x = await _memoryCache.GetOrCreateAsync(
       createChacheKey(datasouce, nameof(ListAsync)),
       async entry =>
@@ -64,7 +61,7 @@ public class ListFeaturesQueryService(
         entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
         entry.SlidingExpiration = TimeSpan.FromMinutes(2);
         entry.Priority = CacheItemPriority.Normal;
-        List<FeatureDTO> result = new List<FeatureDTO>();
+        var result = new List<FeatureDTO>();
         if (datasouce == Datasource.AVAPlace)
         {
           var featuresSummaryTask = integrationDataProvider.GetFeaturesAsync(CancellationToken.None);
@@ -73,8 +70,6 @@ public class ListFeaturesQueryService(
           await Task.WhenAll(featuresSummaryTask, modelsTask);
 
           var featuresSummaryResult = featuresSummaryTask.Result.ToList();
-
-          
           var modelsResult = modelsTask.Result.ToList();
 
           result = featuresSummaryResult.Select(f => new FeatureDTO
@@ -97,19 +92,19 @@ public class ListFeaturesQueryService(
               ReadOnly = inc.ReadOnly
             }).ToList() ?? new List<IncludedDataModelDTO>()
           }).ToList();
-          
+
         }
         else
         {
-          List<FeatureSummaryDTO> features = _db.Features.Select(item=> FeatureMapper.MapToFeatureSummaryDTO(item)).ToList();
-          List<DataModelSummaryDTO> models = _db.DataModels.Select(item=> DataModelMapper.MapToDataModelSummaryDTO(item)).ToList();
+          var features = _db.Features.Select(item => FeatureMapper.MapToFeatureSummaryDTO(item)).ToList();
+          var models = _db.DataModels.Select(item => DataModelMapper.MapToDataModelSummaryDTO(item)).ToList();
 
           result = (await _db.Features
-          .Include(f => f.IncludedFeatures)
-          .Include(f => f.IncludedModels)
-          .ToListAsync())
-          .Select(s => UseCases.Features.Mapping.FeatureMapper.MapToFeatureDTO(s, features, models))
-          .ToList();
+            .Include(f => f.IncludedFeatures)
+            .Include(f => f.IncludedModels)
+            .ToListAsync())
+            .Select(s => UseCases.Features.Mapping.FeatureMapper.MapToFeatureDTO(s, features, models))
+            .ToList();
         }
         return result;
       });

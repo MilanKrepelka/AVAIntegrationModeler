@@ -29,4 +29,8 @@
     <ProjectReference Include="..\AVAIntegrationModeler.ServiceDefaults\AVAIntegrationModeler.ServiceDefaults.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="DataModels\" />
+  </ItemGroup>
+
 </Project>

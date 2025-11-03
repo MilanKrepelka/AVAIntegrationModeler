@@ -19,6 +19,7 @@ public static class InfrastructureServiceExtensions
             .AddScoped<IListContributorsQueryService, ListContributorsQueryService>()
             .AddScoped<IListScenariosQueryService, ListScenariosQueryService>()
             .AddScoped<UseCases.Features.List.IListFeaturesQueryService, ListFeaturesQueryService>()
+            .AddScoped<UseCases.DataModels.List.IListDataModelQueryService, ListDataModelsQueryService>()
             .AddScoped<IDeleteContributorService, DeleteContributorService>();
 
     logger.LogInformation("{Project} services registered", "Infrastructure");
