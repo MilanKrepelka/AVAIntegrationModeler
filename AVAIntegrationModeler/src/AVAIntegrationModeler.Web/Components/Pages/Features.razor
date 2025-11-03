@@ -1,8 +1,8 @@
 ﻿@page "/features"
 @using AVAIntegrationModeler.Web.ViewModels.List;
+@using AVAIntegrationModeler.Web.Components.Widgets.IncludedModelsWidget
+@using AVAIntegrationModeler.Web.Components.Widgets.IncludedFeaturesWidget
 @inject ISnackbar Snackbar
-
-
 
 <PageTitle>Integrační Featury</PageTitle>
 
@@ -35,8 +35,8 @@ else
             </PropertyColumn>
             <PropertyColumn Property="x => x.Name.EnglishValue" Title="Název - anglicky" />
             <PropertyColumn Property="x => x.Description.EnglishValue" Title="Popis - anglicky" />
-            <PropertyColumn Property="x => x.Code" Title="Vstupní Feature" />
-            <PropertyColumn Property="x => x.Code" Title="Výstupní Feature" />
+            <PropertyColumn Property="x => x.IncludedFeaturesText" Title="Includes Features" />
+            <PropertyColumn Property="x => x.IncludedModelsText" Title="Includes Models" />
             <PropertyColumn Property="x => x.Id" Title="Identifikátor">
                 <CellTemplate>
                     @context.Item.Id
@@ -77,12 +77,19 @@ else
                             <MudField Label="Popis - česky" Variant="Variant.Text">@context.Item.Description.CzechValue</MudField>
                         </MudItem>
                     </MudGrid>
+                    
+
                     <MudGrid>
-                        <MudItem xs="12" sm="6" md="4">
-                            <MudField Label="Vstupní feature" Variant="Variant.Text">@context.Item.Code</MudField>
+                        <MudItem xs="12">
+                            <MudDivider Class="my-4" />
+                            <IncludedFeaturesWidget Features="@context.Item.IncludedFeatures" ShowDetails="@true" />
                         </MudItem>
-                        <MudItem xs="12" sm="6" md="4">
-                            <MudField Label="Výstupní feature" Variant="Variant.Text">@context.Item.Code</MudField>
+                    </MudGrid>
+
+                    <MudGrid>
+                        <MudItem xs="12">
+                            <MudDivider Class="my-4" />
+                            <IncludedModelsWidget Models="@context.Item.IncludedModels" ShowDetails="@true" />
                         </MudItem>
                     </MudGrid>
                 </MudForm>

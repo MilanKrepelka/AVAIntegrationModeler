@@ -1,0 +1,38 @@
+@using AVAIntegrationModeler.Contracts.DTO
+@using AVAIntegrationModeler.Web.Components.Widgets.IncludedModelWidget
+
+<MudText Typo="Typo.h6" Class="mb-3">Zahrnuté modely</MudText>
+
+@if (Models == null || !Models.Any())
+{
+    <MudText Typo="Typo.body2" Color="Color.Secondary">Žádné zahrnuté modely</MudText>
+}
+else
+{
+    <MudDataGrid Items="@Models" Dense="true" Hover="true" >
+            <Columns>
+            <PropertyColumn Property="x => x.DataModel.Code" Title="Kód" CellClass="included-models-widget-code-column" HeaderClass="included-models-widget-code-column" />
+                            
+            <PropertyColumn Property="x => x.ReadOnly" Title="Pouze ètení" >
+                    <CellTemplate>
+                        @if (context.Item.ReadOnly)
+                        {
+                            <span>Ano</span>
+                        @*<MudIcon Icon="@Icons.Material.Filled.Lock" Size="Size.Small" Color="Color.Warning" />*@
+                        }
+                        else
+                        {
+                            <span>Ano</span>
+                            @*<MudIcon Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Color="Color.Success" />*@
+                        }
+                    </CellTemplate>
+                </PropertyColumn>
+            </Columns>
+        </MudDataGrid>
+}
+<style>
+    .included-models-widget-code-column {
+        width: 30%;
+        max-width: 30%
+    }
+</style>

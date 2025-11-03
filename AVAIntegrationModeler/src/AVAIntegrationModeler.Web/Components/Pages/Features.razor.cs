@@ -54,7 +54,7 @@ public partial class Features : Microsoft.AspNetCore.Components.ComponentBase, I
       FeatureList.Clear();
       // Načtení scénářů z AVAIntegrationModeler.API
       using var httpClient = new HttpClient();
-      var response = await httpClient.GetAsync($"http://localhost:57679/Scenarios?datasource={this.Datasource}");
+      var response = await httpClient.GetAsync($"http://localhost:57679/Features?datasource={this.Datasource}");
       response.EnsureSuccessStatusCode();
 
       var scenarioListResponse = await response.Content.ReadFromJsonAsync<FeatureListResponse>();

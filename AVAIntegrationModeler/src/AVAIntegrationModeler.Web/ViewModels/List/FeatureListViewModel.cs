@@ -38,6 +38,14 @@ public class FeatureListViewModel
   /// </summary>
   public LocalizedValue Description { get; set; } = LocalizedValue.Empty;
 
-  public List<DataModelSummaryDTO> IncludedModels { get; set; } = new();
-  public List<FeatureSummaryDTO> IncludedFeatures { get; set; } = new();
+  public string IncludedModelsText { get => string.Join(", ", IncludedModels.Select(m => m.DataModel.Code)); }
+  public string IncludedFeaturesText { get => string.Join(", ", IncludedFeatures.Select(m => m.Feature.Code)); }
+
+  public List<IncludedDataModelDTO> IncludedModels { get; set; } = new();
+  public List<IncludedFeatureDTO> IncludedFeatures { get; set; } = new();
+
+  /// <summary>
+  /// Updates IncludedModelsText from IncludedModels DataModelSummaryDTO.Code values.
+  /// </summary>
+  
 }

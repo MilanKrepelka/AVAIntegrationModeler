@@ -20,6 +20,9 @@ public static class FeatureMapper
       Id = dto.Id,
       Description = dto.Description,
       Name = dto.Name,
+      IncludedFeatures = dto.IncludedFeatures,
+      IncludedModels = dto.IncludedModels,
+      Code = dto.Code
     };
   }
 }

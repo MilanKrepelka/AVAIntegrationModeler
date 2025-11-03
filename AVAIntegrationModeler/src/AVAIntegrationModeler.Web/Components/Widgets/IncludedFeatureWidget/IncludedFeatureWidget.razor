@@ -1,0 +1,48 @@
+@using AVAIntegrationModeler.Contracts.DTO
+
+<MudPaper Class="pa-4" Elevation="0">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="4">
+            <MudField Label="Kód" Variant="Variant.Text">@Feature.Feature.Code</MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudField Label="Název (EN)" Variant="Variant.Text">@Feature.Feature.Code</MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="4">
+            <MudField Label="Název (CZ)" Variant="Variant.Text">@Feature.Feature.Code</MudField>
+        </MudItem>
+        <MudItem xs="12">
+            <MudField Label="Režim pøístupu" Variant="Variant.Text">
+                @if (Feature.ConsumeOnly)
+                {
+                    <MudChip T="string" Icon="@Icons.Material.Filled.Visibility" Color="Color.Warning" Size="Size.Small">Pouze konzumace</MudChip>
+                }
+                else
+                {
+                    <MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Success" Size="Size.Small">Plný pøístup</MudChip>
+                }
+            </MudField>
+        </MudItem>
+    </MudGrid>
+
+    @if (!string.IsNullOrWhiteSpace(Feature.Feature.Code) || 
+         !string.IsNullOrWhiteSpace(Feature.Feature.Code))
+    {
+        <MudDivider Class="my-4" />
+        <MudText Typo="Typo.subtitle2" Class="mb-2">Popis</MudText>
+        <MudGrid>
+            @if (!string.IsNullOrWhiteSpace(Feature.Feature.Code))
+            {
+                <MudItem xs="12" md="6">
+                    <MudField Label="Popis (EN)" Variant="Variant.Text">@Feature.Feature.Code</MudField>
+                </MudItem>
+            }
+            @if (!string.IsNullOrWhiteSpace(Feature.Feature.Code))
+            {
+                <MudItem xs="12" md="6">
+                    <MudField Label="Popis (CZ)" Variant="Variant.Text">@Feature.Feature.Code</MudField>
+                </MudItem>
+            }
+        </MudGrid>
+    }
+</MudPaper>

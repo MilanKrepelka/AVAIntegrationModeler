@@ -1,0 +1,30 @@
+@using AVAIntegrationModeler.Contracts.DTO
+
+<MudPaper Class="pa-4" Elevation="0">
+    <MudGrid>
+        <MudItem xs="12" sm="6" md="3">
+            <MudField Label="Kód" Variant="Variant.Text">@Model.DataModel.Code</MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudField Label="Název (EN)" Variant="Variant.Text">@Model.DataModel.Name</MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudField Label="Název (CZ)" Variant="Variant.Text">@Model.DataModel.Name</MudField>
+        </MudItem>
+        <MudItem xs="12" sm="6" md="3">
+            <MudField Label="Režim pøístupu" Variant="Variant.Text">
+                @if (Model.ReadOnly)
+                {
+                    <MudChip T="string" Icon="@Icons.Material.Filled.Lock" Color="Color.Warning" Size="Size.Small">Pouze ètení</MudChip>
+                }
+                else
+                {
+                    <MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Success" Size="Size.Small">Ètení a zápis</MudChip>
+                }
+            </MudField>
+        </MudItem>
+    </MudGrid>
+
+    
+</MudPaper>
+
