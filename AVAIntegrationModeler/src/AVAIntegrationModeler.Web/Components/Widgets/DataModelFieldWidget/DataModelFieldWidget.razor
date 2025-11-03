@@ -1,0 +1,92 @@
+﻿@using AVAIntegrationModeler.Contracts.DTO
+@using AVAIntegrationModeler.Contracts
+
+<MudText Typo="Typo.h6" Class="mb-3">Pole datového modelu</MudText>
+
+@if (Fields == null || !Fields.Any())
+{
+    <MudText Typo="Typo.body2" Color="Color.Secondary">Žádná pole datového modelu</MudText>
+}
+else
+{
+    <MudDataGrid Items="@Fields" Dense="true" Hover="true">
+        <Columns>
+            <HierarchyColumn EnableHeaderToggle=true />
+            <PropertyColumn Property="x => x.Name"
+                            Title="Název"
+                            CellClass="data-model-field-widget-name-column"
+                            HeaderClass="data-model-field-widget-name-column" />
+            <PropertyColumn Property="x => x.Label" Title="Popisek" />
+            <PropertyColumn Property="x => x.FieldType" Title="Typ pole">
+                <CellTemplate>
+                    @GetFieldTypeDisplayName(context.Item.FieldType)
+                </CellTemplate>
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.IsNullable" Title="Nullable">
+                <CellTemplate>
+                    @if (context.Item.IsNullable)
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
+                    }
+                    else
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
+                    }
+                </CellTemplate>
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.IsCollection" Title="Kolekce">
+                <CellTemplate>
+                    @if (context.Item.IsCollection)
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
+                    }
+                </CellTemplate>
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.IsLocalized" Title="Lokalizované">
+                <CellTemplate>
+                    @if (context.Item.IsLocalized)
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
+                    }
+                </CellTemplate>
+            </PropertyColumn>
+        </Columns>
+        <ChildRowContent>
+            <MudPaper Class="pa-6 ma-2" Elevation="2">
+                <MudForm Spacing="4">
+                    <MudGrid>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Identifikátor" Variant="Variant.Text">@context.Item.Id</MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Kód" Variant="Variant.Text">@context.Item.Name</MudField>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Název - anglicky" Variant="Variant.Text">@context.Item.Name</MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Popis - anglicky" Variant="Variant.Text">@context.Item.Description</MudField>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Název - česky" Variant="Variant.Text">@context.Item.Name</MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Popis - česky" Variant="Variant.Text">@context.Item.Description</MudField>
+                        </MudItem>
+                    </MudGrid>
+                </MudForm>
+            </MudPaper>
+        </ChildRowContent>
+    </MudDataGrid>
+}
+
+<style>
+    .data-model-field-widget-name-column {
+        width: 25%;
+        max-width: 25%
+    }
+</style>
