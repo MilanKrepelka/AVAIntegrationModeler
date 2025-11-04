@@ -15,8 +15,8 @@ public class DataModelListViewModel
   {
     Id = Guid.Empty,
     Code = string.Empty,
-    Name = LocalizedValue.Empty,
-    Description = LocalizedValue.Empty,
+    Name = string.Empty,
+    Description = string.Empty,
     Notes = string.Empty,
     IsAggregateRoot = false,
     AreaId = null
@@ -35,12 +35,12 @@ public class DataModelListViewModel
   /// <summary>
   /// <see cref="DataModelDTO.Name"/>
   /// </summary>
-  public LocalizedValue Name { get; set; } = LocalizedValue.Empty;
+  public string Name { get; set; } = string.Empty;
 
   /// <summary>
   /// <see cref="DataModelDTO.Description"/>
   /// </summary>
-  public LocalizedValue Description { get; set; } = LocalizedValue.Empty;
+  public string Description { get; set; } = string.Empty;
 
   /// <summary>
   /// <see cref="DataModelDTO.Notes"/>
@@ -148,4 +148,9 @@ public class DataModelFieldListViewModel
   /// Vnořená pole (pouze pro ComplexType).
   /// </summary>
   public List<DataModelDTO> ReferencedModels { get; set; } = [];
+
+  /// <summary>
+  /// Referencované datové modely jako text
+  /// </summary>
+  public string ReferencedModelsText => string.Join(",", ReferencedModels.Select(item => item.Code));
 }

@@ -17,13 +17,13 @@ else
                             HeaderClass="included-features-widget-code-column" />
             <PropertyColumn Property="x => x.ConsumeOnly" Title="Pouze konzumace">
                 <CellTemplate>
-                    @if (context.Item.ConsumeOnly)
+                    @if (@context.Item.ConsumeOnly)
                     {
-                        <span>Ano</span>
+                        <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
                     }
                     else
                     {
-                        <span>Ne</span>
+                        <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
                     }
                 </CellTemplate>
             </PropertyColumn>

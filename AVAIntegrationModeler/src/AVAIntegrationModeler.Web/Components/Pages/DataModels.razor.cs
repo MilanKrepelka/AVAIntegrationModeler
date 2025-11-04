@@ -32,24 +32,19 @@ public partial class DataModels : Microsoft.AspNetCore.Components.ComponentBase,
 
   
 
-  protected bool FilterFunc(DataModelListViewModel scenario)
+  protected bool FilterFunc(DataModelListViewModel dataModel)
   {
     if (string.IsNullOrEmpty(FilterString)) return true;
 
-    return scenario.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-      || scenario.Id.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+    return dataModel.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+      || dataModel.Id.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
 
-      || scenario.Name.CzechValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-      || scenario.Name.EnglishValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-
-      || scenario.Description.CzechValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-      || scenario.Description.EnglishValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase);
-
-      /*
-      || scenario.InputFeature.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-      || scenario.OutputFeature.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-      */
-      
+      || dataModel.Name.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+      || dataModel.Notes.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+      || dataModel.Description.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+      || dataModel.Fields.Any(field => field.Name.Contains(FilterString, StringComparison.OrdinalIgnoreCase))
+//      || dataModel.Fields.Any(field => field.Description.Contains(FilterString, StringComparison.OrdinalIgnoreCase));
+//      || dataModel.Fields.Any(field => field.ReferencedModels.Any(referencedModel=>referencedModel.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)));
   }
   protected async Task LoadItemsAsync()
   {

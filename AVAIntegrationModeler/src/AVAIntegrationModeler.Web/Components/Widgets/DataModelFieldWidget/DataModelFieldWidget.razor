@@ -17,10 +17,12 @@ else
                             CellClass="data-model-field-widget-name-column"
                             HeaderClass="data-model-field-widget-name-column" />
             <PropertyColumn Property="x => x.Label" Title="Popisek" />
-            <PropertyColumn Property="x => x.FieldType" Title="Typ pole">
+            <PropertyColumn Property="x => x.FieldType" Title="Datový typ">
                 <CellTemplate>
-                    @GetFieldTypeDisplayName(context.Item.FieldType)
+                    @Mapping.DataModelFieldTypeMapper.GetFieldTypeDisplayName(context.Item.FieldType)
                 </CellTemplate>
+            </PropertyColumn>
+            <PropertyColumn Property="x => x.ReferencedModelsText" Title="Referencované modely">
             </PropertyColumn>
             <PropertyColumn Property="x => x.IsNullable" Title="Nullable">
                 <CellTemplate>
@@ -40,6 +42,10 @@ else
                     {
                         <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
                     }
+                    else
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
+                    }
                 </CellTemplate>
             </PropertyColumn>
             <PropertyColumn Property="x => x.IsLocalized" Title="Lokalizované">
@@ -47,6 +53,10 @@ else
                     @if (context.Item.IsLocalized)
                     {
                         <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
+                    }
+                    else
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
                     }
                 </CellTemplate>
             </PropertyColumn>
@@ -56,26 +66,74 @@ else
                 <MudForm Spacing="4">
                     <MudGrid>
                         <MudItem xs="12" sm="6" md="4">
-                            <MudField Label="Identifikátor" Variant="Variant.Text">@context.Item.Id</MudField>
+                            <MudField Label="Popisek" Variant="Variant.Text">@context.Item.Label</MudField>
                         </MudItem>
                         <MudItem xs="12" sm="6" md="4">
                             <MudField Label="Kód" Variant="Variant.Text">@context.Item.Name</MudField>
                         </MudItem>
                     </MudGrid>
                     <MudGrid>
-                        <MudItem xs="12" sm="6" md="4">
-                            <MudField Label="Název - anglicky" Variant="Variant.Text">@context.Item.Name</MudField>
-                        </MudItem>
-                        <MudItem xs="12" sm="6" md="4">
+                        <MudItem xs="12" md="8">
                             <MudField Label="Popis - anglicky" Variant="Variant.Text">@context.Item.Description</MudField>
                         </MudItem>
                     </MudGrid>
                     <MudGrid>
                         <MudItem xs="12" sm="6" md="4">
-                            <MudField Label="Název - česky" Variant="Variant.Text">@context.Item.Name</MudField>
+                            <MudField Label="Datový typ" Variant="Variant.Text">@Mapping.DataModelFieldTypeMapper.GetFieldTypeDisplayName(context.Item.FieldType)</MudField>
                         </MudItem>
                         <MudItem xs="12" sm="6" md="4">
-                            <MudField Label="Popis - česky" Variant="Variant.Text">@context.Item.Description</MudField>
+                            <MudField Label="Referencované modely" Variant="Variant.Text">@context.Item.ReferencedModelsText</MudField>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Kolekce" Variant="Variant.Text">  
+                                @if(@context.Item.IsCollection)
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
+                                }else
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
+                                }
+                            </MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Nullable" Variant="Variant.Text">
+                                @if (@context.Item.IsNullable)
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
+                                }
+                                else
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
+                                }
+                            </MudField>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Lokalizovaná hodnota" Variant="Variant.Text">
+                                @if (@context.Item.IsLocalized)
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
+                                }
+                                else
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
+                                }
+                            </MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="Určeno k vyhledávání" Variant="Variant.Text">
+                                @if (@context.Item.IsPublishedForLookup)
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
+                                }
+                                else
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
+                                }
+                            </MudField>
                         </MudItem>
                     </MudGrid>
                 </MudForm>
@@ -86,7 +144,7 @@ else
 
 <style>
     .data-model-field-widget-name-column {
-        width: 25%;
-        max-width: 25%
+        width: 15%;
+        max-width: 15%
     }
 </style>

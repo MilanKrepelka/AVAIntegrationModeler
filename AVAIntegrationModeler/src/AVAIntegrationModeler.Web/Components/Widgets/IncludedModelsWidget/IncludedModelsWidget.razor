@@ -15,16 +15,14 @@ else
                             
             <PropertyColumn Property="x => x.ReadOnly" Title="Pouze ètení" >
                     <CellTemplate>
-                        @if (context.Item.ReadOnly)
-                        {
-                            <span>Ano</span>
-                        @*<MudIcon Icon="@Icons.Material.Filled.Lock" Size="Size.Small" Color="Color.Warning" />*@
-                        }
-                        else
-                        {
-                            <span>Ano</span>
-                            @*<MudIcon Icon="@Icons.Material.Filled.Edit" Size="Size.Small" Color="Color.Success" />*@
-                        }
+                    @if (@context.Item.ReadOnly)
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
+                    }
+                    else
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
+                    }
                     </CellTemplate>
                 </PropertyColumn>
             </Columns>

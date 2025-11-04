@@ -58,11 +58,9 @@ public class DataModelMapperTests
     result.Id.ShouldBe(dataModelDto.Id);
     result.Code.ShouldBe("CUSTOMER");
     result.Name.ShouldNotBeNull();
-    result.Name.CzechValue.ShouldBe("Customer");
-    result.Name.EnglishValue.ShouldBe("Customer");
+    result.Name.ShouldBe("Customer");
     result.Description.ShouldNotBeNull();
-    result.Description.CzechValue.ShouldBe("Customer data model");
-    result.Description.EnglishValue.ShouldBe("Customer data model");
+    result.Description.ShouldBe("Customer data model");
     result.Notes.ShouldBe("Main customer aggregate");
     result.IsAggregateRoot.ShouldBeTrue();
     result.AreaId.ShouldBe(areaId);
@@ -133,8 +131,8 @@ public class DataModelMapperTests
     var result = DataModelMapper.MapToViewModel(dataModelDto, dataModels);
 
     // Assert
-    result.Name.ShouldBe(LocalizedValue.Empty);
-    result.Description.ShouldBe(LocalizedValue.Empty);
+    result.Name.ShouldBe(string.Empty);
+    result.Description.ShouldBe(string.Empty);
   }
 
   [Fact]
@@ -159,8 +157,8 @@ public class DataModelMapperTests
     var result = DataModelMapper.MapToViewModel(dataModelDto, dataModels);
 
     // Assert
-    result.Name.ShouldBe(LocalizedValue.Empty);
-    result.Description.ShouldBe(LocalizedValue.Empty);
+    result.Name.ShouldBe(string.Empty);
+    result.Description.ShouldBe(string.Empty);
   }
 
   [Fact]

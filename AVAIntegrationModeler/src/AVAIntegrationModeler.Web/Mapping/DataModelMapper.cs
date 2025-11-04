@@ -13,6 +13,7 @@ public static class DataModelMapper
   /// Mapuje <see cref="DataModelDTO"/> na <see cref="DataModelListViewModel"/>.
   /// </summary>
   /// <param name="dto">DTO datového modelu k namapování.</param>
+  /// <param name="dataModels">Seznam všech datových modelů pro mapování referencí.</param>
   /// <returns>ViewModel datového modelu.</returns>
   public static DataModelListViewModel MapToViewModel(DataModelDTO dto, IEnumerable<DataModelDTO> dataModels)
   {
@@ -22,8 +23,8 @@ public static class DataModelMapper
     {
       Id = dto.Id,
       Code = dto.Code,
-      Name = StringToLocalizedValue(dto.Name),
-      Description = StringToLocalizedValue(dto.Description),
+      Name = dto.Name ?? string.Empty,
+      Description = dto.Description ?? string.Empty,
       Notes = dto.Notes,
       IsAggregateRoot = dto.IsAggregateRoot,
       AreaId = dto.AreaId,
@@ -35,6 +36,7 @@ public static class DataModelMapper
   /// Mapuje <see cref="DataModelFieldDTO"/> na <see cref="DataModelFieldListViewModel"/>.
   /// </summary>
   /// <param name="dto">DTO pole datového modelu k namapování.</param>
+  /// <param name="dataModels">Seznam všech datových modelů pro mapování referencí.</param>
   /// <returns>ViewModel pole datového modelu.</returns>
   public static DataModelFieldListViewModel MapFieldToViewModel(DataModelFieldDTO dto, IEnumerable<DataModelDTO> dataModels)
   {
@@ -56,17 +58,5 @@ public static class DataModelMapper
         .Where(dm => dto.ReferencedEntityTypeIds.Contains(dm.Id))
         .ToList()
     };
-  }
-
-  /// <summary>
-  /// Převede string na LocalizedValue (používá stejný text pro češtinu i angličtinu).
-  /// </summary>
-  /// <param name="value">Textová hodnota k převedení.</param>
-  /// <returns>LocalizedValue s hodnotou v obou jazycích.</returns>
-  private static LocalizedValue StringToLocalizedValue(string value)
-  {
-    return string.IsNullOrEmpty(value) 
-      ? LocalizedValue.Empty 
-      : new LocalizedValue { CzechValue = value, EnglishValue = value };
   }
 }

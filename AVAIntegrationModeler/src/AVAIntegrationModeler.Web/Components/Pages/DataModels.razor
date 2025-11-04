@@ -34,8 +34,8 @@ else
             <PropertyColumn Property="x => x.Code" Title="Kód">
                 
             </PropertyColumn>
-            <PropertyColumn Property="x => x.Name.EnglishValue" Title="Název - anglicky" />
-            <PropertyColumn Property="x => x.Description.EnglishValue" Title="Popis - anglicky" />
+            <PropertyColumn Property="x => x.Name" Title="Název" />
+            <PropertyColumn Property="x => x.Description" Title="Popis" />
             <PropertyColumn Property="x => x.Id" Title="Identifikátor">
                 <CellTemplate>
                     @context.Item.Id
@@ -62,18 +62,27 @@ else
             </MudGrid>
             <MudGrid>
                 <MudItem xs="12" sm="6" md="4" >
-                    <MudField Label="Název - anglicky" Variant="Variant.Text">@context.Item.Name.EnglishValue</MudField>
+                    <MudField Label="Název" Variant="Variant.Text">@context.Item.Name</MudField>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="4">
-                    <MudField Label="Popis - anglicky" Variant="Variant.Text">@context.Item.Description.EnglishValue</MudField>
+                    <MudField Label="Popis" Variant="Variant.Text">@context.Item.Description</MudField>
                 </MudItem>
             </MudGrid>
             <MudGrid>
                 <MudItem xs="12" sm="6" md="4" >
-                    <MudField Label="Název - česky" Variant="Variant.Text">@context.Item.Name.CzechValue</MudField>
+                    <MudField Label="Poznámky" Variant="Variant.Text">@context.Item.Notes</MudField>
                 </MudItem>
                 <MudItem xs="12" sm="6" md="4" >
-                    <MudField Label="Popis - česky" Variant="Variant.Text">@context.Item.Description.CzechValue</MudField>
+                    <MudField Label="Je Aggregate Root" Variant="Variant.Text">
+                                @if (@context.Item.IsAggregateRoot)
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
+                                }
+                                else
+                                {
+                                    <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
+                                }
+                    </MudField>
                 </MudItem>
             </MudGrid>
             <DataModelFieldWidget Fields="@context.Item.Fields" ShowDetails="@true" />
@@ -93,30 +102,3 @@ else
         Snackbar.Add($"Zkopírováno do schránky: {text}", Severity.Success);
     }
 }
-@* @code {
-    private WeatherForecast[]? forecasts;
-
-    protected override async Task OnInitializedAsync()
-    {
-        // Simulate asynchronous loading to demonstrate a loading indicator
-        await Task.Delay(500);
-
-        var startDate = DateOnly.FromDateTime(DateTime.Now);
-        var summaries = new[] { "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching" };
-        forecasts = Enumerable.Range(1, 5).Select(index => new WeatherForecast
-        {
-            Date = startDate.AddDays(index),
-            TemperatureC = Random.Shared.Next(-20, 55),
-            Summary = summaries[Random.Shared.Next(summaries.Length)]
-        }).ToArray();
-    }
-
-    private class WeatherForecast
-    {
-        public DateOnly Date { get; set; }
-        public int TemperatureC { get; set; }
-        public string? Summary { get; set; }
-        public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-    }
-}
- *@

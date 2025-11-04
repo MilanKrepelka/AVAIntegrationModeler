@@ -56,12 +56,8 @@ public class DataModelMapperTests
     result.ShouldNotBeNull();
     result.Id.ShouldBe(dataModelDto.Id);
     result.Code.ShouldBe("CUSTOMER");
-    result.Name.ShouldNotBeNull();
-    result.Name.CzechValue.ShouldBe("Customer");
-    result.Name.EnglishValue.ShouldBe("Customer");
-    result.Description.ShouldNotBeNull();
-    result.Description.CzechValue.ShouldBe("Customer data model");
-    result.Description.EnglishValue.ShouldBe("Customer data model");
+    result.Name.ShouldBe("Customer");
+    result.Description.ShouldBe("Customer data model");
     result.Notes.ShouldBe("Main customer aggregate");
     result.IsAggregateRoot.ShouldBeTrue();
     result.AreaId.ShouldBe(areaId);
@@ -111,7 +107,7 @@ public class DataModelMapperTests
   }
 
   [Fact]
-  public void MapToViewModel_ShouldMapToEmptyLocalizedValue_WhenNameIsEmpty()
+  public void MapToViewModel_ShouldMapToEmptyString_WhenNameIsEmpty()
   {
     // Arrange
     var dataModelDto = new DataModelDTO
@@ -132,12 +128,12 @@ public class DataModelMapperTests
     var result = DataModelMapper.MapToViewModel(dataModelDto, dataModels);
 
     // Assert
-    result.Name.ShouldBe(LocalizedValue.Empty);
-    result.Description.ShouldBe(LocalizedValue.Empty);
+    result.Name.ShouldBe(string.Empty);
+    result.Description.ShouldBe(string.Empty);
   }
 
   [Fact]
-  public void MapToViewModel_ShouldMapToEmptyLocalizedValue_WhenNameIsNull()
+  public void MapToViewModel_ShouldMapToEmptyString_WhenNameIsNull()
   {
     // Arrange
     var dataModelDto = new DataModelDTO
@@ -158,8 +154,8 @@ public class DataModelMapperTests
     var result = DataModelMapper.MapToViewModel(dataModelDto, dataModels);
 
     // Assert
-    result.Name.ShouldBe(LocalizedValue.Empty);
-    result.Description.ShouldBe(LocalizedValue.Empty);
+    result.Name.ShouldBe(string.Empty);
+    result.Description.ShouldBe(string.Empty);
   }
 
   [Fact]
