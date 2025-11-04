@@ -42,7 +42,7 @@ public partial class DataModels : Microsoft.AspNetCore.Components.ComponentBase,
       || dataModel.Name.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
       || dataModel.Notes.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
       || dataModel.Description.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
-      || dataModel.Fields.Any(field => field.Name.Contains(FilterString, StringComparison.OrdinalIgnoreCase))
+      || dataModel.Fields.Any(field => field.Name.Contains(FilterString, StringComparison.OrdinalIgnoreCase));
 //      || dataModel.Fields.Any(field => field.Description.Contains(FilterString, StringComparison.OrdinalIgnoreCase));
 //      || dataModel.Fields.Any(field => field.ReferencedModels.Any(referencedModel=>referencedModel.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)));
   }
