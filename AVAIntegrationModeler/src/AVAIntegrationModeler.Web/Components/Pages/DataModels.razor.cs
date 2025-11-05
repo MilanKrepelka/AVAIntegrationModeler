@@ -106,5 +106,8 @@ public partial class DataModels : Microsoft.AspNetCore.Components.ComponentBase,
   {
     base.OnInitialized();
     await LoadItemsAsync();
+    Console.WriteLine($"Current UI Culture: {System.Globalization.CultureInfo.CurrentUICulture.Name}");
+    Console.WriteLine($"Current Culture: {System.Globalization.CultureInfo.CurrentCulture.Name}");
   }
+
 }

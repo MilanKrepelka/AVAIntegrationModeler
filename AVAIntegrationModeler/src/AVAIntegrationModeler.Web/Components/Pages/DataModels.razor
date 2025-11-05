@@ -1,13 +1,14 @@
 ﻿@page "/datamodels"
 @using AVAIntegrationModeler.Web.Components.Widgets.DataModelFieldWidget
-@using AVAIntegrationModeler.Web.ViewModels.List;
+@using AVAIntegrationModeler.Web.ViewModels.List
+@using Microsoft.Extensions.Localization
+@using AVAIntegrationModeler.Web.Resources
 @inject ISnackbar Snackbar
+@inject IStringLocalizer<SharedResources> Localizer
 
+<PageTitle>@Localizer["DataModels.Title"]</PageTitle>
 
-
-<PageTitle>Datové modely</PageTitle>
-
-<MudText Typo="Typo.h3" GutterBottom="true">Datové modely</MudText>
+<MudText Typo="Typo.h3" GutterBottom="true">@Localizer["DataModels.Title"]</MudText>
 <MudText Typo="Typo.body1" Class="mb-8"></MudText>
 
 @if (DataModelList == null)
@@ -17,29 +18,36 @@
 else
 {
     <MudRadioGroup T="AVAIntegrationModeler.Contracts.Datasource" Class="mb-4" Value="Datasource" ValueChanged="onDatasourceChanded">
-        <MudRadio  Dense="true" Value="AVAIntegrationModeler.Contracts.Datasource.Database" Color="Color.Primary">Lokální vývoj</MudRadio>
-        <MudRadio  Dense="true" Value="AVAIntegrationModeler.Contracts.Datasource.AVAPlace" Color="Color.Secondary">AVA place</MudRadio>
+        <MudRadio Dense="true" Value="AVAIntegrationModeler.Contracts.Datasource.Database" Color="Color.Primary">
+            @Localizer["Datasource.LocalDevelopment"]
+        </MudRadio>
+        <MudRadio Dense="true" Value="AVAIntegrationModeler.Contracts.Datasource.AVAPlace" Color="Color.Secondary">
+            @Localizer["Datasource.AVAPlace"]
+        </MudRadio>
     </MudRadioGroup>
 
     <MudDataGrid Items="@DataModelList" Filterable="false" QuickFilter="FilterFunc" ExpandSingleRow="false">
         
         <ToolBarContent>
-            
             <MudSpacer />
-            <MudTextField @bind-Value="this.FilterString" Placeholder="Hledat" Adornment="Adornment.Start" Immediate="true"
-                          AdornmentIcon="@Icons.Material.Filled.Search" IconSize="Size.Medium" Class="mt-0"></MudTextField>
+            <MudTextField @bind-Value="this.FilterString" 
+                          Placeholder="@Localizer["DataModels.Search"]" 
+                          Adornment="Adornment.Start" 
+                          Immediate="true"
+                          AdornmentIcon="@Icons.Material.Filled.Search" 
+                          IconSize="Size.Medium" 
+                          Class="mt-0">
+            </MudTextField>
         </ToolBarContent>
         <Columns>
             <HierarchyColumn T="DataModelListViewModel" EnableHeaderToggle=true />
-            <PropertyColumn Property="x => x.Code" Title="Kód">
-                
-            </PropertyColumn>
-            <PropertyColumn Property="x => x.Name" Title="Název" />
-            <PropertyColumn Property="x => x.Description" Title="Popis" />
-            <PropertyColumn Property="x => x.Id" Title="Identifikátor">
+            <PropertyColumn Property="x => x.Code" Title="@Localizer["DataModels.Code"]" />
+            <PropertyColumn Property="x => x.Name" Title="@Localizer["DataModels.Name"]" />
+            <PropertyColumn Property="x => x.Description" Title="@Localizer["DataModels.Description"]" />
+            <PropertyColumn Property="x => x.Id" Title="@Localizer["DataModels.Identifier"]">
                 <CellTemplate>
                     @context.Item.Id
-                    <MudTooltip Text="Vložit do schránky" Color="Color.Info" Arrow>
+                    <MudTooltip Text="@Localizer["DataModels.CopyToClipboard"]" Color="Color.Info" Arrow>
                         <MudIconButton Icon="@Icons.Material.Filled.ContentCopy"
                                        Color="Color.Primary"
                                        Size="Size.Small"
@@ -47,33 +55,42 @@ else
                     </MudTooltip>
                 </CellTemplate>
             </PropertyColumn>
-            
         </Columns>
         <ChildRowContent>
             <MudPaper Class="pa-6 ma-2" Elevation="2">
-            <MudForm Spacing="4">
-            <MudGrid>
-                <MudItem xs="12" sm="6" md="4" >
-                    <MudField Label="Identifikátor" Variant="Variant.Text">@context.Item.Id</MudField>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="4" >
-                    <MudField Label="Kód" Variant="Variant.Text">@context.Item.Code</MudField>
-                </MudItem>
-            </MudGrid>
-            <MudGrid>
-                <MudItem xs="12" sm="6" md="4" >
-                    <MudField Label="Název" Variant="Variant.Text">@context.Item.Name</MudField>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="4">
-                    <MudField Label="Popis" Variant="Variant.Text">@context.Item.Description</MudField>
-                </MudItem>
-            </MudGrid>
-            <MudGrid>
-                <MudItem xs="12" sm="6" md="4" >
-                    <MudField Label="Poznámky" Variant="Variant.Text">@context.Item.Notes</MudField>
-                </MudItem>
-                <MudItem xs="12" sm="6" md="4" >
-                    <MudField Label="Je Aggregate Root" Variant="Variant.Text">
+                <MudForm Spacing="4">
+                    <MudGrid>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="@Localizer["DataModels.Identifier"]" Variant="Variant.Text">
+                                @context.Item.Id
+                            </MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="@Localizer["DataModels.Code"]" Variant="Variant.Text">
+                                @context.Item.Code
+                            </MudField>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="@Localizer["DataModels.Name"]" Variant="Variant.Text">
+                                @context.Item.Name
+                            </MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="@Localizer["DataModels.Description"]" Variant="Variant.Text">
+                                @context.Item.Description
+                            </MudField>
+                        </MudItem>
+                    </MudGrid>
+                    <MudGrid>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="@Localizer["DataModels.Notes"]" Variant="Variant.Text">
+                                @context.Item.Notes
+                            </MudField>
+                        </MudItem>
+                        <MudItem xs="12" sm="6" md="4">
+                            <MudField Label="@Localizer["DataModels.IsAggregateRoot"]" Variant="Variant.Text">
                                 @if (@context.Item.IsAggregateRoot)
                                 {
                                     <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
@@ -82,16 +99,16 @@ else
                                 {
                                     <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
                                 }
-                    </MudField>
-                </MudItem>
-            </MudGrid>
-            <DataModelFieldWidget Fields="@context.Item.Fields" ShowDetails="@true" />
-            </MudForm>
+                            </MudField>
+                        </MudItem>
+                    </MudGrid>
+                    <DataModelFieldWidget Fields="@context.Item.Fields" ShowDetails="@true" />
+                </MudForm>
             </MudPaper>
         </ChildRowContent>
     </MudDataGrid>
-    
 }
+
 @code
 {
     [Inject] private IJSRuntime JS { get; set; } = default!;
@@ -99,6 +116,6 @@ else
     private async Task CopyToClipboard(string text)
     {
         await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
-        Snackbar.Add($"Zkopírováno do schránky: {text}", Severity.Success);
+        Snackbar.Add(Localizer["DataModels.CopiedToClipboard", text], Severity.Success);
     }
 }

@@ -1,4 +1,6 @@
 ﻿@inherits LayoutComponentBase
+@inject IStringLocalizer<SharedResources> Localizer
+@inject NavigationManager Navigation
 
 <MudThemeProvider Theme="@_theme" IsDarkMode="_isDarkMode" />
 <MudPopoverProvider />
@@ -9,6 +11,10 @@
         <MudIconButton Icon="@Icons.Material.Filled.Menu" Color="Color.Inherit" Edge="Edge.Start" OnClick="@((e) => DrawerToggle())" />
         <MudText Typo="Typo.h5" Class="ml-3">Application</MudText>
         <MudSpacer />
+        <MudMenu Icon="@Icons.Material.Filled.Language" Color="Color.Inherit" AnchorOrigin="Origin.BottomRight">
+            <MudMenuItem OnClick="@(() => SetCulture("cs"))">Čeština</MudMenuItem>
+            <MudMenuItem OnClick="@(() => SetCulture("en"))">English</MudMenuItem>
+        </MudMenu>
         <MudIconButton Icon="@(DarkLightModeButtonIcon)" Color="Color.Inherit" OnClick="@DarkModeToggle" />
         <MudIconButton Icon="@Icons.Material.Filled.MoreVert" Color="Color.Inherit" Edge="Edge.End" />
     </MudAppBar>
@@ -19,7 +25,6 @@
         @Body
     </MudMainContent>
 </MudLayout>
-
 
 <div id="blazor-error-ui" data-nosnippet>
     An unhandled error has occurred.
@@ -42,6 +47,13 @@
             PaletteDark = _darkPalette,
             LayoutProperties = new LayoutProperties()
         };
+    }
+
+    private void SetCulture(string culture)
+    {
+        var uri = new Uri(Navigation.Uri).GetComponents(UriComponents.PathAndQuery, UriFormat.Unescaped);
+        var query = $"?culture={Uri.EscapeDataString(culture)}&redirectUri={Uri.EscapeDataString(uri)}";
+        Navigation.NavigateTo($"/Culture/Set{query}", forceLoad: true);
     }
 
     private void DrawerToggle()
