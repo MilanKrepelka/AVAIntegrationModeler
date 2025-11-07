@@ -324,4 +324,50 @@ public class IntegrationDataProvider : IIntegrationDataProvider
       }
     );
   }
+
+  /// <inheritdoc/>
+  public async Task<IEnumerable<IntegrationMapSummaryDTO>> GetIntegrationMapSummaryAsync(CancellationToken ct = default)
+  {
+    string tenantId = _runtimeContext?.Security?.TenantId!;
+    if (string.IsNullOrEmpty(tenantId))
+    {
+      tenantId = _avaPlaceOptions.Value.TenantId;
+    }
+
+    return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<IntegrationMapSummaryDTO>>(
+      _serviceProvider,
+      tenantId,
+      async client =>
+      {
+        List<IntegrationMapSummaryDTO> integrationMap = new List<IntegrationMapSummaryDTO>();
+        // Replace with actual logic to get features, e.g.:
+        var dataServiceResult = await client.IntegrationMaps.GetMapsAsync(
+
+         new ASOL.DataService.Contracts.Filters.IntegrationMapFilter()
+         {
+           // Add any necessary filter criteria here
+         },
+          new ASOL.Core.Paging.Contracts.Filters.PagingFilter()
+          {
+            Offset = 0,
+            Limit = int.MaxValue
+          },
+          new ASOL.Core.Domain.Contracts.BaseEntityFilter()
+          {
+            Released = true,
+            Deleted = false,
+          },
+         ct);
+
+        if (dataServiceResult != null && dataServiceResult.Any())
+        {
+          foreach (var dataModel in dataServiceResult)
+          {
+            integrationMap.Add(Mapping.IntegrationMapMapper.MapToSummaryDTO(dataModel));
+          }
+        }
+        return integrationMap;
+      }
+    );
+  }
 }

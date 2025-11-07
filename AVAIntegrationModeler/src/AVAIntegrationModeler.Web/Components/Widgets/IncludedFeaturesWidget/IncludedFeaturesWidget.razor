@@ -1,18 +1,18 @@
-@using AVAIntegrationModeler.Contracts.DTO
+ï»¿@using AVAIntegrationModeler.Contracts.DTO
 @using AVAIntegrationModeler.Web.Components.Widgets.IncludedFeatureWidget
 
-<MudText Typo="Typo.h6" Class="mb-3">Zahrnuté featury</MudText>
+<MudText Typo="Typo.h6" Class="mb-3">Zahrnutï¿½ featury</MudText>
 
 @if (Features == null || !Features.Any())
 {
-    <MudText Typo="Typo.body2" Color="Color.Secondary">Žádné zahrnuté featury</MudText>
+    <MudText Typo="Typo.body2" Color="Color.Secondary">ï¿½ï¿½dnï¿½ zahrnutï¿½ featury</MudText>
 }
 else
 {
     <MudDataGrid Items="@Features" Dense="true" Hover="true" >
         <Columns>
             <PropertyColumn Property="x => x.Feature.Code" 
-                            Title="Kód"
+                            Title="Kï¿½d"
                             CellClass="included-features-widget-code-column"
                             HeaderClass="included-features-widget-code-column" />
             <PropertyColumn Property="x => x.ConsumeOnly" Title="Pouze konzumace">

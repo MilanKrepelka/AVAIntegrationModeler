@@ -4,6 +4,7 @@ using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.Infrastructure.Data.Queries;
 using AVAIntegrationModeler.Infrastructure.Infrastructure.Data;
 using AVAIntegrationModeler.UseCases.Contributors.List;
+using AVAIntegrationModeler.UseCases.IntegrationMaps.List;
 using AVAIntegrationModeler.UseCases.Scenarios.List;
 
 
@@ -20,6 +21,7 @@ public static class InfrastructureServiceExtensions
             .AddScoped<IListScenariosQueryService, ListScenariosQueryService>()
             .AddScoped<UseCases.Features.List.IListFeaturesQueryService, ListFeaturesQueryService>()
             .AddScoped<UseCases.DataModels.List.IListDataModelQueryService, ListDataModelsQueryService>()
+            .AddScoped<UseCases.IntegrationMaps.List.IListIntegrationMapsQueryService, ListIntegrationMapsQueryService>()
             .AddScoped<IDeleteContributorService, DeleteContributorService>();
 
     logger.LogInformation("{Project} services registered", "Infrastructure");

@@ -55,6 +55,21 @@ public class IntegrationDataProvider : TestBed<Fixtures.AVAPlaceDemoFixture>
   }
 
   /// <summary>
+  /// Test který načte integrační mapy
+  /// </summary>
+  /// <returns></returns>
+  [Fact]
+  public async Task GetIntegrationMapSummaryAsync()
+  {
+    var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
+
+    var result = await integrationDataProvider.GetIntegrationMapSummaryAsync(CancellationToken.None);
+    result.ShouldNotBeNull();
+    result.ShouldNotBeEmpty();
+  }
+
+
+  /// <summary>
   /// Test který načte integrační feature.
   /// </summary>
   /// <returns></returns>

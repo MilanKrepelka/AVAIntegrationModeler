@@ -1,19 +1,19 @@
-@using AVAIntegrationModeler.Contracts.DTO
+ï»¿@using AVAIntegrationModeler.Contracts.DTO
 @using AVAIntegrationModeler.Web.Components.Widgets.IncludedModelWidget
 
-<MudText Typo="Typo.h6" Class="mb-3">Zahrnuté modely</MudText>
+<MudText Typo="Typo.h6" Class="mb-3">Zahrnutï¿½ modely</MudText>
 
 @if (Models == null || !Models.Any())
 {
-    <MudText Typo="Typo.body2" Color="Color.Secondary">Žádné zahrnuté modely</MudText>
+    <MudText Typo="Typo.body2" Color="Color.Secondary">ï¿½ï¿½dnï¿½ zahrnutï¿½ modely</MudText>
 }
 else
 {
     <MudDataGrid Items="@Models" Dense="true" Hover="true" >
             <Columns>
-            <PropertyColumn Property="x => x.DataModel.Code" Title="Kód" CellClass="included-models-widget-code-column" HeaderClass="included-models-widget-code-column" />
+            <PropertyColumn Property="x => x.DataModel.Code" Title="Kï¿½d" CellClass="included-models-widget-code-column" HeaderClass="included-models-widget-code-column" />
                             
-            <PropertyColumn Property="x => x.ReadOnly" Title="Pouze ètení" >
+            <PropertyColumn Property="x => x.ReadOnly" Title="Pouze ï¿½tenï¿½" >
                     <CellTemplate>
                     @if (@context.Item.ReadOnly)
                     {

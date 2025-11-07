@@ -1,25 +1,25 @@
-@using AVAIntegrationModeler.Contracts.DTO
+ï»¿@using AVAIntegrationModeler.Contracts.DTO
 
 <MudPaper Class="pa-4" Elevation="0">
     <MudGrid>
         <MudItem xs="12" sm="6" md="4">
-            <MudField Label="Kód" Variant="Variant.Text">@Feature.Feature.Code</MudField>
+            <MudField Label="Kï¿½d" Variant="Variant.Text">@Feature.Feature.Code</MudField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudField Label="Název (EN)" Variant="Variant.Text">@Feature.Feature.Code</MudField>
+            <MudField Label="Nï¿½zev (EN)" Variant="Variant.Text">@Feature.Feature.Code</MudField>
         </MudItem>
         <MudItem xs="12" sm="6" md="4">
-            <MudField Label="Název (CZ)" Variant="Variant.Text">@Feature.Feature.Code</MudField>
+            <MudField Label="Nï¿½zev (CZ)" Variant="Variant.Text">@Feature.Feature.Code</MudField>
         </MudItem>
         <MudItem xs="12">
-            <MudField Label="Režim pøístupu" Variant="Variant.Text">
+            <MudField Label="Reï¿½im pï¿½ï¿½stupu" Variant="Variant.Text">
                 @if (Feature.ConsumeOnly)
                 {
                     <MudChip T="string" Icon="@Icons.Material.Filled.Visibility" Color="Color.Warning" Size="Size.Small">Pouze konzumace</MudChip>
                 }
                 else
                 {
-                    <MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Success" Size="Size.Small">Plný pøístup</MudChip>
+                    <MudChip T="string" Icon="@Icons.Material.Filled.Edit" Color="Color.Success" Size="Size.Small">Plnï¿½ pï¿½ï¿½stup</MudChip>
                 }
             </MudField>
         </MudItem>

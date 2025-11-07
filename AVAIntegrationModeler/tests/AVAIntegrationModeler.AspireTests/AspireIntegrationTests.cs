@@ -1,4 +1,4 @@
-namespace AVAIntegrationModeler.AspireTests.Tests;
+﻿namespace AVAIntegrationModeler.AspireTests.Tests;
 
 public class AspireIntegrationTests
 {

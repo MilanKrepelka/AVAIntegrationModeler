@@ -49,4 +49,12 @@ public interface IIntegrationDataProvider
   /// <param name="ct">Token pro zrušení operace.</param>
   /// <returns>Úloha reprezentující asynchronní operaci. Výsledek úlohy obsahuje <see cref="IEnumerable{T}"/> objektů <see cref="DataModelSummaryDTO"/> reprezentujících souhrnné informace o datových modelech.</returns>
   Task<IEnumerable<DataModelSummaryDTO>> GetDataModelsSummaryAsync(CancellationToken ct = default);
+
+  /// <summary>
+  /// Asynchronně získá kolekci souhrnných informací o integračních mapách.
+  /// </summary>
+  /// <remarks>Tato metoda získá seznam souhrnných informací o integračních mapách, které mohou být použity pro zobrazení v seznamech nebo pro rychlý přehled. Operace podporuje zrušení pomocí zadaného <see cref="CancellationToken"/>.</remarks>
+  /// <param name="ct">Token pro zrušení operace.</param>
+  /// <returns>Úloha reprezentující asynchronní operaci. Výsledek úlohy obsahuje <see cref="IEnumerable{T}"/> objektů <see cref="IntegrationMapSummaryDTO"/> reprezentujících souhrnné informace o integračních mapách.</returns>
+  Task<IEnumerable<IntegrationMapSummaryDTO>> GetIntegrationMapSummaryAsync(CancellationToken ct = default);
 }
