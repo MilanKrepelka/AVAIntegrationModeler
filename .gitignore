@@ -83,3 +83,6 @@
 /AVAIntegrationModeler/src/AVAIntegrationModeler.Web.Test/bin/Debug/net9.0
 /AVAIntegrationModeler/src/AVAIntegrationModeler.Web.Test/obj/Debug/net9.0
 /AVAIntegrationModeler/src/AVAIntegrationModeler.Web.Test/obj
+/AVAIntegrationModeler/src/AVAIntegrationModeler.Web.SyncfusionApp/bin/Debug/net9.0
+/AVAIntegrationModeler/src/AVAIntegrationModeler.Web.SyncfusionApp/obj
+/AVAIntegrationModeler/src/AVAIntegrationModeler.Web.SyncfusionApp/AVAIntegrationModeler.Web.SyncfusionApp.csproj.user
