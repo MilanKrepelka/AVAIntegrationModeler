@@ -39,6 +39,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Docs", "Docs", "{02EA681E-C
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVAIntegrationModeler.Web.Test", "src\AVAIntegrationModeler.Web.Test\AVAIntegrationModeler.Web.Test.csproj", "{BAD61573-5AA1-4A6D-99BC-877B6B50D822}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AVAIntegrationModeler.Web.SyncfusionApp", "src\AVAIntegrationModeler.Web.SyncfusionApp\AVAIntegrationModeler.Web.SyncfusionApp.csproj", "{70A1FB33-8B53-4F18-81E8-8219C6C0BE6C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -97,6 +99,10 @@ Global
 		{BAD61573-5AA1-4A6D-99BC-877B6B50D822}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAD61573-5AA1-4A6D-99BC-877B6B50D822}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAD61573-5AA1-4A6D-99BC-877B6B50D822}.Release|Any CPU.Build.0 = Release|Any CPU
+		{70A1FB33-8B53-4F18-81E8-8219C6C0BE6C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{70A1FB33-8B53-4F18-81E8-8219C6C0BE6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{70A1FB33-8B53-4F18-81E8-8219C6C0BE6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{70A1FB33-8B53-4F18-81E8-8219C6C0BE6C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

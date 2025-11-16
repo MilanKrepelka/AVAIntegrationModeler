@@ -1,0 +1,47 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net9.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+<ItemGroup>
+	  <PackageReference Include="Ardalis.GuardClauses" />
+	  <PackageReference Include="Syncfusion.Blazor.Grid" />
+    <PackageReference Include="Syncfusion.Blazor.TreeGrid" />
+    <PackageReference Include="Syncfusion.Blazor.Diagram" />
+    <PackageReference Include="Syncfusion.Blazor.DropDowns" />
+    <PackageReference Include="Syncfusion.Blazor.MultiColumnComboBox" />
+    <PackageReference Include="Syncfusion.Blazor.Navigations" />
+    <PackageReference Include="Syncfusion.Blazor.Lists" />
+    <PackageReference Include="Syncfusion.Blazor.Popups" />
+    <PackageReference Include="Syncfusion.Blazor.Layouts" />
+    <PackageReference Include="Syncfusion.Blazor.Buttons" />
+    <PackageReference Include="Syncfusion.Blazor.Inputs" />
+    <PackageReference Include="Syncfusion.Blazor.FileManager" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+    <PackageReference Include="Syncfusion.Blazor.Ribbon" />
+    <PackageReference Include="Syncfusion.Blazor.SplitButtons" />
+    <PackageReference Include="Syncfusion.Blazor.Notifications" />
+    <PackageReference Include="Syncfusion.Blazor.Spinner" />
+    <PackageReference Include="Syncfusion.Blazor.DataForm" />
+    <PackageReference Include="Syncfusion.Blazor.Themes" />
+</ItemGroup>
+<ItemGroup>
+  <Content Update="wwwroot\app-theme-ava.css">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+</ItemGroup>
+<ItemGroup>
+  <Folder Include="Components\Pages\Syncfusion\" />
+  <Folder Include="ViewModels\Scenarios\" />
+</ItemGroup>
+<ItemGroup>
+  <ProjectReference Include="..\AVAIntegrationModeler.API\AVAIntegrationModeler.API.csproj" />
+  <ProjectReference Include="..\AVAIntegrationModeler.Contracts\AVAIntegrationModeler.Contracts.csproj" />
+  <ProjectReference Include="..\AVAIntegrationModeler.Domain\AVAIntegrationModeler.Domain.csproj" />
+</ItemGroup>
+
+  
+
+</Project>

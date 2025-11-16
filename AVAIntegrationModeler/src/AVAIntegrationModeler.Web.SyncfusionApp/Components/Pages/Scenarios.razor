@@ -1,0 +1,60 @@
+﻿@page "/scenarios"
+@rendermode InteractiveServer
+@using Syncfusion.Blazor.Grids
+@using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
+
+<PageTitle>Integrační scénáře</PageTitle>
+
+<div id = "ControlRegion">
+    <SfGrid ID="Grid" 
+        DataSource="@ScenariosList" 
+        @ref="Grid"
+        AllowPaging="true"
+        AllowFiltering="true"
+        AllowSorting="true"
+        AllowResizing="true"
+        AllowSelection="true"
+        Toolbar="@(new List<string>() { "Search"})">
+
+        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+        <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" Mode="Syncfusion.Blazor.Grids.EditMode.Normal"></GridEditSettings>
+        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
+        <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
+        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+        <GridEvents OnToolbarClick="ToolbarClick" TValue="ScenarioListViewModel"></GridEvents>
+        <GridColumns>
+            <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
+            <GridColumn Field=@nameof(ScenarioListViewModel.Code) HeaderText="Kód" Width="120"></GridColumn>
+            <GridColumn Field=@nameof(ScenarioListViewModel.EnglishName) HeaderText="Název" Width="200"></GridColumn>
+            <GridColumn Field=@nameof(ScenarioListViewModel.EnglishDescription) HeaderText="Popis" Width="250"></GridColumn>
+            <GridColumn Field=@nameof(ScenarioListViewModel.InputFeatureCode) HeaderText="Vstupní feature" Width="150"></GridColumn>
+            <GridColumn Field=@nameof(ScenarioListViewModel.OutputFeatureCode) HeaderText="Výstupní feature" Width="150"></GridColumn>
+            <GridColumn Field=@nameof(ScenarioListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="250" Visible="false"></GridColumn>
+        </GridColumns>
+    </SfGrid>
+</div>
+
+@code{
+    
+    SfGrid<ScenarioListViewModel>? Grid;
+   
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "Grid_excelexport")
+        {
+                //this.Grid?.ExportToExcelAsync();
+        }
+    }
+    
+}
+
+@code
+{
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    private async Task CopyToClipboard(string text)
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
+        //Snackbar.Add($"Zkopírováno do schránky: {text}", Severity.Success);
+    }
+}
