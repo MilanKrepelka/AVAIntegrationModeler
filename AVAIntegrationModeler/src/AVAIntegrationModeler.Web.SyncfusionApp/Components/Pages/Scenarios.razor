@@ -25,12 +25,13 @@
         <GridColumns>
             <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
             <GridColumn Field=@nameof(ScenarioListViewModel.Code) HeaderText="Kód" Width="120"></GridColumn>
-            <GridColumn Field=@nameof(ScenarioListViewModel.EnglishName) HeaderText="Název" Width="200"></GridColumn>
-            <GridColumn Field=@nameof(ScenarioListViewModel.EnglishDescription) HeaderText="Popis" Width="250"></GridColumn>
-            <GridColumn Field=@nameof(ScenarioListViewModel.InputFeatureCode) HeaderText="Vstupní feature" Width="150"></GridColumn>
-            <GridColumn Field=@nameof(ScenarioListViewModel.OutputFeatureCode) HeaderText="Výstupní feature" Width="150"></GridColumn>
-            <GridColumn Field=@nameof(ScenarioListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="250" Visible="false"></GridColumn>
+            <GridColumn Field="Name.EnglishValue" HeaderText="Název" Width="200"></GridColumn>
+            <GridColumn Field="Description.EnglishValue" HeaderText="Popis" Width="250"></GridColumn>
+            <GridColumn Field="InputFeature.Code" HeaderText="Vstupní feature" Width="150"></GridColumn>
+            <GridColumn Field="OutputFeature.Code" HeaderText="Výstupní feature" Width="150"></GridColumn>
+            <GridColumn Field=@nameof(ScenarioListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="250" Visible="true"></GridColumn>
         </GridColumns>
+
     </SfGrid>
 </div>
 

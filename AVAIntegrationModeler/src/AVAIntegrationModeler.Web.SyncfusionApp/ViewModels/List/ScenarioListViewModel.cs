@@ -1,5 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using AVAIntegrationModeler.Contracts.DTO;
+﻿using AVAIntegrationModeler.Contracts.DTO;
 
 namespace AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 
@@ -21,23 +20,22 @@ public class ScenarioListViewModel
   /// <summary>
   /// Lokalizovaný název scénáře (např. v češtině a angličtině).
   /// </summary>
-  public string EnglishName { get; init; } = string.Empty;
-  
+  public LocalizedValue Name { get; init; } = new();
 
   /// <summary>
   /// Lokalizovaný popis scénáře (např. v češtině a angličtině).
   /// </summary>
-  public string EnglishDescription { get; init; } = string.Empty;
+  public LocalizedValue Description { get; init; } = new();
   
   /// <summary>
   /// Vstupní feature scénáře.
   /// </summary>
-  public string InputFeatureCode { get; set; } = string.Empty;
-
+  public List.FeatureListViewModel InputFeature { get; set; } = List.FeatureListViewModel.Empty;
+  
   /// <summary>
   /// Výstupní feature scénáře.
   /// </summary>
-  public string OutputFeatureCode { get; set; } = string.Empty;
+  public List.FeatureListViewModel OutputFeature { get; set; } = List.FeatureListViewModel.Empty;
 
   /// <summary>
   /// Příznak, že se v Gridu bude zobrazovat detail <see cref="ScenarioListViewModel"/>

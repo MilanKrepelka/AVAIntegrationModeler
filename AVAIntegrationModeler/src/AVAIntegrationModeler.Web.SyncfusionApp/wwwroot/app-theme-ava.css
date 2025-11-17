@@ -7,6 +7,11 @@ html, body {
     inherits: false;
     initial-value: #f6f9f9;
 }
+@property --super-light-bg-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: white;
+}
 
 @property --component-bg-color {
     syntax: "<color>";

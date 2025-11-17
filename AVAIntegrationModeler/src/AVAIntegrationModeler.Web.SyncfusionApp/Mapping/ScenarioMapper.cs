@@ -14,7 +14,7 @@ public static class ScenarioMapper
   /// </summary>
   /// <param name="dto">Zdrojový DTO objekt scénáře.</param>
   /// <returns><see cref="ScenarioListViewModel"/> nebo null, pokud je vstup null.</returns>
-  public static ScenarioListViewModel? MapToScenarioListViewModel(ScenarioDTO dto)
+  public static ScenarioListViewModel? MapToScenarioListViewModel(ScenarioDTO? dto)
   {
     if (dto == default) return default;
 
@@ -22,14 +22,14 @@ public static class ScenarioMapper
     {
       Id = dto.Id,
       Code = dto.Code,
-      EnglishName = dto?.Name?.EnglishValue ?? string.Empty,
-      EnglishDescription = dto?.Description?.EnglishValue ?? string.Empty,
-      InputFeatureCode = dto?.InputFeatureSummary != null
-        ? dto.InputFeatureSummary.Code
-        : string.Empty,
-      OutputFeatureCode = dto?.OutputFeatureSummary != null
-        ? dto.OutputFeatureSummary.Code
-        : string.Empty,
+      Name = dto.Name,
+      Description = dto.Description,
+      InputFeature = dto.InputFeatureSummary != null 
+        ? MapFeatureSummaryToViewModel(dto.InputFeatureSummary)
+        : FeatureListViewModel.Empty,
+      OutputFeature = dto.OutputFeatureSummary != null
+        ? MapFeatureSummaryToViewModel(dto.OutputFeatureSummary)
+        : FeatureListViewModel.Empty
     };
 
     return result;

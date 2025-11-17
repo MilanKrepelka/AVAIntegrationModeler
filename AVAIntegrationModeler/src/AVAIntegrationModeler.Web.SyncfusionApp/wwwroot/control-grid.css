@@ -1,0 +1,40 @@
+﻿.e-grid {
+    background-color:red;
+}
+    .e-grid .e-toolbar-items {
+        background-color: var(--super-light-bg-color);
+    }
+    .e-grid .e-gridheader {
+        background-color: var(--super-light-bg-color);
+    }
+    .e-grid .e-headercell {
+        background-color: var(--super-light-bg-color);
+    }
+    .e-grid .e-filterbarcell {
+        background-color: var(--super-light-bg-color);
+    }
+
+.e-grid .e-row {
+    background-color: var(--super-light-bg-color);
+}
+    .e-grid .e-headercontent {
+        background-color: var(--super-light-bg-color);
+    }
+
+    .e-grid .e-row:hover .e-rowcell {
+        background-color: red !important;
+    }
+
+    /*
+    .e-grid .e-rowcell.e-selectionbackground {
+    
+    }
+
+    .e-grid .e-row.e-altrow {
+    
+    }
+
+    .e-grid .e-row {
+    
+    }
+*/

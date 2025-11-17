@@ -9,6 +9,9 @@ a, .btn-link {
     a:hover, .btn-link {
         color: var(--font-color);
     }
+.nav-link {
+    color: var(--font-color);
+}
 
 
 .btn-primary {

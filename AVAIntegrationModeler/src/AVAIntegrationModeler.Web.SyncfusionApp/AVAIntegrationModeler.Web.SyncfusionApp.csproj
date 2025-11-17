@@ -31,6 +31,12 @@
   <Content Update="wwwroot\app-theme-ava.css">
     <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
   </Content>
+  <Content Update="wwwroot\control-checkbox.css">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
+  <Content Update="wwwroot\control-grid.css">
+    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+  </Content>
 </ItemGroup>
 <ItemGroup>
   <Folder Include="Components\Pages\Syncfusion\" />
