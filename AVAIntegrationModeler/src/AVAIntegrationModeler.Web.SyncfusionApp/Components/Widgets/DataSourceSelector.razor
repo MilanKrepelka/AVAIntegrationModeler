@@ -1,0 +1,24 @@
+@* 
+PSEUDOCODE / PLAN (detailed):
+1. Create a reusable Blazor component that encapsulates the datasource radio buttons UI.
+2. Expose a bindable parameter `Selected` (string) so parent can do two-way binding: `bind-Selected`.
+3. Provide an `EventCallback<string> SelectedChanged` (automatically used for bind-Selected) and an optional `EventCallback<string> OnChanged` for additional handling.
+4. Keep an internal `_checked` string that is initialized from `Selected` in `OnParametersSet`.
+5. Render two `SfRadioButton` controls:
+   - Each has `Label`, `Name="options"`, `Value` ("Database" and "AVAPlace").
+   - Bind the radio buttons' checked state to `_checked` using `@bind-Checked`.
+   - Listen to `@onchange` and forward the new value to `SelectedChanged` and `OnChanged`.
+6. Provide a public parameter `LabelText` to allow changing the label text (default "Zdroj dat:").
+7. Provide optional `CssClass` parameter to allow styling/overrides.
+8. Include local styles for layout similar to original.
+9. Keep implementation minimal and safe for use in the existing Scenarios.razor page.
+*@
+
+@using Syncfusion.Blazor.Buttons
+@using Microsoft.AspNetCore.Components
+
+<div class="datasource-selector @CssClass">
+    <span class="e-label">@(LabelText ?? "Zdroj dat:")</span>
+    <SfRadioButton Label="Databáze" Name="options" Value="Database" @bind-Checked="_checked" @onchange="OnRadioChanged"></SfRadioButton>
+    <SfRadioButton Label="AVA Place" Name="options" Value="AVAPlace" @bind-Checked="_checked" @onchange="OnRadioChanged"></SfRadioButton>
+</div>

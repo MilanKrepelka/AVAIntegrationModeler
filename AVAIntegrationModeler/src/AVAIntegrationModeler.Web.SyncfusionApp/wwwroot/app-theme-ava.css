@@ -1,7 +1,4 @@
-html, body {
-    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-    color: black;
-}
+
 @property --main-bg-color {
     syntax: "<color>";
     inherits: false;
@@ -38,10 +35,21 @@ html, body {
     inherits: false;
     initial-value: #A1BFC7;
 }
+@property --border-main-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #dee2e6;
+}
 
 /* Barva specifická pro aplikaci - pro AVA je to AVA taková tyrkysová  */
 @property --app-specific-color {
     syntax: "<color>";
     inherits: false;
     initial-value: #3eced0;
+}
+/* Barva specifická pro aplikaci - svìtlejší varianta */
+@property --app-specific-light-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #7fdee0;
 }

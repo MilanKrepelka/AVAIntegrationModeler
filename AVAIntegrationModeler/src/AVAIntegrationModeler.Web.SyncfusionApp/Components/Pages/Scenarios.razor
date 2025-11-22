@@ -1,11 +1,17 @@
 ﻿@page "/scenarios"
 @rendermode InteractiveServer
+@using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
+@using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.DropDowns
 @using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 
 <PageTitle>Integrační scénáře</PageTitle>
 
-<div id = "ControlRegion">
+<div id="ControlRegion">
+    <DataSourceSelector @bind-Selected="SelectedDataSource" OnChanged="@HandleDataSourceChange" LabelText="Zdroj dat:"></DataSourceSelector>
+
     <SfGrid ID="Grid" 
         DataSource="@ScenariosList" 
         @ref="Grid"
@@ -17,7 +23,7 @@
         Toolbar="@(new List<string>() { "Search"})">
 
         <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-        <GridEditSettings AllowAdding="false" AllowEditing="false" AllowDeleting="false" Mode="Syncfusion.Blazor.Grids.EditMode.Normal"></GridEditSettings>
+        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Grids.EditMode.Normal"></GridEditSettings>
         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
         <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
@@ -29,33 +35,118 @@
             <GridColumn Field="Description.EnglishValue" HeaderText="Popis" Width="250"></GridColumn>
             <GridColumn Field="InputFeature.Code" HeaderText="Vstupní feature" Width="150"></GridColumn>
             <GridColumn Field="OutputFeature.Code" HeaderText="Výstupní feature" Width="150"></GridColumn>
-            <GridColumn Field=@nameof(ScenarioListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="250" Visible="true"></GridColumn>
+            <GridColumn Field=@nameof(ScenarioListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="250" Visible="false"></GridColumn>
         </GridColumns>
+        
+        <GridTemplates>
+            <DetailTemplate>
+                @{
+
+                    var scenario = (context as ScenarioListViewModel);
+                    <div class="detail-form">
+                        <h4>@scenario!.Code</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Kód:</label>
+                                <SfTextBox Value="@scenario.Code" Placeholder="Kód scénáře"></SfTextBox>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>ID:</label>
+                                <SfTextBox Value="@scenario.Id.ToString()" Readonly="true"></SfTextBox>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Název (Česky):</label>
+                                <SfTextBox Value="@scenario.Name.CzechValue" Placeholder="Český název"></SfTextBox>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Název (English):</label>
+                                <SfTextBox Value="@scenario.Name.EnglishValue" Placeholder="English name"></SfTextBox>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label>Popis (Česky):</label>
+                                <SfTextBox @bind-Value="scenario.Description.CzechValue" Placeholder="Český popis" Multiline="true"></SfTextBox>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label>Popis (English):</label>
+                                <SfTextBox @bind-Value="scenario.Description.EnglishValue" Placeholder="English description" Multiline="true"></SfTextBox>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Vstupní feature:</label>
+                                <SfTextBox Value="@scenario.InputFeature.Code" Readonly="true"></SfTextBox>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Výstupní feature:</label>
+                                <SfTextBox Value="@scenario.OutputFeature.Code" Readonly="true"></SfTextBox>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </DetailTemplate>
+        </GridTemplates>
 
     </SfGrid>
 </div>
 
-@code{
-    
-    SfGrid<ScenarioListViewModel>? Grid;
+<style>
    
+
+    .datasource-selector {
+        display: flex;
+        gap: 20px;
+        align-items: center;
+        margin-bottom: 15px;
+        padding: 10px;
+        border: 1px solid var(--border-main-color);
+    }
+</style>
+
+@code
+{
+
+    SfGrid<ScenarioListViewModel>? Grid;
+
     public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
         if (args.Item.Id == "Grid_excelexport")
         {
-                //this.Grid?.ExportToExcelAsync();
+            //this.Grid?.ExportToExcelAsync();
         }
     }
-    
-}
 
-@code
-{
+   
+
+    private string SelectedDataSource = "Database";
+
+    private async Task HandleDataSourceChange(Contracts.Datasource newValue)
+    {
+        this.Datasource = newValue;
+        await LoadItemsAsync();
+        await Grid!.Refresh();
+    }
+
+    
+
     [Inject] private IJSRuntime JS { get; set; } = default!;
 
     private async Task CopyToClipboard(string text)
     {
         await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
-        //Snackbar.Add($"Zkopírováno do schránky: {text}", Severity.Success);
     }
+
 }

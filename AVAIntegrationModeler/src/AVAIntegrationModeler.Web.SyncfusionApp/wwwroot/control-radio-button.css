@@ -1,0 +1,29 @@
+﻿/* Syncfusion RadioButton checked state styling */
+.e-radio-wrapper .e-radio:checked + label::before {
+    background-color: var(--app-specific-color) !important;
+    border-color: var(--app-specific-color) !important;
+}
+
+.e-radio-wrapper .e-radio:checked + label::after {
+    background-color: var(--app-specific-color) !important;
+}
+
+.e-radio-wrapper .e-radio:checked:focus + label::before {
+    border-color: var(--app-specific-color) !important;
+    box-shadow: 0 0 0 2px var(--app-specific-color) !important;
+}
+
+.e-radio-wrapper .e-radio:checked:hover + label::before {
+    background-color: var(--app-specific-color) !important;
+    border-color: var(--app-specific-color) !important;
+}
+
+/* Inner dot */
+.e-radio-wrapper .e-radio:checked + label .e-ripple-container {
+    background-color: var(--app-specific-color) !important;
+}
+
+/* Red focus ring around checked radio button */
+.e-radio-wrapper .e-radio:focus:checked + label::before {
+    box-shadow: 0 0 0 2px var(--app-specific-light-color) !important;
+}

@@ -1,6 +1,27 @@
 ﻿.e-grid {
     background-color:red;
 }
+    /* Barva vybraného řádku */
+    .e-grid .e-row.e-selectionbackground,
+    .e-grid .e-row.e-active {
+        background-color: red!important; /* Světle modrá */
+    }
+
+    /* Barva vybrané buňky */
+    .e-grid .e-rowcell.e-selectionbackground {
+        background-color: red !important; /* Světlejší modrá */
+    }
+
+    /* Hover efekt na vybraném řádku */
+    .e-grid .e-row.e-selectionbackground:hover {
+        background-color: red !important;
+    }
+
+    /* Barva textu ve vybraném řádku */
+    .e-grid .e-row.e-selectionbackground .e-rowcell {
+        color: red !important;
+    }
+
     .e-grid .e-toolbar-items {
         background-color: var(--super-light-bg-color);
     }
