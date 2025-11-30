@@ -5,6 +5,7 @@
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Notifications
 @using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 
 <PageTitle>Integrační scénáře</PageTitle>
@@ -15,6 +16,7 @@
     <SfGrid ID="Grid" 
         DataSource="@ScenariosList" 
         @ref="Grid"
+        EnableAltRow="false"
         AllowPaging="true"
         AllowFiltering="true"
         AllowSorting="true"
@@ -26,22 +28,39 @@
         <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Grids.EditMode.Normal"></GridEditSettings>
         <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
         <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
-        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"></GridSelectionSettings>
+        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple" 
+                               Mode="Syncfusion.Blazor.Grids.SelectionMode.Row">
+        </GridSelectionSettings>
         <GridEvents OnToolbarClick="ToolbarClick" TValue="ScenarioListViewModel"></GridEvents>
         <GridColumns>
             <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
             <GridColumn Field=@nameof(ScenarioListViewModel.Code) HeaderText="Kód" Width="120"></GridColumn>
             <GridColumn Field="Name.EnglishValue" HeaderText="Název" Width="200"></GridColumn>
-            <GridColumn Field="Description.EnglishValue" HeaderText="Popis" Width="250"></GridColumn>
+            <GridColumn Field="Description.EnglishValue" HeaderText="Popis" Width="250" Visible="false"></GridColumn>
             <GridColumn Field="InputFeature.Code" HeaderText="Vstupní feature" Width="150"></GridColumn>
             <GridColumn Field="OutputFeature.Code" HeaderText="Výstupní feature" Width="150"></GridColumn>
-            <GridColumn Field=@nameof(ScenarioListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="250" Visible="false"></GridColumn>
+            <GridColumn Field=@nameof(ScenarioListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="true">
+                <Template>
+                    @{
+
+                        var scenario = (context as ScenarioListViewModel);
+                        <div class="id-cell-container">
+                            <span class="id-text">@scenario!.Id.ToString()</span>
+                            <SfButton CssClass="e-small e-round copy-icon-button"
+                                      IconCss="e-icons e-copy"
+                                      IsPrimary="false"
+                                      OnClick="@(() => CopyToClipboard(scenario.Id.ToString()))"
+                                      title="Kopírovat ID do schránky">
+                            </SfButton>
+                        </div>
+                    }
+                </Template>
+            </GridColumn>
         </GridColumns>
         
         <GridTemplates>
             <DetailTemplate>
                 @{
-
                     var scenario = (context as ScenarioListViewModel);
                     <div class="detail-form">
                         <h4>@scenario!.Code</h4>
@@ -54,26 +73,33 @@
                             
                             <div class="form-group">
                                 <label>ID:</label>
-                                <SfTextBox Value="@scenario.Id.ToString()" Readonly="true"></SfTextBox>
+                                <div class="input-with-button">
+                                    <SfTextBox Value="@scenario.Id.ToString()" Readonly="true" CssClass="id-textbox"></SfTextBox>
+                                    <SfButton CssClass="e-small copy-button" 
+                                              IconCss="e-icons e-copy" 
+                                              OnClick="@(() => CopyToClipboard(scenario.Id.ToString()))"
+                                              Content="Kopírovat">
+                                    </SfButton>
+                                </div>
                             </div>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Název (Česky):</label>
-                                <SfTextBox Value="@scenario.Name.CzechValue" Placeholder="Český název"></SfTextBox>
+                                <SfTextBox Value="@scenario.Name.CzechValue" Placeholder="Český název" Readonly="true"></SfTextBox>
                             </div>
                             
                             <div class="form-group">
                                 <label>Název (English):</label>
-                                <SfTextBox Value="@scenario.Name.EnglishValue" Placeholder="English name"></SfTextBox>
+                                <SfTextBox Value="@scenario.Name.EnglishValue" Placeholder="English name" Readonly="true"></SfTextBox>
                             </div>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group full-width">
                                 <label>Popis (Česky):</label>
-                                <SfTextBox @bind-Value="scenario.Description.CzechValue" Placeholder="Český popis" Multiline="true"></SfTextBox>
+                                <SfTextBox @bind-Value="scenario.Description.CzechValue" Placeholder="Český popis" Multiline="true" Readonly="true"></SfTextBox>
                             </div>
                         </div>
                         
@@ -103,23 +129,14 @@
     </SfGrid>
 </div>
 
-<style>
-   
-
-    .datasource-selector {
-        display: flex;
-        gap: 20px;
-        align-items: center;
-        margin-bottom: 15px;
-        padding: 10px;
-        border: 1px solid var(--border-main-color);
-    }
-</style>
+<SfToast @ref="ToastObj" Title="Zkopírováno" Timeout="3000" ShowCloseButton="true">
+    <ToastPosition X="Right" Y="Top"></ToastPosition>
+</SfToast>
 
 @code
 {
-
     SfGrid<ScenarioListViewModel>? Grid;
+    SfToast? ToastObj;
 
     public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
@@ -128,8 +145,6 @@
             //this.Grid?.ExportToExcelAsync();
         }
     }
-
-   
 
     private string SelectedDataSource = "Database";
 
@@ -140,13 +155,27 @@
         await Grid!.Refresh();
     }
 
-    
-
     [Inject] private IJSRuntime JS { get; set; } = default!;
 
     private async Task CopyToClipboard(string text)
     {
         await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
+        
+        // Zobrazit toast s ID hodnotou
+        await ShowToast($"ID zkopírováno: {text.Substring(0, 8)}...");
     }
 
+    private async Task ShowToast(string message)
+    {
+        if (ToastObj != null)
+        {
+            var toastModel = new ToastModel
+            {
+                Content = message,
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons"
+            };
+            await ToastObj.ShowAsync(toastModel);
+        }
+    }
 }

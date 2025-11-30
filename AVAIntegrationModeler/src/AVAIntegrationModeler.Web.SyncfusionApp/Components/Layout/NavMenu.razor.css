@@ -1,5 +1,5 @@
 .navbar {
-    background-color: var(--app-specific-color);
+    background-color: var(--primary-500);
 }
 .navbar-toggler {
     appearance: none;
@@ -47,9 +47,8 @@
 }
 
 .nav-item .e-icons {
-    
-    color: var(--app-specific-color);
-    font-weight:bold;
+    color: var(--primary-500);
+    font-weight: bold;
 }
 
     /* Nebo pro ještì vìtší ikonu */
@@ -59,8 +58,8 @@
     }
 
 .nav-item {
-    color: var(--app-specific-color);
-    font-size:1.1rem;
+    color: var(--primary-500);
+    font-size: 1.1rem;
     padding-bottom: 0.5rem;
 }
 
@@ -87,7 +86,7 @@
     }
 
     .nav-item ::deep .nav-link:hover {
-        color: var(--app-specific-color);
+        color: var(--primary-500);
     }
 
 .nav-scrollable {

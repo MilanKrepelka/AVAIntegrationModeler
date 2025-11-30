@@ -2,8 +2,7 @@
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 
-
-namespace AVAIntegrationModeler.Web.Mapping;
+namespace AVAIntegrationModeler.Web.SyncfusionApp.Mapping;  // ✅ OPRAVENÝ NAMESPACE
 
 /// <summary>
 /// Implementuje mapování mezi datovým přenosovým objektem datového modelu (<see cref="DataModelDTO"/>) a jeho zobrazeními ve webovém rozhraní.

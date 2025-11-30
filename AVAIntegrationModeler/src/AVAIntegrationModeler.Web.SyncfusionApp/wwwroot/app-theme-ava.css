@@ -1,20 +1,11 @@
 
-@property --main-bg-color {
-    syntax: "<color>";
-    inherits: false;
-    initial-value: #f6f9f9;
-}
 @property --super-light-bg-color {
     syntax: "<color>";
     inherits: false;
     initial-value: white;
 }
 
-@property --component-bg-color {
-    syntax: "<color>";
-    inherits: false;
-    initial-value: #ffffff;
-}
+
 @property --font-color {
     syntax: "<color>";
     inherits: false;
@@ -39,17 +30,4 @@
     syntax: "<color>";
     inherits: false;
     initial-value: #dee2e6;
-}
-
-/* Barva specifická pro aplikaci - pro AVA je to AVA taková tyrkysová  */
-@property --app-specific-color {
-    syntax: "<color>";
-    inherits: false;
-    initial-value: #3eced0;
-}
-/* Barva specifická pro aplikaci - svìtlejší varianta */
-@property --app-specific-light-color {
-    syntax: "<color>";
-    inherits: false;
-    initial-value: #7fdee0;
 }

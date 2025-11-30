@@ -1,0 +1,182 @@
+﻿:root {
+    /* ================================
+     PRIMARY – hlavní tyrkysová barva
+     Použití: hlavní tlačítka, aktivní prvky,
+     odkazy, highlighty, brand prvky
+  ================================== */
+    --primary-50: #055658; /* velmi tmavé pozadí/hover */
+    --primary-100: #0d8b8d; /* tmavé pozadí, fill */
+    --primary-200: #14979a; /* tmavé komponenty */
+    --primary-300: #22b5b7; /* hover na dark */
+    --primary-400: #2fbec0; /* sekundární tlačítka */
+    --primary-500: #3eced0; /* hlavní barva */
+    --primary-600: #75e2e3; /* light hover */
+    --primary-700: #92eaea; /* light active */
+    --primary-800: #b6f4f4; /* highlight background */
+    --primary-900: #d1f6f6; /* velmi světlé pozadí */
+    --primary-950: #e9fbfb; /* extra light overlay */
+    
+    /* ==========================================
+     ACCENT – kontrastní barvy pro upozornění,
+     CTA, zvýraznění, důležité prvky
+  =========================================== */
+    --accent-500: #ff7661; /* hlavní kontrastní akcent */
+    --accent-600: #f65c47; /* hover akcent */
+    --accent-700: #e64530; /* aktivní akcent */
+
+    --secondary-500: #7faee8; /* doplňková barva */
+    --secondary-600: #6a9be0; /* hover */
+    --secondary-700: #4f83cc; /* výraznější sekundární */
+    
+    /* ==========================================
+     MUTED – jemné desaturace pro pozadí,
+     boxy, méně důležité elementy
+  =========================================== */
+    --muted-100: #0d1f1f; /* velmi tmavé pozadí */
+    --muted-200: #144343; /* box background */
+    --muted-300: #1a5a5a; /* jemné oddělovací prvky */
+    --muted-400: #256c6d; /* disabled states dark */
+    --muted-500: #3a8b8c; /* placeholder text dark */
+    
+    /* ==========================================
+     GRAY/NEUTRAL – šedé odstíny pro pozadí (DARK MODE)
+     Použití: tmavé pozadí, karty, panely,
+     borders, shadows, text na tmavém pozadí
+  =========================================== */
+    --gray-50: #0a0a0a; /* nejtmavší pozadí (overlay, shadows) */
+    --gray-100: #171717; /* velmi tmavé pozadí aplikace */
+    --gray-150: #1f1f1f; /* dark app background */
+    --gray-200: #262626; /* tmavé pozadí karet */
+    --gray-250: #2e2e2e; /* sekundární card bg */
+    --gray-300: #404040; /* borders, dividers na dark */
+    --gray-350: #4a4a4a; /* subtle borders dark */
+    --gray-400: #525252; /* disabled bg dark */
+    --gray-500: #737373; /* secondary text dark */
+    --gray-600: #a3a3a3; /* primary text on dark */
+    --gray-700: #d4d4d4; /* headings, emphasis */
+    --gray-800: #e5e5e5; /* high contrast text */
+    --gray-900: #f5f5f5; /* maximum contrast */
+    --gray-950: #fafafa; /* nejsvětlejší (hover states) */
+    
+    /* ==========================================
+     SEMANTIC BACKGROUNDS – sémantické pozadí (DARK)
+     Pro různé kontexty UI v dark mode
+  =========================================== */
+    --bg-app: var(--gray-100); /* hlavní tmavé pozadí aplikace */
+    --bg-page: var(--gray-150); /* pozadí stránky/contentu */
+    --bg-card: var(--gray-200); /* pozadí karet */
+    --bg-card-hover: var(--gray-250); /* hover na kartách */
+    --bg-panel: var(--gray-150); /* pozadí panelů/sidebars */
+    --bg-panel-alt: var(--gray-200); /* alternativní panel bg */
+    --bg-input: var(--gray-250); /* pozadí input polí */
+    --bg-input-disabled: var(--gray-300); /* disabled input */
+    --bg-overlay: rgba(0, 0, 0, 0.75); /* modals, overlays (tmavší) */
+    
+    /* ==========================================
+     BORDERS & DIVIDERS – ohraničení a dělítka (DARK)
+  =========================================== */
+    --border-light: var(--gray-300); /* lehké borders */
+    --border-default: var(--gray-350); /* standardní borders */
+    --border-strong: var(--gray-400); /* výraznější borders */
+    --border-focus: var(--primary-500); /* focus state */
+    
+    /* ==========================================
+     TEXT COLORS – barvy textu (DARK MODE)
+     Použití: všechny textové prvky v aplikaci
+  =========================================== */
+    
+    /* Základní textové barvy - INVERTOVÁNO PRO DARK */
+    --text-primary: var(--gray-900); /* hlavní text - světlý */
+    --text-secondary: var(--gray-600); /* sekundární text */
+    --text-tertiary: var(--gray-500); /* terciární text */
+    --text-quaternary: var(--gray-400); /* velmi jemný text */
+    
+    /* Speciální textové barvy */
+    --text-disabled: var(--gray-400); /* disabled text */
+    --text-placeholder: var(--gray-500); /* placeholder v inputech */
+    --text-inverse: var(--gray-100); /* text na světlém pozadí */
+    --text-muted: var(--gray-500); /* ztlumený text */
+    
+    /* Sémantické textové barvy - SVĚTLEJŠÍ PRO DARK MODE */
+    --text-error: #f87171; /* error zprávy - světlejší červená */
+    --text-success: #4ade80; /* success zprávy - světlejší zelená */
+    --text-warning: #fbbf24; /* warning zprávy - světlejší žlutá */
+    --text-info: var(--secondary-500); /* info zprávy */
+    
+    /* Odkazy - SVĚTLEJŠÍ PRO DARK MODE */
+    --text-link: var(--primary-600); /* výchozí barva odkazu */
+    --text-link-hover: var(--primary-700); /* hover stav odkazu */
+    --text-link-active: var(--primary-800); /* aktivní odkaz */
+    --text-link-visited: var(--primary-900); /* navštívený odkaz */
+    
+    /* Nadpisy - SVĚTLÉ PRO DARK MODE */
+    --text-heading: var(--gray-900); /* h1, h2, h3, h4, h5, h6 */
+    --text-heading-primary: var(--gray-950); /* hlavní nadpis - nejsvětlejší */
+    --text-heading-secondary: var(--gray-800); /* sekundární nadpis */
+    --text-heading-muted: var(--gray-700); /* ztlumený nadpis */
+    
+    /* Speciální kontexty */
+    --text-on-primary: var(--gray-100); /* tmavý text na primary barvě */
+    --text-on-accent: #ffffff; /* bílý text na accent barvě */
+    --text-on-secondary: var(--gray-100); /* tmavý text na secondary barvě */
+    --text-on-error: var(--gray-100); /* tmavý text na error barvě */
+    --text-on-success: var(--gray-100); /* tmavý text na success barvě */
+    --text-on-warning: var(--gray-100); /* tmavý text na warning barvě */
+    
+    /* Label a formuláře */
+    --text-label: var(--gray-800); /* label u input polí - světlý */
+    --text-label-required: var(--accent-500); /* required field označení */
+    --text-helper: var(--gray-600); /* helper text pod inputy */
+    --text-error-field: #f87171; /* chybová hláška u fieldu - světlejší */
+    
+    /* Kód a monospace */
+    --text-code: var(--primary-700); /* inline code - světlejší */
+    --text-code-bg: var(--gray-250); /* pozadí code bloku - tmavé */
+    --text-pre: var(--gray-800); /* preformatovaný text */
+    
+    /* Interaktivní prvky */
+    --text-button-primary: var(--gray-100); /* tmavý text na primary tlačítku */
+    --text-button-secondary: var(--gray-900); /* světlý text na secondary tlačítku */
+    --text-button-ghost: var(--primary-600); /* text na ghost tlačítku */
+    --text-button-disabled: var(--gray-400); /* text na disabled tlačítku */
+    
+    /* Tabulky a gridy */
+    --text-table-header: var(--gray-900); /* záhlaví tabulky - světlé */
+    --text-table-body: var(--gray-700); /* tělo tabulky */
+    --text-table-footer: var(--gray-600); /* patička tabulky */
+    
+    /* Notifikace a badges */
+    --text-badge: var(--gray-100); /* tmavý text v badge */
+    --text-badge-neutral: var(--gray-900); /* světlý text v neutral badge */
+    --text-notification: var(--gray-900); /* světlý text v notifikaci */
+    
+    /* Menu a navigace */
+    --text-nav: var(--gray-700); /* navigační položky */
+    --text-nav-active: var(--primary-600); /* aktivní nav položka */
+    --text-nav-hover: var(--gray-900); /* hover nav položka */
+    --text-breadcrumb: var(--gray-600); /* breadcrumb */
+    --text-breadcrumb-active: var(--gray-900); /* aktivní breadcrumb */
+    
+    /* ==========================================
+     SHADOWS – stíny pro depth (DARK MODE)
+     V dark mode jsou stíny subtilnější a tmavší
+  =========================================== */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.4), 0 2px 4px -1px rgba(0, 0, 0, 0.3);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -2px rgba(0, 0, 0, 0.4);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.6), 0 10px 10px -5px rgba(0, 0, 0, 0.5);
+    
+    /* ==========================================
+     STATES – stavy komponent (DARK)
+  =========================================== */
+    --state-hover-overlay: rgba(255, 255, 255, 0.05); /* lehký white overlay pro hover */
+    --state-active-overlay: rgba(255, 255, 255, 0.1); /* aktivní stav */
+    --state-disabled-overlay: rgba(0, 0, 0, 0.3); /* disabled overlay */
+    
+    /* ==========================================
+     NEUTRALS (LEGACY) – zachováno pro zpětnou kompatibilitu
+  =========================================== */
+    --neutral-50: #1a1a1a; /* hlavní pozadí (dark) */
+    --neutral-100: #2e2e2e; /* sekundární pozadí */
+    --neutral-200: #4b4b4b; /* borders */
+}

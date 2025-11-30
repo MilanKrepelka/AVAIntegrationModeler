@@ -1,0 +1,91 @@
+
+
+/* Grid selection colors */
+::deep .e-grid .e-row.e-selectionbackground,
+::deep .e-grid .e-row.e-active {
+    background-color: var(--primary-100) !important;
+}
+
+::deep .e-grid .e-rowcell.e-selectionbackground,
+::deep .e-grid .e-rowcell.e-active {
+    background-color: var(--primary-200) !important;
+    border-color: var(--primary-500) !important;
+}
+
+::deep .e-grid .e-row.e-selectionbackground:hover {
+    background-color: var(--primary-300) !important;
+}
+
+/* Disable cell focus outline */
+::deep .e-grid .e-rowcell.e-focus,
+::deep .e-grid .e-rowcell.e-focused,
+::deep .e-grid .e-rowcell.e-cellselectionbackground,
+::deep .e-grid .e-detailrowcollapse.e-focus,
+::deep .e-grid .e-detailrowexpand.e-focus,
+::deep .e-grid td.e-rowcell:focus,
+::deep .e-grid td.e-rowcell.e-focus,
+::deep .e-grid .e-gridcontent td.e-rowcell.e-focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+::deep .e-grid .e-rowcell::after {
+    display: none !important;
+}
+
+/* Toast styling */
+::deep .e-toast-success {
+    background-color: var(--text-success);
+    color: var(--text-on-success);
+}
+
+::deep .toast-icons {
+    font-size: 20px;
+}
+
+/* ID cell with copy button */
+.id-cell-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+
+
+.copy-icon-button {
+    flex-shrink: 0;
+    min-width: 28px;
+    padding: 4px;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.copy-icon-button:hover {
+    opacity: 1;
+}
+
+.id-cell-container:hover .copy-icon-button {
+    opacity: 1;
+}
+
+/* Input with button (detail template) */
+.input-with-button {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.input-with-button .id-textbox {
+    flex: 1;
+}
+
+.copy-button {
+    flex-shrink: 0;
+    white-space: nowrap;
+}
+
+.copy-button .e-btn-icon {
+    margin-right: 4px;
+}

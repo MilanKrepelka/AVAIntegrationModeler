@@ -1,0 +1,241 @@
+﻿@page "/datamodelmap/{modelId:guid}"
+@rendermode InteractiveServer
+@using System.Text.Json
+@using AVAIntegrationModeler.API.DataModels
+@using AVAIntegrationModeler.Contracts
+@using AVAIntegrationModeler.Contracts.DTO
+@using AVAIntegrationModeler.Infrastructure
+@using Syncfusion.Blazor.Diagram
+@using System.Collections.ObjectModel
+@using System.Text.Json.Serialization
+@inject IJSRuntime JS
+@inject NavigationManager NavigationManager
+
+<PageTitle>Data Model Map</PageTitle>
+
+<h3>Data Model Map</h3>
+
+@if (IsLoading)
+{
+    <p>Načítám modely…</p>
+}
+else if (nodes == null || nodes.Count == 0)
+{
+    <p>Žádné uzly k zobrazení.</p>
+}
+else
+{
+    <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="700px" Nodes="@nodes" />
+}
+
+@code {
+    [Parameter] public Guid modelId { get; set; }
+
+    // Diagram state
+    SfDiagramComponent? diagram;
+    int connectorCount = 0;
+    DiagramObjectCollection<Node> nodes = new DiagramObjectCollection<Node>();
+    DiagramObjectCollection<Connector> connectors = new DiagramObjectCollection<Connector>();
+
+    // Loading state
+    bool IsLoading { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await LoadModelsAndRenderTreeAsync();
+    }
+
+    private async Task LoadModelsAndRenderTreeAsync()
+    {
+        try
+        {
+            IsLoading = true;
+            nodes.Clear();
+            connectors.Clear();
+            connectorCount = 0;
+
+            // adjust base URL to your API if needed
+            using var http = new HttpClient();
+            var url = $"http://localhost:57679/DataModels?datasource={Datasource.AVAPlace}";
+            var res = await http.GetAsync(url);
+            res.EnsureSuccessStatusCode();
+            var json = await res.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                Converters = { new JsonStringEnumConverter() },
+                PropertyNameCaseInsensitive = true
+            };
+            
+            List<DataModelDTO>? dtos = null;
+
+            // try direct deserialization
+            var dataModelListResponse = JsonSerializer.Deserialize<DataModelListResponse>(json, options);
+            
+            dtos ??= dataModelListResponse?.DataModels;
+            // fallback: if API wraps array in object, find first array property
+            if (dtos == null)
+            {
+                using var doc = JsonDocument.Parse(json);
+                if (doc.RootElement.ValueKind == JsonValueKind.Object)
+                {
+                    var arrayProp = doc.RootElement.EnumerateObject()
+                        .FirstOrDefault(p => p.Value.ValueKind == JsonValueKind.Array);
+                    if (arrayProp.Value.ValueKind == JsonValueKind.Array)
+                    {
+                        var arrJson = arrayProp.Value.GetRawText();
+                        try { dtos = JsonSerializer.Deserialize<List<DataModelDTO>>(arrJson, options); } catch { }
+                    }
+                }
+                else if (doc.RootElement.ValueKind == JsonValueKind.Array)
+                {
+                    dtos = JsonSerializer.Deserialize<List<DataModelDTO>>(doc.RootElement.GetRawText(), options);
+                }
+            }
+
+            dtos ??= new List<DataModelDTO>();
+
+            // build tree using DataModelTree
+            var forest = DataModelTree.BuildTree(dtos.ToList());
+
+            // if route parameter provided, find that subtree and render only it
+            List<DataModelTree> forestToRender;
+            if (modelId != Guid.Empty)
+            {
+                var found = FindNodeInForest(forest, modelId);
+                forestToRender = found != null ? new List<DataModelTree> { CloneSubtree(found) } : new List<DataModelTree>();
+            }
+            else
+            {
+                forestToRender = forest;
+            }
+
+            // simple layout: place nodes by depth and index
+            var levelIndex = new Dictionary<int, int>();
+            void RenderNode(DataModelTree node, int depth)
+            {
+                var index = levelIndex.TryGetValue(depth, out var v) ? v : 0;
+                var x = 120 + index * 220;
+                var y = 80 + depth * 120;
+                CreateNode(node.Id.ToString(), x, y, NodeFlowShapes.Process, node.Name ?? node.Id.ToString());
+                levelIndex[depth] = index + 1;
+
+                foreach (var child in node.Children)
+                {
+                    RenderNode(child, depth + 1);
+                    CreateConnector(node.Id.ToString(), child.Id.ToString());
+                }
+            }
+
+            foreach (var root in forestToRender)
+            {
+                RenderNode(root, 0);
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Chyba při načítání modelů: {ex.Message}");
+            nodes.Clear();
+            connectors.Clear();
+        }
+        finally
+        {
+            IsLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private DataModelTree CloneSubtree(DataModelTree node)
+    {
+        var visited = new HashSet<Guid>();
+        DataModelTree Copy(DataModelTree n)
+        {
+            if (visited.Contains(n.Id)) return null!;
+            visited.Add(n.Id);
+
+            var copy = new DataModelTree
+            {
+                Id = n.Id,
+                Name = n.Name,
+                Model = n.Model
+            };
+            foreach (var ch in n.Children)
+            {
+                if (visited.Contains(ch.Id)) continue;
+                var childCopy = Copy(ch);
+                if (childCopy != null) copy.Children.Add(childCopy);
+            }
+            return copy;
+        }
+        return Copy(node)!;
+    }
+
+    private DataModelTree? FindNodeInForest(IEnumerable<DataModelTree> forest, Guid id)
+    {
+        foreach (var root in forest)
+        {
+            var found = FindNode(root, id);
+            if (found != null) return found;
+        }
+        return null;
+    }
+
+    private DataModelTree? FindNode(DataModelTree node, Guid id)
+    {
+        if (node.Id == id) return node;
+        foreach (var c in node.Children)
+        {
+            var f = FindNode(c, id);
+            if (f != null) return f;
+        }
+        return null;
+    }
+
+    private void CreateConnector(string sourceId, string targetId, string? label = null, OrthogonalSegment? segment1 = null, OrthogonalSegment? segment2 = null)
+    {
+        var diagramConnector = new Connector
+        {
+            ID = string.Format("connector{0}", ++connectorCount),
+            SourceID = sourceId,
+            TargetID = targetId
+        };
+
+        if (!string.IsNullOrEmpty(label))
+        {
+            var annotation = new PathAnnotation { Content = label, Style = new TextStyle { Fill = "white" } };
+            diagramConnector.Annotations = new DiagramObjectCollection<PathAnnotation> { annotation };
+        }
+
+        if (segment1 != null)
+        {
+            diagramConnector.Type = ConnectorSegmentType.Orthogonal;
+            diagramConnector.Segments = new DiagramObjectCollection<ConnectorSegment> { segment1, segment2! };
+        }
+
+        connectors.Add(diagramConnector);
+    }
+
+    private void CreateNode(string id, double x, double y, NodeFlowShapes shape, string label)
+    {
+        var diagramNode = new Node
+        {
+            ID = id,
+            OffsetX = x,
+            OffsetY = y,
+            Width = 180,
+            Height = 60,
+            Style = new ShapeStyle { Fill = "#357BD2", StrokeColor = "White" },
+            Shape = new FlowShape { Type = NodeShapes.Flow, Shape = shape },
+            Annotations = new DiagramObjectCollection<ShapeAnnotation>
+            {
+                new ShapeAnnotation
+                {
+                    Content = label,
+                    Style = new TextStyle { Color = "White", Fill = "transparent" }
+                }
+            }
+        };
+        nodes.Add(diagramNode);
+    }
+}

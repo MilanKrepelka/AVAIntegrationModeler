@@ -71,6 +71,11 @@ public class DataModelListViewModel
   /// Příznak pro zobrazení detailů.
   /// </summary>
   public bool ShowDetails { get; set; } = false;
+
+  /// <summary>
+  /// Textová reprezentace pro IsAggregateRoot.
+  /// </summary>
+  public string IsAggregateRootText => IsAggregateRoot ? "Ano" : "Ne";
 }
 
 /// <summary>

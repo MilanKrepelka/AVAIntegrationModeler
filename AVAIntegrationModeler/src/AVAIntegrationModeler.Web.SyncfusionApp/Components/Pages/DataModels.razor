@@ -1,0 +1,336 @@
+﻿@page "/datamodels"
+@rendermode InteractiveServer
+@using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Notifications
+@using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
+@using AVAIntegrationModeler.Contracts;
+@using Microsoft.AspNetCore.Components;
+
+
+
+<PageTitle>Data Modely</PageTitle>
+
+<div id="ControlRegion">
+    <DataSourceSelector @bind-Selected="SelectedDataSource" OnChanged="@HandleDataSourceChange" LabelText="Zdroj dat:"></DataSourceSelector>
+
+    <SfGrid ID="Grid"
+            DataSource="@DataModelList"
+            @ref="Grid"
+            EnableAltRow="false"
+            AllowPaging="true"
+            AllowFiltering="true"
+            AllowSorting="true"
+            AllowResizing="true"
+            AllowSelection="true"
+            Toolbar="@(new List<string>() { "Search" })">
+
+        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Grids.EditMode.Normal"></GridEditSettings>
+        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
+        <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
+        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"  
+                       Mode="Syncfusion.Blazor.Grids.SelectionMode.Row" >
+</GridSelectionSettings>
+        <GridEvents OnToolbarClick="ToolbarClick" TValue="DataModelListViewModel"></GridEvents>
+        <GridColumns>
+            <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.Code) HeaderText="Kód" Width="120"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.Name) HeaderText="Název" Width="200"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.Description) HeaderText="Popis" Width="250"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.IsAggregateRootText) HeaderText="Aggregate Root" Width="100">
+                <Template>
+                    @{
+                        var model = (context as DataModelListViewModel);
+                        @if (model?.IsAggregateRoot == true)
+                        {
+                            <span class="badge-yes">✓ Ano</span>
+                        }
+                        else
+                        {
+                            <span class="badge-no">Ne</span>
+                        }
+                    }
+                </Template>
+            </GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.FieldsText) HeaderText="Pole" Width="200"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="true">
+                <Template>
+                    @{
+                        var model = (context as DataModelListViewModel);
+                        <div class="id-cell-container">
+                            <span class="id-text">@model!.Id.ToString()</span>
+                            <SfButton CssClass="e-small e-round copy-icon-button"
+                                      IconCss="e-icons e-copy"
+                                      IsPrimary="false"
+                                      OnClick="@(() => CopyToClipboard(model.Id.ToString()))"
+                                      title="Kopírovat ID do schránky">
+                            </SfButton>
+                        </div>
+                    }
+                </Template>
+            </GridColumn>
+            <GridColumn HeaderText="Akce" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+                <Template>
+                    @{
+                        var model = (context as DataModelListViewModel);
+                        <div class="action-buttons">
+                            <SfButton CssClass="e-small e-round e-outline action-button"
+                                      IconCss="e-icons e-edit"
+                                      IsPrimary="false"
+                                      OnClick="@(() => EditDataModel(model!))"
+                                      title="Editovat">
+                            </SfButton>
+                            <SfButton CssClass="e-small e-round e-outline action-button"
+                                      IconCss="e-icons e-hyperlink-open"
+                                      IsPrimary="false"
+                                      OnClick="@(() => OpenDocumentation(model!))"
+                                      title="Dokumentace">
+                            </SfButton>
+                            <SfButton CssClass="e-small e-round e-outline action-button"
+                                      IconCss="e-icons e-chart-scatter"
+                                      IsPrimary="false"
+                                      OnClick="@(() => ShowModelMap(model!))"
+                                      title="Map">
+                            </SfButton>
+                        </div>
+                    }
+                </Template>
+            </GridColumn>
+        </GridColumns>
+        
+        <GridTemplates>
+            <DetailTemplate>
+                @{
+                    var dataModel = (context as DataModelListViewModel);
+                    <div class="detail-form">
+                        <h4>@dataModel!.Code</h4>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Kód:</label>
+                                <SfTextBox Value="@dataModel.Code" Placeholder="Kód modelu" Readonly= "true"></SfTextBox>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>ID:</label>
+                                <div class="input-with-button">
+                                    <SfTextBox Value="@dataModel.Id.ToString()" Readonly="true" CssClass="id-textbox"></SfTextBox>
+                                    <SfButton CssClass="e-small copy-button" 
+                                              IconCss="e-icons e-copy" 
+                                              OnClick="@(() => CopyToClipboard(dataModel.Id.ToString()))"
+                                              Content="Kopírovat">
+                                    </SfButton>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label>Název:</label>
+                                <SfTextBox Value="@dataModel.Name" Placeholder="Název modelu" Readonly="true"></SfTextBox>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label>Agregátní kořen:</label>
+                                <SfCheckBox @bind-Checked="@dataModel.IsAggregateRoot" Label="Je agregátním kořenem" Disabled="true"></SfCheckBox>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label>Popis:</label>
+                                <SfTextBox @bind-Value="dataModel.Description" Placeholder="Popis modelu" Multiline="true" Readonly="true"></SfTextBox>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group full-width">
+                                <label>Poznámky:</label>
+                                <SfTextBox @bind-Value="dataModel.Notes" Placeholder="" Multiline="true" Readonly="true"></SfTextBox>
+                            </div>
+                        </div>
+                        
+                        @if (dataModel.Fields?.Any() == true)
+                        {
+                            <div class="fields-section">
+                                <h5>Pole datového modelu (@dataModel.Fields.Count)</h5>
+                                
+                                <div class="fields-grid">
+                                    @foreach (var field in dataModel.Fields)
+                                    {
+                                        <div class="field-card">
+                                            <div class="field-header">
+                                                <strong>@field.Name</strong>
+                                                <span class="field-type-badge">@GetFieldTypeText(field.FieldType)</span>
+                                            </div>
+                                            
+                                            @if (!string.IsNullOrEmpty(field.Label))
+                                            {
+                                                <div class="field-detail">
+                                                    <span class="field-label">Label:</span> @field.Label
+                                                </div>
+                                            }
+                                            
+                                            @if (!string.IsNullOrEmpty(field.Description))
+                                            {
+                                                <div class="field-detail">
+                                                    <span class="field-label">Popis:</span> @field.Description
+                                                </div>
+                                            }
+                                            
+                                            <div class="field-flags">
+                                                @if (field.IsCollection)
+                                                {
+                                                    <span class="flag-badge">Collection</span>
+                                                }else
+                                                {
+                                                    <span class="flag-badge">Simple value</span>
+                                                }
+
+                                                @if (field.IsNullable)
+                                                {
+                                                    <span class="flag-badge">Nullable</span>
+                                                }else
+                                                {
+                                                    <span class="flag-badge">Not nullable</span>
+                                                }
+                                                @if (field.IsLocalized)
+                                                {
+                                                    <span class="flag-badge">Localized</span>
+                                                }
+                                                else 
+                                                {
+                                                    <span class="flag-badge">Not localized</span>
+                                                }
+                                                @if (field.IsPublishedForLookup)
+                                                {
+                                                    <span class="flag-badge">Fast search (obsolete)</span>
+                                                }
+                                                else
+                                                {
+                                                    <span class="flag-badge">No fast search (obsolete)</span>
+                                                }
+                                            </div>
+                                            
+                                            @if (field.ReferencedModels?.Any() == true)
+                                            {
+                                                <div class="field-references">
+                                                    <span class="field-label">Reference:</span>
+                                                    @foreach (var refModel in field.ReferencedModels)
+                                                    {
+                                                        <span class="reference-badge">@refModel.Code</span>
+                                                    }
+                                                </div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        }
+                    </div>
+                }
+            </DetailTemplate>
+        </GridTemplates>
+
+    </SfGrid>
+</div>
+
+<SfToast @ref="ToastObj" Title="Zkopírováno" Timeout="3000" ShowCloseButton="true">
+    <ToastPosition X="Right" Y="Top"></ToastPosition>
+</SfToast>
+
+
+
+@code
+{
+    SfGrid<DataModelListViewModel>? Grid;
+    SfToast? ToastObj;
+
+    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+        if (args.Item.Id == "Grid_excelexport")
+        {
+            //this.Grid?.ExportToExcelAsync();
+        }
+    }
+
+    private string SelectedDataSource = "Database";
+
+    private async Task HandleDataSourceChange(Contracts.Datasource newValue)
+    {
+        this.Datasource = newValue;
+        await LoadItemsAsync();
+        await Grid!.Refresh();
+    }
+
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+    [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+    
+
+    private async Task CopyToClipboard(string text)
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
+        
+        // Zobrazit toast s ID hodnotou
+        await ShowToast($"ID zkopírováno: {text.Substring(0, 8)}...");
+    }
+
+    private async Task ShowToast(string message)
+    {
+        if (ToastObj != null)
+        {
+            var toastModel = new ToastModel
+            {
+                Content = message,
+                CssClass = "e-toast-success",
+                Icon = "e-success toast-icons"
+            };
+            await ToastObj.ShowAsync(toastModel);
+        }
+    }
+
+    private void ShowModelMap(DataModelListViewModel model)
+    {
+        NavigationManager.NavigateTo($"/datamodelmap/{model.Id}");
+    }
+    private void EditDataModel(DataModelListViewModel model)
+    {
+        // TODO: Implementovat editaci - například přesměrování na edit stránku
+        NavigationManager.NavigateTo($"/datamodels/edit/{model.Id}");
+        // nebo otevřít dialog pro editaci
+    }
+
+    private async Task OpenDocumentation(DataModelListViewModel model)
+    {
+        // TODO: Implementovat otevření dokumentace
+        // Například otevřít externí link v novém okně
+        var docUrl = $"https://demo.avaplace.com/apps/product/x-DevOps/app/integration/documentation?Node=PlatformPublic.AppExample%2Fmodels%2F{model.Code.ToLower()}-{model.Id.ToString().ToLower()}";
+        await JS.InvokeVoidAsync("open", docUrl, "_blank");
+    }
+
+    private string GetFieldTypeText(DataModelFieldType fieldType)
+    {
+        return fieldType switch
+        {
+            DataModelFieldType.Text => "Text",
+            DataModelFieldType.MultilineText => "Víceřádkový text",
+            DataModelFieldType.TwoOptions => "Ano/Ne",
+            DataModelFieldType.WholeNumber => "Celé číslo",
+            DataModelFieldType.DecimalNumber => "Desetinné číslo",
+            DataModelFieldType.UniqueIdentifier => "GUID",
+            DataModelFieldType.UtcDateTime => "Datum a čas (UTC)",
+            DataModelFieldType.LookupEntity => "Odkaz na entitu",
+            DataModelFieldType.NestedEntity => "Vnořená entita",
+            DataModelFieldType.Date => "Datum",
+            DataModelFieldType.FileReference => "Odkaz na soubor",
+            DataModelFieldType.CurrencyNumber => "Měna",
+            DataModelFieldType.SingleSelectOptionSet => "Výběr (jedna hodnota)",
+            DataModelFieldType.MultiSelectOptionSet => "Výběr (více hodnot)",
+            _ => fieldType.ToString()
+        };
+    }
+}
