@@ -1,4 +1,6 @@
-﻿using AVAIntegrationModeler.AVAPlace;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.AVAPlaceTests.Fixtures;
 using Microsoft.Extensions.DependencyInjection;
 using Shouldly;
@@ -50,9 +52,33 @@ public class IntegrationDataProvider : TestBed<Fixtures.AVAPlaceDemoFixture>
     var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
 
     var result = await integrationDataProvider.GetDataModelsSummaryAsync(CancellationToken.None);
+
+    // Serialize the result to JSON for debugging/inspection
+    var options = new JsonSerializerOptions
+    {
+      WriteIndented = true,
+      DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+      ReferenceHandler = ReferenceHandler.IgnoreCycles
+    };
+
+    string json;
+    try
+    {
+      json = JsonSerializer.Serialize(result, options);
+    }
+    catch (Exception ex)
+    {
+      _testOutputHelper.WriteLine($"Serialization failed: {ex}");
+      throw;
+    }
+
+    _testOutputHelper.WriteLine(json);
+
     result.ShouldNotBeNull();
     result.ShouldNotBeEmpty();
   }
+
+ 
 
   /// <summary>
   /// Test který načte integrační mapy
@@ -79,7 +105,27 @@ public class IntegrationDataProvider : TestBed<Fixtures.AVAPlaceDemoFixture>
     var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
 
     var result = await integrationDataProvider.GetDataModelsAsync(CancellationToken.None);
-    
+
+    var options = new JsonSerializerOptions
+    {
+      WriteIndented = true,
+      DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+      ReferenceHandler = ReferenceHandler.IgnoreCycles
+    };
+
+    string json;
+    try
+    {
+      json = JsonSerializer.Serialize(result, options);
+    }
+    catch (Exception ex)
+    {
+      _testOutputHelper.WriteLine($"Serialization failed: {ex}");
+      throw;
+    }
+
+    _testOutputHelper.WriteLine(json);
+
     result.ShouldNotBeNull();
     result.ShouldNotBeEmpty();
     result.ShouldAllBe(x => x.Fields != null && x.Fields.Count() > 1);

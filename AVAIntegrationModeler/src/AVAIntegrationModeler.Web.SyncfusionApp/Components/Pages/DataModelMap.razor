@@ -97,7 +97,15 @@ else
             dtos ??= new List<DataModelDTO>();
 
             // build tree using DataModelTree
-            var forest = DataModelTree.BuildTree(dtos.ToList());
+            var forest = new List<DataModelTree>();
+            foreach (var dto in dtos)
+            {
+                var tree = DataModelTree.BuildTree(dtos, dto.Id);
+                if (tree != null && !forest.Exists(f => f.Id == tree.Id))
+                {
+                    forest.Add(tree);
+                }
+            }
 
             // if route parameter provided, find that subtree and render only it
             List<DataModelTree> forestToRender;

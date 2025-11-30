@@ -19,4 +19,10 @@
     <ProjectReference Include="..\AVAIntegrationModeler.Domain\AVAIntegrationModeler.Domain.csproj" />
     <ProjectReference Include="..\AVAIntegrationModeler.UseCases\AVAIntegrationModeler.UseCases.csproj" />
   </ItemGroup>
+  
+  <ItemGroup>
+    <None Update="Data\DataModels\DataModelsFromAVA.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 </Project>
