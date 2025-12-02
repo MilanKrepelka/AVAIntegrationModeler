@@ -15,7 +15,7 @@
 <PageTitle>Data Modely</PageTitle>
 
 <div id="ControlRegion">
-    <DataSourceSelector @bind-Selected="SelectedDataSource" OnChanged="@HandleDataSourceChange" LabelText="Zdroj dat:"></DataSourceSelector>
+    @* <DataSourceSelector @bind-Selected="SelectedDataSource" OnChanged="@HandleDataSourceChange" LabelText="Zdroj dat:"></DataSourceSelector> *@
 
     <SfGrid ID="Grid"
             DataSource="@DataModelList"
@@ -258,7 +258,7 @@
         }
     }
 
-    private string SelectedDataSource = "Database";
+    //private string SelectedDataSource = "Database";
 
     private async Task HandleDataSourceChange(Contracts.Datasource newValue)
     {
@@ -293,14 +293,19 @@
         }
     }
 
-    private void ShowModelMap(DataModelListViewModel model)
+    
+        private async Task ShowModelMap(DataModelListViewModel model)
     {
-        NavigationManager.NavigateTo($"/datamodelmap/{model.Id}");
+        // Open Data Model Map in a new browser tab
+        var url = NavigationManager.ToAbsoluteUri($"/datamodelmap/{model.Id}").ToString();
+        await JS.InvokeVoidAsync("open", url, "_blank");
     }
+    
     private void EditDataModel(DataModelListViewModel model)
     {
         // TODO: Implementovat editaci - například přesměrování na edit stránku
-        NavigationManager.NavigateTo($"/datamodels/edit/{model.Id}");
+        NavigationManager.NavigateTo($"/datamodels/edit/{model.Id}", true);
+
         // nebo otevřít dialog pro editaci
     }
 

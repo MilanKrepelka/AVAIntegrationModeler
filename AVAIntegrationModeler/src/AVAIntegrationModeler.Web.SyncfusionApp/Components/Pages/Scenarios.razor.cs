@@ -29,7 +29,7 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
       
       // Načtení scénářů z AVAIntegrationModeler.API
       using var httpClient = new HttpClient();
-      var response = await httpClient.GetAsync($"http://localhost:57679/Scenarios?datasource={this.Datasource}");
+      var response = await httpClient.GetAsync($"http://localhost:57679/Scenarios?datasource={Datasource.AVAPlace}");
       response.EnsureSuccessStatusCode();
 
       var scenarioListResponse = await response.Content.ReadFromJsonAsync<ScenarioListResponse>();

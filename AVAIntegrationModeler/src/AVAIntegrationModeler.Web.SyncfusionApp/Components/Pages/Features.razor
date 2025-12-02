@@ -10,7 +10,7 @@
 <PageTitle>Integraèní Features</PageTitle>
 
 <div id="ControlRegion">
-    <DataSourceSelector @bind-Selected="SelectedDataSource" OnChanged="@HandleDataSourceChange" LabelText="Zdroj dat:"></DataSourceSelector>
+    @* <DataSourceSelector @bind-Selected="SelectedDataSource" OnChanged="@HandleDataSourceChange" LabelText="Zdroj dat:"></DataSourceSelector> *@
 
     <SfGrid ID="Grid" 
         DataSource="@FeaturesList" 
@@ -133,7 +133,7 @@
         }
     }
 
-    private string SelectedDataSource = "Database";
+    //private string SelectedDataSource = "Database";
 
     private async Task HandleDataSourceChange(Contracts.Datasource newValue)
     {

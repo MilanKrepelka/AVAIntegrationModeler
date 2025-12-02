@@ -11,7 +11,7 @@
 <PageTitle>Integrační scénáře</PageTitle>
 
 <div id="ControlRegion">
-    <DataSourceSelector @bind-Selected="SelectedDataSource" OnChanged="@HandleDataSourceChange" LabelText="Zdroj dat:"></DataSourceSelector>
+    @* <DataSourceSelector @bind-Selected="SelectedDataSource" OnChanged="@HandleDataSourceChange" LabelText="Zdroj dat:"></DataSourceSelector> *@
 
     <SfGrid ID="Grid" 
         DataSource="@ScenariosList" 
@@ -146,7 +146,7 @@
         }
     }
 
-    private string SelectedDataSource = "Database";
+    //private string SelectedDataSource = "Database";
 
     private async Task HandleDataSourceChange(Contracts.Datasource newValue)
     {

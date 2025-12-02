@@ -31,7 +31,7 @@ public partial class DataModels : ComponentBase
             
             // Načtení data modelů z AVAIntegrationModeler.API
             using var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"http://localhost:57679/DataModels?datasource={this.Datasource}");
+            var response = await httpClient.GetAsync($"http://localhost:57679/DataModels?datasource={Datasource.AVAPlace}");
             response.EnsureSuccessStatusCode();
 
             var options = new JsonSerializerOptions
@@ -71,8 +71,13 @@ public partial class DataModels : ComponentBase
         }
     }
 
+    private bool _initialized;
+
     protected override async Task OnInitializedAsync()
     {
+        if (_initialized) return;
+        _initialized = true;
+
         await base.OnInitializedAsync();
         await LoadItemsAsync();
     }

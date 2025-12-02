@@ -27,7 +27,7 @@ public partial class Features : ComponentBase, IPageListBase
             
             // Načtení features z AVAIntegrationModeler.API
             using var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"http://localhost:57679/Features?datasource={this.Datasource}");
+            var response = await httpClient.GetAsync($"http://localhost:57679/Features?datasource={Datasource.AVAPlace}");
             response.EnsureSuccessStatusCode();
 
             var featureListResponse = await response.Content.ReadFromJsonAsync<FeatureListResponse>();
