@@ -1,4 +1,5 @@
-﻿using AVAIntegrationModeler.Web.SyncfusionApp;
+﻿using AVAIntegrationModeler.API.Client;
+using AVAIntegrationModeler.Web.SyncfusionApp;
 using AVAIntegrationModeler.Web.SyncfusionApp.Components;
 using Syncfusion.Blazor;
 
@@ -8,6 +9,8 @@ Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQx
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSyncfusionBlazor();
+builder.Services.AddAVAIntegrationModelerApiClient(builder.Configuration);
+//builder.Services.AddWebAppHttpClientFactory(builder.Configuration);
 
 var app = builder.Build();
 //Register Syncfusion license https://help.syncfusion.com/common/essential-studio/licensing/how-to-generate

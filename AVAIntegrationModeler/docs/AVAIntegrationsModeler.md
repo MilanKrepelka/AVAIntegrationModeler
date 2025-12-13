@@ -1,5 +1,7 @@
 # AVA Integration Modeler
 
+# Road mapa 
+- Vytvoøit základní pøehledy pro UI a API
 # Základní popis
 
 ## UI - Pøehled

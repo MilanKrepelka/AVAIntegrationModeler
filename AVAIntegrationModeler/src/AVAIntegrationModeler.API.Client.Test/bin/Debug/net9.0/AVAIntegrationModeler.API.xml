@@ -1,0 +1,254 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AVAIntegrationModeler.API</name>
+    </assembly>
+    <members>
+        <member name="T:AVAIntegrationModeler.API.Contributors.CreateContributorValidator">
+            <summary>
+            See: https://fast-endpoints.com/docs/validation
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Contributors.Create">
+            <summary>
+            Create a new Contributor
+            </summary>
+            <remarks>
+            Creates a new Contributor given a name.
+            </remarks>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Contributors.Create.#ctor(MediatR.IMediator)">
+            <summary>
+            Create a new Contributor
+            </summary>
+            <remarks>
+            Creates a new Contributor given a name.
+            </remarks>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Contributors.Delete">
+            <summary>
+            Delete a Contributor.
+            </summary>
+            <remarks>
+            Delete a Contributor by providing a valid integer id.
+            </remarks>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Contributors.Delete.#ctor(MediatR.IMediator)">
+            <summary>
+            Delete a Contributor.
+            </summary>
+            <remarks>
+            Delete a Contributor by providing a valid integer id.
+            </remarks>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Contributors.DeleteContributorValidator">
+            <summary>
+            See: https://fast-endpoints.com/docs/validation
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Contributors.GetById">
+            <summary>
+            Get a Contributor by integer ID.
+            </summary>
+            <remarks>
+            Takes a positive integer ID and returns a matching Contributor record.
+            </remarks>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Contributors.GetById.#ctor(MediatR.IMediator)">
+            <summary>
+            Get a Contributor by integer ID.
+            </summary>
+            <remarks>
+            Takes a positive integer ID and returns a matching Contributor record.
+            </remarks>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Contributors.GetContributorValidator">
+            <summary>
+            See: https://fast-endpoints.com/docs/validation
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Contributors.List">
+            <summary>
+            List all Contributors
+            </summary>
+            <remarks>
+            List all contributors - returns a ContributorListResponse containing the Contributors.
+            </remarks>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Contributors.List.#ctor(MediatR.IMediator)">
+            <summary>
+            List all Contributors
+            </summary>
+            <remarks>
+            List all contributors - returns a ContributorListResponse containing the Contributors.
+            </remarks>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Contributors.Update">
+            <summary>
+            Update an existing Contributor.
+            </summary>
+            <remarks>
+            Update an existing Contributor by providing a fully defined replacement set of values.
+            See: https://stackoverflow.com/questions/60761955/rest-update-best-practice-put-collection-id-without-id-in-body-vs-put-collecti
+            </remarks>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Contributors.Update.#ctor(MediatR.IMediator)">
+            <summary>
+            Update an existing Contributor.
+            </summary>
+            <remarks>
+            Update an existing Contributor by providing a fully defined replacement set of values.
+            See: https://stackoverflow.com/questions/60761955/rest-update-best-practice-put-collection-id-without-id-in-body-vs-put-collecti
+            </remarks>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Contributors.UpdateContributorValidator">
+            <summary>
+            See: https://fast-endpoints.com/docs/validation
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.DataModels.List">
+            <summary>
+            List all DataModels
+            </summary>
+            <remarks>
+            List all DataModels.
+            </remarks>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.DataModels.List.#ctor(MediatR.IMediator)">
+            <summary>
+            List all DataModels
+            </summary>
+            <remarks>
+            List all DataModels.
+            </remarks>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Features.List">
+            <summary>
+            List all Features
+            </summary>
+            <remarks>
+            List all contributors - returns a ContributorListResponse containing the Features.
+            </remarks>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Features.List.#ctor(MediatR.IMediator)">
+            <summary>
+            List all Features
+            </summary>
+            <remarks>
+            List all contributors - returns a ContributorListResponse containing the Features.
+            </remarks>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.IntegrationMaps.List">
+            <summary>
+            List all Integration Maps
+            </summary>
+            <remarks>
+            List all Integration Maps - returns a IntegrationMapsListResponse containing the Integration Maps.
+            </remarks>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.IntegrationMaps.List.#ctor(MediatR.IMediator)">
+            <summary>
+            List all Integration Maps
+            </summary>
+            <remarks>
+            List all Integration Maps - returns a IntegrationMapsListResponse containing the Integration Maps.
+            </remarks>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.IntegrationMaps.IntegrationMapListRequest">
+            <summary>
+            Požadavek na výpis featur
+            </summary>
+        </member>
+        <member name="P:AVAIntegrationModeler.API.IntegrationMaps.IntegrationMapListRequest.Datasource">
+            <summary>
+            <see cref="T:AVAIntegrationModeler.Contracts.Datasource"/>
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.IntegrationMaps.IntegrationMapListResponse">
+            <summary>
+            Odpověď na požadavek <see cref="T:AVAIntegrationModeler.API.IntegrationMaps.IntegrationMapListRequest"/>
+            </summary>
+        </member>
+        <member name="P:AVAIntegrationModeler.API.IntegrationMaps.IntegrationMapListResponse.IntegrationMaps">
+            <summary>
+            Seznam <see cref="T:AVAIntegrationModeler.Contracts.DTO.IntegrationMapSummaryDTO"/>
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Scenarios.Delete">
+            <summary>
+            Delete a Scenario.
+            </summary>
+            <remarks>
+            Delete a Contributor by providing a valid integer id.
+            </remarks>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Scenarios.Delete.#ctor(MediatR.IMediator)">
+            <summary>
+            Delete a Scenario.
+            </summary>
+            <remarks>
+            Delete a Contributor by providing a valid integer id.
+            </remarks>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Scenarios.DeleteScenarioRequest">
+            <summary>
+            Požadavek na smazání scénáře podle jeho ID.
+            </summary>
+        </member>
+        <member name="P:AVAIntegrationModeler.API.Scenarios.DeleteScenarioRequest.ScenarioId">
+            <summary>
+            Identifikátor scénáře, který má být smazán.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Scenarios.DeleteScenarioValidator">
+            <summary>
+            Validator pro <see cref="T:AVAIntegrationModeler.API.Scenarios.DeleteScenarioRequest"/>
+            </summary>
+            <see href="https://fast-endpoints.com/docs/validation"/>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Scenarios.GetById">
+            <summary>
+            Get a Contributor by integer ID.
+            </summary>
+            <remarks>
+            Takes a positive integer ID and returns a matching Contributor record.
+            </remarks>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Scenarios.GetById.#ctor(MediatR.IMediator)">
+            <summary>
+            Get a Contributor by integer ID.
+            </summary>
+            <remarks>
+            Takes a positive integer ID and returns a matching Contributor record.
+            </remarks>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Scenarios.GetScenariosValidator">
+            <summary>
+            See: https://fast-endpoints.com/docs/validation
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Scenarios.List">
+            <summary>
+            List all Scenarios
+            </summary>
+            <remarks>
+            List all contributors - returns a ContributorListResponse containing the Scenarios.
+            </remarks>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Scenarios.List.#ctor(MediatR.IMediator)">
+            <summary>
+            List all Scenarios
+            </summary>
+            <remarks>
+            List all contributors - returns a ContributorListResponse containing the Scenarios.
+            </remarks>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Scenarios.ScenarioRecord">
+            <summary>
+            Represents a record of a Scenario, inheriting from <see cref="T:AVAIntegrationModeler.Contracts.DTO.ScenarioDTO"/>.
+            </summary>
+            <remarks>This record is used to encapsulate data related to a specific Scenario.  It extends the functionality
+            of <see cref="T:AVAIntegrationModeler.Contracts.DTO.ScenarioDTO"/> and is immutable by design.</remarks>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,359 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "AVAIntegrationModeler.API.Client/1.0.0": {
+        "dependencies": {
+          "AVAIntegrationModeler.Contracts": "1.0.0",
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.10",
+          "Microsoft.Extensions.DependencyInjection": "9.0.10",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.10",
+          "Microsoft.Extensions.Http": "9.0.10",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "9.0.10",
+          "Pathoschild.Http.FluentClient": "4.3.0"
+        },
+        "runtime": {
+          "AVAIntegrationModeler.API.Client.dll": {}
+        }
+      },
+      "Microsoft.AspNet.WebApi.Client/5.2.9": {
+        "dependencies": {
+          "Newtonsoft.Json": "10.0.1",
+          "Newtonsoft.Json.Bson": "1.0.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Net.Http.Formatting.dll": {
+            "assemblyVersion": "5.2.9.0",
+            "fileVersion": "5.2.61129.10"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration/9.0.10": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.10",
+          "Microsoft.Extensions.Primitives": "9.0.10"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Configuration.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Abstractions/9.0.10": {
+        "dependencies": {
+          "Microsoft.Extensions.Primitives": "9.0.10"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Configuration.Abstractions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "Microsoft.Extensions.Configuration.Binder/9.0.10": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.10"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Configuration.Binder.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection/9.0.10": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.10"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.DependencyInjection.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.10": {
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.DependencyInjection.Abstractions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "Microsoft.Extensions.Diagnostics/9.0.10": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration": "9.0.10",
+          "Microsoft.Extensions.Diagnostics.Abstractions": "9.0.10",
+          "Microsoft.Extensions.Options.ConfigurationExtensions": "9.0.10"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Diagnostics.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "Microsoft.Extensions.Diagnostics.Abstractions/9.0.10": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.10",
+          "Microsoft.Extensions.Options": "9.0.10"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Diagnostics.Abstractions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "Microsoft.Extensions.Http/9.0.10": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.10",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.10",
+          "Microsoft.Extensions.Diagnostics": "9.0.10",
+          "Microsoft.Extensions.Logging": "9.0.10",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.10",
+          "Microsoft.Extensions.Options": "9.0.10"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Http.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging/9.0.10": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection": "9.0.10",
+          "Microsoft.Extensions.Logging.Abstractions": "9.0.10",
+          "Microsoft.Extensions.Options": "9.0.10"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Logging.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "Microsoft.Extensions.Logging.Abstractions/9.0.10": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.10"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Logging.Abstractions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "Microsoft.Extensions.Options/9.0.10": {
+        "dependencies": {
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.10",
+          "Microsoft.Extensions.Primitives": "9.0.10"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Options.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "Microsoft.Extensions.Options.ConfigurationExtensions/9.0.10": {
+        "dependencies": {
+          "Microsoft.Extensions.Configuration.Abstractions": "9.0.10",
+          "Microsoft.Extensions.Configuration.Binder": "9.0.10",
+          "Microsoft.Extensions.DependencyInjection.Abstractions": "9.0.10",
+          "Microsoft.Extensions.Options": "9.0.10",
+          "Microsoft.Extensions.Primitives": "9.0.10"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Options.ConfigurationExtensions.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "Microsoft.Extensions.Primitives/9.0.10": {
+        "runtime": {
+          "lib/net9.0/Microsoft.Extensions.Primitives.dll": {
+            "assemblyVersion": "9.0.0.0",
+            "fileVersion": "9.0.1025.47515"
+          }
+        }
+      },
+      "Newtonsoft.Json/10.0.1": {
+        "runtime": {
+          "lib/netstandard1.3/Newtonsoft.Json.dll": {
+            "assemblyVersion": "10.0.0.0",
+            "fileVersion": "10.0.1.20720"
+          }
+        }
+      },
+      "Newtonsoft.Json.Bson/1.0.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "10.0.1"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.1.20722"
+          }
+        }
+      },
+      "Pathoschild.Http.FluentClient/4.3.0": {
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Client": "5.2.9"
+        },
+        "runtime": {
+          "lib/net5.0/Pathoschild.Http.Client.dll": {
+            "assemblyVersion": "4.3.0.0",
+            "fileVersion": "4.3.0.0"
+          }
+        }
+      },
+      "AVAIntegrationModeler.Contracts/1.0.0": {
+        "runtime": {
+          "AVAIntegrationModeler.Contracts.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AVAIntegrationModeler.API.Client/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.AspNet.WebApi.Client/5.2.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cuVhPjjNMSEFpKXweMNBbsG4RUFuuZpFBm8tSyw309U9JEjcnbB6n3EPb4xwgcy9bJ38ctIbv5G8zXUBhlrPWw==",
+      "path": "microsoft.aspnet.webapi.client/5.2.9",
+      "hashPath": "microsoft.aspnet.webapi.client.5.2.9.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UAm3SLGAMlJdowbN+/xnh2UGJkdJoXVm4MsdhZ60dAMS8jteoyCx5WfIab5DKv0TCYpdhVecLJVUjEO3abs9UQ==",
+      "path": "microsoft.extensions.configuration/9.0.10",
+      "hashPath": "microsoft.extensions.configuration.9.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Abstractions/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ad3JxmFj0uxuFa1CT6oxTCC1lQ0xeRuOvzBRFT/I/ofIXVOnNsH/v2GZkAJWhlpZqKUvSexQZzp3EEAB2CdtJg==",
+      "path": "microsoft.extensions.configuration.abstractions/9.0.10",
+      "hashPath": "microsoft.extensions.configuration.abstractions.9.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Configuration.Binder/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-D6Kng+9I+w1SQPxJybc6wzw9nnnyUQPutycjtI0svv1RHaWOpUk9PPlwIRfhhoQZ3yihejkEI2wNv/7VnVtkGA==",
+      "path": "microsoft.extensions.configuration.binder/9.0.10",
+      "hashPath": "microsoft.extensions.configuration.binder.9.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-iEtXCkNd5XhjNJAOb/wO4IhDRdLIE2CsPxZggZQWJ/q2+sa8dmEPC393nnsiqdH8/4KV8Xn25IzgKPR1UEQ0og==",
+      "path": "microsoft.extensions.dependencyinjection/9.0.10",
+      "hashPath": "microsoft.extensions.dependencyinjection.9.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.DependencyInjection.Abstractions/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-r9waLiOPe9ZF1PvzUT+RDoHvpMmY8MW+lb4lqjYGObwKpnyPMLI3odVvlmshwuZcdoHynsGWOrCPA0hxZ63lIA==",
+      "path": "microsoft.extensions.dependencyinjection.abstractions/9.0.10",
+      "hashPath": "microsoft.extensions.dependencyinjection.abstractions.9.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Diagnostics/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-01x2vz0AbIdfNUzEVYFq2HSeq1BmrSDpiG7nTmwjfd0d39sahQ8T7dhSXhH+YnZyaLWyMBudOq0vVa/voyNWjg==",
+      "path": "microsoft.extensions.diagnostics/9.0.10",
+      "hashPath": "microsoft.extensions.diagnostics.9.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Diagnostics.Abstractions/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-iwVnYi+gNKrr5riw8YFCoLCN4s0dmHtzfUmV99RIhrz8R4d6C/bsKzXhIhZWDIxJOhVzB+idSOQeRGj1/oMF+Q==",
+      "path": "microsoft.extensions.diagnostics.abstractions/9.0.10",
+      "hashPath": "microsoft.extensions.diagnostics.abstractions.9.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Http/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Xg+P2o+fUyI38up8lpT2M/xNnSMc1M49nN42NcfJHGn5gUrpEHOg9XopcYMM6BOgglCcnYtT6PAb1aASPNA/4A==",
+      "path": "microsoft.extensions.http/9.0.10",
+      "hashPath": "microsoft.extensions.http.9.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UBXHqE9vyptVhaFnT1R7YJKCve7TqVI10yjjUZBNGMlW2lZ4c031Slt9hxsOzWCzlpPxxIFyf1Yk4a6Iubxx7w==",
+      "path": "microsoft.extensions.logging/9.0.10",
+      "hashPath": "microsoft.extensions.logging.9.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Logging.Abstractions/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-MFUPv/nN1rAQ19w43smm6bbf0JDYN/1HEPHoiMYY50pvDMFpglzWAuoTavByDmZq7UuhjaxwrET3joU69ZHoHQ==",
+      "path": "microsoft.extensions.logging.abstractions/9.0.10",
+      "hashPath": "microsoft.extensions.logging.abstractions.9.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-zMNABt8eBv0B0XrWjFy9nZNgddavaOeq3ZdaD5IlHhRH65MrU7HM+Hd8GjWE3e2VDGFPZFfSAc6XVXC17f9fOA==",
+      "path": "microsoft.extensions.options/9.0.10",
+      "hashPath": "microsoft.extensions.options.9.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Options.ConfigurationExtensions/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-wLsf2TyVFFxWQPv0PRJj365it1ngIt8utlHJWSZ9OJ2k+NDa/PtBIRsGlF/NkoLwm1m+1vOePNl2MiKfk6lYfQ==",
+      "path": "microsoft.extensions.options.configurationextensions/9.0.10",
+      "hashPath": "microsoft.extensions.options.configurationextensions.9.0.10.nupkg.sha512"
+    },
+    "Microsoft.Extensions.Primitives/9.0.10": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3pl8D1O5ZwMpDkZAT2uXrhQ6NipkwEgDLMFuURiHTf72TvkoMP61QYH3Vk1yrzVHnHBdNZk3cQACz8Zc7YGNhQ==",
+      "path": "microsoft.extensions.primitives/9.0.10",
+      "hashPath": "microsoft.extensions.primitives.9.0.10.nupkg.sha512"
+    },
+    "Newtonsoft.Json/10.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-ebWzW9j2nwxQeBo59As2TYn7nYr9BHicqqCwHOD1Vdo+50HBtLPuqdiCYJcLdTRknpYis/DSEOQz5KmZxwrIAg==",
+      "path": "newtonsoft.json/10.0.1",
+      "hashPath": "newtonsoft.json.10.0.1.nupkg.sha512"
+    },
+    "Newtonsoft.Json.Bson/1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5PYT/IqQ+UK31AmZiSS102R6EsTo+LGTSI8bp7WAUqDKaF4wHXD8U9u4WxTI1vc64tYi++8p3dk3WWNqPFgldw==",
+      "path": "newtonsoft.json.bson/1.0.1",
+      "hashPath": "newtonsoft.json.bson.1.0.1.nupkg.sha512"
+    },
+    "Pathoschild.Http.FluentClient/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kYgKWzY9WwxHtHMtwIpEE2dlv/a783vCvEp4Jbct2jiJyDTXxR4BoyNGG33r6Y2nxLXAnkV6ue2xh8jnaZydqA==",
+      "path": "pathoschild.http.fluentclient/4.3.0",
+      "hashPath": "pathoschild.http.fluentclient.4.3.0.nupkg.sha512"
+    },
+    "AVAIntegrationModeler.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

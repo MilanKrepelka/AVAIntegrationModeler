@@ -1,0 +1,619 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v9.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v9.0": {
+      "AVAIntegrationModeler.AVAPlace/1.0.0": {
+        "dependencies": {
+          "ASOL.Core.Multitenancy.AspNetCore": "0.0.1.47910-dev",
+          "ASOL.DataService.Connector": "0.0.1.41097-dev",
+          "ASOL.IdentityProvider.Connector": "0.0.1.40507-dev",
+          "ASOL.IdentityProvider.Contracts": "0.0.1.40507-dev",
+          "AVAIntegrationModeler.Contracts": "1.0.0",
+          "Ardalis.GuardClauses": "5.0.0"
+        },
+        "runtime": {
+          "AVAIntegrationModeler.AVAPlace.dll": {}
+        }
+      },
+      "Ardalis.GuardClauses/5.0.0": {
+        "runtime": {
+          "lib/net8.0/Ardalis.GuardClauses.dll": {
+            "assemblyVersion": "5.0.0.0",
+            "fileVersion": "5.0.0.0"
+          }
+        }
+      },
+      "ASOL.Core.ApiConnector/0.0.1.39271-dev": {
+        "dependencies": {
+          "ASOL.Core.HealthChecks": "0.0.1.28438-dev",
+          "ASOL.Core.Identity": "0.0.1.47819-dev",
+          "ASOL.Core.Multitenancy.Abstractions": "0.0.1.47910-dev",
+          "ASOL.Core.Serialization.Abstractions": "0.0.1.24470-dev",
+          "IdentityModel": "4.0.0",
+          "Pathoschild.Http.FluentClient": "4.3.0"
+        },
+        "runtime": {
+          "lib/net8.0/ASOL.Core.ApiConnector.dll": {
+            "assemblyVersion": "0.0.1.39271",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ASOL.Core.Domain.Contracts/0.0.1.32018-dev": {
+        "runtime": {
+          "lib/net8.0/ASOL.Core.Domain.Contracts.dll": {
+            "assemblyVersion": "0.0.1.32018",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ASOL.Core.HealthChecks/0.0.1.28438-dev": {
+        "runtime": {
+          "lib/net8.0/ASOL.Core.HealthChecks.dll": {
+            "assemblyVersion": "0.0.1.28438",
+            "fileVersion": "0.0.1.28438"
+          }
+        }
+      },
+      "ASOL.Core.Identity/0.0.1.47819-dev": {
+        "dependencies": {
+          "ASOL.Core.Identity.Abstractions": "0.0.1.47819-dev",
+          "ASOL.Core.Identity.Contracts": "0.0.1.47819-dev",
+          "Microsoft.AspNetCore.Authentication.Certificate": "8.0.12"
+        },
+        "runtime": {
+          "lib/net8.0/ASOL.Core.Identity.dll": {
+            "assemblyVersion": "0.0.1.47819",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ASOL.Core.Identity.Abstractions/0.0.1.47819-dev": {
+        "dependencies": {
+          "ASOL.Core.Identity.Contracts": "0.0.1.47819-dev"
+        },
+        "runtime": {
+          "lib/net8.0/ASOL.Core.Identity.Abstractions.dll": {
+            "assemblyVersion": "0.0.1.47819",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ASOL.Core.Identity.Contracts/0.0.1.47819-dev": {
+        "runtime": {
+          "lib/net8.0/ASOL.Core.Identity.Contracts.dll": {
+            "assemblyVersion": "0.0.1.47819",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ASOL.Core.Localization/0.0.1.24388-dev": {
+        "runtime": {
+          "lib/net8.0/ASOL.Core.Localization.dll": {
+            "assemblyVersion": "0.0.1.24388",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ASOL.Core.Multitenancy/0.0.1.47910-dev": {
+        "dependencies": {
+          "ASOL.Core.Multitenancy.Abstractions": "0.0.1.47910-dev"
+        },
+        "runtime": {
+          "lib/net8.0/ASOL.Core.Multitenancy.dll": {
+            "assemblyVersion": "0.0.1.47910",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ASOL.Core.Multitenancy.Abstractions/0.0.1.47910-dev": {
+        "dependencies": {
+          "ASOL.Core.Multitenancy.Contracts": "0.0.1.47910-dev"
+        },
+        "runtime": {
+          "lib/net8.0/ASOL.Core.Multitenancy.Abstractions.dll": {
+            "assemblyVersion": "0.0.1.47910",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ASOL.Core.Multitenancy.AspNetCore/0.0.1.47910-dev": {
+        "dependencies": {
+          "ASOL.Core.Identity": "0.0.1.47819-dev",
+          "ASOL.Core.Multitenancy": "0.0.1.47910-dev",
+          "ASOL.Core.Multitenancy.Abstractions": "0.0.1.47910-dev"
+        },
+        "runtime": {
+          "lib/net8.0/ASOL.Core.Multitenancy.AspNetCore.dll": {
+            "assemblyVersion": "0.0.1.47910",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ASOL.Core.Multitenancy.Contracts/0.0.1.47910-dev": {
+        "runtime": {
+          "lib/net8.0/ASOL.Core.Multitenancy.Contracts.dll": {
+            "assemblyVersion": "0.0.1.47910",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ASOL.Core.Paging.Contracts/0.0.1.24128-dev": {
+        "runtime": {
+          "lib/net8.0/ASOL.Core.Paging.Contracts.dll": {
+            "assemblyVersion": "0.0.1.24128",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ASOL.Core.Serialization.Abstractions/0.0.1.24470-dev": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/net8.0/ASOL.Core.Serialization.Abstractions.dll": {
+            "assemblyVersion": "0.0.1.24470",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ASOL.DataService.Connector/0.0.1.41097-dev": {
+        "dependencies": {
+          "ASOL.Core.ApiConnector": "0.0.1.39271-dev",
+          "ASOL.Core.Domain.Contracts": "0.0.1.32018-dev",
+          "ASOL.Core.Paging.Contracts": "0.0.1.24128-dev",
+          "ASOL.DataService.Primitives": "0.0.1.41097-dev"
+        },
+        "runtime": {
+          "lib/net8.0/ASOL.DataService.Connector.dll": {
+            "assemblyVersion": "0.0.1.41097",
+            "fileVersion": "0.0.1.41097"
+          }
+        }
+      },
+      "ASOL.DataService.Edge.Contracts/0.0.1.41097-dev": {
+        "dependencies": {
+          "ASOL.Core.Multitenancy.Contracts": "0.0.1.47910-dev",
+          "ASOL.Core.Paging.Contracts": "0.0.1.24128-dev",
+          "ASOL.Core.Serialization.Abstractions": "0.0.1.24470-dev"
+        },
+        "runtime": {
+          "lib/net8.0/ASOL.DataService.Edge.Contracts.dll": {
+            "assemblyVersion": "0.0.1.41097",
+            "fileVersion": "0.0.1.41097"
+          }
+        }
+      },
+      "ASOL.DataService.Primitives/0.0.1.41097-dev": {
+        "dependencies": {
+          "ASOL.Core.Domain.Contracts": "0.0.1.32018-dev",
+          "ASOL.Core.Localization": "0.0.1.24388-dev",
+          "ASOL.Core.Multitenancy.Contracts": "0.0.1.47910-dev",
+          "ASOL.Core.Paging.Contracts": "0.0.1.24128-dev",
+          "ASOL.Core.Serialization.Abstractions": "0.0.1.24470-dev",
+          "ASOL.DataService.Edge.Contracts": "0.0.1.41097-dev"
+        },
+        "runtime": {
+          "lib/net8.0/ASOL.DataService.Primitives.dll": {
+            "assemblyVersion": "0.0.1.41097",
+            "fileVersion": "0.0.1.41097"
+          }
+        }
+      },
+      "ASOL.IdentityProvider.Connector/0.0.1.40507-dev": {
+        "dependencies": {
+          "ASOL.Core.ApiConnector": "0.0.1.39271-dev",
+          "ASOL.IdentityProvider.Contracts": "0.0.1.40507-dev",
+          "Microsoft.IdentityModel.JsonWebTokens": "8.0.1",
+          "Microsoft.IdentityModel.Protocols": "8.0.1",
+          "Microsoft.IdentityModel.Protocols.OpenIdConnect": "8.0.1"
+        },
+        "runtime": {
+          "lib/net8.0/ASOL.IdentityProvider.Connector.dll": {
+            "assemblyVersion": "0.0.1.40507",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "ASOL.IdentityProvider.Contracts/0.0.1.40507-dev": {
+        "dependencies": {
+          "ASOL.Core.Domain.Contracts": "0.0.1.32018-dev",
+          "ASOL.Core.Localization": "0.0.1.24388-dev",
+          "ASOL.Core.Paging.Contracts": "0.0.1.24128-dev",
+          "ASOL.Core.Serialization.Abstractions": "0.0.1.24470-dev"
+        },
+        "runtime": {
+          "lib/net8.0/ASOL.IdentityProvider.Contracts.dll": {
+            "assemblyVersion": "0.0.1.40507",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "IdentityModel/4.0.0": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/netstandard2.0/IdentityModel.dll": {
+            "assemblyVersion": "4.0.0.0",
+            "fileVersion": "4.0.0.0"
+          }
+        }
+      },
+      "Microsoft.AspNet.WebApi.Client/5.2.9": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3",
+          "Newtonsoft.Json.Bson": "1.0.1"
+        },
+        "runtime": {
+          "lib/netstandard2.0/System.Net.Http.Formatting.dll": {
+            "assemblyVersion": "5.2.9.0",
+            "fileVersion": "5.2.61129.10"
+          }
+        }
+      },
+      "Microsoft.AspNetCore.Authentication.Certificate/8.0.12": {
+        "runtime": {
+          "lib/net8.0/Microsoft.AspNetCore.Authentication.Certificate.dll": {
+            "assemblyVersion": "8.0.12.0",
+            "fileVersion": "8.0.1224.60312"
+          }
+        }
+      },
+      "Microsoft.IdentityModel.Abstractions/8.0.1": {
+        "runtime": {
+          "lib/net9.0/Microsoft.IdentityModel.Abstractions.dll": {
+            "assemblyVersion": "8.0.1.0",
+            "fileVersion": "8.0.1.50722"
+          }
+        }
+      },
+      "Microsoft.IdentityModel.JsonWebTokens/8.0.1": {
+        "dependencies": {
+          "Microsoft.IdentityModel.Tokens": "8.0.1"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.IdentityModel.JsonWebTokens.dll": {
+            "assemblyVersion": "8.0.1.0",
+            "fileVersion": "8.0.1.50722"
+          }
+        }
+      },
+      "Microsoft.IdentityModel.Logging/8.0.1": {
+        "dependencies": {
+          "Microsoft.IdentityModel.Abstractions": "8.0.1"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.IdentityModel.Logging.dll": {
+            "assemblyVersion": "8.0.1.0",
+            "fileVersion": "8.0.1.50722"
+          }
+        }
+      },
+      "Microsoft.IdentityModel.Protocols/8.0.1": {
+        "dependencies": {
+          "Microsoft.IdentityModel.Tokens": "8.0.1"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.IdentityModel.Protocols.dll": {
+            "assemblyVersion": "8.0.1.0",
+            "fileVersion": "8.0.1.50722"
+          }
+        }
+      },
+      "Microsoft.IdentityModel.Protocols.OpenIdConnect/8.0.1": {
+        "dependencies": {
+          "Microsoft.IdentityModel.Protocols": "8.0.1",
+          "System.IdentityModel.Tokens.Jwt": "8.0.1"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.IdentityModel.Protocols.OpenIdConnect.dll": {
+            "assemblyVersion": "8.0.1.0",
+            "fileVersion": "8.0.1.50722"
+          }
+        }
+      },
+      "Microsoft.IdentityModel.Tokens/8.0.1": {
+        "dependencies": {
+          "Microsoft.IdentityModel.Logging": "8.0.1"
+        },
+        "runtime": {
+          "lib/net9.0/Microsoft.IdentityModel.Tokens.dll": {
+            "assemblyVersion": "8.0.1.0",
+            "fileVersion": "8.0.1.50722"
+          }
+        }
+      },
+      "Newtonsoft.Json/13.0.3": {
+        "runtime": {
+          "lib/net6.0/Newtonsoft.Json.dll": {
+            "assemblyVersion": "13.0.0.0",
+            "fileVersion": "13.0.3.27908"
+          }
+        }
+      },
+      "Newtonsoft.Json.Bson/1.0.1": {
+        "dependencies": {
+          "Newtonsoft.Json": "13.0.3"
+        },
+        "runtime": {
+          "lib/netstandard1.3/Newtonsoft.Json.Bson.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.1.20722"
+          }
+        }
+      },
+      "Pathoschild.Http.FluentClient/4.3.0": {
+        "dependencies": {
+          "Microsoft.AspNet.WebApi.Client": "5.2.9"
+        },
+        "runtime": {
+          "lib/net5.0/Pathoschild.Http.Client.dll": {
+            "assemblyVersion": "4.3.0.0",
+            "fileVersion": "4.3.0.0"
+          }
+        }
+      },
+      "System.IdentityModel.Tokens.Jwt/8.0.1": {
+        "dependencies": {
+          "Microsoft.IdentityModel.JsonWebTokens": "8.0.1",
+          "Microsoft.IdentityModel.Tokens": "8.0.1"
+        },
+        "runtime": {
+          "lib/net9.0/System.IdentityModel.Tokens.Jwt.dll": {
+            "assemblyVersion": "8.0.1.0",
+            "fileVersion": "8.0.1.50722"
+          }
+        }
+      },
+      "AVAIntegrationModeler.Contracts/1.0.0": {
+        "runtime": {
+          "AVAIntegrationModeler.Contracts.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "AVAIntegrationModeler.AVAPlace/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Ardalis.GuardClauses/5.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jVPRvLw0xIUFto2cMrKgRYADWIHbEEfzZHGiU/swwNgl1zo28Q1zfSa3VUC3C0s9DyhFDPSaF4dEDQRyTZUcyQ==",
+      "path": "ardalis.guardclauses/5.0.0",
+      "hashPath": "ardalis.guardclauses.5.0.0.nupkg.sha512"
+    },
+    "ASOL.Core.ApiConnector/0.0.1.39271-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5E31hpcy6Q8iqOZ9nJOj8LlVoS+Mzpg3f7WzdsMt/a89K9BUNSNlUR75hZ9klsjvsS7hvcUURPD/LFfSp52jmA==",
+      "path": "asol.core.apiconnector/0.0.1.39271-dev",
+      "hashPath": "asol.core.apiconnector.0.0.1.39271-dev.nupkg.sha512"
+    },
+    "ASOL.Core.Domain.Contracts/0.0.1.32018-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cTnqlxQjlX3HBVnFsMvIhVVXJN18o1zbbDbRZzyQNbtAqY8KqHvaiCAxQWrzRxzkrLfc8by1Ky+Uw22xjepCWg==",
+      "path": "asol.core.domain.contracts/0.0.1.32018-dev",
+      "hashPath": "asol.core.domain.contracts.0.0.1.32018-dev.nupkg.sha512"
+    },
+    "ASOL.Core.HealthChecks/0.0.1.28438-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-/G33dO+edKXTpDrJPLoYLnyZJTXaDATTC8CCJ/lwKNSCNW3Fq5IK5jtq0R6zT1wKRfVQcTwhl7exrTEQbKll+Q==",
+      "path": "asol.core.healthchecks/0.0.1.28438-dev",
+      "hashPath": "asol.core.healthchecks.0.0.1.28438-dev.nupkg.sha512"
+    },
+    "ASOL.Core.Identity/0.0.1.47819-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-9HiC979VxJv76Mnvse3znau3gaTxbit4u+Z+/1QsgI16Gz9+WACZItXWX0KwF8L9kPC2+iYvpOZbJfZtgjWsow==",
+      "path": "asol.core.identity/0.0.1.47819-dev",
+      "hashPath": "asol.core.identity.0.0.1.47819-dev.nupkg.sha512"
+    },
+    "ASOL.Core.Identity.Abstractions/0.0.1.47819-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-KBYc4teW+qhmgqK0rEWM/G3vpRKACUYE3dLnvA/FoK7UdSIy/9ffArTUv4H0KpBztFT9Nbsy8PWMVX1NzNZI2Q==",
+      "path": "asol.core.identity.abstractions/0.0.1.47819-dev",
+      "hashPath": "asol.core.identity.abstractions.0.0.1.47819-dev.nupkg.sha512"
+    },
+    "ASOL.Core.Identity.Contracts/0.0.1.47819-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Xm1pnpVdIzCxxEVF9xFda5qpB5NKg807m62+V1CGeWYKMcie3r920I6Js2VWMfbla1BJEYjLR+1tBKdxHsUf/g==",
+      "path": "asol.core.identity.contracts/0.0.1.47819-dev",
+      "hashPath": "asol.core.identity.contracts.0.0.1.47819-dev.nupkg.sha512"
+    },
+    "ASOL.Core.Localization/0.0.1.24388-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-TevjawSp2IXDk2d2xR0WT55RzwZbWsa+iC+V6sRjdhaTtGL1Om60c0wuS1U6nme8oK1KlO5UKEk+olpHvzM7KQ==",
+      "path": "asol.core.localization/0.0.1.24388-dev",
+      "hashPath": "asol.core.localization.0.0.1.24388-dev.nupkg.sha512"
+    },
+    "ASOL.Core.Multitenancy/0.0.1.47910-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3DztWnF+l5ZRRAX/9jctK24RBibxKSmP5GlhqYMRPkPsOqH8kueomik9RiMFIIcyD+MRq+67hdQgZ0/viSG9xA==",
+      "path": "asol.core.multitenancy/0.0.1.47910-dev",
+      "hashPath": "asol.core.multitenancy.0.0.1.47910-dev.nupkg.sha512"
+    },
+    "ASOL.Core.Multitenancy.Abstractions/0.0.1.47910-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-hzxS9ToMtGNBk5jV+YJb7pyQMjH8v3gBxKFMLNR0xmay9IBprYwF5POw/kDGG97SNcdo6zMucc3Z0IdtHscJ6Q==",
+      "path": "asol.core.multitenancy.abstractions/0.0.1.47910-dev",
+      "hashPath": "asol.core.multitenancy.abstractions.0.0.1.47910-dev.nupkg.sha512"
+    },
+    "ASOL.Core.Multitenancy.AspNetCore/0.0.1.47910-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-323aOiMvJ15ql3MioDtrh0QXKCpKqWUUx01FTEwBTTS1XMUQ6rFEwXGAAwDaJQEdB3LLU81iGZuWYGWwf6HiZA==",
+      "path": "asol.core.multitenancy.aspnetcore/0.0.1.47910-dev",
+      "hashPath": "asol.core.multitenancy.aspnetcore.0.0.1.47910-dev.nupkg.sha512"
+    },
+    "ASOL.Core.Multitenancy.Contracts/0.0.1.47910-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-4Cmnt7h+ObH1lUoN7N84jyCN+kRe6XVnTN9J39ofvGzhd8DaJSN/cgf2es3+criM5kVbhZHUHTVKYnNlCF8a0g==",
+      "path": "asol.core.multitenancy.contracts/0.0.1.47910-dev",
+      "hashPath": "asol.core.multitenancy.contracts.0.0.1.47910-dev.nupkg.sha512"
+    },
+    "ASOL.Core.Paging.Contracts/0.0.1.24128-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-7USQPtnbyKWoJHw7EffRiFsfv0yABBNOQXYh8PONLe9hAgyPKek/1HgAtMIlaTWNA63+DwbchK9jQYfi26ShwA==",
+      "path": "asol.core.paging.contracts/0.0.1.24128-dev",
+      "hashPath": "asol.core.paging.contracts.0.0.1.24128-dev.nupkg.sha512"
+    },
+    "ASOL.Core.Serialization.Abstractions/0.0.1.24470-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JDvaRoAhhP/xFbkLhmjTB6s1Rr0rR1eNldOrNvW+kMwegBJnx2hMZZIz2TX/wFuqzzQvUKuK6i8WTcjsKMIdtw==",
+      "path": "asol.core.serialization.abstractions/0.0.1.24470-dev",
+      "hashPath": "asol.core.serialization.abstractions.0.0.1.24470-dev.nupkg.sha512"
+    },
+    "ASOL.DataService.Connector/0.0.1.41097-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-nyBPotKkJqCQ16MaYy2ftTnfp1pFFcpvDcpvQtMdB8Z15xxqweKYYqxApCrLXnQOdux8uoTVetGBvypLDGXp3w==",
+      "path": "asol.dataservice.connector/0.0.1.41097-dev",
+      "hashPath": "asol.dataservice.connector.0.0.1.41097-dev.nupkg.sha512"
+    },
+    "ASOL.DataService.Edge.Contracts/0.0.1.41097-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-jnPCao673mcJy5g24eFYSnNcuaMsLvixX9LcagRaKfhU8yztGZ6RgGYq1L81zAQyklPj6rWZbFUuMSpYpPVs/w==",
+      "path": "asol.dataservice.edge.contracts/0.0.1.41097-dev",
+      "hashPath": "asol.dataservice.edge.contracts.0.0.1.41097-dev.nupkg.sha512"
+    },
+    "ASOL.DataService.Primitives/0.0.1.41097-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gISXpeRhcC+Pm5bmN5Dl+KDlyJ5r7V5FGh3WDg5laQq7YN5tP7JUX/k70ZM7LZRAniCSnXGMx/H+IQB3UFjmDw==",
+      "path": "asol.dataservice.primitives/0.0.1.41097-dev",
+      "hashPath": "asol.dataservice.primitives.0.0.1.41097-dev.nupkg.sha512"
+    },
+    "ASOL.IdentityProvider.Connector/0.0.1.40507-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-qKFAM329B1hn8arkig2MggZo/ZVH/EJ/Kp3JOGE6IaA+i0q+gcmMuCr/1t2mfqttFY51YUvpKZ8/eDKepCmDYw==",
+      "path": "asol.identityprovider.connector/0.0.1.40507-dev",
+      "hashPath": "asol.identityprovider.connector.0.0.1.40507-dev.nupkg.sha512"
+    },
+    "ASOL.IdentityProvider.Contracts/0.0.1.40507-dev": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-l3uf2xPNeAQYIcqoyLYvoAJVqHHr6pS4Q2Vag83K5jU4zW+WjnTUkS+ihxUfLr40r77BB3AjLxrCiJkAivDrgA==",
+      "path": "asol.identityprovider.contracts/0.0.1.40507-dev",
+      "hashPath": "asol.identityprovider.contracts.0.0.1.40507-dev.nupkg.sha512"
+    },
+    "IdentityModel/4.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Y7i2fezKKKnmxdENfEOpby4Es84e76D16SYcxWKggYraFOvvfKfQAn5KGuuR1X2h1aTrlKZy0lct0NxHg4aVVw==",
+      "path": "identitymodel/4.0.0",
+      "hashPath": "identitymodel.4.0.0.nupkg.sha512"
+    },
+    "Microsoft.AspNet.WebApi.Client/5.2.9": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cuVhPjjNMSEFpKXweMNBbsG4RUFuuZpFBm8tSyw309U9JEjcnbB6n3EPb4xwgcy9bJ38ctIbv5G8zXUBhlrPWw==",
+      "path": "microsoft.aspnet.webapi.client/5.2.9",
+      "hashPath": "microsoft.aspnet.webapi.client.5.2.9.nupkg.sha512"
+    },
+    "Microsoft.AspNetCore.Authentication.Certificate/8.0.12": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-gmypvLBa5miSvqjFGhTCD5u329lWLC8tgOMVDGqN2veHJHeOR2LMM3ZQBehr03AihGrG2f9N9vgIwaWFEfDRVQ==",
+      "path": "microsoft.aspnetcore.authentication.certificate/8.0.12",
+      "hashPath": "microsoft.aspnetcore.authentication.certificate.8.0.12.nupkg.sha512"
+    },
+    "Microsoft.IdentityModel.Abstractions/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-OtlIWcyX01olfdevPKZdIPfBEvbcioDyBiE/Z2lHsopsMD7twcKtlN9kMevHmI5IIPhFpfwCIiR6qHQz1WHUIw==",
+      "path": "microsoft.identitymodel.abstractions/8.0.1",
+      "hashPath": "microsoft.identitymodel.abstractions.8.0.1.nupkg.sha512"
+    },
+    "Microsoft.IdentityModel.JsonWebTokens/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-s6++gF9x0rQApQzOBbSyp4jUaAlwm+DroKfL8gdOHxs83k8SJfUXhuc46rDB3rNXBQ1MVRxqKUrqFhO/M0E97g==",
+      "path": "microsoft.identitymodel.jsonwebtokens/8.0.1",
+      "hashPath": "microsoft.identitymodel.jsonwebtokens.8.0.1.nupkg.sha512"
+    },
+    "Microsoft.IdentityModel.Logging/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-UCPF2exZqBXe7v/6sGNiM6zCQOUXXQ9+v5VTb9gPB8ZSUPnX53BxlN78v2jsbIvK9Dq4GovQxo23x8JgWvm/Qg==",
+      "path": "microsoft.identitymodel.logging/8.0.1",
+      "hashPath": "microsoft.identitymodel.logging.8.0.1.nupkg.sha512"
+    },
+    "Microsoft.IdentityModel.Protocols/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-uA2vpKqU3I2mBBEaeJAWPTjT9v1TZrGWKdgK6G5qJd03CLx83kdiqO9cmiK8/n1erkHzFBwU/RphP83aAe3i3g==",
+      "path": "microsoft.identitymodel.protocols/8.0.1",
+      "hashPath": "microsoft.identitymodel.protocols.8.0.1.nupkg.sha512"
+    },
+    "Microsoft.IdentityModel.Protocols.OpenIdConnect/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-AQDbfpL+yzuuGhO/mQhKNsp44pm5Jv8/BI4KiFXR7beVGZoSH35zMV3PrmcfvSTsyI6qrcR898NzUauD6SRigg==",
+      "path": "microsoft.identitymodel.protocols.openidconnect/8.0.1",
+      "hashPath": "microsoft.identitymodel.protocols.openidconnect.8.0.1.nupkg.sha512"
+    },
+    "Microsoft.IdentityModel.Tokens/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kDimB6Dkd3nkW2oZPDkMkVHfQt3IDqO5gL0oa8WVy3OP4uE8Ij+8TXnqg9TOd9ufjsY3IDiGz7pCUbnfL18tjg==",
+      "path": "microsoft.identitymodel.tokens/8.0.1",
+      "hashPath": "microsoft.identitymodel.tokens.8.0.1.nupkg.sha512"
+    },
+    "Newtonsoft.Json/13.0.3": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-HrC5BXdl00IP9zeV+0Z848QWPAoCr9P3bDEZguI+gkLcBKAOxix/tLEAAHC+UvDNPv4a2d18lOReHMOagPa+zQ==",
+      "path": "newtonsoft.json/13.0.3",
+      "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
+    },
+    "Newtonsoft.Json.Bson/1.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-5PYT/IqQ+UK31AmZiSS102R6EsTo+LGTSI8bp7WAUqDKaF4wHXD8U9u4WxTI1vc64tYi++8p3dk3WWNqPFgldw==",
+      "path": "newtonsoft.json.bson/1.0.1",
+      "hashPath": "newtonsoft.json.bson.1.0.1.nupkg.sha512"
+    },
+    "Pathoschild.Http.FluentClient/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-kYgKWzY9WwxHtHMtwIpEE2dlv/a783vCvEp4Jbct2jiJyDTXxR4BoyNGG33r6Y2nxLXAnkV6ue2xh8jnaZydqA==",
+      "path": "pathoschild.http.fluentclient/4.3.0",
+      "hashPath": "pathoschild.http.fluentclient.4.3.0.nupkg.sha512"
+    },
+    "System.IdentityModel.Tokens.Jwt/8.0.1": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GJw3bYkWpOgvN3tJo5X4lYUeIFA2HD293FPUhKmp7qxS+g5ywAb34Dnd3cDAFLkcMohy5XTpoaZ4uAHuw0uSPQ==",
+      "path": "system.identitymodel.tokens.jwt/8.0.1",
+      "hashPath": "system.identitymodel.tokens.jwt.8.0.1.nupkg.sha512"
+    },
+    "AVAIntegrationModeler.Contracts/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

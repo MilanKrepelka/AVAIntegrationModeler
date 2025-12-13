@@ -1,0 +1,14 @@
+2025-12-13 13:41:39.017 +01:00 [INF] Registered 11 endpoints in 3 687 milliseconds.
+2025-12-13 13:41:41.591 +01:00 [INF] Now listening on: http://0.0.0.0:5005
+2025-12-13 13:41:41.641 +01:00 [INF] Request starting HTTP/1.1 GET http://0.0.0.0:5005/datamodels?datasource=Database - null null
+2025-12-13 13:41:41.685 +01:00 [INF] No cached response available for this request.
+2025-12-13 13:41:41.690 +01:00 [WRN] Failed to determine the https port for redirect.
+2025-12-13 13:41:41.694 +01:00 [INF] Executing endpoint 'HTTP: GET /DataModels'
+2025-12-13 13:41:41.745 +01:00 [INF] Handling ListDataModelsQuery
+2025-12-13 13:41:41.746 +01:00 [INF] Property Datasource : "Database"
+2025-12-13 13:41:41.748 +01:00 [INF] Property Skip : null
+2025-12-13 13:41:41.749 +01:00 [INF] Property Take : null
+2025-12-13 13:41:41.924 +01:00 [INF] Handled ListDataModelsQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.DataModelDTO]] in 174 ms
+2025-12-13 13:41:41.961 +01:00 [INF] Executed endpoint 'HTTP: GET /DataModels'
+2025-12-13 13:41:41.962 +01:00 [INF] The response could not be cached for this request.
+2025-12-13 13:41:41.968 +01:00 [INF] Request finished HTTP/1.1 GET http://0.0.0.0:5005/datamodels?datasource=Database - 200 null application/json; charset=utf-8 327.4157ms

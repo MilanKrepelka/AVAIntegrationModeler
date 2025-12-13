@@ -46,7 +46,7 @@
   <Folder Include="ViewModels\Scenarios\" />
 </ItemGroup>
 <ItemGroup>
-  <ProjectReference Include="..\AVAIntegrationModeler.API\AVAIntegrationModeler.API.csproj" />
+  <ProjectReference Include="..\AVAIntegrationModeler.API.Client\AVAIntegrationModeler.API.Client.csproj" />
   <ProjectReference Include="..\AVAIntegrationModeler.Contracts\AVAIntegrationModeler.Contracts.csproj" />
   <ProjectReference Include="..\AVAIntegrationModeler.Domain\AVAIntegrationModeler.Domain.csproj" />
 </ItemGroup>

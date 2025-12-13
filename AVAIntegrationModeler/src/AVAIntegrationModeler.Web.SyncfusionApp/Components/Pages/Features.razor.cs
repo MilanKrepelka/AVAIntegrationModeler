@@ -1,5 +1,4 @@
-﻿using AVAIntegrationModeler.API.Features;
-using AVAIntegrationModeler.Contracts;
+﻿using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Microsoft.AspNetCore.Components;
 

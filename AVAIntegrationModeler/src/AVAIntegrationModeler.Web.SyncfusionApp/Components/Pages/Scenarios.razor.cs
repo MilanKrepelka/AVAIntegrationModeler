@@ -1,5 +1,4 @@
-﻿using AVAIntegrationModeler.API.Scenarios;
-using AVAIntegrationModeler.Contracts;
+﻿using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -32,7 +31,7 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
       var response = await httpClient.GetAsync($"http://localhost:57679/Scenarios?datasource={Datasource.AVAPlace}");
       response.EnsureSuccessStatusCode();
 
-      var scenarioListResponse = await response.Content.ReadFromJsonAsync<ScenarioListResponse>();
+      var scenarioListResponse = await response.Content.ReadFromJsonAsync<Contracts.Scenarios.ScenarioListResponse>();
       
       if (scenarioListResponse?.Scenarios != null)
       {
@@ -67,5 +66,9 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
   {
     await base.OnInitializedAsync();
     await LoadItemsAsync();
+    if (Grid != null)
+    {
+      await Grid.Refresh(true);
+    }
   }
 }

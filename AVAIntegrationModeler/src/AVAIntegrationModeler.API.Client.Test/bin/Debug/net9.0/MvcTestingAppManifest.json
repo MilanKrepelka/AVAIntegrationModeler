@@ -1,0 +1,10 @@
+{
+  "AVAIntegrationModeler.API.Client, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Křepelka\\source\\GITHUB\\AVAIntegrationModeler\\AVAIntegrationModeler\\src\\AVAIntegrationModeler.API.Client",
+  "AVAIntegrationModeler.API, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Křepelka\\source\\GITHUB\\AVAIntegrationModeler\\AVAIntegrationModeler\\src\\AVAIntegrationModeler.API",
+  "AVAIntegrationModeler.AVAPlace, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Křepelka\\source\\GITHUB\\AVAIntegrationModeler\\AVAIntegrationModeler\\src\\AVAIntegrationModeler.AVAPlace",
+  "AVAIntegrationModeler.Contracts, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Křepelka\\source\\GITHUB\\AVAIntegrationModeler\\AVAIntegrationModeler\\src\\AVAIntegrationModeler.Contracts",
+  "AVAIntegrationModeler.Domain, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Křepelka\\source\\GITHUB\\AVAIntegrationModeler\\AVAIntegrationModeler\\src\\AVAIntegrationModeler.Domain",
+  "AVAIntegrationModeler.Infrastructure, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Křepelka\\source\\GITHUB\\AVAIntegrationModeler\\AVAIntegrationModeler\\src\\AVAIntegrationModeler.Infrastructure",
+  "AVAIntegrationModeler.ServiceDefaults, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Křepelka\\source\\GITHUB\\AVAIntegrationModeler\\AVAIntegrationModeler\\src\\AVAIntegrationModeler.ServiceDefaults",
+  "AVAIntegrationModeler.UseCases, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\Křepelka\\source\\GITHUB\\AVAIntegrationModeler\\AVAIntegrationModeler\\src\\AVAIntegrationModeler.UseCases"
+}

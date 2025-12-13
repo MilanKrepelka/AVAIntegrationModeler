@@ -1,7 +1,6 @@
 ﻿@page "/datamodelmap/{modelId:guid}"
 @rendermode InteractiveServer
 @using System.Text.Json
-@using AVAIntegrationModeler.API.DataModels
 @using AVAIntegrationModeler.Contracts
 @using AVAIntegrationModeler.Contracts.DTO
 @using AVAIntegrationModeler.Infrastructure
@@ -41,6 +40,9 @@ else
     DiagramObjectCollection<Node> nodes = new DiagramObjectCollection<Node>();
     DiagramObjectCollection<Connector> connectors = new DiagramObjectCollection<Connector>();
 
+    // Which models are referenced as NestedEntity -> render slightly lighter
+    HashSet<Guid> nestedEntityIds = new HashSet<Guid>(GuidComparer.Instance);
+
     // RadialTree root id (string for markup)
     string radialRoot = string.Empty;
 
@@ -61,6 +63,7 @@ else
             nodes.Clear();
             connectors.Clear();
             connectorCount = 0;
+            nestedEntityIds.Clear();
 
             using var http = new HttpClient();
             var url = $"http://localhost:57679/DataModels?datasource={Datasource.AVAPlace}";
@@ -98,6 +101,22 @@ else
             }
 
             dtos ??= new List<DataModelDTO>();
+
+            // Collect IDs that are referenced as NestedEntity (to render them lighter)
+            foreach (var dto in dtos)
+            {
+                var fields = dto.Fields ?? Enumerable.Empty<DataModelFieldDTO>();
+                foreach (var field in fields)
+                {
+                    if (field.FieldType == DataModelFieldType.NestedEntity)
+                    {
+                        foreach (var rid in field.ReferencedEntityTypeIds ?? Enumerable.Empty<Guid>())
+                        {
+                            if (rid != Guid.Empty) nestedEntityIds.Add(rid);
+                        }
+                    }
+                }
+            }
 
             // build forest of subtrees (each subtree contains only outgoing references from its root)
             var forest = new List<DataModelTree>();
@@ -258,13 +277,21 @@ else
 
     private void CreateNode(string id, string label)
     {
-        var isRoot = !string.IsNullOrEmpty(radialRoot) && string.Equals(id, radialRoot, StringComparison.OrdinalIgnoreCase);
+        var parsed = Guid.TryParse(id, out var gid) ? gid : Guid.Empty;
+        var isRoot = parsed != Guid.Empty && !string.IsNullOrEmpty(radialRoot) && string.Equals(id, radialRoot, StringComparison.OrdinalIgnoreCase);
+        var isNested = parsed != Guid.Empty && nestedEntityIds.Contains(parsed);
 
+        // choose fill color:
+        // - root: highlighted accent
+        // - nested entity: slightly lighter (--primary-300)
+        // - default: primary 500
         var fillColor = isRoot
-            ? "var(--accent, #FF7043)"   // highlighted color for root (fallback provided)
-            : "var(--primary-500)";      // use CSS variable for other nodes
+            ? "var(--accent, #FF7043)"
+            : isNested
+                ? "var(--primary-300, #93c5fd)"   // light variant fallback
+                : "var(--primary-500, #357BD2)";
 
-        var textColor = isRoot ? "black" : "white";
+        var textColor = isRoot ? "black" : (isNested ? "#0b1826" : "white");
 
         var diagramNode = new Node
         {
@@ -283,5 +310,13 @@ else
             }
         };
         nodes.Add(diagramNode);
+    }
+
+    // small comparer for HashSet<Guid> initialization above
+    private class GuidComparer : IEqualityComparer<Guid>
+    {
+        public static readonly GuidComparer Instance = new();
+        public bool Equals(Guid x, Guid y) => x == y;
+        public int GetHashCode(Guid obj) => obj.GetHashCode();
     }
 }

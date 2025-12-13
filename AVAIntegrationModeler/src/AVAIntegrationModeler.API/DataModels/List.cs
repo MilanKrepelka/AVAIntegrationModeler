@@ -11,7 +11,7 @@ namespace AVAIntegrationModeler.API.DataModels;
 /// <remarks>
 /// List all DataModels.
 /// </remarks>
-public class List(IMediator _mediator) : Endpoint<DataModelListRequest, DataModelListResponse>
+public class List(IMediator _mediator) : Endpoint<Contracts.DataModelListRequest, Contracts.DataModelListResponse>
 {
   public override void Configure()
   {
@@ -20,7 +20,7 @@ public class List(IMediator _mediator) : Endpoint<DataModelListRequest, DataMode
     Options(x => x.CacheOutput(p => p.Expire(TimeSpan.FromSeconds(5))));
   }
 
-  public override async Task HandleAsync(DataModelListRequest request, CancellationToken cancellationToken)
+  public override async Task HandleAsync(Contracts.DataModelListRequest request, CancellationToken cancellationToken)
   {
 
     Result<IEnumerable<DataModelDTO>> result = await _mediator.Send(new ListDataModelsQuery(request.Datasource, null, null), cancellationToken);
@@ -30,7 +30,7 @@ public class List(IMediator _mediator) : Endpoint<DataModelListRequest, DataMode
 
     if (result.IsSuccess)
     {
-      Response = new DataModelListResponse
+      Response = new Contracts.DataModelListResponse
       {
         DataModels = result.Value.ToList()
       };

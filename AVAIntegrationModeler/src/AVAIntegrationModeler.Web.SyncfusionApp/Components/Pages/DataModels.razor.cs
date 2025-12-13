@@ -1,4 +1,4 @@
-﻿using AVAIntegrationModeler.API.DataModels;
+﻿using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Microsoft.AspNetCore.Components;
@@ -9,7 +9,9 @@ namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
 
 public partial class DataModels : ComponentBase
 {
-  
+
+  [Inject]
+  IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
 
   /// <inheritdoc/>
   public bool IsLoading { get; set; } = false;
@@ -22,54 +24,34 @@ public partial class DataModels : ComponentBase
 
     public List<DataModelListViewModel> DataModelList { get; set; } = new();
 
-    protected async Task LoadItemsAsync()
+  protected async Task LoadItemsAsync()
+  {
+    try
     {
-        try
-        {
-            IsLoading = true;
-            DataModelList.Clear();
-            
-            // Načtení data modelů z AVAIntegrationModeler.API
-            using var httpClient = new HttpClient();
-            var response = await httpClient.GetAsync($"http://localhost:57679/DataModels?datasource={Datasource.AVAPlace}");
-            response.EnsureSuccessStatusCode();
+      IsLoading = true;
+      DataModelList.Clear();
 
-            var options = new JsonSerializerOptions
-            {
-                Converters = { new JsonStringEnumConverter() },
-                PropertyNameCaseInsensitive = true
-            };
 
-            var dataModelListResponseJson = await response.Content.ReadAsStringAsync();
-            var dataModelListResponse = JsonSerializer.Deserialize<DataModelListResponse>(dataModelListResponseJson, options);
-            
-            if (dataModelListResponse?.DataModels != null)
-            {
-                foreach (var dataModel in dataModelListResponse.DataModels)
-                {
-                    DataModelListViewModel? dataModelListViewModel = Mapping.DataModelMapper.MapToViewModel(dataModel, dataModelListResponse.DataModels);
-                    if (dataModelListViewModel != null) 
-                    {
-                        DataModelList.Add(dataModelListViewModel);
-                    }
-                }
-            }
-        }
-        catch (HttpRequestException httpEx)
+      var dataModelListResponse = await _apiClient.GetDataModels(Datasource.AVAPlace, CancellationToken.None);
+
+      foreach (var dataModel in dataModelListResponse.DataModels)
+      {
+        DataModelListViewModel? dataModelListViewModel = Mapping.DataModelMapper.MapToViewModel(dataModel, dataModelListResponse.DataModels);
+        if (dataModelListViewModel != null)
         {
-            Console.WriteLine($"Chyba HTTP požadavku: {httpEx.Message}");
-            DataModelList = new();
+          DataModelList.Add(dataModelListViewModel);
         }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"Chyba při načítání datových modelů: {ex.Message}");
-            DataModelList = new();
-        }
-        finally
-        {
-            IsLoading = false;
-        }
+      }
+
     }
+    finally
+    {
+      IsLoading = false;
+    }
+
+  }
+
+      
 
     private bool _initialized;
 
@@ -80,5 +62,6 @@ public partial class DataModels : ComponentBase
 
         await base.OnInitializedAsync();
         await LoadItemsAsync();
-    }
+        await Grid!.Refresh(true);
+  }
 }

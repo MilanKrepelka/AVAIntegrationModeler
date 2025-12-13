@@ -57,7 +57,7 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
       var response = await httpClient.GetAsync($"http://localhost:57679/Scenarios?datasource={this.Datasource}");
       response.EnsureSuccessStatusCode();
 
-      var scenarioListResponse = await response.Content.ReadFromJsonAsync<ScenarioListResponse>();
+      var scenarioListResponse = await response.Content.ReadFromJsonAsync<Contracts.Scenarios.ScenarioListResponse>();
       
       if (scenarioListResponse?.Scenarios != null)
       {
