@@ -9,6 +9,7 @@ using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
 using Pathoschild.Http.Client;
 using Microsoft.Extensions.Logging;
+using AVAIntegrationModeler.Contracts.Scenarios;
 
 namespace AVAIntegrationModeler.API.Client;
 
@@ -52,22 +53,68 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
     }
     catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
     {
-      _logger.LogInformation($"GetDataModels cancelled by token. datasource={datasource}");
+      _logger.LogInformation($"{nameof(GetDataModels)} cancelled by token. datasource={datasource}");
       throw;
     }
     catch (HttpRequestException ex)
     {
-      _logger.LogError(ex, $"HTTP error in GetDataModels. datasource={datasource}");
+      _logger.LogError(ex, $"HTTP error in {nameof(GetDataModels)}. datasource={datasource}");
       throw;
     }
     catch (JsonException ex)
     {
-      _logger.LogError(ex, $"JSON deserialization error in GetDataModels. datasource={datasource}");
+      _logger.LogError(ex, $"JSON deserialization error in {nameof(GetDataModels)}. datasource={datasource}");
       throw;
     }
     catch (Exception ex)
     {
-      _logger.LogError(ex, $"Unexpected error in GetDataModels. datasource={datasource}");
+      _logger.LogError(ex, $"Unexpected error in {nameof(GetDataModels)}. datasource={datasource}");
+      throw;
+    }
+  }
+
+  /// <inheritdoc/>
+  public async Task<ScenarioListResponse> GetScenarios(Datasource datasource, CancellationToken cancellationToken)
+  {
+    if (!Enum.IsDefined(typeof(Datasource), datasource))
+      throw new ArgumentOutOfRangeException(nameof(datasource));
+
+    try
+    {
+      _logger.LogDebug($"{nameof(GetScenarios)} starting. datasource={datasource}");
+
+      var fluent = new FluentClient(_httpClient);
+
+      // Execute with FluentClient and get deserialized result (keep using FluentClient)
+      var response = await fluent
+        .GetAsync("scenarios")
+        .WithArgument("datasource", datasource)
+        .WithCancellationToken(cancellationToken)
+        .As<ScenarioListResponse>();
+
+      var count = response?.Scenarios?.Count ?? 0;
+      _logger.LogInformation($"{nameof(GetScenarios)} completed. datasource={datasource} returned {count} items");
+
+      return response ?? new ScenarioListResponse();
+    }
+    catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+    {
+      _logger.LogInformation($"{nameof(GetScenarios)} cancelled by token. datasource={datasource}");
+      throw;
+    }
+    catch (HttpRequestException ex)
+    {
+      _logger.LogError(ex, $"HTTP error in {nameof(GetScenarios)}. datasource={datasource}");
+      throw;
+    }
+    catch (JsonException ex)
+    {
+      _logger.LogError(ex, $"JSON deserialization error in {nameof(GetScenarios)}. datasource={datasource}");
+      throw;
+    }
+    catch (Exception ex)
+    {
+      _logger.LogError(ex, $"Unexpected error in {nameof(GetScenarios)}. datasource={datasource}");
       throw;
     }
   }

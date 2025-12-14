@@ -1,0 +1,23 @@
+﻿/* Use theme primary variables instead of hardcoded colors */
+.action-button.e-btn,
+.action-button.e-btn.e-small,
+.action-button.e-btn.e-round {
+    flex-shrink: 0;
+    min-width: 28px;
+    padding: 4px;
+    opacity: 0.7;
+    transition: opacity 0.2s, background-color 0.2s;
+    background-color: var(--primary-500);
+    background: var(--primary-500);
+    border: 1px solid var(--primary-500);
+    color: var(--text-on-primary);
+}
+    .action-button.e-btn:hover,
+    .action-button.e-btn.e-small:hover,
+    .action-button.e-btn.e-round:hover
+     {
+        opacity: 1 ;
+        background-color: var(--primary-600, var(--primary-500)) ;
+        background: var(--primary-600, var(--primary-500)) ;
+        border-color: var(--primary-700, var(--primary-600, var(--primary-500))) ;
+    }   

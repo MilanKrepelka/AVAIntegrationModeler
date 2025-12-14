@@ -63,7 +63,7 @@
                         var model = (context as DataModelListViewModel);
                         <div class="id-cell-container">
                             <span class="id-text">@model!.Id.ToString()</span>
-                            <SfButton CssClass="e-small e-round copy-icon-button"
+                            <SfButton CssClass="e-small e-round action-button"
                                       IconCss="e-icons e-copy"
                                       IsPrimary="false"
                                       OnClick="@(() => CopyToClipboard(model.Id.ToString()))"

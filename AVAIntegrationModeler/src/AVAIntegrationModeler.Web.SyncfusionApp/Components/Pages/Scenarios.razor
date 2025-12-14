@@ -46,11 +46,33 @@
                         var scenario = (context as ScenarioListViewModel);
                         <div class="id-cell-container">
                             <span class="id-text">@scenario!.Id.ToString()</span>
-                            <SfButton CssClass="e-small e-round copy-icon-button"
+                            <SfButton CssClass="e-small e-round action-button copy-icon-button"
                                       IconCss="e-icons e-copy"
                                       IsPrimary="false"
                                       OnClick="@(() => CopyToClipboard(scenario.Id.ToString()))"
                                       title="Kopírovat ID do schránky">
+                            </SfButton>
+                        </div>
+                    }
+                </Template>
+            </GridColumn>
+            <GridColumn HeaderText="Akce" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+                <Template>
+                    @{
+                        var model = (context as DataModelListViewModel);
+                        <div class="action-buttons">
+                            <SfButton CssClass="e-small e-round e-outline action-button"
+                                      IconCss="e-icons e-edit"
+                                      IsPrimary="false"
+                                      OnClick="@(() => EditDataModel(model!))"
+                                      title="Editovat">
+                            </SfButton>
+
+                            <SfButton CssClass="e-small e-round e-outline action-button"
+                                      IconCss="e-icons e-chart-scatter"
+                                      IsPrimary="false"
+                                      OnClick="@(() => ShowModelMap(model!))"
+                                      title="Map">
                             </SfButton>
                         </div>
                     }
@@ -68,15 +90,15 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Kód:</label>
-                                <SfTextBox Value="@scenario.Code" Placeholder="Kód scénáře"></SfTextBox>
+                                <SfTextBox Value="@scenario.Code" Placeholder="Kód scénáře" Readonly="true"></SfTextBox>
                             </div>
                             
                             <div class="form-group">
                                 <label>ID:</label>
                                 <div class="input-with-button">
                                     <SfTextBox Value="@scenario.Id.ToString()" Readonly="true" CssClass="id-textbox"></SfTextBox>
-                                    <SfButton CssClass="e-small copy-button" 
-                                              IconCss="e-icons e-copy" 
+                                    <SfButton CssClass="e-small action-button"
+                                              IconCss="e-icons e-copy"
                                               OnClick="@(() => CopyToClipboard(scenario.Id.ToString()))"
                                               Content="Kopírovat">
                                     </SfButton>
@@ -87,26 +109,26 @@
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Název (Česky):</label>
-                                <SfTextBox Value="@scenario.Name.CzechValue" Placeholder="Český název" Readonly="true"></SfTextBox>
+                                <SfTextBox Value="@scenario.Name.CzechValue" Placeholder="" Readonly="true"></SfTextBox>
                             </div>
                             
                             <div class="form-group">
                                 <label>Název (English):</label>
-                                <SfTextBox Value="@scenario.Name.EnglishValue" Placeholder="English name" Readonly="true"></SfTextBox>
+                                <SfTextBox Value="@scenario.Name.EnglishValue" Placeholder="" Readonly="true"></SfTextBox>
                             </div>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group full-width">
                                 <label>Popis (Česky):</label>
-                                <SfTextBox @bind-Value="scenario.Description.CzechValue" Placeholder="Český popis" Multiline="true" Readonly="true"></SfTextBox>
+                                <SfTextBox @bind-Value="scenario.Description.CzechValue" Placeholder="" Multiline="true" Readonly="true"></SfTextBox>
                             </div>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group full-width">
                                 <label>Popis (English):</label>
-                                <SfTextBox @bind-Value="scenario.Description.EnglishValue" Placeholder="English description" Multiline="true"></SfTextBox>
+                                <SfTextBox @bind-Value="scenario.Description.EnglishValue" Placeholder="" Multiline="true" Readonly="true"></SfTextBox>
                             </div>
                         </div>
                         
@@ -177,5 +199,19 @@
             };
             await ToastObj.ShowAsync(toastModel);
         }
+    }
+    private async Task ShowModelMap(DataModelListViewModel model)
+    {
+        // Open Data Model Map in a new browser tab
+        var url = NavigationManager.ToAbsoluteUri($"/datamodelmap/{model.Id}").ToString();
+        await JS.InvokeVoidAsync("open", url, "_blank");
+    }
+
+    private void EditDataModel(DataModelListViewModel model)
+    {
+        // TODO: Implementovat editaci - například přesměrování na edit stránku
+        NavigationManager.NavigateTo($"/datamodels/edit/{model.Id}", true);
+
+        // nebo otevřít dialog pro editaci
     }
 }

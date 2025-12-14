@@ -37,5 +37,41 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
     Assert.NotNull(result);
     Assert.NotNull(result.DataModels);
     Assert.NotEmpty(result.DataModels);
+
+    // Act: call the API method
+    result = await apiClient.GetDataModels(Contracts.Datasource.AVAPlace, CancellationToken.None);
+
+    // Assert: ensure we got a non-null, non-empty response from the API
+    Assert.NotNull(result);
+    Assert.NotNull(result.DataModels);
+    Assert.NotEmpty(result.DataModels);
+  }
+
+  [Fact]
+  public async Task GetScenarios_Returns_Any_Scenarios()
+  {
+    // Arrange: create HttpClient for the in-memory server
+    using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions() { BaseAddress = new Uri("http://0.0.0.0:5005") });
+
+    // Create the typed client wrapper
+    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, NullLogger<AVAIntegrationModelerApiClient>.Instance);
+
+    // Act: call the API method
+    var result = await apiClient.GetScenarios(Contracts.Datasource.Database, CancellationToken.None);
+
+    // Assert: ensure we got a non-null, non-empty response from the API
+    Assert.NotNull(result);
+    Assert.NotNull(result.Scenarios);
+    Assert.NotEmpty(result.Scenarios);
+
+    // Act: call the API method
+    result = await apiClient.GetScenarios(Contracts.Datasource.AVAPlace, CancellationToken.None);
+
+    // Assert: ensure we got a non-null, non-empty response from the API
+    Assert.NotNull(result);
+    Assert.NotNull(result.Scenarios);
+    Assert.NotEmpty(result.Scenarios);
+
+
   }
 }

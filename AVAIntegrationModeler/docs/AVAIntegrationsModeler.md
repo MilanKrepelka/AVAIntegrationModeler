@@ -1,7 +1,13 @@
 # AVA Integration Modeler
 
 # Road mapa 
+- Dotáhnout pøehled pro scénáøe
+    - Lokalizovat( vèetnì hlavní stránky)
+    - Pøidat akce, Pøidat, Editovat
+    - Pøidat stránku pro vytvoøení/editaci Integraèního scénáøe
+    - Vyøešit validace (od domain vrstvy až po UI)
 - Vytvoøit základní pøehledy pro UI a API
+- Import z XMI bla bla
 # Základní popis
 
 ## UI - Pøehled

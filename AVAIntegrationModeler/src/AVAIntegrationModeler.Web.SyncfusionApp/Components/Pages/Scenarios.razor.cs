@@ -1,13 +1,22 @@
-﻿using AVAIntegrationModeler.Contracts;
+﻿using AVAIntegrationModeler.API.Client;
+using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using Microsoft.JSInterop;
 using static System.Net.WebRequestMethods;
 
 namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
 
 public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, IPageListBase
 {
+  [Inject]
+  IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
+
+  
+  [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+
+
   /// <inheritdoc/>
   public bool IsLoading { get; set; } = false;
   /// <inheritdoc/>
@@ -27,12 +36,8 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
       ScenariosList.Clear();
       
       // Načtení scénářů z AVAIntegrationModeler.API
-      using var httpClient = new HttpClient();
-      var response = await httpClient.GetAsync($"http://localhost:57679/Scenarios?datasource={Datasource.AVAPlace}");
-      response.EnsureSuccessStatusCode();
+      var scenarioListResponse = await _apiClient.GetScenarios(Datasource.AVAPlace, CancellationToken.None);
 
-      var scenarioListResponse = await response.Content.ReadFromJsonAsync<Contracts.Scenarios.ScenarioListResponse>();
-      
       if (scenarioListResponse?.Scenarios != null)
       {
         foreach (var scenario in scenarioListResponse.Scenarios)
