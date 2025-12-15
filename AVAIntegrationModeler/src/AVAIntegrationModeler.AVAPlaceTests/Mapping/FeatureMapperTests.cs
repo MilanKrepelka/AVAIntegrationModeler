@@ -15,6 +15,27 @@ namespace AVAIntegrationModeler.AVAPlace.Tests.Mapping;
 public class FeatureMapperTests
 {
   #region FeatureSummaryDTO Tests
+  [Fact]
+  public void IntegrationFeatureModel_MapTo_FeatureSummaryDTO()
+  {
+    // Arrange
+    var expectedId = Guid.NewGuid();
+    var expectedCode = "FEATURE_001";
+
+    var integrationFeatureSummary = new IntegrationFeatureModel
+    {
+      Id = expectedId.ToString(),
+      Code = expectedCode
+    };
+
+    // Act
+    var result = FeatureMapper.MapFeatureSummaryDTO(integrationFeatureSummary);
+
+    // Assert
+    Assert.NotNull(result);
+    Assert.Equal(expectedId, result.Id);
+    Assert.Equal(expectedCode, result.Code);
+  }
 
   [Fact]
   public void FeatureSummaryDTO_ValidInput_ReturnsCorrectMapping()

@@ -1,5 +1,6 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
+using Ardalis.GuardClauses;
 using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.AVAPlaceTests.Fixtures;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,9 +9,9 @@ using Xunit.Microsoft.DependencyInjection.Abstracts;
 
 namespace AVAIntegrationModeler.AVAPlaceTests;
 
-public class IntegrationDataProvider : TestBed<Fixtures.AVAPlaceDemoFixture>
+public class IntegrationDataProviderTest : TestBed<Fixtures.AVAPlaceDemoFixture>
 {
-  public IntegrationDataProvider(ITestOutputHelper testOutputHelper, AVAPlaceDemoFixture fixture) : base(testOutputHelper, fixture)
+  public IntegrationDataProviderTest(ITestOutputHelper testOutputHelper, AVAPlaceDemoFixture fixture) : base(testOutputHelper, fixture)
   {
   }
 
@@ -19,13 +20,29 @@ public class IntegrationDataProvider : TestBed<Fixtures.AVAPlaceDemoFixture>
   /// </summary>
   /// <returns></returns>
   [Fact]
-  public async Task GetIntegrationScenariosAsyncTest()
+  public async Task GetIntegrationScenariosTest()
   {
     var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
 
-    var result = await integrationDataProvider.GetScenariosAsync(CancellationToken.None);
+    var result = await integrationDataProvider.GetScenarios(CancellationToken.None);
     result.ShouldNotBeNull();
     result.ShouldNotBeEmpty();
+  }
+
+  /// <summary>
+  /// Test který načte integrační scénář
+  /// </summary>
+  /// <returns></returns>
+  [Fact]
+  public async Task GetIntegrationScenarioTest()
+  {
+    var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
+
+    var scenarios = await integrationDataProvider.GetScenarios(CancellationToken.None);
+
+    var result = await integrationDataProvider.GetScenario(scenarios.ElementAt(0).Id, CancellationToken.None);
+    result.ShouldNotBeNull();
+    
   }
 
   /// <summary>
@@ -129,5 +146,67 @@ public class IntegrationDataProvider : TestBed<Fixtures.AVAPlaceDemoFixture>
     result.ShouldNotBeNull();
     result.ShouldNotBeEmpty();
     result.ShouldAllBe(x => x.Fields != null && x.Fields.Count() > 1);
+  }
+
+  [Fact]
+  public async Task GetFeatureSummary_Returns_Any_Result()
+  {
+    var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
+
+    var features = await integrationDataProvider.GetFeaturesAsync(CancellationToken.None);
+    var result = await integrationDataProvider.GetFeatureSummary(features.ElementAt(0).Id, CancellationToken.None);
+    result.ShouldNotBeNull();
+  }
+
+  [Fact]
+  public async Task GetFeatureSummary_ByCode_Returns_Any_Result()
+  {
+    var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
+
+    var features = await integrationDataProvider.GetFeaturesAsync(CancellationToken.None);
+    var result = await integrationDataProvider.GetFeatureSummary(features.ElementAt(0).Code, CancellationToken.None);
+    result.ShouldNotBeNull();
+  }
+
+  [Fact]
+  public async Task GetFeatureSummary_Throws_Exception_When_Feature_Not_Found()
+  {
+    var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
+
+    await Should.ThrowAsync<NotFoundException>(async () =>
+    {
+      await integrationDataProvider.GetFeatureSummary(Guid.NewGuid(), CancellationToken.None);
+    });
+  }
+
+  [Fact]
+  public async Task GetFeature_Returns_Any_Result()
+  {
+    var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
+
+    var features = await integrationDataProvider.GetFeaturesAsync(CancellationToken.None);
+    var result = await integrationDataProvider.GetFeature(features.ElementAt(0).Id, CancellationToken.None);
+    result.ShouldNotBeNull();
+  }
+
+  [Fact]
+  public async Task GetFeature_ByCode_Returns_Any_Result()
+  {
+    var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
+
+    var features = await integrationDataProvider.GetFeaturesAsync(CancellationToken.None);
+    var result = await integrationDataProvider.GetFeature(features.ElementAt(0).Code, CancellationToken.None);
+    result.ShouldNotBeNull();
+  }
+
+  [Fact]
+  public async Task GetFeature_Throws_Exception_When_Feature_Not_Found()
+  {
+    var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
+
+    await Should.ThrowAsync<NotFoundException>(async () =>
+    {
+      await integrationDataProvider.GetFeature(Guid.NewGuid(), CancellationToken.None);
+    });
   }
 }

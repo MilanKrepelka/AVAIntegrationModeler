@@ -33,7 +33,7 @@ public class ListIntegrationMapsQueryService(
         
         if (datasouce == Datasource.AVAPlace)
         {
-          var scenariosTask = integrationDataProvider.GetScenariosAsync();
+          var scenariosTask = integrationDataProvider.GetScenarios();
           var featuresTask = integrationDataProvider.GetFeaturesSummaryAsync();
           await Task.WhenAll(scenariosTask, featuresTask);
 

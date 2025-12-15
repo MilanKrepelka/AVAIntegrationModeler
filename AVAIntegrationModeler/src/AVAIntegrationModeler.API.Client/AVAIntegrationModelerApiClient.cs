@@ -74,6 +74,50 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
   }
 
   /// <inheritdoc/>
+  public async Task<ScenarioDTO> GetScenario(Datasource datasource, Guid scenarioId, CancellationToken cancellationToken)
+  {
+    if (!Enum.IsDefined(typeof(Datasource), datasource))
+      throw new ArgumentOutOfRangeException(nameof(datasource));
+
+    try
+    {
+      _logger.LogDebug($"GetDataModels starting. datasource={datasource}");
+
+      var fluent = new FluentClient(_httpClient);
+
+      // Execute with FluentClient and get deserialized result (keep using FluentClient)
+      var response = await fluent
+        .GetAsync($"scenarios/{datasource}/{scenarioId}")
+        //.WithArgument("datasource", datasource)
+        //.WithArgument("scenarioId", scenarioId)
+        .WithCancellationToken(cancellationToken)
+        .As<ScenarioDTO>();
+
+      return response ?? new ScenarioDTO();
+    }
+    catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+    {
+      _logger.LogInformation($"{nameof(GetScenario)} cancelled by token. datasource={datasource} scenarioId={scenarioId}");
+      throw;
+    }
+    catch (HttpRequestException ex)
+    {
+      _logger.LogError(ex, $"HTTP error in {nameof(GetScenario)}. datasource={datasource} scenarioId={scenarioId}");
+      throw;
+    }
+    catch (JsonException ex)
+    {
+      _logger.LogError(ex, $"JSON deserialization error in {nameof(GetScenario)}. datasource={datasource} scenarioId={scenarioId}");
+      throw;
+    }
+    catch (Exception ex)
+    {
+      _logger.LogError(ex, $"Unexpected error in {nameof(GetScenario)}. datasource={datasource} scenarioId={scenarioId}");
+      throw;
+    }
+  }
+
+  /// <inheritdoc/>
   public async Task<ScenarioListResponse> GetScenarios(Datasource datasource, CancellationToken cancellationToken)
   {
     if (!Enum.IsDefined(typeof(Datasource), datasource))

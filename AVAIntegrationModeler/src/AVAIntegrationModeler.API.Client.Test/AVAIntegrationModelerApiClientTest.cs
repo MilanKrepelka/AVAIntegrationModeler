@@ -71,7 +71,23 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
     Assert.NotNull(result);
     Assert.NotNull(result.Scenarios);
     Assert.NotEmpty(result.Scenarios);
+  }
 
+  [Fact]
+  public async Task GetScenarios_Returns_NotNull()
+  {
+    // Arrange: create HttpClient for the in-memory server
+    using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions() { BaseAddress = new Uri("http://0.0.0.0:5005") });
 
+    // Create the typed client wrapper
+    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, NullLogger<AVAIntegrationModelerApiClient>.Instance);
+
+    // Act: call the API method
+    var scenariosResult = await apiClient.GetScenarios(Contracts.Datasource.AVAPlace, CancellationToken.None);
+
+    var scenarioResult = await apiClient.GetScenario(Contracts.Datasource.AVAPlace, scenariosResult.Scenarios.ElementAt(0).Id, CancellationToken.None);
+
+    // Assert: ensure we got a non-null, non-empty response from the API
+    Assert.NotNull(scenarioResult);
   }
 }

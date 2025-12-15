@@ -25,4 +25,12 @@ public interface IAVAIntegrationModelerApiClient
   /// <returns>Seznam integračních scénářů.</returns>
   public Task<ScenarioListResponse> GetScenarios(Datasource datasource, CancellationToken cancellationToken);
 
+  /// <summary>
+  /// Vrátí všechny Integrační scénáře ze zadaného datového zdroje.
+  /// </summary>
+  /// <param name="datasource">Datový zdroj.</param>
+  /// <param name="scenarioId">ID scénáře.</param>
+  /// <param name="cancellationToken">Token pro zrušení operace.</param>
+  /// <returns>Seznam integračních scénářů.</returns>
+  public Task<ScenarioDTO> GetScenario(Datasource datasource, Guid scenarioId, CancellationToken cancellationToken);
 }

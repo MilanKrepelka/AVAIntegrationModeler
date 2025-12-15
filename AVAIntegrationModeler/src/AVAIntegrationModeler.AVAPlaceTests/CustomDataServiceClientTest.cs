@@ -32,7 +32,7 @@ public class CustomDataServiceClientTest : TestBed<Fixtures.AVAPlaceDemoFixture>
       
     //  _ = await ServiceRuntimeTenantContext.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<ScenarioDTO>>(scopedProvider, "ASOLEU-DEV-fd9ad6b9-2f29-4c7a-9a3a-c7469e19b1ff", async connector =>
     //  {
-    //    var result = await connector.GetScenariosAsync(CancellationToken.None);
+    //    var result = await connector.GetScenarios(CancellationToken.None);
     //    Assert.NotNull(result);
     //    Assert.NotEmpty(result);
     //    return result;

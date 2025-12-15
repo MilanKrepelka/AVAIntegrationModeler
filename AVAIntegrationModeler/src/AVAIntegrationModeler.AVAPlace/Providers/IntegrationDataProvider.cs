@@ -40,6 +40,22 @@ public class IntegrationDataProvider : IIntegrationDataProvider
     _runtimeContext = _serviceProvider.GetRequiredService<IRuntimeContext>() ?? throw new ArgumentNullException(nameof(IRuntimeContext));
   }
 
+  /// <summary>
+  /// Identifikátor tenanta.
+  /// </summary>
+  private string tenantId
+  {
+    get
+    {
+      var result = _runtimeContext?.Security?.TenantId!;
+      if (string.IsNullOrEmpty(result))
+      {
+        result = _avaPlaceOptions.Value.TenantId;
+      }
+      return result;
+    }
+  }
+
   /// <inheritdoc/>
   public async Task<IEnumerable<FeatureSummaryDTO>> GetFeaturesSummaryAsync(CancellationToken ct = default)
   {
@@ -88,11 +104,6 @@ public class IntegrationDataProvider : IIntegrationDataProvider
   {
     List<FeatureDTO> features = new List<FeatureDTO>();
 
-    string tenantId = _runtimeContext?.Security?.TenantId!;
-    if (string.IsNullOrEmpty(tenantId))
-    {
-      tenantId = _avaPlaceOptions.Value.TenantId;
-    }
     return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<FeatureDTO>>(
       _serviceProvider,
       tenantId,
@@ -106,14 +117,14 @@ public class IntegrationDataProvider : IIntegrationDataProvider
            Limit = int.MaxValue
          },
          ct);
-        
+
         modelResult.ToList().ForEach(model =>
         {
           modelSummaryDTOs.Add(Mapping.DataModelMapper.MapToSummaryDTO(model));
         });
 
         List<FeatureDTO> features = new List<FeatureDTO>();
-        
+
         // Replace with actual logic to get features, e.g.:
         var dataServiceResult = await client.IntegrationFeatures.GetFeaturesAsync(
          new ASOL.DataService.Contracts.Filters.IntegrationFeatureFilter()
@@ -139,10 +150,10 @@ public class IntegrationDataProvider : IIntegrationDataProvider
         if (dataServiceResult != null && dataServiceResult.Any())
         {
 
-          List< IntegrationFeatureModel > integrationFeatures = new List<IntegrationFeatureModel>();
+          List<IntegrationFeatureModel> integrationFeatures = new List<IntegrationFeatureModel>();
           foreach (var featureSummary in dataServiceResult)
           {
-              integrationFeatures.Add(await client.IntegrationFeatures.GetFeatureAsync(featureSummary.Id, true, ct));
+            integrationFeatures.Add(await client.IntegrationFeatures.GetFeatureAsync(featureSummary.Id, true, ct));
           }
 
           foreach (var integrationFeatureModel in integrationFeatures)
@@ -156,18 +167,8 @@ public class IntegrationDataProvider : IIntegrationDataProvider
   }
 
   /// <inheritdoc/>
-  public async Task<IEnumerable<ScenarioDTO>> GetScenariosAsync(CancellationToken ct = default)
+  public async Task<IEnumerable<ScenarioDTO>> GetScenarios(CancellationToken ct = default)
   {
-
-    // Assuming you have access to a serviceProvider and tenantId in your context.
-    // You may need to inject these via constructor or other means.
-
-    string tenantId = _runtimeContext?.Security?.TenantId!;
-    if (string.IsNullOrEmpty(tenantId))
-    {
-      tenantId = _avaPlaceOptions.Value.TenantId;
-    }
-    ;
 
     return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<ScenarioDTO>>(
       _serviceProvider,
@@ -205,16 +206,6 @@ public class IntegrationDataProvider : IIntegrationDataProvider
 
   public async Task<IEnumerable<ScenarioDTO>> GetAreasAsync(CancellationToken ct = default)
   {
-
-    // Assuming you have access to a serviceProvider and tenantId in your context.
-    // You may need to inject these via constructor or other means.
-
-    string tenantId = _runtimeContext?.Security?.TenantId!;
-    if (string.IsNullOrEmpty(tenantId))
-    {
-      tenantId = _avaPlaceOptions.Value.TenantId;
-    }
-    ;
 
     return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<ScenarioDTO>>(
       _serviceProvider,
@@ -254,12 +245,6 @@ public class IntegrationDataProvider : IIntegrationDataProvider
   /// <inheritdoc/>
   public async Task<IEnumerable<DataModelDTO>> GetDataModelsAsync(CancellationToken ct = default)
   {
-    string tenantId = _runtimeContext?.Security?.TenantId!;
-    if (string.IsNullOrEmpty(tenantId))
-    {
-      tenantId = _avaPlaceOptions.Value.TenantId;
-    }
-
     return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<DataModelDTO>>(
       _serviceProvider,
       tenantId,
@@ -291,12 +276,6 @@ public class IntegrationDataProvider : IIntegrationDataProvider
   /// <inheritdoc/>
   public async Task<IEnumerable<DataModelSummaryDTO>> GetDataModelsSummaryAsync(CancellationToken ct = default)
   {
-    string tenantId = _runtimeContext?.Security?.TenantId!;
-    if (string.IsNullOrEmpty(tenantId))
-    {
-      tenantId = _avaPlaceOptions.Value.TenantId;
-    }
-
     return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<DataModelSummaryDTO>>(
       _serviceProvider,
       tenantId,
@@ -369,5 +348,133 @@ public class IntegrationDataProvider : IIntegrationDataProvider
         return integrationMap;
       }
     );
+  }
+
+  /// <inheritdoc/>
+
+  public async Task<ScenarioDTO> GetScenario(Guid scenarioId, CancellationToken ct = default)
+  {
+    var avaResult = await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IntegrationScenarioModel>(
+      _serviceProvider,
+      tenantId,
+      async client =>
+      {
+        var dataServiceResult = await client.IntegrationScenarios.GetScenarioAsync(
+          scenarioId.ToString(), false, ct);
+        return dataServiceResult;
+      }
+    );
+
+    var result = Mapping.ScenarioMapper.MapToDTO(avaResult);
+    // totáhnout feature summary atd.
+    if (result.InputFeatureId.HasValue)
+    {
+      var inputFeature = await GetFeaturesSummaryAsync(ct);
+      result = result with
+      {
+        InputFeatureSummary = inputFeature.FirstOrDefault(f => f.Id == result.InputFeatureId.Value)
+      };
+    }
+
+    if (result.OutputFeatureId.HasValue)
+    {
+      var outputFeature = await GetFeaturesSummaryAsync(ct);
+      result = result with
+      {
+        OutputFeatureSummary = outputFeature.FirstOrDefault(f => f.Id == result.OutputFeatureId.Value)
+      };
+    }
+    return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<FeatureSummaryDTO> GetFeatureSummary(Guid featureId, CancellationToken ct = default)
+  {
+    FeatureSummaryDTO result = new FeatureSummaryDTO();
+    var avaResult = await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IntegrationFeatureModel>(
+     _serviceProvider,
+     tenantId,
+     async client =>
+     {
+       var dataServiceResult = await client.IntegrationFeatures.GetFeatureAsync(
+         featureId.ToString(), true, ct);
+       return dataServiceResult;
+     });
+    if (avaResult == default)
+    {
+      throw new Ardalis.GuardClauses.NotFoundException(featureId.ToString(), "Feature");
+    }
+
+    result = Mapping.FeatureMapper.MapFeatureSummaryDTO(avaResult!);
+
+    return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<FeatureSummaryDTO> GetFeatureSummary(string featureCode, CancellationToken ct = default)
+  {
+    FeatureSummaryDTO result = new FeatureSummaryDTO();
+    var avaResult = await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IntegrationFeatureModel>(
+     _serviceProvider,
+     tenantId,
+     async client =>
+     {
+       var dataServiceResult = await client.IntegrationFeatures.GetFeatureAsync(
+         featureCode, true, ct);
+       return dataServiceResult;
+     });
+    if (avaResult == default)
+    {
+      throw new Ardalis.GuardClauses.NotFoundException(featureCode, "Feature");
+    }
+
+    result = Mapping.FeatureMapper.MapFeatureSummaryDTO(avaResult!);
+
+    return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<FeatureDTO> GetFeature(string featureCode, CancellationToken ct = default)
+  {
+    FeatureDTO result = new FeatureDTO();
+    var avaResult = await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IntegrationFeatureModel>(
+     _serviceProvider,
+     tenantId,
+     async client =>
+     {
+       var dataServiceResult = await client.IntegrationFeatures.GetFeatureAsync(
+         featureCode, true, ct);
+       return dataServiceResult;
+     });
+    if (avaResult == default)
+    {
+      throw new Ardalis.GuardClauses.NotFoundException(featureCode, "Feature");
+    }
+
+    result = Mapping.FeatureMapper.FeatureDTO(avaResult!);
+
+    return result;
+  }
+  /// <inheritdoc/>
+  public async Task<FeatureDTO> GetFeature(Guid featureId, CancellationToken ct = default)
+  {
+    FeatureDTO result = new FeatureDTO();
+    var avaResult = await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IntegrationFeatureModel>(
+     _serviceProvider,
+     tenantId,
+     async client =>
+     {
+       var dataServiceResult = await client.IntegrationFeatures.GetFeatureAsync(
+         featureId.ToString(), true, ct);
+       return dataServiceResult;
+     });
+    if (avaResult == default)
+    {
+      throw new Ardalis.GuardClauses.NotFoundException(featureId.ToString(), "Feature");
+    }
+
+    result = Mapping.FeatureMapper.FeatureDTO(avaResult!);
+
+    return result;
   }
 }

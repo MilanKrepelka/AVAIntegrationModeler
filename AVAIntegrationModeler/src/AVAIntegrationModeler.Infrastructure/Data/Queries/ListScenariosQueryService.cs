@@ -5,6 +5,7 @@ using AVAIntegrationModeler.UseCases.Contributors;
 using AVAIntegrationModeler.UseCases.Contributors.List;
 using AVAIntegrationModeler.UseCases.Scenarios;
 using AVAIntegrationModeler.UseCases.Scenarios.List;
+using AVAIntegrationModeler.UseCases.Scenarios.Mapping;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace AVAIntegrationModeler.Infrastructure.Data.Queries;
@@ -32,7 +33,7 @@ public class ListScenariosQueryService(
         
         if (datasouce == Datasource.AVAPlace)
         {
-          var scenariosTask = integrationDataProvider.GetScenariosAsync();
+          var scenariosTask = integrationDataProvider.GetScenarios();
           var featuresTask = integrationDataProvider.GetFeaturesSummaryAsync();
           await Task.WhenAll(scenariosTask, featuresTask);
 
@@ -97,5 +98,22 @@ public class ListScenariosQueryService(
     
     return methodResult!;
   }
-    
+
+  /// <inheritdoc/>
+  public async Task<ScenarioDTO> GetScenario(Datasource dataSource, Guid scenarioId)
+  {
+    if (dataSource == Datasource.AVAPlace)
+    {
+      return await integrationDataProvider.GetScenario(scenarioId);
+    }
+    else
+    {
+      var scenario = await _db.Scenarios.FirstOrDefaultAsync(s => s.Id == scenarioId);
+      if (scenario == null)
+      {
+        throw new NotFoundException(scenarioId.ToString(), "Scenario");
+      }
+      return ScenarioMapper.MapToScenarioDTO(scenario);
+    }
+  }
 }

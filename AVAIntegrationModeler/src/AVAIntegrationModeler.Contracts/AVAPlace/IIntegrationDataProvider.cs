@@ -16,9 +16,49 @@ public interface IIntegrationDataProvider
   /// <remarks>Tato metoda získá seznam integračních scénářů, které mohou být použity pro konfiguraci nebo správu integrací v systému. Operace podporuje zrušení pomocí zadaného <see cref="CancellationToken"/>.</remarks>
   /// <param name="ct">Token pro zrušení operace.</param>
   /// <returns>Úloha reprezentující asynchronní operaci. Výsledek úlohy obsahuje <see cref="IEnumerable{T}"/> objektů <see cref="ScenarioDTO"/> reprezentujících integrační scénáře.</returns>
-  Task<IEnumerable<ScenarioDTO>> GetScenariosAsync(CancellationToken ct = default);
+  Task<IEnumerable<ScenarioDTO>> GetScenarios(CancellationToken ct = default);
 
   /// <summary>
+  /// Získá integrační scénář podle jeho identifikátoru.
+  /// </summary>
+  /// <param name="scenarioId">Identifikátor scénáře</param>
+  /// <param name="ct"><see cref="CancellationToken"/></param>
+  /// <returns>Integrační scénář</returns>
+  Task<ScenarioDTO> GetScenario(Guid scenarioId, CancellationToken ct = default);
+
+  /// <summary>
+  /// Asynchronně získá <see cref="FeatureSummaryDTO"/> podle jeho identifikátoru.
+  /// </summary>
+  /// <param name="featureId">Identifikátor feature</param>
+  /// <param name="ct">Token pro zrušení operace.</param>
+  /// <returns><see cref="ScenarioDTO"/></returns>
+  Task<FeatureSummaryDTO> GetFeatureSummary(Guid featureId, CancellationToken ct = default);
+  /// <summary>
+  /// Asynchronně získá <see cref="FeatureSummaryDTO"/> podle jeho code.
+  /// </summary>
+  /// <param name="featureCode">Code feature</param>
+  /// <param name="ct">Token pro zrušení operace.</param>
+  /// <returns><see cref="ScenarioDTO"/></returns>
+  Task<FeatureDTO> GetFeature(string featureCode, CancellationToken ct = default);
+
+  /// <summary>
+  /// Asynchronně získá <see cref="FeatureSummaryDTO"/> podle jeho identifikátoru.
+  /// </summary>
+  /// <param name="featureId">Identifikátor feature</param>
+  /// <param name="ct">Token pro zrušení operace.</param>
+  /// <returns><see cref="ScenarioDTO"/></returns>
+  
+  Task<FeatureDTO> GetFeature(Guid featureId, CancellationToken ct = default);
+  
+  /// <summary>
+  /// Asynchronně získá <see cref="FeatureSummaryDTO"/> podle jeho code.
+  /// </summary>
+  /// <param name="featureCode">Code feature</param>
+  /// <param name="ct">Token pro zrušení operace.</param>
+  /// <returns><see cref="ScenarioDTO"/></returns>
+  Task<FeatureSummaryDTO> GetFeatureSummary(string featureCode, CancellationToken ct = default);
+
+/// <summary>
   /// Asynchronně získá kolekci integračních featur.
   /// </summary>
   /// <remarks>Tato metoda získá seznam integračních featur, které mohou být použity pro konfiguraci nebo správu integrací v systému. Operace podporuje zrušení pomocí zadaného <see cref="CancellationToken"/>.</remarks>

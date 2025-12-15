@@ -18,6 +18,23 @@ namespace AVAIntegrationModeler.AVAPlace.Mapping;
 public static class FeatureMapper
 {
   /// <summary>
+  /// Převede datový přenosový objekt feature (<see cref="IntegrationFeatureModel"/>) na jeho datový přenosový objekt (<see cref="FeatureSummaryDTO"/>).
+  /// </summary>
+  /// <param name="integrationFeatureModel"><see cref="IntegrationFeatureModel"/></param>
+  /// <returns><see cref="FeatureSummaryDTO"/></returns>
+  public static FeatureSummaryDTO MapFeatureSummaryDTO(IntegrationFeatureModel integrationFeatureModel)
+  {
+    Guard.Against.Null(integrationFeatureModel, $"{nameof(FeatureMapper)} - {nameof(integrationFeatureModel)}");
+    Guard.Against.NullOrEmpty(integrationFeatureModel.Id, $"{nameof(FeatureMapper)} - {nameof(integrationFeatureModel)} - {nameof(integrationFeatureModel.Id)}");
+
+    return new FeatureSummaryDTO()
+    {
+      Code = integrationFeatureModel.Code,
+      Id = Guid.Parse(integrationFeatureModel.Id),
+    };
+  }
+
+  /// <summary>
   /// Převede datový přenosový objekt feature (<see cref="IntegrationFeatureSummary"/>) na jeho datový přenosový objekt (<see cref="FeatureSummaryDTO"/>).
   /// </summary>
   /// <param name="integrationDefenitionSummary"><see cref="IntegrationFeatureSummary"/></param>
@@ -50,6 +67,27 @@ public static class FeatureMapper
       Id = Guid.Parse(integrationDefenitionSummary.Id),
       Name = LocalizedValueMapper.MapToDTO(integrationDefenitionSummary.Name),
       Description = LocalizedValueMapper.MapToDTO(integrationDefenitionSummary.Description),
+      IncludedFeatures = new List<IncludedFeatureDTO>(),
+      IncludedModels = new List<IncludedDataModelDTO>()
+    };
+  }
+
+  /// <summary>
+  /// Převede datový přenosový objekt feature (<see cref="IntegrationFeatureSummary"/>) na jeho datový přenosový objekt (<see cref="FeatureDTO"/>).
+  /// </summary>
+  /// <param name="integrationFeatureModel"><see cref="IntegrationFeatureSummary"/></param>
+  /// <returns><see cref="FeatureDTO"/></returns>
+  public static FeatureDTO FeatureDTO(IntegrationFeatureModel integrationFeatureModel)
+  {
+    Guard.Against.Null(integrationFeatureModel, $"{nameof(FeatureMapper)} - {nameof(integrationFeatureModel)}");
+    Guard.Against.NullOrEmpty(integrationFeatureModel.Id, $"{nameof(FeatureMapper)} - {nameof(integrationFeatureModel)} - {nameof(integrationFeatureModel.Id)}");
+
+    return new FeatureDTO()
+    {
+      Code = integrationFeatureModel.Code,
+      Id = Guid.Parse(integrationFeatureModel.Id),
+      Name = LocalizedValueMapper.MapToDTO(integrationFeatureModel.Name),
+      Description = LocalizedValueMapper.MapToDTO(integrationFeatureModel.Description),
       IncludedFeatures = new List<IncludedFeatureDTO>(),
       IncludedModels = new List<IncludedDataModelDTO>()
     };

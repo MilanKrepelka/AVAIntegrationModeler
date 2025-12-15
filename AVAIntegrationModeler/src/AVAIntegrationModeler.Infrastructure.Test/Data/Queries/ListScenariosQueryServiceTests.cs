@@ -247,7 +247,7 @@ public class ListScenariosQueryServiceTests : IAsyncLifetime, IAsyncDisposable
     };
 
     _mockIntegrationDataProvider
-        .GetScenariosAsync(Arg.Any<CancellationToken>())
+        .GetScenarios(Arg.Any<CancellationToken>())
         .Returns(expectedScenarios);
 
     // Act
@@ -262,7 +262,7 @@ public class ListScenariosQueryServiceTests : IAsyncLifetime, IAsyncDisposable
 
     await _mockIntegrationDataProvider
         .Received(1)
-        .GetScenariosAsync(Arg.Any<CancellationToken>());
+        .GetScenarios(Arg.Any<CancellationToken>());
   }
 
   [Fact]
@@ -277,7 +277,7 @@ public class ListScenariosQueryServiceTests : IAsyncLifetime, IAsyncDisposable
     };
 
     _mockIntegrationDataProvider
-        .GetScenariosAsync(Arg.Any<CancellationToken>())
+        .GetScenarios(Arg.Any<CancellationToken>())
         .Returns(expectedScenarios);
 
     // Act
@@ -298,7 +298,7 @@ public class ListScenariosQueryServiceTests : IAsyncLifetime, IAsyncDisposable
     };
 
     _mockIntegrationDataProvider
-        .GetScenariosAsync(Arg.Any<CancellationToken>())
+        .GetScenarios(Arg.Any<CancellationToken>())
         .Returns(expectedScenarios);
 
     // Act
@@ -310,7 +310,7 @@ public class ListScenariosQueryServiceTests : IAsyncLifetime, IAsyncDisposable
 
     await _mockIntegrationDataProvider
         .Received(1)
-        .GetScenariosAsync(Arg.Any<CancellationToken>());
+        .GetScenarios(Arg.Any<CancellationToken>());
   }
 
   [Fact]
@@ -323,7 +323,7 @@ public class ListScenariosQueryServiceTests : IAsyncLifetime, IAsyncDisposable
     };
 
     _mockIntegrationDataProvider
-        .GetScenariosAsync(Arg.Any<CancellationToken>())
+        .GetScenarios(Arg.Any<CancellationToken>())
         .Returns(avaPlaceScenarios);
 
     var dbScenario = new Scenario(Guid.NewGuid());

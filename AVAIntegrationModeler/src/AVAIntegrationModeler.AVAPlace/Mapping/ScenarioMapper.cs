@@ -19,6 +19,23 @@ public static class ScenarioMapper
   
 {
   /// <inheritdoc/>
+  public static ScenarioDTO MapToDTO(IntegrationScenarioModel  integrationScenarioModel)
+  {
+    Guard.Against.Null(integrationScenarioModel, $"{nameof(ScenarioMapper)} - {nameof(integrationScenarioModel)}");
+    Guard.Against.NullOrEmpty(integrationScenarioModel.Id, $"{nameof(ScenarioMapper)} - {nameof(integrationScenarioModel)} - {nameof(integrationScenarioModel.Id)} ");
+
+    return new ScenarioDTO()
+    {
+      Code = integrationScenarioModel.Code,
+      Id = Guid.Parse(integrationScenarioModel.Id),
+      InputFeatureId = string.IsNullOrEmpty(integrationScenarioModel.InputFeatureId) ? null : Guid.Parse(integrationScenarioModel.InputFeatureId),
+      OutputFeatureId = string.IsNullOrEmpty(integrationScenarioModel.OutputFeatureId) ? null : Guid.Parse(integrationScenarioModel.OutputFeatureId),
+      Name = LocalizedValueMapper.MapToDTO(integrationScenarioModel.Name),
+      Description = LocalizedValueMapper.MapToDTO(integrationScenarioModel.Description),
+    };
+  }
+
+  /// <inheritdoc/>
   public static ScenarioDTO MapToDTO(IntegrationScenarioDefinition domainEntity)
   {
     Guard.Against.Null(domainEntity, $"{nameof(ScenarioMapper)} - {nameof(domainEntity)}");

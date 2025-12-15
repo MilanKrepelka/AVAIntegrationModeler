@@ -46,7 +46,7 @@ public static class ScenarioMapper
     {
       Id = featureSummary.Id,
       Code = featureSummary.Code,
-      Name = new Domain.ValueObjects.LocalizedValue(), // prázdná hodnota, protože FeatureSummaryDTO neobsahuje Name
+      Name = new Domain.ValueObjects.LocalizedValue(), // prázdná hodnota, protože MapFeatureSummaryDTO neobsahuje Name
       Description = new Domain.ValueObjects.LocalizedValue() // prázdná hodnota
     };
   }
