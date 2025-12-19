@@ -14,16 +14,21 @@ public partial class ScenariosMap : Microsoft.AspNetCore.Components.ComponentBas
   [Inject]
   IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
 
-  [Parameter] public Guid scenarioId { get; set; }
+  [Parameter] public string scenarioCode { get; set; } = string.Empty;
 
   ScenarioDTO _scenarioDTO = new ScenarioDTO();
   /// <inheritdoc/>
   public bool IsLoading { get; set; } = false;
-  
-  protected override async Task OnInitializedAsync()
-  {
-    await base.OnInitializedAsync();
 
-    _scenarioDTO = await _apiClient.GetScenario(Datasource.AVAPlace, scenarioId, CancellationToken.None);
-  }
+  //protected override async Task OnInitializedAsync()
+  //{
+  //  await base.OnInitializedAsync();
+  //  if (string.IsNullOrEmpty(scenarioCode))
+  //  {
+  //    return;
+  //  }
+  //  _scenarioDTO = await _apiClient.GetScenario(Datasource.AVAPlace, scenarioCode, CancellationToken.None);
+  //  InitDiagramModel();
+    
+  //}
 }

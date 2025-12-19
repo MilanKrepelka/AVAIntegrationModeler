@@ -92,4 +92,22 @@ public static class ScenarioMapper
       Description = LocalizedValueMapper.MapToEntity(dto.Description),
     };
   }
+
+  /// <summary>
+  /// Mapuje datový přenosový objekt scénáře (<see cref="ScenarioDTO"/>) na definici integračního scénáře (<see cref="IntegrationScenarioDefinition"/>).
+  /// </summary>
+  /// <param name="scenario">Integrační scénář</param>
+  /// <returns></returns>
+  public static IntegrationScenarioDefinition MapToIntegrationScenarioDefinition(ScenarioDTO scenario)
+  {
+    return new IntegrationScenarioDefinition()
+    {
+      Code = scenario.Code,
+      Id = scenario.Id.ToString(),
+      InputFeatureCodeOrId = scenario?.InputFeatureId?.ToString()?? string.Empty,
+      OutputFeatureCodeOrId = scenario?.OutputFeatureId?.ToString() ?? string.Empty,
+      Name = scenario?.Name == default? null : LocalizedValueMapper.MapToEntity(scenario.Name),
+      Description = scenario?.Description == default ? null : LocalizedValueMapper.MapToEntity(scenario.Description),
+    };
+  }
 }

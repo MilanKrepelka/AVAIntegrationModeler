@@ -11,6 +11,7 @@ public static class ServiceConfigs
     services.AddInfrastructureServices(logger)
             .AddMediatrConfigs();
     services.AddDatabaseServices(builder.Configuration, logger);
+    services.AddDomainValidationServices(logger);
 
     if (builder.Environment.IsDevelopment())
     {

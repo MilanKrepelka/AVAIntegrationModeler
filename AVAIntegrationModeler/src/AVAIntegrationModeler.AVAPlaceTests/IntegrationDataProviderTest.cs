@@ -180,13 +180,31 @@ public class IntegrationDataProviderTest : TestBed<Fixtures.AVAPlaceDemoFixture>
   }
 
   [Fact]
-  public async Task GetFeature_Returns_Any_Result()
+  public async Task GetScenario_By_Id_Returns_Any_Result()
   {
     var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
 
-    var features = await integrationDataProvider.GetFeaturesAsync(CancellationToken.None);
-    var result = await integrationDataProvider.GetFeature(features.ElementAt(0).Id, CancellationToken.None);
-    result.ShouldNotBeNull();
+    var scenario = await integrationDataProvider.GetScenario(Guid.Parse("f2252456-c7a7-41e0-a5a1-13e4a508e57b"), CancellationToken.None);
+    scenario.ShouldNotBeNull();
+
+    scenario.InputFeatureId.HasValue.ShouldBeTrue();
+    scenario.InputFeatureSummary.ShouldNotBeNull();
+    scenario.OutputFeatureId.HasValue.ShouldBeTrue();
+    scenario.OutputFeatureSummary.ShouldNotBeNull();
+  }
+
+  [Fact]
+  public async Task GetScenario_By_Code_Returns_Any_Result()
+  {
+    var integrationDataProvider = this._fixture.GetServiceProvider(_testOutputHelper).GetRequiredService<IIntegrationDataProvider>();
+
+    var scenario = await integrationDataProvider.GetScenario("BankingProvider", CancellationToken.None);
+    scenario.ShouldNotBeNull();
+
+    scenario.InputFeatureId.HasValue.ShouldBeTrue();
+    scenario.InputFeatureSummary.ShouldNotBeNull();
+    scenario.OutputFeatureId.HasValue.ShouldBeTrue();
+    scenario.OutputFeatureSummary.ShouldNotBeNull();
   }
 
   [Fact]

@@ -1,0 +1,11 @@
+/* Zarovnej šíøku Syncfusion inputù v rámci bootstrap sloupcù */
+.e-control-wrapper.e-input-group,
+.e-control-wrapper.e-multi-line {
+    width: 100%;
+    display: block;
+}
+
+    .e-control-wrapper.e-multi-line textarea.e-input {
+        width: 100%;
+        box-sizing: border-box;
+    }

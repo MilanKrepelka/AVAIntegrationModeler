@@ -13,11 +13,18 @@ namespace AVAIntegrationModeler.UseCases.Scenarios.Get;
 /// Queries don't necessarily need to use repository methods, but they can if it's convenient
 /// </summary>
 public class GetScenarioHandler(IListScenariosQueryService query)
-  : IQueryHandler<GetScenarioQuery, Result<ScenarioDTO>>
+  : IQueryHandler<GetScenarioQuery, Result<ScenarioDTO>>, IQueryHandler<GetScenarioByCodeQuery, Result<ScenarioDTO>>
 {
   public async Task<Result<ScenarioDTO>> Handle(GetScenarioQuery request, CancellationToken cancellationToken)
   {
-    var scenario = await query.GetScenario(request.Datasource, request.ScenarioId);
+    var scenario = await query.GetScenario(request.Datasource, request.ScenarioId, cancellationToken);
+    if (scenario == null) return Result.NotFound();
+    return Result.Success(scenario);
+  }
+
+  public async Task<Result<ScenarioDTO>> Handle(GetScenarioByCodeQuery request, CancellationToken cancellationToken)
+  {
+    var scenario = await query.GetScenario(request.Datasource, request.ScenarioCode, cancellationToken);
     if (scenario == null) return Result.NotFound();
     return Result.Success(scenario);
   }

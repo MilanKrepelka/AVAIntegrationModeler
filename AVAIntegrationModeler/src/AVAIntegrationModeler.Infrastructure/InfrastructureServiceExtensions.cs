@@ -1,4 +1,5 @@
-﻿using AVAIntegrationModeler.Domain.Interfaces;
+﻿using AVAIntegrationModeler.Domain;
+using AVAIntegrationModeler.Domain.Interfaces;
 using AVAIntegrationModeler.Domain.Services;
 using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.Infrastructure.Data.Queries;
@@ -53,6 +54,15 @@ public static class InfrastructureServiceExtensions
     });
     logger.LogInformation("{Project} services registered", "Infrastructure");
 
+    return services;
+  }
+
+  public static IServiceCollection AddDomainValidationServices(
+    this IServiceCollection services,
+    ILogger logger)
+  {
+    services.AddScoped<IDomainEntityValidationService<Scenario>, ValidationServices.ScenarioValidationService>();
+    logger.LogInformation("DomainValidationServices services registered");
     return services;
   }
 }

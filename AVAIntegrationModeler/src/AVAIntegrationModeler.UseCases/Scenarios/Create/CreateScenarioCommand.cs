@@ -6,24 +6,21 @@ using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using FastEndpoints;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Contracts.DTO;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Create;
 
 /// <summary>
-/// Create a new Scenario.
+/// Příkaz pro vytvoření nového integračního scénáře.
 /// </summary>
-/// <param name="Id">Identifikátor scénáře.</param>
-/// <param name="Code">Jedinečný kód scénáře.</param>
-/// <param name="Name">Lokalizovaný název scénáře.</param>
-/// <param name="Decsription">Lokalizovaný popis scénáře.</param>
-/// <param name="InputFeatureId">Id vstupní feature.</param>
-/// <param name="OutputFeatureId">Id výstupní feature.</param>
+/// <param name="Datasource"><see cref="AVAIntegrationModeler.Contracts.Datasource"/></param>
+/// <param name="Scenario"><see cref="AVAIntegrationModeler.Contracts.DTO.ScenarioDTO"/></param>
 public record CreateScenarioCommand(
-    Guid Id,
-    string Code,
-    LocalizedValue Name,
-    LocalizedValue Decsription,
-    Guid? InputFeatureId,
-    Guid? OutputFeatureId
+    Datasource Datasource,
+    ScenarioDTO Scenario
 ) : Ardalis.SharedKernel.ICommand<Result<Guid>>;
+
+public record CreateScenarioCommand2(Datasource Datasource,
+    ScenarioDTO Scenario) : FastEndpoints.ICommand<Result<Guid>>;
 

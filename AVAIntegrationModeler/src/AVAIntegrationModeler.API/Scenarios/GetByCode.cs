@@ -5,21 +5,21 @@ using AVAIntegrationModeler.UseCases.Scenarios.Get;
 namespace AVAIntegrationModeler.API.Scenarios;
 
 /// <summary>
-/// Get a Scenario by Scenario Id.
+/// Get a Scenario by Scenario code.
 /// </summary>
-public class GetById(IMediator _mediator)
-  : Endpoint<GetScenarioByIdRequest, ScenarioDTO>
+public class GetByCode(IMediator _mediator)
+  : Endpoint<GetScenarioByCodeRequest, ScenarioDTO>
 {
   public override void Configure()
   {
-    Get(GetScenarioByIdRequest.Route);
+    Get(GetScenarioByCodeRequest.Route);
     AllowAnonymous();
   }
 
-  public override async Task HandleAsync(GetScenarioByIdRequest request,
+  public override async Task HandleAsync(GetScenarioByCodeRequest request,
     CancellationToken cancellationToken)
   {
-    var query = new GetScenarioQuery(request.Datasource, request.ScenarioId);
+    var query = new GetScenarioByCodeQuery(request.Datasource, request.ScenarioCode);
 
     var result = await _mediator.Send(query, cancellationToken);
 

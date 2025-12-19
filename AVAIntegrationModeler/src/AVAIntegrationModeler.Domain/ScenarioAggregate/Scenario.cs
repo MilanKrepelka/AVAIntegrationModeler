@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Linq;
 using AVAIntegrationModeler.Domain.ContributorAggregate;
 using AVAIntegrationModeler.Domain.ValueObjects;
 
@@ -73,6 +74,8 @@ public class Scenario : EntityBase<Guid>, IAggregateRoot
   /// <param name="name">Nový lokalizovaný název.</param>
   public Scenario SetName(LocalizedValue name)
   {
+    Guard.Against.Null(name, nameof(name));
+    Guard.Against.Null(name?.EnglishValue);
     Name = name;
     return this;
   }
@@ -83,6 +86,8 @@ public class Scenario : EntityBase<Guid>, IAggregateRoot
   /// <param name="description">Nový lokalizovaný popis.</param>
   public Scenario SetDescription(LocalizedValue description)
   {
+    Guard.Against.Null(description, nameof(description));
+    Guard.Against.Null(description, nameof(description));
     Description = description;
     return this;
   }

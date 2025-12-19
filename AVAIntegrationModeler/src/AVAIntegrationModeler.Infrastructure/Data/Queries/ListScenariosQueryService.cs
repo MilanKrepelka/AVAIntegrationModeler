@@ -1,9 +1,6 @@
 ﻿using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.UseCases.Contributors;
-using AVAIntegrationModeler.UseCases.Contributors.List;
-using AVAIntegrationModeler.UseCases.Scenarios;
 using AVAIntegrationModeler.UseCases.Scenarios.List;
 using AVAIntegrationModeler.UseCases.Scenarios.Mapping;
 using Microsoft.Extensions.Caching.Memory;
@@ -19,6 +16,7 @@ public class ListScenariosQueryService(
   private readonly IMemoryCache _memoryCache = memoryCache;
 
   private string createChacheKey(Datasource datasource) => $"{primaryKeyName}-{datasource}";
+
   public async Task<IEnumerable<ScenarioDTO>> ListAsync(Datasource datasouce) 
   {
     var methodResult = await _memoryCache.GetOrCreateAsync(
@@ -28,11 +26,12 @@ public class ListScenariosQueryService(
         entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
         entry.SlidingExpiration = TimeSpan.FromMinutes(2);
         entry.Priority = CacheItemPriority.Normal;
-        
+
         List<ScenarioDTO> result;
-        
+
         if (datasouce == Datasource.AVAPlace)
         {
+          // AVAPlace – načtení přes poskytovatele integrací
           var scenariosTask = integrationDataProvider.GetScenarios();
           var featuresTask = integrationDataProvider.GetFeaturesSummaryAsync();
           await Task.WhenAll(scenariosTask, featuresTask);
@@ -58,14 +57,13 @@ public class ListScenariosQueryService(
         }
         else
         {
-          // ✅ Explicitní join pomocí LINQ bez navigačních vlastností
+          // Databáze – explicitní join bez navigačních vlastností
           var scenariosTask = _db.Scenarios.ToListAsync();
           var allFeaturesTask = _db.Features.ToListAsync();
           await Task.WhenAll(scenariosTask, allFeaturesTask);
 
           var scenarios = scenariosTask.Result;
           var features = allFeaturesTask.Result;
-
           var featureDict = features.ToDictionary(f => f.Id);
 
           result = scenarios.Select(s => new ScenarioDTO
@@ -77,30 +75,24 @@ public class ListScenariosQueryService(
             InputFeatureId = s.InputFeature,
             OutputFeatureId = s.OutputFeature,
             InputFeatureSummary = s.InputFeature.HasValue && featureDict.ContainsKey(s.InputFeature.Value)
-              ? new FeatureSummaryDTO 
-                { 
-                  Id = featureDict[s.InputFeature.Value].Id, 
-                  Code = featureDict[s.InputFeature.Value].Code 
-                }
+              ? new FeatureSummaryDTO { Id = featureDict[s.InputFeature.Value].Id, Code = featureDict[s.InputFeature.Value].Code }
               : null,
             OutputFeatureSummary = s.OutputFeature.HasValue && featureDict.ContainsKey(s.OutputFeature.Value)
-              ? new FeatureSummaryDTO 
-                { 
-                  Id = featureDict[s.OutputFeature.Value].Id, 
-                  Code = featureDict[s.OutputFeature.Value].Code 
-                }
+              ? new FeatureSummaryDTO { Id = featureDict[s.OutputFeature.Value].Id, Code = featureDict[s.OutputFeature.Value].Code }
               : null
           }).ToList();
         }
-        
+
         return result;
       });
-    
+
     return methodResult!;
   }
 
-  /// <inheritdoc/>
-  public async Task<ScenarioDTO> GetScenario(Datasource dataSource, Guid scenarioId)
+  /// <summary>
+  /// Vrátí scénář podle Id; vyhazuje NotFoundException, pokud neexistuje.
+  /// </summary>
+  public async Task<ScenarioDTO> GetScenario(Datasource dataSource, Guid scenarioId, CancellationToken ct)
   {
     if (dataSource == Datasource.AVAPlace)
     {
@@ -108,12 +100,80 @@ public class ListScenariosQueryService(
     }
     else
     {
-      var scenario = await _db.Scenarios.FirstOrDefaultAsync(s => s.Id == scenarioId);
+      var scenario = await _db.Scenarios.FirstOrDefaultAsync(s => s.Id == scenarioId, ct);
       if (scenario == null)
       {
         throw new NotFoundException(scenarioId.ToString(), "Scenario");
       }
       return ScenarioMapper.MapToScenarioDTO(scenario);
+    }
+  }
+
+  /// <summary>
+  /// Vrátí scénář podle kódu; vyhazuje NotFoundException, pokud neexistuje.
+  /// </summary>
+  public async Task<ScenarioDTO> GetScenario(Datasource dataSource, string scenarioCode, CancellationToken ct)
+  {
+    if (dataSource == Datasource.AVAPlace)
+    {
+      return await integrationDataProvider.GetScenario(scenarioCode);
+    }
+    else
+    {
+      var scenario = await _db.Scenarios.FirstOrDefaultAsync(s => s.Code == scenarioCode, ct);
+      if (scenario == null)
+      {
+        throw new NotFoundException(scenarioCode, "Scenario");
+      }
+      return ScenarioMapper.MapToScenarioDTO(scenario);
+    }
+  }
+
+  /// <summary>
+  /// Ověří existenci scénáře podle Id bez výjimek.
+  /// </summary>
+  public async Task<bool> ExistsByIdAsync(Datasource dataSource, Guid scenarioId, CancellationToken ct)
+  {
+    if (dataSource == Datasource.AVAPlace)
+    {
+      // AVAPlace nevrací snadný exists; použijeme try/catch nad GetScenario
+      try
+      {
+        await integrationDataProvider.GetScenario(scenarioId);
+        return true;
+      }
+      catch (NotFoundException)
+      {
+        return false;
+      }
+    }
+    else
+    {
+      return await _db.Scenarios.AnyAsync(s => s.Id == scenarioId, ct);
+    }
+  }
+
+  /// <summary>
+  /// Ověří existenci scénáře podle kódu bez výjimek.
+  /// </summary>
+  public async Task<bool> ExistsByCodeAsync(Datasource dataSource, string scenarioCode, CancellationToken ct)
+  {
+    if (dataSource == Datasource.AVAPlace)
+    {
+      // AVAPlace nevrací snadný exists; použijeme try/catch nad GetScenario
+      try
+      {
+        await integrationDataProvider.GetScenario(scenarioCode);
+        return true;
+      }
+      catch (NotFoundException)
+      {
+        return false;
+      }
+    }
+    else
+    {
+      return await _db.Scenarios.AnyAsync(s => s.Code == scenarioCode, ct);
     }
   }
 }

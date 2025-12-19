@@ -59,7 +59,7 @@
             <GridColumn HeaderText="Akce" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
                 <Template>
                     @{
-                        var model = (context as DataModelListViewModel);
+                        var model = (context as ScenarioListViewModel);
                         <div class="action-buttons">
                             <SfButton CssClass="e-small e-round e-outline action-button"
                                       IconCss="e-icons e-edit"
@@ -182,7 +182,7 @@
     private async Task CopyToClipboard(string text)
     {
         await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
-        
+
         // Zobrazit toast s ID hodnotou
         await ShowToast($"ID zkopírováno: {text.Substring(0, 8)}...");
     }
@@ -200,18 +200,16 @@
             await ToastObj.ShowAsync(toastModel);
         }
     }
-    private async Task ShowModelMap(DataModelListViewModel model)
+    private async Task ShowModelMap(ScenarioListViewModel scenario)
     {
         // Open Data Model Map in a new browser tab
-        var url = NavigationManager.ToAbsoluteUri($"/datamodelmap/{model.Id}").ToString();
+        var url = NavigationManager.ToAbsoluteUri($"/scenariomap/{scenario.Code}").ToString();
         await JS.InvokeVoidAsync("open", url, "_blank");
     }
 
-    private void EditDataModel(DataModelListViewModel model)
+    private async Task EditDataModel(ScenarioListViewModel scenario)
     {
-        // TODO: Implementovat editaci - například přesměrování na edit stránku
-        NavigationManager.NavigateTo($"/datamodels/edit/{model.Id}", true);
-
-        // nebo otevřít dialog pro editaci
+        var url = NavigationManager.ToAbsoluteUri($"/scenarioedit/{scenario.Code}").ToString();
+        await JS.InvokeVoidAsync("open", url, "_blank");
     }
 }

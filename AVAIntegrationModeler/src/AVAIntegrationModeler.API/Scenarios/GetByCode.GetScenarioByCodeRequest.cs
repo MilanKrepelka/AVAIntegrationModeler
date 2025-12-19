@@ -2,23 +2,23 @@
 
 namespace AVAIntegrationModeler.API.Scenarios;
 
-public class GetScenarioByIdRequest
+public class GetScenarioByCodeRequest
 {
   // Route now includes Datasource as enum text (no int constraint) and ScenarioCode as guid
-  public const string Route = "/Scenarios/{" + nameof(Datasource) + "}/{" + nameof(ScenarioId) + ":guid}";
+  public const string Route = "/Scenarios/{" + nameof(Datasource) + "}/{" + nameof(ScenarioCode)+"}";
   // GuidRoute provided for compatibility/explicit naming, mirrors Route
   public const string GuidRoute = Route;
 
-  public static string BuildRoute(Guid scenarioId, Datasource datasource) =>
+  public static string BuildRoute(string scenarioCode, Datasource datasource) =>
     Route
       .Replace("{" + nameof(Datasource) + "}", datasource.ToString())
-      .Replace("{" + nameof(ScenarioId) + ":guid}", scenarioId.ToString());
+      .Replace("{" + nameof(ScenarioCode) +"}", scenarioCode);
 
-  // Backward-compatible helper if only scenarioId is provided; defaults Datasource to Database
-  public static string BuildRoute(Guid scenarioId) =>
-    BuildRoute(scenarioId, Datasource.Database);
+  // Backward-compatible helper if only scenarioCode is provided; defaults Datasource to Database
+  public static string BuildRoute(string scenarioCode) =>
+    BuildRoute(scenarioCode, Datasource.Database);
 
-  public Guid ScenarioId { get; set; }
+  public string ScenarioCode { get; set; } = string.Empty;
 
   /// <summary>
   /// <see cref="AVAIntegrationModeler.Contracts.Datasource"/>

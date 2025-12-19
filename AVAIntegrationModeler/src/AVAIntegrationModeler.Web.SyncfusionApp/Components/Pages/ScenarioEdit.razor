@@ -1,0 +1,83 @@
+﻿@page "/scenarioedit/{scenarioCode}"
+@rendermode InteractiveServer
+@using AVAIntegrationModeler.Contracts.DTO
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Buttons
+@using Microsoft.AspNetCore.Components.Forms
+
+<EditForm Model="_edit" OnValidSubmit="SaveAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="container">
+        <h2>Upravit scénář</h2>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <SfTextBox CssClass="w-100" Placeholder="Kód scénáře" FloatLabelType="FloatLabelType.Always" @bind-Value="_edit.Code"></SfTextBox>
+                <ValidationMessage For="@(() => _edit.Code)" />
+            </div>
+            <div class="col-12 col-md-6">
+                <SfTextBox CssClass="w-100"
+                           Placeholder="Identifikátor (GUID)"
+                           FloatLabelType="FloatLabelType.Always"
+                           @bind-Value="_edit.IdText">
+                </SfTextBox>
+                <ValidationMessage For="@(() => _edit.IdText)" />
+            </div>
+        </div>
+
+        <h4 style="margin-top:16px">Název</h4>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <SfTextBox CssClass="w-100" Placeholder="Česky" FloatLabelType="FloatLabelType.Auto" @bind-Value="_edit.NameCz"></SfTextBox>
+                <ValidationMessage For="@(() => _edit.NameCz)" />
+            </div>
+            <div class="col-12 col-md-6">
+                <SfTextBox CssClass="w-100" Placeholder="Anglicky" FloatLabelType="FloatLabelType.Auto" @bind-Value="_edit.NameEn"></SfTextBox>
+                <ValidationMessage For="@(() => _edit.NameEn)" />
+            </div>
+        </div>
+
+        <h4 style="margin-top:16px">Popis</h4>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <SfTextArea CssClass="w-100" Placeholder="Popis (CZ)" FloatLabelType="FloatLabelType.Auto" @bind-Value="_edit.DescriptionCz" Rows="3"></SfTextArea>
+                <ValidationMessage For="@(() => _edit.DescriptionCz)" />
+            </div>
+            <div class="col-12 col-md-6">
+                <SfTextArea CssClass="w-100" Placeholder="Description (EN)" FloatLabelType="FloatLabelType.Auto" @bind-Value="_edit.DescriptionEn" Rows="3"></SfTextArea>
+                <ValidationMessage For="@(() => _edit.DescriptionEn)" />
+            </div>
+        </div>
+
+        <h4 style="margin-top:16px">Propojené feature</h4>
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <label>Vstupní feature</label>
+                <SfDropDownList TItem="FeatureDTO" TValue="Guid?" DataSource="@_features"
+                                Placeholder="Vyberte vstupní feature"
+                                @bind-Value="_edit.InputFeatureId" AllowFiltering="true" ShowClearButton="true">
+                    <DropDownListFieldSettings Text="Code" Value="Id"></DropDownListFieldSettings>
+                </SfDropDownList>
+                <ValidationMessage For="@(() => _edit.InputFeatureId)" />
+            </div>
+            <div class="col-12 col-md-6">
+                <label>Výstupní feature</label>
+                <SfDropDownList TItem="FeatureDTO" TValue="Guid?" DataSource="@_features"
+                                Placeholder="Vyberte výstupní feature"
+                                @bind-Value="_edit.OutputFeatureId" AllowFiltering="true" ShowClearButton="true">
+                    <DropDownListFieldSettings Text="Code" Value="Id"></DropDownListFieldSettings>
+                </SfDropDownList>
+                <ValidationMessage For="@(() => _edit.OutputFeatureId)" />
+            </div>
+        </div>
+
+        <div style="margin-top:16px">
+            <SfButton CssClass="e-primary" Type="Submit">Uložit</SfButton>
+            <SfButton CssClass="e-flat" OnClick="Cancel" Style="margin-left:8px">Zrušit</SfButton>
+        </div>
+    </div>
+</EditForm>
+    

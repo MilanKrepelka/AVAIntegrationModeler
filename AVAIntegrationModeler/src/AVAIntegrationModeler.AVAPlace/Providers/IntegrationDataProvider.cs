@@ -243,6 +243,61 @@ public class IntegrationDataProvider : IIntegrationDataProvider
   }
 
   /// <inheritdoc/>
+  public async Task<bool> CreateScenario(ScenarioDTO scenario, CancellationToken cancelationToken = default)
+  {
+    return await importScenario(scenario, false, cancelationToken);
+  }
+
+  /// <inheritdoc/>
+  public async Task<bool> UpdateScenario(ScenarioDTO scenario, CancellationToken cancelationToken = default)
+  {
+    return await importScenario(scenario, true, cancelationToken);
+  }
+
+  /// <inheritdoc/>
+  public async Task<bool> DeleteScenario(string scenarioCode, CancellationToken cancelationToken = default)
+  {
+    return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, bool>(
+      _serviceProvider,
+      tenantId,
+      async client =>
+      {
+        List<ScenarioDTO> scenarios = new List<ScenarioDTO>();
+
+        var imported = await client.IntegrationScenarios.DeleteScenarioAsync(scenarioCode, cancelationToken);
+
+        return imported;
+      }
+    );
+  }
+
+  /// <summary>
+  /// importuje scénář do DataService
+  /// </summary>
+  /// <param name="scenario">Integrační scénář</param>
+  /// <param name="allowUdate">Příznak, že se má povolit aktualizace existujícího scénáře</param>
+  /// <param name="cancelationToken"><see cref="CancellationToken"/></param>
+  /// <returns>Příznak, že import byl úspěšný</returns>
+  private async Task<bool> importScenario(ScenarioDTO scenario, bool allowUdate, CancellationToken cancelationToken = default)
+  {
+    IntegrationScenarioDefinition integrationScenarioDefinition = new IntegrationScenarioDefinition();
+    integrationScenarioDefinition = Mapping.ScenarioMapper.MapToIntegrationScenarioDefinition(scenario);
+
+    return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, bool>(
+      _serviceProvider,
+      tenantId,
+      async client =>
+      {
+        List<ScenarioDTO> scenarios = new List<ScenarioDTO>();
+
+        var imported = await client.IntegrationScenarios.ImportScenarioAsync(integrationScenarioDefinition, allowUdate, false, cancelationToken);
+
+        return imported;
+      }
+    );
+  }
+
+  /// <inheritdoc/>
   public async Task<IEnumerable<DataModelDTO>> GetDataModelsAsync(CancellationToken ct = default)
   {
     return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<DataModelDTO>>(
@@ -475,6 +530,42 @@ public class IntegrationDataProvider : IIntegrationDataProvider
 
     result = Mapping.FeatureMapper.FeatureDTO(avaResult!);
 
+    return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<ScenarioDTO> GetScenario(string scenarioCode, CancellationToken ct = default)
+  {
+    var avaResult = await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IntegrationScenarioModel>(
+     _serviceProvider,
+     tenantId,
+     async client =>
+     {
+       var dataServiceResult = await client.IntegrationScenarios.GetScenarioAsync(
+         scenarioCode, false, ct);
+       return dataServiceResult;
+     }
+   );
+
+    var result = Mapping.ScenarioMapper.MapToDTO(avaResult);
+    // totáhnout feature summary atd.
+    if (result.InputFeatureId.HasValue)
+    {
+      var inputFeature = await GetFeaturesSummaryAsync(ct);
+      result = result with
+      {
+        InputFeatureSummary = inputFeature.FirstOrDefault(f => f.Id == result.InputFeatureId.Value)
+      };
+    }
+
+    if (result.OutputFeatureId.HasValue)
+    {
+      var outputFeature = await GetFeaturesSummaryAsync(ct);
+      result = result with
+      {
+        OutputFeatureSummary = outputFeature.FirstOrDefault(f => f.Id == result.OutputFeatureId.Value)
+      };
+    }
     return result;
   }
 }
