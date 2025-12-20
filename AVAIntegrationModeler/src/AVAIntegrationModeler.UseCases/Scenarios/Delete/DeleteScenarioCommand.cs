@@ -1,3 +1,3 @@
 ﻿namespace AVAIntegrationModeler.UseCases.Scenarios.Delete;
 
-public record DeleteScenarioCommand(Guid ScenarioId) : ICommand<Result>;
+public record DeleteScenarioCommand(string ScenarioCode) : ICommand<Result>;

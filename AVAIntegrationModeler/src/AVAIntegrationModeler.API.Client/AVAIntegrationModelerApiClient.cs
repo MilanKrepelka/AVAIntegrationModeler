@@ -10,9 +10,9 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Pathoschild.Http.Client;
 
-    namespace AVAIntegrationModeler.API.Client;
+namespace AVAIntegrationModeler.API.Client;
 
-    public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
+public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
 {
   private readonly HttpClient _httpClient;
   private readonly ILogger<AVAIntegrationModelerApiClient> _logger;
@@ -251,6 +251,11 @@ using Pathoschild.Http.Client;
   /// <inheritdoc/>
   public async Task<Result<Guid>> CreateScenario(Datasource datasource, ScenarioDTO scenario, CancellationToken cancellationToken)
   {
+    var requestbody = new
+    {
+      Datasource = datasource,
+      Scenario = scenario
+    };
     if (!Enum.IsDefined(typeof(Datasource), datasource))
       return Result<Guid>.Invalid(new ValidationError(nameof(datasource), "Neplatný datasource."));
     
@@ -263,8 +268,7 @@ using Pathoschild.Http.Client;
 
     var result = await fluent
       .PostAsync("scenarios")
-      .WithArgument("datasource", datasource)
-      .WithBody(scenario)
+      .WithBody(requestbody)
       .WithCancellationToken(cancellationToken)
       .AsResult<Guid>(); // ← Použití nové extension metody
 
@@ -347,5 +351,19 @@ using Pathoschild.Http.Client;
       _logger.LogWarning($"{nameof(UpdateScenarioResult)} failed. datasource={datasource}, status={result.Status}");
 
     return result;
+  }
+
+  public async Task<Result> DeleteScenario(Datasource datasource, string scenarioCode, CancellationToken ct)
+  {
+    _logger.LogDebug($"{nameof(DeleteScenario)} starting. datasource={datasource}, scenarioCode={scenarioCode}");
+
+    var fluent = new FluentClient(_httpClient);
+
+    var result = await fluent
+      .DeleteAsync($"scenarios/{datasource}/{Uri.EscapeDataString(scenarioCode)}")
+      .WithCancellationToken(ct)
+      .AsResult<object>(); // DELETE obvykle nevrací tělo
+
+    return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));
   }
 }

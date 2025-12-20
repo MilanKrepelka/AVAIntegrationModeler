@@ -125,7 +125,7 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
     
     var createResult = await apiClient.CreateScenario(Contracts.Datasource.Database, scenariosResponse.Scenarios.ElementAt(0), CancellationToken.None);
 
-    Assert.NotNull(scenariosResponse);
+    Assert.True(createResult.IsError());
     
   }
 
@@ -186,8 +186,44 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
       newScenario, 
       CancellationToken.None);
 
-    // Assert
     Assert.True(result.IsSuccess);
-    Assert.NotEqual(Guid.Empty, result.Value);
+    Assert.Equal(newScenario.Id, result.Value);
+  }
+
+  [Fact()]
+  public async Task DeleteScenario_WithResult_Success()
+  {
+    using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions()
+    {
+      BaseAddress = new Uri("http://0.0.0.0:5005")
+    });
+
+    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(
+      client,
+      NullLogger<AVAIntegrationModelerApiClient>.Instance);
+
+    var newScenario = new Contracts.DTO.ScenarioDTO
+    {
+      Id = Guid.NewGuid(),
+      Code = $"TEST-{Guid.NewGuid().ToString().Substring(0, 8)}",
+      Name = new Contracts.DTO.LocalizedValue
+      {
+        CzechValue = "Test",
+        EnglishValue = "Test"
+      }
+    };
+
+    // Act
+    _ =  await apiClient.CreateScenario(
+      Contracts.Datasource.Database,
+      newScenario,
+      CancellationToken.None);
+
+    var deleteResult = await apiClient.DeleteScenario(
+      Contracts.Datasource.Database, newScenario.Code, CancellationToken.None);
+
+    Assert.True(deleteResult.IsNoContent());  
+
+
   }
 }

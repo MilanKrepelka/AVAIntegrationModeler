@@ -14,7 +14,7 @@ public class DeleteScenarioHandler(IRepository<Scenario> repository) : ICommandH
     
     // Another Approach: Do the real work here including dispatching domain events - change the event from internal to public
     // @ardalis prefers using the service above so that **domain** event behavior remains in the **domain model** (core project)
-     var aggregateToDelete = await _repository.GetByIdAsync(request.ScenarioId, cancellationToken);
+     var aggregateToDelete = await _repository.FirstOrDefaultAsync(new Domain.ScenarioAggregate.Specifications.ScenarioByCodeSpec(request.ScenarioCode), cancellationToken);
     if (aggregateToDelete == null) return Result.NotFound();
 
     await _repository.DeleteAsync(aggregateToDelete, cancellationToken);

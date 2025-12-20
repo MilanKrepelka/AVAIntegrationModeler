@@ -89,7 +89,6 @@
 /AVAIntegrationModeler/src/AVAIntegrationModeler.API/bin/Release/net9.0
 /AVAIntegrationModeler/src/AVAIntegrationModeler.API.Client/bin/
 /AVAIntegrationModeler/src/AVAIntegrationModeler.API.Client/obj
-/AVAIntegrationModeler/src/AVAIntegrationModeler.API.Client.Test/obj
 /AVAIntegrationModeler/src/AVAIntegrationModeler.AVAPlace/bin/Release/net9.0
 /AVAIntegrationModeler/src/AVAIntegrationModeler.Contracts/bin/Release/net9.0
 /AVAIntegrationModeler/src/AVAIntegrationModeler.Domain/bin/Release/net9.0
@@ -105,4 +104,5 @@
 /AVAIntegrationModeler/src/AVAIntegrationModeler.UseCases.Test/bin/Release/net9.0
 /AVAIntegrationModeler/src/AVAIntegrationModeler.Web.Test/bin/Release/net9.0
 /AVAIntegrationModeler/src/AVAIntegrationModeler.API/Properties/PublishProfiles
-/AVAIntegrationModeler/src/AVAIntegrationModeler.API.Client.Test/bin/Debug/net9.0
+/AVAIntegrationModeler/src/AVAIntegrationModeler.API.Client.Test/bin
+/AVAIntegrationModeler/src/AVAIntegrationModeler.API.Client.Test/obj

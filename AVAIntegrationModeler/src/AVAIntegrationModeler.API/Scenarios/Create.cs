@@ -11,7 +11,7 @@ namespace AVAIntegrationModeler.API.Scenarios;
 /// Creates a new Scenario given a datasource and scenario DTO.
 /// </remarks>
 public class CreateScenarioEndpoint(IMediator _mediator)
-  : Endpoint<CreateScenarioRequest, CreateScenarioResponse>
+  : Endpoint<CreateScenarioRequest, Guid>
 {
   public override void Configure()
   {
@@ -52,7 +52,7 @@ public class CreateScenarioEndpoint(IMediator _mediator)
 
     if (result.IsSuccess)
     {
-      Response = new CreateScenarioResponse(result.Value);
+      Response = result.Value;
       
       await SendCreatedAtAsync<GetById>(
         new { datasource = request.Datasource, scenarioId = result.Value },

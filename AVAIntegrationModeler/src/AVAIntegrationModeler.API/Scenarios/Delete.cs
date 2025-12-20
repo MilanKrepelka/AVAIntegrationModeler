@@ -10,7 +10,7 @@ namespace AVAIntegrationModeler.API.Scenarios;
 /// Delete a Contributor by providing a valid integer id.
 /// </remarks>
 public class Delete(IMediator _mediator)
-  : Endpoint<DeleteScenarioRequest>
+  : Endpoint<DeleteScenarioRequest, Boolean>
 {
   public override void Configure()
   {
@@ -22,7 +22,7 @@ public class Delete(IMediator _mediator)
     DeleteScenarioRequest request,
     CancellationToken cancellationToken)
   {
-    var command = new DeleteScenarioCommand(request.ScenarioId);
+    var command = new DeleteScenarioCommand(request.ScenarioCode);
 
     var result = await _mediator.Send(command, cancellationToken);
 
@@ -32,10 +32,14 @@ public class Delete(IMediator _mediator)
       return;
     }
 
-    if (result.IsSuccess)
+    if (result.IsSuccess && result.Status == ResultStatus.Ok)
     {
       await SendNoContentAsync(cancellationToken);
-    };
-    // TODO: Handle other issues as needed
+    }
+    else
+    {
+      await SendErrorsAsync(400, cancellationToken);
+    }
+    return;
   }
 }

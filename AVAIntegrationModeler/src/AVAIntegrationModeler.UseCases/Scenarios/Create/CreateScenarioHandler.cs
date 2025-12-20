@@ -84,12 +84,20 @@ public class CreateScenarioHandler(
     if (request.Datasource == Datasource.Database)
     {
       // 3. Uložení do repository
-      var created = await scenarioRepository.AddAsync(scenario, cancellationToken);
-
-      if (created is null)
+      Scenario? createdScenario = null;
+      try
+      {
+        createdScenario = await scenarioRepository.AddAsync(scenario, cancellationToken);
+      }
+      catch( Exception ex)
+      {
+        return Result<Guid>.Error($"Scénář se nepodařilo vytvořit: {ex.Message}");
+      }
+      if (createdScenario is null)
       {
         return Result<Guid>.Error("Scénář nebyl vytvořen.");
       }
+      return Result<Guid>.Success(createdScenario.Id);
     }
     else if (request.Datasource == Datasource.AVAPlace)
     {

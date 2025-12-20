@@ -78,4 +78,13 @@ public interface IAVAIntegrationModelerApiClient
   /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
   /// <returns>Výsledek operace obsahující aktualizovaný scénář.</returns>
   Task<Result<ScenarioDTO>> UpdateScenarioResult(Datasource datasource, ScenarioDTO scenario, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Smaže integrační scénář ve zadaném datovém zdroji a vrátí výsledek jako <see cref="Result{T}"/>.
+  /// </summary>
+  /// <param name="datasource"><see cref="Datasource"/></param>
+  /// <param name="scenarioCode">Kód integrační scénář</param>
+  /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+  /// <returns>Výsledek operace obsahující aktualizovaný scénář.</returns>
+  Task<Result> DeleteScenario(Datasource datasource, string scenarioCode, CancellationToken cancellationToken);
 }
