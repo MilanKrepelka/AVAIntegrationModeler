@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Ardalis.Result;
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
@@ -9,7 +10,12 @@ namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
 public partial class ScenarioEdit : ComponentBase
 {
   [Inject] private IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
+
   [Parameter] public string scenarioCode { get; set; } = string.Empty;
+
+  
+  
+  [Parameter] public Datasource datasource { get; set; }
 
   private ScenarioDTO? _scenarioDTO;
   private List<FeatureDTO> _features = new();
@@ -50,8 +56,8 @@ public partial class ScenarioEdit : ComponentBase
     if (string.IsNullOrWhiteSpace(scenarioCode))
       return;
 
-    _scenarioDTO = await _apiClient.GetScenario(Datasource.AVAPlace, scenarioCode, CancellationToken.None);
-    var featuresResp = await _apiClient.GetFeatures(Datasource.AVAPlace, CancellationToken.None);
+    _scenarioDTO = await _apiClient.GetScenario(datasource, scenarioCode, CancellationToken.None);
+    var featuresResp = await _apiClient.GetFeatures(datasource, CancellationToken.None);
     _features = featuresResp.Features ?? new List<FeatureDTO>();
 
     if (_scenarioDTO is not null)
@@ -94,21 +100,27 @@ public partial class ScenarioEdit : ComponentBase
     };
 
     _scenarioDTO = updated;
+    var result = await _apiClient.UpdateScenario(datasource, updated, CancellationToken.None);
+    if (result.IsSuccess)
+    {
+      await ShowToast(true, $"Integrační scénář {updated.Code} byl v pořádku uložen");
+    }
+    else 
+    {
+      if (result.IsError())
+      {
+        await ShowToast(false, $"Chyba při uložení integračního scénáře:{string.Join(",", result.Errors)}");
+      }else if (result.IsInvalid())
+      {
+        await ShowToast(false, $"Chyba při uložení integračního scénáře:{string.Join(",", result.ValidationErrors)}");
+      }else
+      {
+        await ShowToast(false, $"Chyba při uložení integračního scénáře':{string.Join(",", result.Errors)}'");
+      }
+    }
     await InvokeAsync(StateHasChanged);
   }
 
  
-  private void Cancel()
-  {
-    if (_scenarioDTO is null) return;
-
-    _edit.Code = _scenarioDTO.Code;
-    _edit.IdText = _scenarioDTO.Id.ToString();
-    _edit.NameCz = _scenarioDTO.Name?.CzechValue ?? string.Empty;
-    _edit.NameEn = _scenarioDTO.Name?.EnglishValue ?? string.Empty;
-    _edit.DescriptionCz = _scenarioDTO.Description?.CzechValue ?? string.Empty;
-    _edit.DescriptionEn = _scenarioDTO.Description?.EnglishValue ?? string.Empty;
-    _edit.InputFeatureId = _scenarioDTO.InputFeatureId;
-    _edit.OutputFeatureId = _scenarioDTO.OutputFeatureId;
-  }
+  
 }

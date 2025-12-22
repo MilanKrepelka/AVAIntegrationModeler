@@ -1,18 +1,20 @@
 ﻿using Ardalis.GuardClauses;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
+using AVAIntegrationModeler.UseCases.Scenarios.List;
 using AVAIntegrationModeler.UseCases.Scenarios.Update;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Update;
 
 public class UpdateScenarioHandler(
-  IRepository<Scenario> _repository
-
+  IRepository<Scenario> _repository,
+  IListScenariosQueryService _scenariosQueryService
   )
   : ICommandHandler<UpdateScenarioCommand, Result<ScenarioDTO>>
 {
   public async Task<Result<ScenarioDTO>> Handle(UpdateScenarioCommand request, CancellationToken cancellationToken)
   {
+    //TODO: chybí odbočka pro AVAPlace integration
     Guard.Against.Null(request, nameof(request));
     Guard.Against.Null(request.Scenario, nameof(request.Scenario));
 
@@ -30,7 +32,7 @@ public class UpdateScenarioHandler(
     existingScenario.SetOutputFeature(request?.Scenario.OutputFeatureId);
 
     await _repository.UpdateAsync(existingScenario, cancellationToken);
-    
+    _scenariosQueryService.InvalidateCache(request!.datasource);
     return new Result<ScenarioDTO>(request?.Scenario!);
   }
 }

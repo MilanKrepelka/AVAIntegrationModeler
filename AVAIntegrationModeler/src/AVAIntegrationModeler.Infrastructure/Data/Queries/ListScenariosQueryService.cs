@@ -3,6 +3,7 @@ using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.UseCases.Scenarios.List;
 using AVAIntegrationModeler.UseCases.Scenarios.Mapping;
+using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace AVAIntegrationModeler.Infrastructure.Data.Queries;
@@ -10,17 +11,19 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Queries;
 public class ListScenariosQueryService(
   AppDbContext _db, 
   IIntegrationDataProvider integrationDataProvider,
-  IMemoryCache memoryCache) : IListScenariosQueryService
+  IMemoryCache memoryCache) : IListScenariosQueryService, UseCases.ICacheableQueryService
 {
   private const string primaryKeyName = "ScenarioListQuery";
   private readonly IMemoryCache _memoryCache = memoryCache;
 
-  private string createChacheKey(Datasource datasource) => $"{primaryKeyName}-{datasource}";
+  private string getChacheKey(Datasource datasource) => $"{primaryKeyName}-{datasource}";
 
+  
+  /// <inheritdoc />
   public async Task<IEnumerable<ScenarioDTO>> ListAsync(Datasource datasouce) 
   {
     var methodResult = await _memoryCache.GetOrCreateAsync(
-      createChacheKey(datasouce),
+      getChacheKey(datasouce),
       async entry =>
       {
         entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
@@ -175,5 +178,11 @@ public class ListScenariosQueryService(
     {
       return await _db.Scenarios.AnyAsync(s => s.Code == scenarioCode, ct);
     }
+  }
+
+  /// <inheritdoc />
+  public void InvalidateCache(Datasource datasource)
+  {
+    _memoryCache.Remove(getChacheKey(datasource));
   }
 }

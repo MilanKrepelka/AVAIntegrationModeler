@@ -7,12 +7,14 @@ using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Domain;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using AVAIntegrationModeler.Domain.ValueObjects;
+using AVAIntegrationModeler.UseCases.Scenarios.List;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Create;
 
 public class CreateScenarioHandler(
   IRepository<Scenario> scenarioRepository,
   IIntegrationDataProvider integrationDataProvider,
+  IListScenariosQueryService scenariosQueryService,
   IDomainEntityValidationService<Scenario> scenarioValidationService
 ) : ICommandHandler<CreateScenarioCommand, Result<Guid>>
 {
@@ -88,6 +90,7 @@ public class CreateScenarioHandler(
       try
       {
         createdScenario = await scenarioRepository.AddAsync(scenario, cancellationToken);
+        scenariosQueryService.InvalidateCache(request.Datasource);
       }
       catch( Exception ex)
       {
@@ -103,6 +106,7 @@ public class CreateScenarioHandler(
     {
       // TODO
       var created = await integrationDataProvider.CreateScenario(request.Scenario, cancellationToken);
+      scenariosQueryService.InvalidateCache(request.Datasource);
       return created ? Result.Success() : Result.Error("Scénář nebyl vytvořen.");
     }
     return Result.Error("Scénář nebyl vytvořen.");

@@ -6,7 +6,7 @@ namespace AVAIntegrationModeler.UseCases.Scenarios.List;
 /// Represents a service that will actually fetch the necessary data
 /// Typically implemented in Infrastructure
 /// </summary>
-public interface IListScenariosQueryService
+public interface IListScenariosQueryService : ICacheableQueryService
 {
   Task<IEnumerable<ScenarioDTO>> ListAsync(Contracts.Datasource dataSource);
 

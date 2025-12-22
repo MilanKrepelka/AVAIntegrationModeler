@@ -1,6 +1,7 @@
 ﻿using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.UseCases;
 using AVAIntegrationModeler.UseCases.DataModels.Mapping;
 using AVAIntegrationModeler.UseCases.Features.Mapping;
 using AVAIntegrationModeler.UseCases.Scenarios.Mapping;
@@ -11,12 +12,12 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Queries;
 public class ListDataModelsQueryService(
   AppDbContext _db,
   IIntegrationDataProvider integrationDataProvider,
-  IMemoryCache memoryCache) : AVAIntegrationModeler.UseCases.DataModels.List.IListDataModelQueryService
+  IMemoryCache memoryCache) : AVAIntegrationModeler.UseCases.DataModels.List.IListDataModelQueryService, ICacheableQueryService
 {
 
   private const string PrimaryKeyName = "DataModelsListQuery";
   private readonly IMemoryCache _memoryCache = memoryCache;
-  private static string createChacheKey(Datasource datasource, string methodName) => $"{PrimaryKeyName}-{datasource}-{methodName}";
+  private static string getCacheKey(Datasource datasource, string methodName) => $"{PrimaryKeyName}-{datasource}-{methodName}";
 
   /// <inheritdoc/>
   public Task<IEnumerable<DataModelSummaryDTO>> ListSummaryAsync(Datasource datasouce)
@@ -26,7 +27,7 @@ public class ListDataModelsQueryService(
 
     //  var x = await _memoryCache.GetOrCreateAsync(
 
-    //    createChacheKey(datasouce, nameof(ListSummaryAsync)),
+    //    getCacheKey(datasouce, nameof(ListSummaryAsync)),
     //    async entry =>
     //    {
 
@@ -60,7 +61,7 @@ public class ListDataModelsQueryService(
     datasouce.GetHashCode();
     List<DataModelDTO> result = new List<DataModelDTO>();
     var x = await _memoryCache.GetOrCreateAsync(
-      createChacheKey(datasouce, nameof(ListAsync)),
+      getCacheKey(datasouce, nameof(ListAsync)),
       async entry =>
       {
         entry.AbsoluteExpirationRelativeToNow = TimeSpan.FromMinutes(5);
@@ -87,4 +88,10 @@ public class ListDataModelsQueryService(
     return x!;
   }
 
+  /// <inheritdoc />
+  public void InvalidateCache(Datasource datasource)
+  {
+    _memoryCache.Remove(getCacheKey(datasource,(nameof(ListSummaryAsync))));
+    _memoryCache.Remove(getCacheKey(datasource, (nameof(ListAsync))));
+  }
 }

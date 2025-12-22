@@ -1,6 +1,7 @@
 ﻿using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.UseCases;
 using AVAIntegrationModeler.UseCases.Contributors;
 using AVAIntegrationModeler.UseCases.Contributors.List;
 using AVAIntegrationModeler.UseCases.IntegrationMaps.List;
@@ -13,7 +14,7 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Queries;
 public class ListIntegrationMapsQueryService(
   AppDbContext _db, 
   IIntegrationDataProvider integrationDataProvider,
-  IMemoryCache memoryCache) : IListIntegrationMapsQueryService
+  IMemoryCache memoryCache) : IListIntegrationMapsQueryService, ICacheableQueryService
 {
   private const string primaryKeyName = "IntegrationMapListQuery";
   private readonly IMemoryCache _memoryCache = memoryCache;
@@ -167,6 +168,11 @@ public class ListIntegrationMapsQueryService(
   }
 
   Task<IEnumerable<IntegrationMapDTO>> IListIntegrationMapsQueryService.ListAsync(Datasource dataSource)
+  {
+    throw new NotImplementedException();
+  }
+
+  public void InvalidateCache(Datasource datasource)
   {
     throw new NotImplementedException();
   }

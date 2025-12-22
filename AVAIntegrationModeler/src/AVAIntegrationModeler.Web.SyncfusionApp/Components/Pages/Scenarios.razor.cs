@@ -10,6 +10,7 @@ namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
 
 public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, IPageListBase
 {
+  
   [Inject]
   IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
 
@@ -34,9 +35,11 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
       //StateHasChanged(); // ✅ Aktualizace UI - zobrazení loading
       
       ScenariosList.Clear();
-      
+
       // Načtení scénářů z AVAIntegrationModeler.API
-      var scenarioListResponse = await _apiClient.GetScenarios(Datasource.AVAPlace, CancellationToken.None);
+      
+      
+      var scenarioListResponse = await _apiClient.GetScenarios(this.Datasource, CancellationToken.None);
 
       if (scenarioListResponse?.Scenarios != null)
       {
