@@ -1,5 +1,35 @@
 # AVA Integration Modeler
 
+## Pro radost
+
+    - uèení se nových vìcí
+    - design aplikace
+    - èistý kód
+
+## Pro funkènost
+
+    - bìžná repetitivní èinnost
+
+## Pro profesionalitu
+
+    - správné nástroje pro práci
+    - správné postupy
+    - dodržování standardù
+    - kvalitní výstupy
+    - testy
+
+ ## Jak si ušetøit práci v práci
+
+### Nejbližší práce
+- Scénáøe - akce pøidat scénáø
+- Validace
+- Spoleèná knihovna pro lokalizaovné texty?
+- Znièit Summary validací
+- Guid nemá jít editovat nikdy
+- Description(EN)
+- Vyhodit létající popisky
+- Èesky/Anglicky Název/Popis
+
 # Road mapa 
 - Dotáhnout pøehled pro scénáøe
     - Lokalizovat( vèetnì hlavní stránky)

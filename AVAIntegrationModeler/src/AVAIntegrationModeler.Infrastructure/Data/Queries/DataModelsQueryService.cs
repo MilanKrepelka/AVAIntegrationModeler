@@ -2,6 +2,7 @@
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.UseCases;
+using AVAIntegrationModeler.UseCases.DataModels;
 using AVAIntegrationModeler.UseCases.DataModels.Mapping;
 using AVAIntegrationModeler.UseCases.Features.Mapping;
 using AVAIntegrationModeler.UseCases.Scenarios.Mapping;
@@ -9,10 +10,10 @@ using Microsoft.Extensions.Caching.Memory;
 
 namespace AVAIntegrationModeler.Infrastructure.Data.Queries;
 
-public class ListDataModelsQueryService(
+public class DataModelsQueryService(
   AppDbContext _db,
   IIntegrationDataProvider integrationDataProvider,
-  IMemoryCache memoryCache) : AVAIntegrationModeler.UseCases.DataModels.List.IListDataModelQueryService, ICacheableQueryService
+  IMemoryCache memoryCache) : IDataModelQueryService, ICacheableQueryService
 {
 
   private const string PrimaryKeyName = "DataModelsListQuery";

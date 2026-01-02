@@ -16,7 +16,7 @@ public class ListScenariosQueryServiceTests : IAsyncLifetime, IAsyncDisposable
   private readonly AppDbContext _dbContext;
   private readonly IIntegrationDataProvider _mockIntegrationDataProvider;
   private readonly IMemoryCache _memoryCache;
-  private readonly ListScenariosQueryService _sut;
+  private readonly ScenariosQueryService _sut;
   private readonly string _databaseName;
 
   public ListScenariosQueryServiceTests()
@@ -32,7 +32,7 @@ public class ListScenariosQueryServiceTests : IAsyncLifetime, IAsyncDisposable
     _mockIntegrationDataProvider = Substitute.For<IIntegrationDataProvider>();
     _memoryCache = new MemoryCache(new MemoryCacheOptions());
 
-    _sut = new ListScenariosQueryService(
+    _sut = new ScenariosQueryService(
         _dbContext,
         _mockIntegrationDataProvider,
         _memoryCache);

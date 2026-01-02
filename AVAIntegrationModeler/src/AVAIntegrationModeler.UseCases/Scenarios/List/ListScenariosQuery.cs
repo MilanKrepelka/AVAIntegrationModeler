@@ -12,9 +12,9 @@ public record ListScenariosQuery2(Datasource Datasource, int? Skip, int? Take) :
 
 public class ListScenariosQueryHandler2 : CommandHandler<ListScenariosQuery2, Result<IEnumerable<ScenarioDTO>>>
 {
-  private readonly IListScenariosQueryService _query;
+  private readonly IScenariosQueryService _query;
 
-  public ListScenariosQueryHandler2(IListScenariosQueryService query)
+  public ListScenariosQueryHandler2(IScenariosQueryService query)
   {
     _query = query;
   }

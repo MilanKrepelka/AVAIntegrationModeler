@@ -2,7 +2,6 @@
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
-using AVAIntegrationModeler.UseCases.IntegrationMaps.List;
 using FastEndpoints;
 
 namespace AVAIntegrationModeler.UseCases.IntegrationMaps.List;
@@ -12,9 +11,9 @@ public record ListIntegrationMapsQuery2(Datasource Datasource, int? Skip, int? T
 
 public class ListIntegrationMapsQueryHandler2 : CommandHandler<ListIntegrationMapsQuery2, Result<IEnumerable<IntegrationMapSummaryDTO>>>
 {
-  private readonly IListIntegrationMapsQueryService _query;
+  private readonly IIntegrationMapsQueryService _query;
 
-  public ListIntegrationMapsQueryHandler2(IListIntegrationMapsQueryService query)
+  public ListIntegrationMapsQueryHandler2(IIntegrationMapsQueryService query)
   {
     _query = query;
   }

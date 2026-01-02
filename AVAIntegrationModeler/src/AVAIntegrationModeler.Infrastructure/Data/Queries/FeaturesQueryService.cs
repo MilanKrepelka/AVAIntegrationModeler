@@ -3,20 +3,27 @@ using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.UseCases;
 using AVAIntegrationModeler.UseCases.DataModels.Mapping;
+using AVAIntegrationModeler.UseCases.Features;
 using AVAIntegrationModeler.UseCases.Features.Mapping;
 using AVAIntegrationModeler.UseCases.Scenarios.Mapping;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace AVAIntegrationModeler.Infrastructure.Data.Queries;
 
-public class ListFeaturesQueryService(
-  AppDbContext _db,
+/// <summary>
+/// Implemetace IFeaturesQueryService pro získávání feature z různých zdrojů dat.
+/// </summary>
+/// <param name="databaseContext"><see cref="AppDbContext"/></param>
+/// <param name="integrationDataProvider"><see cref="IIntegrationDataProvider"/></param>
+/// <param name="memoryCache"><see cref="IMemoryCache"/></param>
+public class FeaturesQueryService(
+  AppDbContext databaseContext,
   IIntegrationDataProvider integrationDataProvider,
-  IMemoryCache memoryCache) : AVAIntegrationModeler.UseCases.Features.List.IListFeaturesQueryService, ICacheableQueryService
+  IMemoryCache memoryCache) : IFeaturesQueryService, ICacheableQueryService
 {
-
   private const string PrimaryKeyName = "FeatureListQuery";
   private readonly IMemoryCache _memoryCache = memoryCache;
+
   private static string getCacheKey(Datasource datasource, string methodName) => $"{PrimaryKeyName}-{datasource}-{methodName}";
 
   /// <inheritdoc/>
@@ -38,7 +45,7 @@ public class ListFeaturesQueryService(
         }
         else
         {
-          result = (await _db.Features
+          result = (await databaseContext.Features
             .Include(f => f.IncludedFeatures)
             .Include(f => f.IncludedModels)
             .ToListAsync())
@@ -97,10 +104,10 @@ public class ListFeaturesQueryService(
         }
         else
         {
-          var features = _db.Features.Select(item => FeatureMapper.MapToFeatureSummaryDTO(item)).ToList();
-          var models = _db.DataModels.Select(item => DataModelMapper.MapToDataModelSummaryDTO(item)).ToList();
+          var features = databaseContext.Features.Select(item => FeatureMapper.MapToFeatureSummaryDTO(item)).ToList();
+          var models = databaseContext.DataModels.Select(item => DataModelMapper.MapToDataModelSummaryDTO(item)).ToList();
 
-          result = (await _db.Features
+          result = (await databaseContext.Features
             .Include(f => f.IncludedFeatures)
             .Include(f => f.IncludedModels)
             .ToListAsync())
@@ -119,4 +126,33 @@ public class ListFeaturesQueryService(
     _memoryCache.Remove(getCacheKey(datasource, nameof(ListAsync)));
   }
 
+  public Task<FeatureDTO> GetFeature(Datasource dataSource, Guid featureId, CancellationToken cancellationToken)
+  {
+    throw new NotImplementedException();
+  }
+
+  public Task<FeatureSummaryDTO> GetFeatureSummary(Datasource dataSource, Guid featureId, CancellationToken cancellationToken)
+  {
+    throw new NotImplementedException();
+  }
+
+  public Task<FeatureDTO> GetFeature(Datasource dataSource, string featureCode, CancellationToken cancellationToken)
+  {
+    throw new NotImplementedException();
+  }
+
+  public Task<FeatureSummaryDTO> GetFeatureSummary(Datasource dataSource, string featureCode, CancellationToken cancellationToken)
+  {
+    throw new NotImplementedException();
+  }
+
+  public Task<bool> ExistsByIdAsync(Datasource dataSource, Guid featureId, CancellationToken cancellationToken)
+  {
+    throw new NotImplementedException();
+  }
+
+  public Task<bool> ExistsByCodeAsync(Datasource dataSource, string featureCode, CancellationToken cancellationToken)
+  {
+    throw new NotImplementedException();
+  }
 }

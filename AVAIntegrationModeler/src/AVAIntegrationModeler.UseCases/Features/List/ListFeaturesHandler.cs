@@ -2,7 +2,7 @@
 
 namespace AVAIntegrationModeler.UseCases.Features.List;
 
-public class ListFeaturesHandler(IListFeaturesQueryService _query)
+public class ListFeaturesHandler(IFeaturesQueryService _query)
   : IQueryHandler<ListFeaturesQuery, Result<IEnumerable<FeatureDTO>>>
 {
   public async Task<Result<IEnumerable<FeatureDTO>>> Handle(ListFeaturesQuery request, CancellationToken cancellationToken)

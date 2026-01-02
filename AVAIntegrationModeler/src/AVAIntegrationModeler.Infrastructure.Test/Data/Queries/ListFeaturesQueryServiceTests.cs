@@ -19,7 +19,7 @@ public class ListFeaturesQueryServiceTests : IAsyncLifetime, IAsyncDisposable
   private readonly AppDbContext _dbContext;
   private readonly IIntegrationDataProvider _mockIntegrationDataProvider;
   private readonly IMemoryCache _memoryCache;
-  private readonly ListFeaturesQueryService _sut;
+  private readonly FeaturesQueryService _sut;
   
   public ListFeaturesQueryServiceTests()
   {
@@ -36,7 +36,7 @@ public class ListFeaturesQueryServiceTests : IAsyncLifetime, IAsyncDisposable
     _mockIntegrationDataProvider = Substitute.For<IIntegrationDataProvider>();
     _memoryCache = new MemoryCache(new MemoryCacheOptions());
 
-    _sut = new ListFeaturesQueryService(
+    _sut = new FeaturesQueryService(
         _dbContext,
         _mockIntegrationDataProvider,
         _memoryCache);

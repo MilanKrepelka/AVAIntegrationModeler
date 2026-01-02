@@ -6,16 +6,16 @@ using System.Threading.Tasks;
 using Ardalis.Result;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Domain;
-using AVAIntegrationModeler.UseCases.Scenarios.List;
+using AVAIntegrationModeler.UseCases.Scenarios;
 
 namespace AVAIntegrationModeler.Infrastructure.ValidationServices;
 
 /// <inheritdoc/>
 public class ScenarioValidationService : IDomainEntityValidationService<Scenario>
 {
-  private readonly IListScenariosQueryService _listScenariosQueryService;
+  private readonly IScenariosQueryService _listScenariosQueryService;
 
-  public ScenarioValidationService(IListScenariosQueryService listScenariosQueryService)
+  public ScenarioValidationService(IScenariosQueryService listScenariosQueryService)
   {
     _listScenariosQueryService = listScenariosQueryService;
   }

@@ -2,7 +2,7 @@
 
 namespace AVAIntegrationModeler.UseCases.DataModels.List;
 
-public class ListDataModelsHandler(IListDataModelQueryService _query)
+public class ListDataModelsHandler(IDataModelQueryService _query)
   : IQueryHandler<ListDataModelsQuery, Result<IEnumerable<DataModelDTO>>>
 {
   public async Task<Result<IEnumerable<DataModelDTO>>> Handle(ListDataModelsQuery request, CancellationToken cancellationToken)

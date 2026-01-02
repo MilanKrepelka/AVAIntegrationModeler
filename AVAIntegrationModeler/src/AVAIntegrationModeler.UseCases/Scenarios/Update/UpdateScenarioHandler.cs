@@ -1,14 +1,13 @@
 ﻿using Ardalis.GuardClauses;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
-using AVAIntegrationModeler.UseCases.Scenarios.List;
 using AVAIntegrationModeler.UseCases.Scenarios.Update;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Update;
 
 public class UpdateScenarioHandler(
   IRepository<Scenario> _repository,
-  IListScenariosQueryService _scenariosQueryService
+  IScenariosQueryService _scenariosQueryService
   )
   : ICommandHandler<UpdateScenarioCommand, Result<ScenarioDTO>>
 {

@@ -4,17 +4,23 @@ using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.UseCases;
 using AVAIntegrationModeler.UseCases.Contributors;
 using AVAIntegrationModeler.UseCases.Contributors.List;
-using AVAIntegrationModeler.UseCases.IntegrationMaps.List;
+using AVAIntegrationModeler.UseCases.IntegrationMaps;
 using AVAIntegrationModeler.UseCases.Scenarios;
 using AVAIntegrationModeler.UseCases.Scenarios.List;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace AVAIntegrationModeler.Infrastructure.Data.Queries;
 
-public class ListIntegrationMapsQueryService(
-  AppDbContext _db, 
+/// <summary>
+/// Implementace služby pro dotazování na integrační mapy
+/// </summary>
+/// <param name="databaseContext"><see cref="AppDbContext"/></param>
+/// <param name="integrationDataProvider"><see cref="IIntegrationDataProvider"/></param>
+/// <param name="memoryCache"><see cref="IMemoryCache"/></param>
+public class IntegrationMapsQueryService(
+  AppDbContext databaseContext, 
   IIntegrationDataProvider integrationDataProvider,
-  IMemoryCache memoryCache) : IListIntegrationMapsQueryService, ICacheableQueryService
+  IMemoryCache memoryCache) : IIntegrationMapsQueryService, ICacheableQueryService
 {
   private const string primaryKeyName = "IntegrationMapListQuery";
   private readonly IMemoryCache _memoryCache = memoryCache;
@@ -60,8 +66,8 @@ public class ListIntegrationMapsQueryService(
         else
         {
           // ✅ Explicitní join pomocí LINQ bez navigačních vlastností
-          var scenariosTask = _db.Scenarios.ToListAsync();
-          var allFeaturesTask = _db.Features.ToListAsync();
+          var scenariosTask = databaseContext.Scenarios.ToListAsync();
+          var allFeaturesTask = databaseContext.Features.ToListAsync();
           await Task.WhenAll(scenariosTask, allFeaturesTask);
 
           var scenarios = scenariosTask.Result;
@@ -126,8 +132,8 @@ public class ListIntegrationMapsQueryService(
     else
     {
       // ✅ Explicitní join pomocí LINQ bez navigačních vlastností
-      var scenariosTask = _db.Scenarios.ToListAsync();
-      var allFeaturesTask = _db.Features.ToListAsync();
+      var scenariosTask = databaseContext.Scenarios.ToListAsync();
+      var allFeaturesTask = databaseContext.Features.ToListAsync();
       await Task.WhenAll(scenariosTask, allFeaturesTask);
 
       var scenarios = scenariosTask.Result;
@@ -167,7 +173,7 @@ public class ListIntegrationMapsQueryService(
 
   }
 
-  Task<IEnumerable<IntegrationMapDTO>> IListIntegrationMapsQueryService.ListAsync(Datasource dataSource)
+  Task<IEnumerable<IntegrationMapDTO>> IIntegrationMapsQueryService.ListAsync(Datasource dataSource)
   {
     throw new NotImplementedException();
   }

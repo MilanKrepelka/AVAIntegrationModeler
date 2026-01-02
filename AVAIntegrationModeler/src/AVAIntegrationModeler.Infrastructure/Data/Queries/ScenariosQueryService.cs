@@ -1,17 +1,24 @@
 ﻿using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.UseCases.Scenarios.List;
+using AVAIntegrationModeler.UseCases.Features.Mapping;
+using AVAIntegrationModeler.UseCases.Scenarios;
 using AVAIntegrationModeler.UseCases.Scenarios.Mapping;
 using Microsoft.AspNetCore.DataProtection.KeyManagement.Internal;
 using Microsoft.Extensions.Caching.Memory;
 
 namespace AVAIntegrationModeler.Infrastructure.Data.Queries;
 
-public class ListScenariosQueryService(
-  AppDbContext _db, 
+/// <summary>
+/// Implementace dotazovací služby pro scénáře.
+/// </summary>
+/// <param name="databaseContext"><see cref="AppDbContext"/></param>
+/// <param name="integrationDataProvider"><see cref="IIntegrationDataProvider"/></param>
+/// <param name="memoryCache"></param>
+public class ScenariosQueryService(
+  AppDbContext databaseContext, 
   IIntegrationDataProvider integrationDataProvider,
-  IMemoryCache memoryCache) : IListScenariosQueryService, UseCases.ICacheableQueryService
+  IMemoryCache memoryCache) : IScenariosQueryService, UseCases.ICacheableQueryService
 {
   private const string primaryKeyName = "ScenarioListQuery";
   private readonly IMemoryCache _memoryCache = memoryCache;
@@ -61,8 +68,8 @@ public class ListScenariosQueryService(
         else
         {
           // Databáze – explicitní join bez navigačních vlastností
-          var scenariosTask = _db.Scenarios.ToListAsync();
-          var allFeaturesTask = _db.Features.ToListAsync();
+          var scenariosTask = databaseContext.Scenarios.ToListAsync();
+          var allFeaturesTask = databaseContext.Features.ToListAsync();
           await Task.WhenAll(scenariosTask, allFeaturesTask);
 
           var scenarios = scenariosTask.Result;
@@ -103,7 +110,7 @@ public class ListScenariosQueryService(
     }
     else
     {
-      var scenario = await _db.Scenarios.FirstOrDefaultAsync(s => s.Id == scenarioId, ct);
+      var scenario = await databaseContext.Scenarios.Include(s => s.InputFeature).Include(s => s.OutputFeature).FirstOrDefaultAsync(s => s.Id == scenarioId, ct);
       if (scenario == null)
       {
         throw new NotFoundException(scenarioId.ToString(), "Scenario");
@@ -123,12 +130,31 @@ public class ListScenariosQueryService(
     }
     else
     {
-      var scenario = await _db.Scenarios.FirstOrDefaultAsync(s => s.Code == scenarioCode, ct);
+      var scenario = await databaseContext.Scenarios.FirstOrDefaultAsync(s => s.Code == scenarioCode, ct);
+
+      var inputFeature = scenario?.InputFeature != null
+        ? await databaseContext.Features.FirstOrDefaultAsync(f => f.Id == scenario.InputFeature, ct)
+        : null;
+
+      var outputFeature = scenario?.OutputFeature != null
+        ? await databaseContext.Features.FirstOrDefaultAsync(f => f.Id == scenario.OutputFeature, ct)
+        : null;
+
       if (scenario == null)
       {
         throw new NotFoundException(scenarioCode, "Scenario");
       }
-      return ScenarioMapper.MapToScenarioDTO(scenario);
+      var result = ScenarioMapper.MapToScenarioDTO(scenario);
+      if (inputFeature != null)
+      {
+        result.InputFeatureSummary = FeatureMapper.MapToFeatureSummaryDTO(inputFeature);
+      }
+      
+      if (outputFeature != null)
+      {
+        result.OutputFeatureSummary = FeatureMapper.MapToFeatureSummaryDTO(outputFeature);
+      }
+      return result;
     }
   }
 
@@ -152,7 +178,7 @@ public class ListScenariosQueryService(
     }
     else
     {
-      return await _db.Scenarios.AnyAsync(s => s.Id == scenarioId, ct);
+      return await databaseContext.Scenarios.AnyAsync(s => s.Id == scenarioId, ct);
     }
   }
 
@@ -176,7 +202,7 @@ public class ListScenariosQueryService(
     }
     else
     {
-      return await _db.Scenarios.AnyAsync(s => s.Code == scenarioCode, ct);
+      return await databaseContext.Scenarios.AnyAsync(s => s.Code == scenarioCode, ct);
     }
   }
 

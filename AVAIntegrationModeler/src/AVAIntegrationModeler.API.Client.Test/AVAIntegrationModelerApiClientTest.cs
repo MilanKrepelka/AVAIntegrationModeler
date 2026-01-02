@@ -109,6 +109,8 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
     Assert.NotNull(scenarioResult);
     Assert.NotNull(scenarioResult.OutputFeatureId);
     Assert.NotNull(scenarioResult.OutputFeatureSummary);
+    Assert.NotNull(scenarioResult.InputFeatureId);
+    Assert.NotNull(scenarioResult.InputFeatureSummary);
   }
 
 

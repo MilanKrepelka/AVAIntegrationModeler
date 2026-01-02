@@ -7,14 +7,13 @@ using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Domain;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using AVAIntegrationModeler.Domain.ValueObjects;
-using AVAIntegrationModeler.UseCases.Scenarios.List;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Create;
 
 public class CreateScenarioHandler(
   IRepository<Scenario> scenarioRepository,
   IIntegrationDataProvider integrationDataProvider,
-  IListScenariosQueryService scenariosQueryService,
+  IScenariosQueryService scenariosQueryService,
   IDomainEntityValidationService<Scenario> scenarioValidationService
 ) : ICommandHandler<CreateScenarioCommand, Result<Guid>>
 {

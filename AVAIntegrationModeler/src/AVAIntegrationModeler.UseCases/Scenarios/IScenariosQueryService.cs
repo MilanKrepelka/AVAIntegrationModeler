@@ -1,16 +1,14 @@
 ﻿using AVAIntegrationModeler.Contracts.DTO;
 
-namespace AVAIntegrationModeler.UseCases.Scenarios.List;
+namespace AVAIntegrationModeler.UseCases.Scenarios;
 
 /// <summary>
 /// Represents a service that will actually fetch the necessary data
 /// Typically implemented in Infrastructure
 /// </summary>
-public interface IListScenariosQueryService : ICacheableQueryService
+public interface IScenariosQueryService : ICacheableQueryService
 {
   Task<IEnumerable<ScenarioDTO>> ListAsync(Contracts.Datasource dataSource);
-
-
 
   /// <summary>
   /// Vrátí detail scénáře

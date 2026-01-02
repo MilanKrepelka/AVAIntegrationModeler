@@ -12,9 +12,9 @@ public record ListFeaturesQuery2(Datasource Datasource, int? Skip, int? Take) : 
 
 public class ListFeaturesQueryHandler2 : CommandHandler<ListFeaturesQuery2, Result<IEnumerable<FeatureDTO>>>
 {
-  private readonly IListFeaturesQueryService _query;
+  private readonly IFeaturesQueryService _query;
 
-  public ListFeaturesQueryHandler2(IListFeaturesQueryService query)
+  public ListFeaturesQueryHandler2(IFeaturesQueryService query)
   {
     _query = query;
   }

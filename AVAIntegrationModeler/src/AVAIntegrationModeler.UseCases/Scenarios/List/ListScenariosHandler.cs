@@ -2,7 +2,7 @@
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.List;
 
-public class ListScenariosHandler(IListScenariosQueryService _query)
+public class ListScenariosHandler(IScenariosQueryService _query)
   : IQueryHandler<ListScenariosQuery, Result<IEnumerable<ScenarioDTO>>>
 {
   public async Task<Result<IEnumerable<ScenarioDTO>>> Handle(ListScenariosQuery request, CancellationToken cancellationToken)

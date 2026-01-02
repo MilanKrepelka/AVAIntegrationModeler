@@ -5,9 +5,10 @@ using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.Infrastructure.Data.Queries;
 using AVAIntegrationModeler.Infrastructure.Infrastructure.Data;
 using AVAIntegrationModeler.UseCases.Contributors.List;
-using AVAIntegrationModeler.UseCases.IntegrationMaps.List;
-using AVAIntegrationModeler.UseCases.Scenarios.List;
-
+using AVAIntegrationModeler.UseCases.DataModels;
+using AVAIntegrationModeler.UseCases.Features;
+using AVAIntegrationModeler.UseCases.IntegrationMaps;
+using AVAIntegrationModeler.UseCases.Scenarios;
 
 namespace AVAIntegrationModeler.Infrastructure;
 public static class InfrastructureServiceExtensions
@@ -19,10 +20,10 @@ public static class InfrastructureServiceExtensions
     services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
             .AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>))
             .AddScoped<IListContributorsQueryService, ListContributorsQueryService>()
-            .AddScoped<IListScenariosQueryService, ListScenariosQueryService>()
-            .AddScoped<UseCases.Features.List.IListFeaturesQueryService, ListFeaturesQueryService>()
-            .AddScoped<UseCases.DataModels.List.IListDataModelQueryService, ListDataModelsQueryService>()
-            .AddScoped<UseCases.IntegrationMaps.List.IListIntegrationMapsQueryService, ListIntegrationMapsQueryService>()
+            .AddScoped<IScenariosQueryService, ScenariosQueryService>()
+            .AddScoped<IFeaturesQueryService, FeaturesQueryService>()
+            .AddScoped<IDataModelQueryService, DataModelsQueryService>()
+            .AddScoped<IIntegrationMapsQueryService, IntegrationMapsQueryService>()
             .AddScoped<IDeleteContributorService, DeleteContributorService>();
 
     logger.LogInformation("{Project} services registered", "Infrastructure");
