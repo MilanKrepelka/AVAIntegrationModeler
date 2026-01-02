@@ -25,6 +25,13 @@ public class GetScenarioHandler(IListScenariosQueryService query)
   public async Task<Result<ScenarioDTO>> Handle(GetScenarioByCodeQuery request, CancellationToken cancellationToken)
   {
     var scenario = await query.GetScenario(request.Datasource, request.ScenarioCode, cancellationToken);
+    
+    if (scenario.InputFeatureId.HasValue)
+    {
+      //var inputFeatureSpec = new GetFeatureByIdSpecification(request.Datasource, scenario.InputFeatureId.Value);
+      //var inputFeature = await query.GetFeature(inputFeatureSpec, cancellationToken);
+      //scenario = scenario with { InputFeatureSummary = inputFeature };
+    }
     if (scenario == null) return Result.NotFound();
     return Result.Success(scenario);
   }

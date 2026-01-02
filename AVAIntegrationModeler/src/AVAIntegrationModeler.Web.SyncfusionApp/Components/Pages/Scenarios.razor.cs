@@ -20,6 +20,9 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
 
   /// <inheritdoc/>
   public bool IsLoading { get; set; } = false;
+
+  
+
   /// <inheritdoc/>
   public Datasource Datasource { get; set; } = Datasource.Database;
   /// <inheritdoc/>
@@ -32,7 +35,7 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
     try
     {
       IsLoading = true;
-      //StateHasChanged(); // ✅ Aktualizace UI - zobrazení loading
+      StateHasChanged(); // ✅ Aktualizace UI - zobrazení loading
       
       ScenariosList.Clear();
 
@@ -66,13 +69,15 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
     finally
     {
       IsLoading = false;
-      //StateHasChanged(); // ✅ Aktualizace UI - konec loading
+      StateHasChanged(); // ✅ Aktualizace UI - konec loading
     }
   }
 
   protected override async Task OnInitializedAsync()
   {
     await base.OnInitializedAsync();
+    
+    IsLoading = true;
     await LoadItemsAsync();
     if (Grid != null)
     {

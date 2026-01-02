@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Features\Get\" />
     <Folder Include="LocalizedValue\Mapping\" />
   </ItemGroup>
 

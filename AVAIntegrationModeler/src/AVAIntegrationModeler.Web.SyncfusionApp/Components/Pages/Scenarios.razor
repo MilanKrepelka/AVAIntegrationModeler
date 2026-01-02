@@ -1,5 +1,5 @@
 ﻿@page "/scenarios"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Grids
@@ -8,152 +8,164 @@
 @using Syncfusion.Blazor.Notifications
 @using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 
+
 <PageTitle>Integrační scénáře</PageTitle>
 
 <div id="ControlRegion">
     <DataSourceSelector OnChanged="@HandleDataSourceChange" LabelText="Zdroj dat:"></DataSourceSelector>
 
-    <SfGrid ID="Grid" 
-        DataSource="@ScenariosList" 
-        @ref="Grid"
-        EnableAltRow="false"
-        AllowPaging="true"
-        AllowFiltering="true"
-        AllowSorting="true"
-        AllowResizing="true"
-        AllowSelection="true"
-        Toolbar="@(new List<string>() { "Search"})">
+    <div id="GridContainer">
+        <SfGrid ID="Grid" 
+            DataSource="@ScenariosList" 
+            @ref="Grid"
+            EnableAltRow="false"
+            AllowPaging="true"
+            AllowFiltering="true"
+            AllowSorting="true"
+            AllowResizing="true"
+            AllowSelection="true"
+            Toolbar="@(new List<string>() { "Search"})">
+            <GridEvents TValue="ScenarioListViewModel"
+                        OnActionBegin="OnActionBegin"
+                        OnActionComplete="OnActionComplete" />
+            <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+            <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Grids.EditMode.Normal"></GridEditSettings>
+            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
+            <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple" 
+                                   Mode="Syncfusion.Blazor.Grids.SelectionMode.Row">
+            </GridSelectionSettings>
+            <GridEvents OnToolbarClick="ToolbarClick" TValue="ScenarioListViewModel"></GridEvents>
+            <GridColumns>
+                <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
+                <GridColumn Field=@nameof(ScenarioListViewModel.Code) HeaderText="Kód" Width="120"></GridColumn>
+                <GridColumn Field="Name.EnglishValue" HeaderText="Název" Width="200"></GridColumn>
+                <GridColumn Field="Description.EnglishValue" HeaderText="Popis" Width="250" Visible="false"></GridColumn>
+                <GridColumn Field="InputFeature.Code" HeaderText="Vstupní feature" Width="150"></GridColumn>
+                <GridColumn Field="OutputFeature.Code" HeaderText="Výstupní feature" Width="150"></GridColumn>
+                <GridColumn Field=@nameof(ScenarioListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="true">
+                    <Template>
+                        @{
 
-        <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-        <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Grids.EditMode.Normal"></GridEditSettings>
-        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
-        <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
-        <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple" 
-                               Mode="Syncfusion.Blazor.Grids.SelectionMode.Row">
-        </GridSelectionSettings>
-        <GridEvents OnToolbarClick="ToolbarClick" TValue="ScenarioListViewModel"></GridEvents>
-        <GridColumns>
-            <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
-            <GridColumn Field=@nameof(ScenarioListViewModel.Code) HeaderText="Kód" Width="120"></GridColumn>
-            <GridColumn Field="Name.EnglishValue" HeaderText="Název" Width="200"></GridColumn>
-            <GridColumn Field="Description.EnglishValue" HeaderText="Popis" Width="250" Visible="false"></GridColumn>
-            <GridColumn Field="InputFeature.Code" HeaderText="Vstupní feature" Width="150"></GridColumn>
-            <GridColumn Field="OutputFeature.Code" HeaderText="Výstupní feature" Width="150"></GridColumn>
-            <GridColumn Field=@nameof(ScenarioListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="true">
-                <Template>
+                            var scenario = (context as ScenarioListViewModel);
+                            <div class="id-cell-container">
+                                <span class="id-text">@scenario!.Id.ToString()</span>
+                                <SfButton CssClass="e-small e-round action-button copy-icon-button"
+                                          IconCss="e-icons e-copy"
+                                          IsPrimary="false"
+                                          OnClick="@(() => CopyToClipboard(scenario.Id.ToString()))"
+                                          title="Kopírovat ID do schránky">
+                                </SfButton>
+                            </div>
+                        }
+                    </Template>
+                </GridColumn>
+                <GridColumn HeaderText="Akce" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+                    <Template>
+                        @{
+                            var model = (context as ScenarioListViewModel);
+                            <div class="action-buttons">
+                                <SfButton CssClass="e-small e-round e-outline action-button"
+                                          IconCss="e-icons e-edit"
+                                          IsPrimary="false"
+                                          OnClick="@(() => EditDataModel(model!))"
+                                          title="Editovat">
+                                </SfButton>
+
+                                <SfButton CssClass="e-small e-round e-outline action-button"
+                                          IconCss="e-icons e-chart-scatter"
+                                          IsPrimary="false"
+                                          OnClick="@(() => ShowModelMap(model!))"
+                                          title="Map">
+                                </SfButton>
+                            </div>
+                        }
+                    </Template>
+                </GridColumn>
+            </GridColumns>
+            
+            <GridTemplates>
+                <DetailTemplate>
                     @{
-
                         var scenario = (context as ScenarioListViewModel);
-                        <div class="id-cell-container">
-                            <span class="id-text">@scenario!.Id.ToString()</span>
-                            <SfButton CssClass="e-small e-round action-button copy-icon-button"
-                                      IconCss="e-icons e-copy"
-                                      IsPrimary="false"
-                                      OnClick="@(() => CopyToClipboard(scenario.Id.ToString()))"
-                                      title="Kopírovat ID do schránky">
-                            </SfButton>
-                        </div>
-                    }
-                </Template>
-            </GridColumn>
-            <GridColumn HeaderText="Akce" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
-                <Template>
-                    @{
-                        var model = (context as ScenarioListViewModel);
-                        <div class="action-buttons">
-                            <SfButton CssClass="e-small e-round e-outline action-button"
-                                      IconCss="e-icons e-edit"
-                                      IsPrimary="false"
-                                      OnClick="@(() => EditDataModel(model!))"
-                                      title="Editovat">
-                            </SfButton>
-
-                            <SfButton CssClass="e-small e-round e-outline action-button"
-                                      IconCss="e-icons e-chart-scatter"
-                                      IsPrimary="false"
-                                      OnClick="@(() => ShowModelMap(model!))"
-                                      title="Map">
-                            </SfButton>
-                        </div>
-                    }
-                </Template>
-            </GridColumn>
-        </GridColumns>
-        
-        <GridTemplates>
-            <DetailTemplate>
-                @{
-                    var scenario = (context as ScenarioListViewModel);
-                    <div class="detail-form">
-                        <h4>@scenario!.Code</h4>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Kód:</label>
-                                <SfTextBox Value="@scenario.Code" Placeholder="Kód scénáře" Readonly="true"></SfTextBox>
+                        <div class="detail-form">
+                            <h4>@scenario!.Code</h4>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Kód:</label>
+                                    <SfTextBox Value="@scenario.Code" Placeholder="Kód scénáře" Readonly="true"></SfTextBox>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>ID:</label>
+                                    <div class="input-with-button">
+                                        <SfTextBox Value="@scenario.Id.ToString()" Readonly="true" CssClass="id-textbox"></SfTextBox>
+                                        <SfButton CssClass="e-small action-button"
+                                                  IconCss="e-icons e-copy"
+                                                  OnClick="@(() => CopyToClipboard(scenario.Id.ToString()))"
+                                                  Content="Kopírovat">
+                                        </SfButton>
+                                    </div>
+                                </div>
                             </div>
                             
-                            <div class="form-group">
-                                <label>ID:</label>
-                                <div class="input-with-button">
-                                    <SfTextBox Value="@scenario.Id.ToString()" Readonly="true" CssClass="id-textbox"></SfTextBox>
-                                    <SfButton CssClass="e-small action-button"
-                                              IconCss="e-icons e-copy"
-                                              OnClick="@(() => CopyToClipboard(scenario.Id.ToString()))"
-                                              Content="Kopírovat">
-                                    </SfButton>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Název (Česky):</label>
+                                    <SfTextBox Value="@scenario.Name.CzechValue" Placeholder="" Readonly="true"></SfTextBox>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Název (English):</label>
+                                    <SfTextBox Value="@scenario.Name.EnglishValue" Placeholder="" Readonly="true"></SfTextBox>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label>Popis (Česky):</label>
+                                    <SfTextBox @bind-Value="scenario.Description.CzechValue" Placeholder="" Multiline="true" Readonly="true"></SfTextBox>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group full-width">
+                                    <label>Popis (English):</label>
+                                    <SfTextBox @bind-Value="scenario.Description.EnglishValue" Placeholder="" Multiline="true" Readonly="true"></SfTextBox>
+                                </div>
+                            </div>
+                            
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Vstupní feature:</label>
+                                    <SfTextBox Value="@scenario.InputFeature.Code" Readonly="true"></SfTextBox>
+                                </div>
+                                
+                                <div class="form-group">
+                                    <label>Výstupní feature:</label>
+                                    <SfTextBox Value="@scenario.OutputFeature.Code" Readonly="true"></SfTextBox>
                                 </div>
                             </div>
                         </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Název (Česky):</label>
-                                <SfTextBox Value="@scenario.Name.CzechValue" Placeholder="" Readonly="true"></SfTextBox>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Název (English):</label>
-                                <SfTextBox Value="@scenario.Name.EnglishValue" Placeholder="" Readonly="true"></SfTextBox>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group full-width">
-                                <label>Popis (Česky):</label>
-                                <SfTextBox @bind-Value="scenario.Description.CzechValue" Placeholder="" Multiline="true" Readonly="true"></SfTextBox>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group full-width">
-                                <label>Popis (English):</label>
-                                <SfTextBox @bind-Value="scenario.Description.EnglishValue" Placeholder="" Multiline="true" Readonly="true"></SfTextBox>
-                            </div>
-                        </div>
-                        
-                        <div class="form-row">
-                            <div class="form-group">
-                                <label>Vstupní feature:</label>
-                                <SfTextBox Value="@scenario.InputFeature.Code" Readonly="true"></SfTextBox>
-                            </div>
-                            
-                            <div class="form-group">
-                                <label>Výstupní feature:</label>
-                                <SfTextBox Value="@scenario.OutputFeature.Code" Readonly="true"></SfTextBox>
-                            </div>
-                        </div>
-                    </div>
-                }
-            </DetailTemplate>
-        </GridTemplates>
+                    }
+                </DetailTemplate>
+            </GridTemplates>
 
-    </SfGrid>
+        </SfGrid>
+    </div>
 </div>
 
 <SfToast @ref="ToastObj" Title="Zkopírováno" Timeout="3000" ShowCloseButton="true">
     <ToastPosition X="Right" Y="Top"></ToastPosition>
 </SfToast>
+
+@if (IsLoading)
+{
+    <div class="progress-bar-container">
+        <div class="progress-bar-indeterminate"></div>
+    </div>
+}
 
 @code
 {
@@ -168,13 +180,23 @@
         }
     }
 
-    //private string SelectedDataSource = "Database";
-
     private async Task HandleDataSourceChange(Contracts.Datasource newValue)
     {
-        this.Datasource = newValue;
-        await LoadItemsAsync();
-        await Grid!.Refresh();
+        this.IsLoading = true;
+        StateHasChanged();
+
+        try
+        {
+            this.Datasource = newValue;
+            await LoadItemsAsync();
+            if (Grid is not null)
+                await Grid.Refresh();
+        }
+        finally
+        {
+            IsLoading = false;
+            StateHasChanged();
+        }
     }
 
     [Inject] private IJSRuntime JS { get; set; } = default!;
@@ -200,16 +222,27 @@
             await ToastObj.ShowAsync(toastModel);
         }
     }
+    
     private async Task ShowModelMap(ScenarioListViewModel scenario)
     {
         // Open Data Model Map in a new browser tab
-        var url = NavigationManager.ToAbsoluteUri($"/scenariomap/{scenario.Code}").ToString();
+        var url = NavigationManager.ToAbsoluteUri($"/scenariomap/{this.Datasource}/{scenario.Code}").ToString();
         await JS.InvokeVoidAsync("open", url, "_blank");
     }
 
     private async Task EditDataModel(ScenarioListViewModel scenario)
     {
-        var url = NavigationManager.ToAbsoluteUri($"/scenarioedit/{scenario.Code}").ToString();
+        var url = NavigationManager.ToAbsoluteUri($"/scenarioedit/{this.Datasource}/{scenario.Code}").ToString();
         await JS.InvokeVoidAsync("open", url, "_blank");
+    }
+
+    private void OnActionBegin(ActionEventArgs<ScenarioListViewModel> args)
+    {
+        IsLoading = true;
+    }
+
+    private void OnActionComplete(ActionEventArgs<ScenarioListViewModel> args)
+    {
+        IsLoading = false;
     }
 }

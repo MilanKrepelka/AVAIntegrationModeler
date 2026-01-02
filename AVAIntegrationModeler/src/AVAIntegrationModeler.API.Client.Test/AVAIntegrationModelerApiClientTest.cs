@@ -93,6 +93,26 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
   }
 
   [Fact]
+  public async Task GetScenarios_From_Database_Fill_Features()
+  {
+    // Arrange: create HttpClient for the in-memory server
+    using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions() { BaseAddress = new Uri("http://0.0.0.0:5005") });
+
+    // Create the typed client wrapper
+    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, NullLogger<AVAIntegrationModelerApiClient>.Instance);
+
+    // Act: call the API method
+    
+    var scenarioResult = await apiClient.GetScenario(Contracts.Datasource.Database, "scenario3Code", CancellationToken.None);
+
+    // Assert: ensure we got a non-null, non-empty response from the API
+    Assert.NotNull(scenarioResult);
+    Assert.NotNull(scenarioResult.OutputFeatureId);
+    Assert.NotNull(scenarioResult.OutputFeatureSummary);
+  }
+
+
+  [Fact]
   public async Task GetFeatures_Returns_NotNull()
   {
     // Arrange: create HttpClient for the in-memory server

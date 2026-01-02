@@ -1,4 +1,4 @@
-﻿@page "/scenariomap/{scenarioCode}"
+﻿@page "/scenariomap/{dataSourceAsString}/{scenarioCode}"
 @rendermode InteractiveServer
 @using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
 @using Syncfusion.Blazor.Buttons
@@ -37,17 +37,17 @@
 
     private bool _needsLayout;
 
-    protected override async Task OnInitializedAsync()
-    {
-        // Load data
-        _scenarioDTO = await _apiClient.GetScenario(Contracts.Datasource.AVAPlace, scenarioCode, CancellationToken.None);
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     // Load data
+    //     _scenarioDTO = await _apiClient.GetScenario(Contracts.Datasource.AVAPlace, scenarioCode, CancellationToken.None);
 
-        // Build model
-        InitDiagramModel();
+    //     // Build model
+    //     InitDiagramModel();
 
-        // Defer layout until @ref is ready
-        _needsLayout = true;
-    }
+    //     // Defer layout until @ref is ready
+    //     _needsLayout = true;
+    // }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {

@@ -53,15 +53,6 @@ public interface IAVAIntegrationModelerApiClient
   public Task<FeatureListResponse> GetFeatures(Datasource datasource, CancellationToken cancellationToken);
 
   /// <summary>
-  /// Aktualizuje integrační scénář ve zadaném datovém zdroji.
-  /// </summary>
-  /// <param name="datasource"><see cref="Datasource"/></param>
-  /// <param name="scenario">Integrační scénář</param>
-  /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
-  /// <returns>Integrační scénář</returns>
-  Task<ScenarioDTO> UpdateScenario(Datasource datasource, ScenarioDTO scenario, CancellationToken cancellationToken);
-
-  /// <summary>
   /// Vytvoří nový integrační scénář ve zadaném datovém zdroji a vrátí výsledek jako <see cref="Result{T}"/>.
   /// </summary>
   /// <param name="datasource"><see cref="Datasource"/></param>
@@ -77,7 +68,7 @@ public interface IAVAIntegrationModelerApiClient
   /// <param name="scenario">Integrační scénář</param>
   /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
   /// <returns>Výsledek operace obsahující aktualizovaný scénář.</returns>
-  Task<Result<ScenarioDTO>> UpdateScenarioResult(Datasource datasource, ScenarioDTO scenario, CancellationToken cancellationToken);
+  Task<Result<ScenarioDTO>> UpdateScenario(Datasource datasource, ScenarioDTO scenario, CancellationToken cancellationToken);
 
   /// <summary>
   /// Smaže integrační scénář ve zadaném datovém zdroji a vrátí výsledek jako <see cref="Result{T}"/>.

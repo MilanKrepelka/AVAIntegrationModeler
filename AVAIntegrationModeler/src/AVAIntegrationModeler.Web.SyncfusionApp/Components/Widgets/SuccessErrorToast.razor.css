@@ -1,0 +1,43 @@
+﻿/* Toast success styling */
+.e-toast-success {
+    background-color: #4caf50 !important;
+    color: white !important;
+}
+
+    .e-toast-success .e-toast-title {
+        color: white !important;
+        font-weight: 600;
+    }
+
+    .e-toast-success .e-toast-message {
+        color: white !important;
+    }
+
+/* Toast error styling */
+.e-toast-error {
+    background-color: #f44336 !important;
+    color: white !important;
+}
+
+    .e-toast-error .e-toast-title {
+        color: white !important;
+        font-weight: 600;
+    }
+
+    .e-toast-error .e-toast-message {
+        color: white !important;
+    }
+
+/* Toast icons */
+.toast-icons {
+    font-size: 24px;
+    margin-right: 8px;
+}
+
+.e-success:before {
+    content: '\e7ff'; /* check_circle icon */
+}
+
+.e-error:before {
+    content: '\e000'; /* error icon */
+}

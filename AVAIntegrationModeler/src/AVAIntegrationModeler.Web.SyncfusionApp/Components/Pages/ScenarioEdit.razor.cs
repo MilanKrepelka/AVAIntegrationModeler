@@ -13,9 +13,10 @@ public partial class ScenarioEdit : ComponentBase
 
   [Parameter] public string scenarioCode { get; set; } = string.Empty;
 
-  
-  
-  [Parameter] public Datasource datasource { get; set; }
+
+  [Parameter] public string dataSourceAsString { get; set; } = string.Empty;
+
+  public Datasource datasource { get; set; }
 
   private ScenarioDTO? _scenarioDTO;
   private List<FeatureDTO> _features = new();
@@ -55,6 +56,14 @@ public partial class ScenarioEdit : ComponentBase
   {
     if (string.IsNullOrWhiteSpace(scenarioCode))
       return;
+
+    if (!Enum.TryParse<Datasource>(dataSourceAsString, true, out var datasource))
+    {
+      // Fallback na Database pokud parsing selže
+      datasource = Datasource.Database;
+    }
+    
+
 
     _scenarioDTO = await _apiClient.GetScenario(datasource, scenarioCode, CancellationToken.None);
     var featuresResp = await _apiClient.GetFeatures(datasource, CancellationToken.None);

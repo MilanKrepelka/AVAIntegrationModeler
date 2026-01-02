@@ -12,9 +12,19 @@ using Pathoschild.Http.Client;
 
 namespace AVAIntegrationModeler.API.Client;
 
+/// <summary>
+/// Client Integration Modeler pro volání AVA Integration Modeler API.
+/// </summary>
 public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
 {
+  /// <summary>
+  /// Http client
+  /// </summary>
   private readonly HttpClient _httpClient;
+  
+  /// <summary>
+  /// Logger
+  /// </summary>
   private readonly ILogger<AVAIntegrationModelerApiClient> _logger;
 
   public AVAIntegrationModelerApiClient(HttpClient httpClient, ILogger<AVAIntegrationModelerApiClient> logger)
@@ -112,6 +122,7 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
       throw;
     }
   }
+  
   /// <inheritdoc/>
   public async Task<ScenarioDTO> GetScenario(Datasource datasource, string scenarioCode, CancellationToken cancellationToken)
   {
@@ -281,53 +292,7 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
   }
 
   /// <inheritdoc/>
-  public async Task<ScenarioDTO> UpdateScenario(Datasource datasource, ScenarioDTO scenario, CancellationToken cancellationToken)
-  {
-    if (!Enum.IsDefined(typeof(Datasource), datasource))
-      throw new ArgumentOutOfRangeException(nameof(datasource));
-    if (scenario is null)
-      throw new ArgumentNullException(nameof(scenario));
-
-    try
-    {
-      _logger.LogDebug($"{nameof(UpdateScenario)} starting. datasource={datasource}, scenarioId={scenario.Id}");
-
-      var fluent = new FluentClient(_httpClient);
-
-      var response = await fluent
-        .PutAsync($"scenarios/{datasource}/{scenario.Id}")
-        .WithBody(scenario)
-        .WithCancellationToken(cancellationToken)
-        .WithApiExceptionHandling<ScenarioDTO>(); // ← Použití extension metody
-
-      _logger.LogInformation($"{nameof(UpdateScenario)} completed. datasource={datasource}, scenarioId={scenario.Id}");
-
-      return response;
-    }
-    catch (ApiValidationException vex)
-    {
-      _logger.LogWarning($"{nameof(UpdateScenario)} validation error. datasource={datasource}, errors={vex.Errors.Count}");
-      throw;
-    }
-    catch (ApiException aex)
-    {
-      _logger.LogError(aex, $"{nameof(UpdateScenario)} API error. datasource={datasource}, status={aex.StatusCode}");
-      throw;
-    }
-    catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
-    {
-      _logger.LogInformation($"{nameof(UpdateScenario)} cancelled by token. datasource={datasource}, scenarioId={scenario.Id}");
-      throw;
-    }
-    catch (Exception ex)
-    {
-      _logger.LogError(ex, $"Unexpected error in {nameof(UpdateScenario)}. datasource={datasource}, scenarioId={scenario.Id}");
-      throw;
-    }
-  }
-
-  /// <inheritdoc/>
-  public async Task<Result<ScenarioDTO>> UpdateScenarioResult(Datasource datasource, ScenarioDTO scenario, CancellationToken cancellationToken)
+  public async Task<Result<ScenarioDTO>> UpdateScenario(Datasource datasource, ScenarioDTO scenario, CancellationToken cancellationToken)
   {
     if (!Enum.IsDefined(typeof(Datasource), datasource))
       return Result<ScenarioDTO>.Invalid(new ValidationError(nameof(datasource), "Neplatný datasource."));
@@ -335,20 +300,26 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
     if (scenario is null)
       return Result<ScenarioDTO>.Invalid(new ValidationError(nameof(scenario), "Scenario nesmí být null."));
 
-    _logger.LogDebug($"{nameof(UpdateScenarioResult)} starting. datasource={datasource}, scenarioId={scenario.Id}");
+    _logger.LogDebug($"{nameof(UpdateScenario)} starting. datasource={datasource}, scenarioId={scenario.Id}");
 
     var fluent = new FluentClient(_httpClient);
-
+    var requestBody = new
+    {
+      ScenarioCode = scenario.Code,
+      Datasource = datasource,
+      Scenario = scenario
+    };
+    // volám update scénáře podle jeho kódu, protože DataService zatím nemá Identifikátory
     var result = await fluent
-      .PutAsync($"scenarios/{datasource}/{scenario.Id}")
-      .WithBody(scenario)
+      .PutAsync($"scenarios/{datasource}/{scenario.Code}")
+      .WithBody(requestBody)
       .WithCancellationToken(cancellationToken)
       .AsResult<ScenarioDTO>(); // ← Použití nové extension metody
 
     if (result.IsSuccess)
-      _logger.LogInformation($"{nameof(UpdateScenarioResult)} completed. datasource={datasource}, scenarioId={scenario.Id}");
+      _logger.LogInformation($"{nameof(UpdateScenario)} completed. datasource={datasource}, scenarioId={scenario.Id}");
     else
-      _logger.LogWarning($"{nameof(UpdateScenarioResult)} failed. datasource={datasource}, status={result.Status}");
+      _logger.LogWarning($"{nameof(UpdateScenario)} failed. datasource={datasource}, status={result.Status}");
 
     return result;
   }

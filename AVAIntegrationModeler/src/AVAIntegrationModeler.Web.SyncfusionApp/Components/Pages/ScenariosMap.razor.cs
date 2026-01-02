@@ -16,19 +16,34 @@ public partial class ScenariosMap : Microsoft.AspNetCore.Components.ComponentBas
 
   [Parameter] public string scenarioCode { get; set; } = string.Empty;
 
+  [Parameter] public string dataSourceAsString { get; set; } = string.Empty;
+
   ScenarioDTO _scenarioDTO = new ScenarioDTO();
   /// <inheritdoc/>
   public bool IsLoading { get; set; } = false;
 
-  //protected override async Task OnInitializedAsync()
-  //{
-  //  await base.OnInitializedAsync();
-  //  if (string.IsNullOrEmpty(scenarioCode))
-  //  {
-  //    return;
-  //  }
-  //  _scenarioDTO = await _apiClient.GetScenario(Datasource.AVAPlace, scenarioCode, CancellationToken.None);
-  //  InitDiagramModel();
+  protected override async Task OnInitializedAsync()
+  {
+    await base.OnInitializedAsync();
+    if (string.IsNullOrEmpty(scenarioCode))
+    {
+      return;
+    }
+    if (!Enum.TryParse<Datasource>(dataSourceAsString, true, out var datasource))
+    {
+      // Fallback na Database pokud parsing selže
+      datasource = Datasource.Database;
+    }
+
+    _scenarioDTO = await _apiClient.GetScenario(datasource, scenarioCode, CancellationToken.None);
+
+    // Build model
+    InitDiagramModel();
+
+    // Defer layout until @ref is ready
+    _needsLayout = true;
+
     
-  //}
+
+  }
 }

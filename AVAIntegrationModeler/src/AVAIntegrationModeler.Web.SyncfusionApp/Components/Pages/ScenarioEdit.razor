@@ -1,12 +1,15 @@
-﻿@page "/scenarioedit/{scenarioCode}"
+﻿@page "/scenarioedit/{dataSourceAsString}/{scenarioCode}"
 @rendermode InteractiveServer
 @using AVAIntegrationModeler.Contracts.DTO
+@using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Buttons
 @using Microsoft.AspNetCore.Components.Forms
 @using Syncfusion.Blazor.Notifications
 
+<SuccessErrorToast @ref="InfoErrorToast" Title="Integrační scénář" >
+</SuccessErrorToast>
 <SfToast @ref="SaveToast" Title="Uložení scénáře" Timeout="3000" ShowCloseButton="true">
     <ToastPosition X="Right" Y="Top"></ToastPosition>
 </SfToast>
@@ -87,19 +90,12 @@
 @code
 {
     SfToast? SaveToast;
-    
+    Widgets.SuccessErrorToast? InfoErrorToast;
     private async Task ShowToast(bool success,string message)
     {
-        if (SaveToast != null)
+        if (InfoErrorToast != null)
         {
-            var toastModel = new ToastModel
-            {
-                Content = message,
-                CssClass = success ? "e-toast-success" : "e-toast-error",
-                Icon = success ? "e-success toast-icons" : "e-error toast-icons",
-                
-            };
-            await SaveToast.ShowAsync(toastModel);
+            await InfoErrorToast.Show(success, message);
         }
     }
 }
