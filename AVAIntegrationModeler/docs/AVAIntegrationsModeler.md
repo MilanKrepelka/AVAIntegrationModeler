@@ -22,13 +22,17 @@
 
 ### Nejbližší práce
 - Scénáøe - akce pøidat scénáø
+- Smazání scénáøe (má plno závislostí kdy scénáø nesmazat)
 - Validace
 - Spoleèná knihovna pro lokalizaovné texty?
 - Znièit Summary validací
-- Guid nemá jít editovat nikdy
+- [x] Guid nemá jít editovat nikdy
 - Description(EN)
 - Vyhodit létající popisky
 - Èesky/Anglicky Název/Popis
+- FeaturesQueryService - plná implementace
+-  public async Task<ScenarioListResponse> GetScenarios( - pøepsat na result + testy)
+ -  public async Task<FeatureListResponse> GetFeatures( - pøepsat na result + testy)
 
 # Road mapa 
 - Dotáhnout pøehled pro scénáøe

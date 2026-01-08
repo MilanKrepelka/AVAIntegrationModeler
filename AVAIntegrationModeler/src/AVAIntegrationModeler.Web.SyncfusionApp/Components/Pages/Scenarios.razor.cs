@@ -1,5 +1,6 @@
 ﻿using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Mvc.RazorPages;
@@ -84,4 +85,10 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
       await Grid.Refresh(true);
     }
   }
+    private void AddNewScenario(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+    {
+    NavigationManager.NavigateTo($"/scenarioedit/{this.Datasource}");
+    
+    //throw new NotImplementedException();
+    }
 }

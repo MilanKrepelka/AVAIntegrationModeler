@@ -1,8 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Ardalis.Result;
+using Ardalis.Specification;
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Web.SyncfusionApp.Extensions;
 using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.Inputs.Internal;
 namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
@@ -11,12 +13,14 @@ public partial class ScenarioEdit : ComponentBase
 {
   [Inject] private IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
 
-  [Parameter] public string scenarioCode { get; set; } = string.Empty;
+  [Parameter] public string? scenarioCode { get; set; }
 
 
   [Parameter] public string dataSourceAsString { get; set; } = string.Empty;
 
   public Datasource datasource { get; set; }
+
+  DataOperation dataOperation = DataOperation.Update;
 
   private ScenarioDTO? _scenarioDTO;
   private List<FeatureDTO> _features = new();
@@ -48,50 +52,80 @@ public partial class ScenarioEdit : ComponentBase
 
     public Guid? InputFeatureId { get; set; }
     public Guid? OutputFeatureId { get; set; }
+
+    public static ScenarioEditModel NewScenarioEditModel()
+    {
+      Guid guid = Guid.NewGuid();
+      return new ScenarioEditModel()
+      {
+        Code = string.Empty,
+        NameCz = string.Empty,
+        NameEn = string.Empty,
+        DescriptionCz = string.Empty,
+        DescriptionEn = string.Empty,
+        IdText = guid.ToString(),
+        Id = guid,
+        InputFeatureId = null,
+        OutputFeatureId = null
+      };
+    }
   }
 
   private ScenarioEditModel _edit = new();
 
-  protected override async Task OnInitializedAsync()
-  {
-    if (string.IsNullOrWhiteSpace(scenarioCode))
-      return;
 
+  protected async override Task OnParametersSetAsync()
+  {
     if (!Enum.TryParse<Datasource>(dataSourceAsString, true, out var datasource))
     {
       // Fallback na Database pokud parsing selže
       datasource = Datasource.Database;
     }
-    
-
-
-    _scenarioDTO = await _apiClient.GetScenario(datasource, scenarioCode, CancellationToken.None);
     var featuresResp = await _apiClient.GetFeatures(datasource, CancellationToken.None);
     _features = featuresResp.Features ?? new List<FeatureDTO>();
 
-    if (_scenarioDTO is not null)
+    this.dataOperation = string.IsNullOrEmpty(scenarioCode) ? DataOperation.Create : DataOperation.Update;
+
+   
+
+    if (string.IsNullOrEmpty(scenarioCode))
     {
-      _edit = new ScenarioEditModel
-      {
-        Id = _scenarioDTO.Id,
-        IdText = _scenarioDTO.Id.ToString(),
-        Code = _scenarioDTO.Code,
-        NameCz = _scenarioDTO.Name?.CzechValue ?? string.Empty,
-        NameEn = _scenarioDTO.Name?.EnglishValue ?? string.Empty,
-        DescriptionCz = _scenarioDTO.Description?.CzechValue ?? string.Empty,
-        DescriptionEn = _scenarioDTO.Description?.EnglishValue ?? string.Empty,
-        InputFeatureId = _scenarioDTO.InputFeatureId,
-        OutputFeatureId = _scenarioDTO.OutputFeatureId
-      };
+      _edit = ScenarioEditModel.NewScenarioEditModel();
     }
+    else
+    {
+      _scenarioDTO = await _apiClient.GetScenario(datasource, scenarioCode, CancellationToken.None);
+
+      if (_scenarioDTO is not null)
+      {
+        _edit = new ScenarioEditModel
+        {
+          Id = _scenarioDTO.Id,
+          IdText = _scenarioDTO.Id.ToString(),
+          Code = _scenarioDTO.Code,
+          NameCz = _scenarioDTO.Name?.CzechValue ?? string.Empty,
+          NameEn = _scenarioDTO.Name?.EnglishValue ?? string.Empty,
+          DescriptionCz = _scenarioDTO.Description?.CzechValue ?? string.Empty,
+          DescriptionEn = _scenarioDTO.Description?.EnglishValue ?? string.Empty,
+          InputFeatureId = _scenarioDTO.InputFeatureId,
+          OutputFeatureId = _scenarioDTO.OutputFeatureId
+        };
+      }
+    }
+    return;
+  }
+
+  protected override void OnInitialized()
+  {
   }
 
   private async Task SaveAsync()
   {
-    if (_scenarioDTO is null) return;
-
-    // Převod IdText -> Id (ochrana před neplatným GUID už přes DataAnnotations)
-    _ = Guid.TryParse(_edit.IdText, out var parsedId);
+    if (!Guid.TryParse(_edit.IdText, out var parsedId))
+    {
+      await ShowToast(false, "Neplatný formát GUID.");
+      return;
+    }
     var updated = new ScenarioDTO
     {
       Id = parsedId == Guid.Empty ? _edit.Id : parsedId,
@@ -109,27 +143,41 @@ public partial class ScenarioEdit : ComponentBase
     };
 
     _scenarioDTO = updated;
-    var result = await _apiClient.UpdateScenario(datasource, updated, CancellationToken.None);
+    Result result = new Result();
+
+    if (dataOperation == DataOperation.Create)
+    {
+      var createResult = await _apiClient.CreateScenario(datasource, updated, CancellationToken.None);
+    }
+    else
+    {
+      var updateResult = await _apiClient.UpdateScenario(datasource, updated, CancellationToken.None);
+      result = updateResult.ToResult();
+    }
+
     if (result.IsSuccess)
     {
-      await ShowToast(true, $"Integrační scénář {updated.Code} byl v pořádku uložen");
+      string operationText = dataOperation == DataOperation.Create ? "vytvořen" : "uložen";
+      await ShowToast(true, $"Integrační scénář {updated.Code} byl v pořádku {operationText}");
     }
-    else 
+    else
     {
+      string operationText = dataOperation == DataOperation.Create ? "vytvoření" : "uložení";
+
       if (result.IsError())
       {
-        await ShowToast(false, $"Chyba při uložení integračního scénáře:{string.Join(",", result.Errors)}");
-      }else if (result.IsInvalid())
+        await ShowToast(false, $"Chyba při {operationText} integračního scénáře: {string.Join(", ", result.Errors)}");
+      }
+      else if (result.IsInvalid())
       {
-        await ShowToast(false, $"Chyba při uložení integračního scénáře:{string.Join(",", result.ValidationErrors)}");
-      }else
+        await ShowToast(false, $"Chyba při {operationText} integračního scénáře: {string.Join(", ", result.ValidationErrors)}");
+      }
+      else
       {
-        await ShowToast(false, $"Chyba při uložení integračního scénáře':{string.Join(",", result.Errors)}'");
+        await ShowToast(false, $"Chyba při {operationText} integračního scénáře: {string.Join(", ", result.Errors)}");
       }
     }
-    await InvokeAsync(StateHasChanged);
+    //await InvokeAsync(StateHasChanged);
   }
-
- 
-  
 }
+

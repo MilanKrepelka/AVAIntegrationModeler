@@ -1,4 +1,5 @@
 ﻿@page "/scenarioedit/{dataSourceAsString}/{scenarioCode}"
+@page "/scenarioedit/{dataSourceAsString}"
 @rendermode InteractiveServer
 @using AVAIntegrationModeler.Contracts.DTO
 @using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
@@ -27,9 +28,10 @@
             </div>
             <div class="col-12 col-md-6">
                 <SfTextBox CssClass="w-100"
-                           Placeholder="Identifikátor (GUID)"
+                           Placeholder="@Localization.SharedResources.Identifier"
+                           
                            FloatLabelType="FloatLabelType.Always"
-                           @bind-Value="_edit.IdText">
+                           @bind-Value="_edit.IdText" Readonly=true>
                 </SfTextBox>
                 <ValidationMessage For="@(() => _edit.IdText)" />
             </div>
@@ -38,11 +40,11 @@
         <h4 style="margin-top:16px">Název</h4>
         <div class="row">
             <div class="col-12 col-md-6">
-                <SfTextBox CssClass="w-100" Placeholder="Česky" FloatLabelType="FloatLabelType.Auto" @bind-Value="_edit.NameCz"></SfTextBox>
+                <SfTextBox CssClass="w-100" Placeholder="Česky" FloatLabelType="FloatLabelType.Always" @bind-Value="_edit.NameCz"></SfTextBox>
                 <ValidationMessage For="@(() => _edit.NameCz)" />
             </div>
             <div class="col-12 col-md-6">
-                <SfTextBox CssClass="w-100" Placeholder="Anglicky" FloatLabelType="FloatLabelType.Auto" @bind-Value="_edit.NameEn"></SfTextBox>
+                <SfTextBox CssClass="w-100" Placeholder="Anglicky" FloatLabelType="FloatLabelType.Always" @bind-Value="_edit.NameEn"></SfTextBox>
                 <ValidationMessage For="@(() => _edit.NameEn)" />
             </div>
         </div>
@@ -50,11 +52,11 @@
         <h4 style="margin-top:16px">Popis</h4>
         <div class="row">
             <div class="col-12 col-md-6">
-                <SfTextArea CssClass="w-100" Placeholder="Popis (CZ)" FloatLabelType="FloatLabelType.Auto" @bind-Value="_edit.DescriptionCz" Rows="3"></SfTextArea>
+                <SfTextArea CssClass="w-100" Placeholder="Popis (CZ)" FloatLabelType="FloatLabelType.Always" @bind-Value="_edit.DescriptionCz" Rows="3"></SfTextArea>
                 <ValidationMessage For="@(() => _edit.DescriptionCz)" />
             </div>
             <div class="col-12 col-md-6">
-                <SfTextArea CssClass="w-100" Placeholder="Description (EN)" FloatLabelType="FloatLabelType.Auto" @bind-Value="_edit.DescriptionEn" Rows="3"></SfTextArea>
+                <SfTextArea CssClass="w-100" Placeholder="Description (EN)" FloatLabelType="FloatLabelType.Always" @bind-Value="_edit.DescriptionEn" Rows="3"></SfTextArea>
                 <ValidationMessage For="@(() => _edit.DescriptionEn)" />
             </div>
         </div>

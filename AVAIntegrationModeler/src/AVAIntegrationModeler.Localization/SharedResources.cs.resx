@@ -162,4 +162,7 @@
   <data name="Scenarios" xml:space="preserve">
     <value>Scénáře</value>
   </data>
+  <data name="Identifier" xml:space="preserve">
+    <value>Identifikátor</value>
+  </data>
 </root>
