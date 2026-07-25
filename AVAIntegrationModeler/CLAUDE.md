@@ -1,101 +1,101 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Tento soubor poskytuje pokyny pro Claude Code (claude.ai/code) při práci s kódem v tomto repozitáři.
 
-## Build & Run
+## Sestavení a spuštění
 
 ```powershell
-# Build entire solution
+# Sestavení celého solution
 dotnet build AVAIntegrationModeler.sln
 
-# Run the API (listens on http://0.0.0.0:5005 by default)
+# Spuštění API (naslouchá na http://0.0.0.0:5005)
 dotnet run --project src/AVAIntegrationModeler.API
 
-# Run the Blazor UI
+# Spuštění Blazor UI
 dotnet run --project src/AVAIntegrationModeler.Web.SyncfusionApp
 
-# Run via .NET Aspire (orchestrates both)
+# Spuštění přes .NET Aspire (orchestruje obojí)
 dotnet run --project src/AVAIntegrationModeler.AspireHost
 ```
 
-## Testing
+## Testování
 
 ```powershell
-# Run all tests
+# Spuštění všech testů
 dotnet test AVAIntegrationModeler.sln
 
-# Run a specific test project
+# Spuštění konkrétního testovacího projektu
 dotnet test tests/AVAIntegrationModeler.FunctionalTests
 dotnet test tests/AVAIntegrationModeler.IntegrationTests
 dotnet test src/AVAIntegrationModeler.Domain.Test
 
-# Run a single test class or method
+# Spuštění jednoho testu nebo třídy
 dotnet test --filter "FullyQualifiedName~ScenarioAddTest"
 ```
 
-## EF Migrations
+## EF Migrace
 
-Run from the `src/AVAIntegrationModeler.API` directory:
+Spouštět z adresáře `src/AVAIntegrationModeler.API`:
 
 ```powershell
-dotnet ef migrations add MIGRATIONNAME -c AppDbContext -p ../AVAIntegrationModeler.Infrastructure/AVAIntegrationModeler.Infrastructure.csproj -s AVAIntegrationModeler.API.csproj -o Data/Migrations
+dotnet ef migrations add NAZEV_MIGRACE -c AppDbContext -p ../AVAIntegrationModeler.Infrastructure/AVAIntegrationModeler.Infrastructure.csproj -s AVAIntegrationModeler.API.csproj -o Data/Migrations
 
 dotnet ef database update -c AppDbContext -p ../AVAIntegrationModeler.Infrastructure/AVAIntegrationModeler.Infrastructure.csproj -s AVAIntegrationModeler.API.csproj
 ```
 
-## NuGet Sources
+## NuGet zdroje
 
-`ASOL.*` packages come from the private Azure Artifacts feed configured in `nuget.config`. You need access to `https://pkgs.dev.azure.com/avaspace/feed/_packaging/feed/nuget/v3/index.json` to restore these packages.
+Balíčky `ASOL.*` pocházejí z privátního Azure Artifacts feedu nakonfigurovaného v `nuget.config`. Pro obnovení balíčků je potřeba přístup k `https://pkgs.dev.azure.com/avaspace/feed/_packaging/feed/nuget/v3/index.json`.
 
-## Architecture
+## Architektura
 
-This is a **Clean Architecture / DDD** solution built on [Ardalis.CleanArchitecture](https://github.com/ardalis/CleanArchitecture). Dependency direction: `API → UseCases → Domain ← Infrastructure`.
+Řešení je postaveno na **Clean Architecture / DDD** šabloně [Ardalis.CleanArchitecture](https://github.com/ardalis/CleanArchitecture). Směr závislostí: `API → UseCases → Domain ← Infrastructure`.
 
-### Projects
+### Projekty
 
-| Project | Role |
+| Projekt | Role |
 |---|---|
-| `Domain` | Aggregates, entities, value objects, domain events, specifications, domain interfaces |
-| `UseCases` | MediatR commands/queries, DTOs, query service interfaces, mappers |
-| `Infrastructure` | EF Core (`AppDbContext`), repository implementation (`EfRepository`), query services, migrations, email |
-| `API` | FastEndpoints (REPR pattern), Swagger, startup wiring |
-| `Contracts` | Shared request/response DTOs, enums, options — referenced by API, UseCases, and AVAPlace |
-| `AVAPlace` | Integration layer to the external ASOL DataService (tenant-aware HTTP client) |
-| `Web.SyncfusionApp` | Blazor Server UI using Syncfusion components |
-| `Localization` | Localized text resources |
-| `ServiceDefaults` | .NET Aspire shared service defaults (OpenTelemetry, health checks) |
+| `Domain` | Agregáty, entity, hodnotové objekty, doménové události, specifikace, doménová rozhraní |
+| `UseCases` | MediatR příkazy/dotazy, DTO, rozhraní query služeb, mappery |
+| `Infrastructure` | EF Core (`AppDbContext`), implementace repozitáře (`EfRepository`), query služby, migrace, email |
+| `API` | FastEndpoints (vzor REPR), Swagger, registrace služeb |
+| `Contracts` | Sdílená request/response DTO, enumy, options — používáno z API, UseCases i AVAPlace |
+| `AVAPlace` | Integrační vrstva na externí ASOL DataService (multi-tenant HTTP klient) |
+| `Web.SyncfusionApp` | Blazor Server UI s Syncfusion komponentami |
+| `Localization` | Lokalizační textové zdroje |
+| `ServiceDefaults` | Sdílené výchozí nastavení .NET Aspire (OpenTelemetry, health checks) |
 
-### Key domain concepts
+### Klíčové doménové koncepty
 
-- **Scenario** — integration scenario connecting an input Feature to an output Feature; identified by `Code` (string) and `Id` (Guid)
-- **Feature** — integration feature composed of included sub-features and data models
-- **DataModel / DataModelField** — data schema definitions
-- **IntegrationsMap / IntegrationMapItem** — maps integration scenarios to areas
-- **Area** — organizational grouping
+- **Scenario** — integrační scénář propojující vstupní Feature s výstupní Feature; identifikován přes `Code` (string) a `Id` (Guid)
+- **Feature** — integrační feature složená z vložených sub-featur a datových modelů
+- **DataModel / DataModelField** — definice datového schématu
+- **IntegrationsMap / IntegrationMapItem** — mapování integračních scénářů na oblasti
+- **Area** — organizační seskupení
 
-### Datasource enum
+### Enum Datasource
 
-All query services and handlers accept a `Datasource` parameter (`Database` or `AVAPlace`). This determines whether data is fetched from the local SQLite database or from the external ASOL DataService via `AVAPlace`. The `AVAPlace` project's `IntegrationDataProvider` handles the multi-tenant HTTP calls to the DataService.
+Všechny query služby a handlery přijímají parametr `Datasource` (`Database` nebo `AVAPlace`). Ten určuje, zda se data čtou z lokální SQLite databáze nebo z externí ASOL DataService přes `AVAPlace`. Multi-tenant HTTP volání zajišťuje `IntegrationDataProvider` v projektu `AVAPlace`.
 
-### CQRS pattern
+### Vzor CQRS
 
-- **Commands** (mutating): `Create/Update/DeleteScenario`, `Create/Update/DeleteContributor` — use repository (`IRepository<T>` from `Ardalis.Specification`)
-- **Queries** (read-only): handled by dedicated `IXxxQueryService` interfaces (defined in `UseCases`, implemented in `Infrastructure` or `AVAPlace`), bypassing the repository pattern for efficiency
-- Query services implement `ICacheableQueryService` with `InvalidateCache(Datasource)` for cache management
+- **Příkazy** (mutace): `Create/Update/DeleteScenario`, `Create/Update/DeleteContributor` — používají repozitář (`IRepository<T>` z `Ardalis.Specification`)
+- **Dotazy** (jen čtení): zpracovávány dedikovanými rozhraními `IXxxQueryService` (definovanými v `UseCases`, implementovanými v `Infrastructure` nebo `AVAPlace`), obcházejí vzor repozitáře pro efektivitu
+- Query služby implementují `ICacheableQueryService` s metodou `InvalidateCache(Datasource)` pro správu cache
 
-### API endpoint naming
+### Pojmenování API endpointů
 
-Endpoints follow FastEndpoints REPR pattern. Each endpoint is a class ending in `Endpoint` inside a folder named after the aggregate (e.g. `API/Scenarios/Create.cs`). Related request, response, and validator types live in the same folder with the operation name as prefix (e.g. `Create.CreateScenarioRequest.cs`).
+Endpointy sledují vzor FastEndpoints REPR. Každý endpoint je třída končící `Endpoint` ve složce pojmenované podle agregátu (např. `API/Scenarios/Create.cs`). Příslušné request, response a validační typy leží ve stejné složce s prefixem operace (např. `Create.CreateScenarioRequest.cs`).
 
-### Validation
+### Validace
 
-Validation occurs at two levels:
-1. **FastEndpoints validators** on request types (FluentValidation, in `API`)
-2. **Guard clauses** (`Ardalis.GuardClauses`) inside domain entity setters
-3. **Domain validation services** (`IDomainEntityValidationService`) for cross-entity rules, registered in `InfrastructureServiceExtensions`
+Validace probíhá na dvou úrovních:
+1. **FastEndpoints validátory** na request typech (FluentValidation, v `API`)
+2. **Guard klauzule** (`Ardalis.GuardClauses`) uvnitř setterů doménových entit
+3. **Doménové validační služby** (`IDomainEntityValidationService`) pro pravidla přes více entit, registrované v `InfrastructureServiceExtensions`
 
-Results flow as `Ardalis.Result<T>` — endpoints map `ResultStatus.Invalid` → 400, `ResultStatus.Conflict` → 409.
+Výsledky proudí jako `Ardalis.Result<T>` — endpointy mapují `ResultStatus.Invalid` → 400, `ResultStatus.Conflict` → 409.
 
 ### LocalizedValue
 
-`LocalizedValue` is a value object with `CzechValue` and `EnglishValue` properties. It is defined as a DTO in `Contracts.DTO.LocalizedValue` and extended in `Domain.ValueObjects.LocalizedValue`. Used for all user-facing text on domain entities (Name, Description).
+`LocalizedValue` je hodnotový objekt s vlastnostmi `CzechValue` a `EnglishValue`. Definován jako DTO v `Contracts.DTO.LocalizedValue` a rozšířen v `Domain.ValueObjects.LocalizedValue`. Používá se pro veškerý uživatelský text na doménových entitách (Name, Description).
