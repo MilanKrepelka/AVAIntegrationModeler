@@ -62,8 +62,9 @@ Balíčky `ASOL.*` pocházejí z privátního Azure Artifacts feedu nakonfigurov
 | `Contracts` | Sdílená request/response DTO, enumy, options — používáno z API, UseCases i AVAPlace |
 | `AVAPlace` | Integrační vrstva na externí ASOL DataService (multi-tenant HTTP klient) |
 | `Web.SyncfusionApp` | Blazor Server UI s Syncfusion komponentami |
+| `API.Client` | Generovaný HTTP klient pro API — používán v integračních testech a externími konzumenty |
 | `Localization` | Lokalizační textové zdroje |
-| `ServiceDefaults` | Sdílené výchozí nastavení .NET Aspire (OpenTelemetry, health checks) |
+| `ServiceDefaults` | Sdílené výchozí nastavení .NET Aspire (OpenTelemetry, health checks); obsahuje `FluentClientFactory` / `IFluentClientFactory` — abstrakce nad typovanými HTTP klienty, používaná v `AVAPlace` i `API.Client` |
 
 ### Klíčové doménové koncepty
 
@@ -96,6 +97,44 @@ Validace probíhá na dvou úrovních:
 
 Výsledky proudí jako `Ardalis.Result<T>` — endpointy mapují `ResultStatus.Invalid` → 400, `ResultStatus.Conflict` → 409.
 
+`ResultError(string Code, string Message, string? Field)` je sealed record pro typované předávání chyb mezi vrstvami.
+
 ### LocalizedValue
 
 `LocalizedValue` je hodnotový objekt s vlastnostmi `CzechValue` a `EnglishValue`. Definován jako DTO v `Contracts.DTO.LocalizedValue` a rozšířen v `Domain.ValueObjects.LocalizedValue`. Používá se pro veškerý uživatelský text na doménových entitách (Name, Description).
+
+### Doménové základní typy
+
+Všechny agregáty dědí z `EntityBase` a implementují `IAggregateRoot` (z `Ardalis.SharedKernel`). Hodnotové objekty dědí z `ValueObject`. `Domain` projekt používá globální using direktivy pro celý Ardalis stack: `GuardClauses`, `Result`, `SharedKernel`, `SmartEnum`, `Specification`, `MediatR`.
+
+### Doménové události
+
+Doménové události dědí z `DomainEventBase`. Handlery jsou MediatR notification handlery umístěné v `Aggregate/Events/` a `Aggregate/Handlers/`. `EventDispatcherInterceptor` (EF Core `SaveChangesInterceptor` v `Infrastructure`) automaticky dispatchuje doménové události po každém `SaveChanges`.
+
+### Specifikace
+
+Query specifikace dědí z `Specification<T>` (`Ardalis.Specification`), např. `ScenarioByIdSpec`, `ScenarioByCodeSpec`, `FeatureByIdSpec`. Používají se v command handlerech pro načítání entit přes `IRepository<T>`.
+
+### Mapování
+
+`IMapper<TDomainEntity, TDTO, TSelf>` v `UseCases` využívá C# 11 statické abstraktní členy rozhraní — `MapToDTO` a `MapToEntity` jsou implementovány jako statické metody na konkrétních mapper třídách. Paralelní `IMapper` existuje také v `Contracts`.
+
+### AVAPlace vrstva
+
+`IIntegrationDataProvider` (v `Contracts/AVAPlace/`) je primární kontrakt pro načítání dat z externí ASOL DataService. Implementován třídou `IntegrationDataProvider` v projektu `AVAPlace`. `CustomDataServiceClient` zajišťuje samotná HTTP volání. Multi-tenant kontext proudí přes `IntegrationDataProvider`.
+
+### Testovací projekty
+
+Testy jsou rozloženy mezi kolocované projekty (v `src/`) a separátní projekty (v `tests/`):
+
+| Projekt | Co testuje |
+|---|---|
+| `Domain.Test` (`src/`) | Doménové agregáty (Area, Contributor, DataModel, Feature, Scenario), ValueObjects |
+| `Infrastructure.Test` (`src/`) | EF datová vrstva přes SQLite fixture; query služby (ListFeatures, ListScenarios); DataModelTree |
+| `UseCases.Test` (`src/`) | Mapper třídy (AreaMapper, DataModelMapper, FeatureMapper, LocalizedValueMapper) |
+| `API.Client.Test` (`src/`) | Klientské integrační testy přes `AVAIntegrationModelerAPIFactory` |
+| `AVAPlaceTests` (`src/`) | Live integrační testy proti AVAPlace demo prostředí; mapper třídy a `IntegrationDataProvider` |
+| `FunctionalTests` (`tests/`) | API endpointy přes `CustomWebApplicationFactory` (Contributors, Scenarios); AVAPlace HTTP klient |
+| `IntegrationTests` (`tests/`) | EF repozitář přes SQLite; Scenario CRUD |
+| `UnitTests` (`tests/`) | Doménové agregáty, doménové služby, UseCase handlery, Web mapování, FluentClientFactory |
+| `AspireTests` (`tests/`) | Aspire orchestration smoke test |
