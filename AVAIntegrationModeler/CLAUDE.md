@@ -138,3 +138,54 @@ Testy jsou rozloženy mezi kolocované projekty (v `src/`) a separátní projekt
 | `IntegrationTests` (`tests/`) | EF repozitář přes SQLite; Scenario CRUD |
 | `UnitTests` (`tests/`) | Doménové agregáty, doménové služby, UseCase handlery, Web mapování, FluentClientFactory |
 | `AspireTests` (`tests/`) | Aspire orchestration smoke test |
+
+## UI — Web.SyncfusionApp
+
+Blazor Server aplikace (.NET 9, `InteractiveServer` render mode). Všechny stránky jsou implementovány jako partial třídy se souborem code-behind (`*.razor` + `*.razor.cs`).
+
+### Syncfusion komponenty
+
+Projekt používá [Syncfusion Blazor](https://www.syncfusion.com/blazor-components). Licence se registruje v `Program.cs` přes `SyncfusionLicenseProvider.RegisterLicense(...)`. Komponenty jsou zaregistrovány přes `builder.Services.AddSyncfusionBlazor()`.
+
+Hlavní používané komponenty:
+
+| Komponenta | Balíček | Použití |
+|---|---|---|
+| `SfGrid<T>` | `Syncfusion.Blazor.Grid` | Seznamy (Scenarios, Features, DataModels) |
+| `SfDiagramComponent` + `RadialTree` layout | `Syncfusion.Blazor.Diagram` | Diagram scénáře, strom datového modelu |
+| `SfDropDownList<TItem,TValue>` | `Syncfusion.Blazor.DropDowns` | Výběry na formuláři ScenarioEdit |
+| `SfTextBox`, `SfTextArea` | `Syncfusion.Blazor.Inputs` | Textové vstupy na formulářích |
+| `SfRadioButton`, `SfCheckBox`, `SfButton` | `Syncfusion.Blazor.Buttons` | Akce a přepínače |
+| `SfToast` | `Syncfusion.Blazor.Notifications` | Zpětná vazba po uložení (`SuccessErrorToast`) |
+| `SfToolbar` | `Syncfusion.Blazor.Navigations` | Nástrojová lišta na Scenarios |
+
+Globální `@using Syncfusion.Blazor` a `@using Syncfusion.Blazor.Diagram` jsou v `_Imports.razor`; ostatní namespace se přidávají lokálně.
+
+### Stránky a routy
+
+| Stránka | Route | Popis |
+|---|---|---|
+| `Features.razor` | `/features` | SfGrid seznam integrčních features |
+| `DataModels.razor` | `/datamodels` | SfGrid seznam datových modelů s detail template |
+| `DataModelMap.razor` | `/datamodelmap/{modelId:guid}` | Radiální strom referencí datového modelu (SfDiagramComponent) |
+| `Scenarios.razor` | `/scenarios` | SfGrid seznam scénářů |
+| `ScenarioEdit.razor` | `/scenarioedit/{ds}/{code}` nebo `/scenarioedit/{ds}` | Formulář pro vytvoření / editaci scénáře |
+| `ScenariosMap.razor` | `/scenariomap/{ds}/{code}` | Diagram scénáře (SfDiagramComponent, RadialTree) |
+
+Složka `Components/Pages/ComponentsSyncfusion/` (~40 souborů) je **pouze referenční demo** Syncfusion Template Studio — není součástí navigace aplikace.
+
+### Sdílené vzory UI
+
+**`IPageListBase`** — rozhraní pro list stránky s `IsLoading`, `Datasource`, `FilterString`. Implementováno v `Scenarios` a `Features`.
+
+**`DataSourceSelector`** (widget) — dva `SfRadioButton` pro přepínání mezi `Datasource.Database` a `Datasource.AVAPlace`. Parametry: `@bind-Selected`, `OnChanged` (typovaný callback s `Datasource` enum), `LabelText`, `CssClass`.
+
+**`SuccessErrorToast`** (widget) — tenký obal nad `SfToast`; volá se přes `await toast.Show(success, message)` v ScenarioEdit po uložení.
+
+### ViewModels a mapování
+
+Stránky pracují s vlastními view modely ze složky `ViewModels/List/` (`ScenarioListViewModel`, `DataModelListViewModel`, `FeatureListViewModel`, `IntegrationMapListViewModel`). Mapování z API response DTO na view modely zajišťují třídy ve složce `Mapping/`.
+
+### Přístup k datům
+
+Stránky injektují `IAVAIntegrationModelerApiClient` (z projektu `API.Client`) pro volání API. `DataModelTree` (namespace `AVAIntegrationModeler.Infrastructure`) builduje rekurzivní strom referencí pro `DataModelMap.razor`.
