@@ -103,7 +103,6 @@ public partial class DataModelEdit : ComponentBase, IDisposable
         var result = await _apiClient.CreateDataModel(_datasource, dto, _cts?.Token ?? CancellationToken.None);
         if (result.IsSuccess)
         {
-          await ShowToastSafe(true, $"Datový model {dto.Code} byl úspěšně vytvořen.");
           NavigationManager.NavigateTo("/datamodels");
         }
         else
@@ -118,7 +117,9 @@ public partial class DataModelEdit : ComponentBase, IDisposable
       {
         var result = await _apiClient.UpdateDataModel(_datasource, dto, _cts?.Token ?? CancellationToken.None);
         if (result.IsSuccess)
-          await ShowToastSafe(true, $"Datový model {dto.Code} byl úspěšně uložen.");
+        {
+          NavigationManager.NavigateTo("/datamodels");
+        }
         else
         {
           var msg = result.Status == Ardalis.Result.ResultStatus.Invalid

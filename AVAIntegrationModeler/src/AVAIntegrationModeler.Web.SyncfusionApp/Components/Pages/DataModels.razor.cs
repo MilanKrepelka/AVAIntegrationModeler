@@ -28,8 +28,8 @@ public partial class DataModels : ComponentBase
     try
     {
       IsLoading = true;
+      StateHasChanged();
       DataModelList.Clear();
-
 
       var dataModelListResponse = await _apiClient.GetDataModels(this.Datasource, CancellationToken.None);
 
@@ -37,31 +37,27 @@ public partial class DataModels : ComponentBase
       {
         DataModelListViewModel? dataModelListViewModel = Mapping.DataModelMapper.MapToViewModel(dataModel, dataModelListResponse.DataModels);
         if (dataModelListViewModel != null)
-        {
           DataModelList.Add(dataModelListViewModel);
-        }
       }
-
+    }
+    catch (Exception ex)
+    {
+      Console.WriteLine($"Chyba při načítání datových modelů: {ex.Message}");
+      DataModelList = [];
     }
     finally
     {
       IsLoading = false;
+      StateHasChanged();
     }
-
   }
-
-      
-
-  private bool _initialized;
 
   protected override async Task OnInitializedAsync()
   {
-    if (_initialized) return;
-    _initialized = true;
-
     await base.OnInitializedAsync();
     await LoadItemsAsync();
-    await Grid!.Refresh(true);
+    if (Grid != null)
+      await Grid.Refresh(true);
   }
 
   private void AddNewDataModel()

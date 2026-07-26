@@ -2,4 +2,4 @@ using AVAIntegrationModeler.Contracts;
 
 namespace AVAIntegrationModeler.UseCases.DataModels.Delete;
 
-public record DeleteDataModelCommand(Guid DataModelId) : Ardalis.SharedKernel.ICommand<Result>;
+public record DeleteDataModelCommand(Datasource Datasource, Guid DataModelId) : Ardalis.SharedKernel.ICommand<Result>;

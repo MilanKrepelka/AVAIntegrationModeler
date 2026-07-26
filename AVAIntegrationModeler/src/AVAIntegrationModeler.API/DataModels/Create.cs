@@ -3,7 +3,7 @@ using AVAIntegrationModeler.UseCases.DataModels.Create;
 
 namespace AVAIntegrationModeler.API.DataModels;
 
-public class Create(IMediator _mediator) : Endpoint<CreateDataModelRequest, CreateDataModelResponse>
+public class Create(IMediator _mediator) : Endpoint<CreateDataModelRequest, Guid>
 {
   public override void Configure()
   {
@@ -17,7 +17,7 @@ public class Create(IMediator _mediator) : Endpoint<CreateDataModelRequest, Crea
 
     if (result.IsSuccess)
     {
-      Response = new CreateDataModelResponse { DataModelId = result.Value };
+      Response = result.Value;
       await SendCreatedAtAsync<GetById>(
         new { datasource = request.Datasource, dataModelId = result.Value },
         Response,

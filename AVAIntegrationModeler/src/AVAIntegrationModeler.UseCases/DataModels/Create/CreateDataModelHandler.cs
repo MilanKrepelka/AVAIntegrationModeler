@@ -1,15 +1,20 @@
 using Ardalis.GuardClauses;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Domain.DataModelAggregate;
+using AVAIntegrationModeler.Domain.DataModelAggregate.Specifications;
 
 namespace AVAIntegrationModeler.UseCases.DataModels.Create;
 
-public class CreateDataModelHandler(IRepository<DataModel> repository)
+public class CreateDataModelHandler(IRepository<DataModel> repository, IDataModelQueryService queryService)
   : ICommandHandler<CreateDataModelCommand, Result<Guid>>
 {
   public async Task<Result<Guid>> Handle(CreateDataModelCommand request, CancellationToken cancellationToken)
   {
     Guard.Against.Null(request.DataModel, nameof(request.DataModel));
+
+    var existing = await repository.FirstOrDefaultAsync(new DataModelByCodeSpec(request.DataModel.Code), cancellationToken);
+    if (existing is not null)
+      return Result<Guid>.Error($"DataModel s kódem '{request.DataModel.Code}' již existuje.");
 
     DataModel dataModel;
     try
@@ -33,6 +38,8 @@ public class CreateDataModelHandler(IRepository<DataModel> repository)
 
     var created = await repository.AddAsync(dataModel, cancellationToken);
     if (created is null) return Result<Guid>.Error("Nepodařilo se vytvořit datový model.");
+
+    queryService.InvalidateCache(request.Datasource);
     return Result<Guid>.Success(created.Id);
   }
 }

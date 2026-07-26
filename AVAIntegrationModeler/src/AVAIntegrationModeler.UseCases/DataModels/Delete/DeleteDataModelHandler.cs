@@ -2,7 +2,7 @@ using AVAIntegrationModeler.Domain.DataModelAggregate;
 
 namespace AVAIntegrationModeler.UseCases.DataModels.Delete;
 
-public class DeleteDataModelHandler(IRepository<DataModel> repository)
+public class DeleteDataModelHandler(IRepository<DataModel> repository, IDataModelQueryService queryService)
   : ICommandHandler<DeleteDataModelCommand, Result>
 {
   public async Task<Result> Handle(DeleteDataModelCommand request, CancellationToken cancellationToken)
@@ -11,6 +11,7 @@ public class DeleteDataModelHandler(IRepository<DataModel> repository)
     if (dataModel is null) return Result.NotFound();
 
     await repository.DeleteAsync(dataModel, cancellationToken);
+    queryService.InvalidateCache(request.Datasource);
     return Result.Success();
   }
 }

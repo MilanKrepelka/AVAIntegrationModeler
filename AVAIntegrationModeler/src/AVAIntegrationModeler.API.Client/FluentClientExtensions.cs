@@ -17,6 +17,14 @@ public static class FluentClientExtensions
     PropertyNameCaseInsensitive = true
   };
 
+  // FastEndpoints error response format: { statusCode, message, errors: { field: [msg] } }
+  private sealed class FastEndpointsErrorResponse
+  {
+    public int StatusCode { get; set; }
+    public string Message { get; set; } = string.Empty;
+    public Dictionary<string, List<string>> Errors { get; set; } = [];
+  }
+
   /// <summary>
   /// Zpracuje request a vrátí Result&lt;T&gt; místo výjimek.
   /// </summary>
@@ -24,62 +32,91 @@ public static class FluentClientExtensions
   {
     try
     {
+      // AsResponse() přechází přes Pathoschild error filter, který hází ApiException pro non-2xx.
+      // Success kódy (2xx) ale projdou bez výjimky.
       var response = await request.AsResponse();
 
       if (response.Status == HttpStatusCode.NoContent)
-      {
         return Result<T>.NoContent();
-      }
+
       if (response.Status == HttpStatusCode.OK || response.Status == HttpStatusCode.Created)
       {
         var data = await response.As<T>();
         return Result<T>.Success(data);
       }
 
-      var content = await response.AsString();
+      return Result<T>.Error($"HTTP {(int)response.Status}");
+    }
+    catch (Pathoschild.Http.Client.ApiException apiEx)
+    {
+      // Pathoschild hází ApiException pro non-2xx — zachytíme a namapujeme na Result
+      var status = apiEx.Response.Status;
 
-      // Parsování ValidationProblemDetails (400)
-      if (response.Status == HttpStatusCode.BadRequest)
+      if (status == HttpStatusCode.NotFound)
+        return Result<T>.NotFound();
+
+      if (status == HttpStatusCode.NoContent)
+        return Result<T>.NoContent();
+
+      string content;
+      try { content = await apiEx.Response.AsString(); }
+      catch { content = string.Empty; }
+
+      if (status == HttpStatusCode.BadRequest)
       {
+        // FastEndpoints formát: { errors: { field: [msg] } }
         try
         {
-          var problemDetails = JsonSerializer.Deserialize<ValidationProblemDetails>(content, JsonOptions);
-          if (problemDetails?.Errors != null)
+          var feError = JsonSerializer.Deserialize<FastEndpointsErrorResponse>(content, JsonOptions);
+          if (feError?.Errors is { Count: > 0 })
           {
-            var validationErrors = problemDetails.Errors
-                .SelectMany(kvp => kvp.Value.Select(msg => new ValidationError
-                {
-                  Identifier = kvp.Key,
-                  ErrorMessage = msg
-                }))
-                .ToArray(); // ← Převod na pole
-
+            var validationErrors = feError.Errors
+              .SelectMany(kvp => kvp.Value.Select(msg => new ValidationError
+              {
+                Identifier = kvp.Key,
+                ErrorMessage = msg
+              }))
+              .ToArray();
             return Result<T>.Invalid(validationErrors);
           }
         }
-        catch (JsonException)
+        catch (JsonException) { }
+
+        // ValidationProblemDetails formát
+        try
         {
-          // Pokračuj k obecnému parsování
+          var vpd = JsonSerializer.Deserialize<ValidationProblemDetails>(content, JsonOptions);
+          if (vpd?.Errors is { Count: > 0 })
+          {
+            var validationErrors = vpd.Errors
+              .SelectMany(kvp => kvp.Value.Select(msg => new ValidationError
+              {
+                Identifier = kvp.Key,
+                ErrorMessage = msg
+              }))
+              .ToArray();
+            return Result<T>.Invalid(validationErrors);
+          }
         }
+        catch (JsonException) { }
+
+        return Result<T>.Error(content);
       }
 
-      // Parsování obecného ProblemDetails
       try
       {
-        var problemDetails = JsonSerializer.Deserialize<ProblemDetails>(content, JsonOptions);
-
-        return response.Status switch
+        var pd = JsonSerializer.Deserialize<ProblemDetails>(content, JsonOptions);
+        return status switch
         {
-          HttpStatusCode.NotFound => Result<T>.NotFound(),
-          HttpStatusCode.Conflict => Result<T>.Conflict(problemDetails?.Detail ?? content),
+          HttpStatusCode.Conflict => Result<T>.Conflict(pd?.Detail ?? content),
           HttpStatusCode.Forbidden => Result<T>.Forbidden(),
           HttpStatusCode.Unauthorized => Result<T>.Unauthorized(),
-          _ => Result<T>.Error(problemDetails?.Detail ?? content)
+          _ => Result<T>.Error(pd?.Detail ?? content)
         };
       }
       catch (JsonException)
       {
-        return Result<T>.Error($"HTTP {(int)response.Status}: {content}");
+        return Result<T>.Error($"HTTP {(int)status}: {content}");
       }
     }
     catch (Exception ex)

@@ -7,14 +7,17 @@ using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Web.SyncfusionApp.Extensions;
 using Microsoft.AspNetCore.Components;
 using Syncfusion.Blazor.Inputs.Internal;
+
 namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
 
-public partial class ScenarioEdit : ComponentBase
+public partial class ScenarioEdit : ComponentBase, IDisposable
 {
+  private bool _disposed = false;
+  private CancellationTokenSource? _cts;
+  
   [Inject] private IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
 
   [Parameter] public string? scenarioCode { get; set; }
-
 
   [Parameter] public string dataSourceAsString { get; set; } = string.Empty;
 
@@ -45,7 +48,6 @@ public partial class ScenarioEdit : ComponentBase
     [StringLength(1000)]
     public string DescriptionEn { get; set; } = string.Empty;
 
-    // GUID jako text pro bind + validace
     [Required(ErrorMessage = "GUID je povinný.")]
     [RegularExpression(@"^[0-9A-Fa-f]{8}-([0-9A-Fa-f]{4}-){3}[0-9A-Fa-f]{12}$", ErrorMessage = "Neplatný formát GUID.")]
     public string IdText { get; set; } = string.Empty;
@@ -73,59 +75,74 @@ public partial class ScenarioEdit : ComponentBase
 
   private ScenarioEditModel _edit = new();
 
+  protected override void OnInitialized()
+  {
+    _cts = new CancellationTokenSource();
+  }
 
   protected async override Task OnParametersSetAsync()
   {
+    if (_disposed || _cts?.Token.IsCancellationRequested == true) return;
+    
     if (!Enum.TryParse<Datasource>(dataSourceAsString, true, out var datasource))
     {
-      // Fallback na Database pokud parsing selže
       datasource = Datasource.Database;
     }
-    var featuresResp = await _apiClient.GetFeatures(datasource, CancellationToken.None);
-    _features = featuresResp.Features ?? new List<FeatureDTO>();
-
-    this.dataOperation = string.IsNullOrEmpty(scenarioCode) ? DataOperation.Create : DataOperation.Update;
-
-   
-
-    if (string.IsNullOrEmpty(scenarioCode))
+    
+    this.datasource = datasource;
+    
+    try
     {
-      _edit = ScenarioEditModel.NewScenarioEditModel();
-    }
-    else
-    {
-      _scenarioDTO = await _apiClient.GetScenario(datasource, scenarioCode, CancellationToken.None);
+      var featuresResp = await _apiClient.GetFeatures(datasource, _cts?.Token ?? CancellationToken.None);
+      _features = featuresResp.Features ?? new List<FeatureDTO>();
 
-      if (_scenarioDTO is not null)
+      this.dataOperation = string.IsNullOrEmpty(scenarioCode) ? DataOperation.Create : DataOperation.Update;
+
+      if (string.IsNullOrEmpty(scenarioCode))
       {
-        _edit = new ScenarioEditModel
+        _edit = ScenarioEditModel.NewScenarioEditModel();
+      }
+      else
+      {
+        _scenarioDTO = await _apiClient.GetScenario(datasource, scenarioCode, _cts?.Token ?? CancellationToken.None);
+
+        if (_scenarioDTO is not null)
         {
-          Id = _scenarioDTO.Id,
-          IdText = _scenarioDTO.Id.ToString(),
-          Code = _scenarioDTO.Code,
-          NameCz = _scenarioDTO.Name?.CzechValue ?? string.Empty,
-          NameEn = _scenarioDTO.Name?.EnglishValue ?? string.Empty,
-          DescriptionCz = _scenarioDTO.Description?.CzechValue ?? string.Empty,
-          DescriptionEn = _scenarioDTO.Description?.EnglishValue ?? string.Empty,
-          InputFeatureId = _scenarioDTO.InputFeatureId,
-          OutputFeatureId = _scenarioDTO.OutputFeatureId
-        };
+          _edit = new ScenarioEditModel
+          {
+            Id = _scenarioDTO.Id,
+            IdText = _scenarioDTO.Id.ToString(),
+            Code = _scenarioDTO.Code,
+            NameCz = _scenarioDTO.Name?.CzechValue ?? string.Empty,
+            NameEn = _scenarioDTO.Name?.EnglishValue ?? string.Empty,
+            DescriptionCz = _scenarioDTO.Description?.CzechValue ?? string.Empty,
+            DescriptionEn = _scenarioDTO.Description?.EnglishValue ?? string.Empty,
+            InputFeatureId = _scenarioDTO.InputFeatureId,
+            OutputFeatureId = _scenarioDTO.OutputFeatureId
+          };
+        }
       }
     }
-    return;
-  }
-
-  protected override void OnInitialized()
-  {
+    catch (OperationCanceledException)
+    {
+      // Komponenta byla disposed - ignoruj
+    }
+    catch (Exception ex)
+    {
+      Console.WriteLine($"Error in OnParametersSetAsync: {ex.Message}");
+    }
   }
 
   private async Task SaveAsync()
   {
+    if (_disposed || _cts?.Token.IsCancellationRequested == true) return;
+    
     if (!Guid.TryParse(_edit.IdText, out var parsedId))
     {
-      await ShowToast(false, "Neplatný formát GUID.");
+      await ShowToastSafe(false, "Neplatný formát GUID.");
       return;
     }
+    
     var updated = new ScenarioDTO
     {
       Id = parsedId == Guid.Empty ? _edit.Id : parsedId,
@@ -143,41 +160,120 @@ public partial class ScenarioEdit : ComponentBase
     };
 
     _scenarioDTO = updated;
-    Result result = new Result();
+    Result result;
 
-    if (dataOperation == DataOperation.Create)
+    try
     {
-      var createResult = await _apiClient.CreateScenario(datasource, updated, CancellationToken.None);
-    }
-    else
-    {
-      var updateResult = await _apiClient.UpdateScenario(datasource, updated, CancellationToken.None);
-      result = updateResult.ToResult();
-    }
-
-    if (result.IsSuccess)
-    {
-      string operationText = dataOperation == DataOperation.Create ? "vytvořen" : "uložen";
-      await ShowToast(true, $"Integrační scénář {updated.Code} byl v pořádku {operationText}");
-    }
-    else
-    {
-      string operationText = dataOperation == DataOperation.Create ? "vytvoření" : "uložení";
-
-      if (result.IsError())
+      if (dataOperation == DataOperation.Create)
       {
-        await ShowToast(false, $"Chyba při {operationText} integračního scénáře: {string.Join(", ", result.Errors)}");
-      }
-      else if (result.IsInvalid())
-      {
-        await ShowToast(false, $"Chyba při {operationText} integračního scénáře: {string.Join(", ", result.ValidationErrors)}");
+        var createResult = await _apiClient.CreateScenario(datasource, updated, _cts?.Token ?? CancellationToken.None);
+        result = createResult.ToResult();
       }
       else
       {
-        await ShowToast(false, $"Chyba při {operationText} integračního scénáře: {string.Join(", ", result.Errors)}");
+        var updateResult = await _apiClient.UpdateScenario(datasource, updated, _cts?.Token ?? CancellationToken.None);
+        result = updateResult.ToResult();
+      }
+
+      // Zkontroluj disposed stav před zobrazením toast
+      if (_disposed || _cts?.Token.IsCancellationRequested == true) return;
+
+      if (result.IsSuccess)
+      {
+        string operationText = dataOperation == DataOperation.Create ? "vytvořen" : "uložen";
+        await ShowToastSafe(true, $"Integrační scénář {updated.Code} byl v pořádku {operationText}");
+      }
+      else
+      {
+        string operationText = dataOperation == DataOperation.Create ? "vytvoření" : "uložení";
+
+        if (result.IsError())
+        {
+          await ShowToastSafe(false, $"Chyba při {operationText} integračního scénáře: {string.Join(", ", result.Errors)}");
+        }
+        else if (result.IsInvalid())
+        {
+          await ShowToastSafe(false, $"Chyba při {operationText} integračního scénáře: {string.Join(", ", result.ValidationErrors)}");
+        }
+        else
+        {
+          await ShowToastSafe(false, $"Chyba při {operationText} integračního scénáře: {string.Join(", ", result.Errors)}");
+        }
       }
     }
-    //await InvokeAsync(StateHasChanged);
+    catch (OperationCanceledException)
+    {
+      // Operace byla zrušena - komponenta byla disposed
+      Console.WriteLine("SaveAsync was cancelled");
+    }
+    catch (Exception ex)
+    {
+      Console.WriteLine($"Error in SaveAsync: {ex.Message}");
+      if (!_disposed && _cts?.Token.IsCancellationRequested == false)
+      {
+        await ShowToastSafe(false, "Došlo k neočekávané chybě.");
+      }
+    }
+  }
+
+  /// <summary>
+  /// Bezpečné zobrazení toast notifikace s ochranou proti disposed stavu
+  /// </summary>
+  private async Task ShowToastSafe(bool success, string message)
+  {
+    if (_disposed || _cts?.Token.IsCancellationRequested == true) return;
+
+    try
+    {
+      // Pokud máte SfToast komponentu, použijte ji zde
+      // Například:
+      // if (ToastObj != null)
+      // {
+      //   var toastModel = new ToastModel
+      //   {
+      //     Content = message,
+      //     CssClass = success ? "e-toast-success" : "e-toast-danger",
+      //     Icon = success ? "e-success toast-icons" : "e-error toast-icons"
+      //   };
+      //   await ToastObj.ShowAsync(toastModel);
+      // }
+      
+      // Nebo použijte InvokeAsync pro bezpečné volání
+      await InvokeAsync(async () =>
+      {
+        if (!_disposed && _cts?.Token.IsCancellationRequested == false)
+        {
+          // Zde volejte váš Toast mechanismus
+          await ShowToast(success, message);
+        }
+      });
+    }
+    catch (ObjectDisposedException)
+    {
+      // Toast komponenta byla disposed - ignoruj
+      Console.WriteLine($"Toast disposed: {message}");
+    }
+    catch (InvalidOperationException)
+    {
+      // Renderer byl disposed - ignoruj
+      Console.WriteLine($"Renderer disposed: {message}");
+    }
+    catch (Exception ex)
+    {
+      // Log chybu, ale nepropauj ji
+      Console.WriteLine($"Toast error: {ex.Message}");
+    }
+  }
+  
+  public void Dispose()
+  {
+    if (!_disposed)
+    {
+      _disposed = true;
+      _cts?.Cancel();
+      _cts?.Dispose();
+      _cts = null;
+    }
   }
 }
 

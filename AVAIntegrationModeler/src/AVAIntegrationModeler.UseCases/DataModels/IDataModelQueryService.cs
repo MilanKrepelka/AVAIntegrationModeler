@@ -5,7 +5,7 @@ namespace AVAIntegrationModeler.UseCases.DataModels;
 /// <summary>
 /// Rozhraní pro službu, která bude skutečně získávat data pro datové modely.
 /// </summary>
-public interface IDataModelQueryService
+public interface IDataModelQueryService : ICacheableQueryService
 {
   /// <summary>
   /// Vrátí seznam shrnutí datových modelů pro daný zdroj dat.

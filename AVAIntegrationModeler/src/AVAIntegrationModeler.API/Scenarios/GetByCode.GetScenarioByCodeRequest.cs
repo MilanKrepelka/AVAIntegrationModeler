@@ -5,7 +5,7 @@ namespace AVAIntegrationModeler.API.Scenarios;
 public class GetScenarioByCodeRequest
 {
   // Route now includes Datasource as enum text (no int constraint) and ScenarioCode as guid
-  public const string Route = "/Scenarios/{" + nameof(Datasource) + "}/{" + nameof(ScenarioCode)+"}";
+  public const string Route = "/Scenarios/by-code/{" + nameof(Datasource) + "}/{" + nameof(ScenarioCode)+"}";
   // GuidRoute provided for compatibility/explicit naming, mirrors Route
   public const string GuidRoute = Route;
 

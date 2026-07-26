@@ -13,7 +13,7 @@ public class Delete(IMediator _mediator) : Endpoint<DeleteDataModelRequest, bool
 
   public override async Task HandleAsync(DeleteDataModelRequest request, CancellationToken cancellationToken)
   {
-    var result = await _mediator.Send(new DeleteDataModelCommand(request.DataModelId), cancellationToken);
+    var result = await _mediator.Send(new DeleteDataModelCommand(request.Datasource, request.DataModelId), cancellationToken);
 
     if (result.Status == ResultStatus.NotFound) { await SendNotFoundAsync(cancellationToken); return; }
     if (result.IsSuccess) { await SendNoContentAsync(cancellationToken); return; }

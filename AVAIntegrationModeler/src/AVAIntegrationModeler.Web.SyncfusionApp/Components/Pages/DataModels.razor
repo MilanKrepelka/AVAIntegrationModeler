@@ -274,7 +274,7 @@
     {
         this.Datasource = newValue;
         await LoadItemsAsync();
-        await Grid!.Refresh();
+        if (Grid != null) await Grid.Refresh();
     }
 
     [Inject] private IJSRuntime JS { get; set; } = default!;

@@ -5,7 +5,7 @@ using AVAIntegrationModeler.UseCases.DataModels.Mapping;
 
 namespace AVAIntegrationModeler.UseCases.DataModels.Update;
 
-public class UpdateDataModelHandler(IRepository<DataModel> repository)
+public class UpdateDataModelHandler(IRepository<DataModel> repository, IDataModelQueryService queryService)
   : ICommandHandler<UpdateDataModelCommand, Result<DataModelDTO>>
 {
   public async Task<Result<DataModelDTO>> Handle(UpdateDataModelCommand request, CancellationToken cancellationToken)
@@ -34,6 +34,7 @@ public class UpdateDataModelHandler(IRepository<DataModel> repository)
     }
 
     await repository.UpdateAsync(existing, cancellationToken);
+    queryService.InvalidateCache(request.Datasource);
     return Result<DataModelDTO>.Success(request.DataModel);
   }
 }

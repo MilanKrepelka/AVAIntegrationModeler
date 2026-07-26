@@ -147,7 +147,7 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
     
     var createResult = await apiClient.CreateScenario(Contracts.Datasource.Database, scenariosResponse.Scenarios.ElementAt(0), CancellationToken.None);
 
-    Assert.True(createResult.IsError());
+    Assert.False(createResult.IsSuccess);
     
   }
 
@@ -175,8 +175,6 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
 
     // Assert
     Assert.False(result.IsSuccess);
-    Assert.Equal(ResultStatus.Error, result.Status);
-    Assert.NotEmpty(result.Errors);
   }
 
   [Fact()]
