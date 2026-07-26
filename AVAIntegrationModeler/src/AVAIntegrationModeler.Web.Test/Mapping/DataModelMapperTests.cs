@@ -1,11 +1,11 @@
 ﻿using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.Web.Mapping;
-using AVAIntegrationModeler.Web.ViewModels.List;
+using AVAIntegrationModeler.Web.SyncfusionApp.Mapping;
+using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Shouldly;
 using Xunit;
 
-namespace AVAIntegrationModeler.Web.Test.Mapping;
+namespace AVAIntegrationModeler.Web.SyncfusionApp.Test.Mapping;
 
 /// <summary>
 /// Unit testy pro DataModelMapper.

@@ -31,7 +31,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AVAIntegrationModeler.Contracts\AVAIntegrationModeler.Contracts.csproj" />
-    <ProjectReference Include="..\AVAIntegrationModeler.Web\AVAIntegrationModeler.Web.csproj" />
+    <ProjectReference Include="..\AVAIntegrationModeler.Web.SyncfusionApp\AVAIntegrationModeler.Web.SyncfusionApp.csproj" />
   </ItemGroup>
 
 </Project>
