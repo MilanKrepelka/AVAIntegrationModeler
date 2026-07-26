@@ -78,4 +78,9 @@ public interface IAVAIntegrationModelerApiClient
   /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
   /// <returns>Výsledek operace obsahující aktualizovaný scénář.</returns>
   Task<Result> DeleteScenario(Datasource datasource, string scenarioCode, CancellationToken cancellationToken);
+
+  Task<DataModelDTO> GetDataModel(Datasource datasource, Guid dataModelId, CancellationToken cancellationToken);
+  Task<Result<Guid>> CreateDataModel(Datasource datasource, DataModelDTO dataModel, CancellationToken cancellationToken);
+  Task<Result<DataModelDTO>> UpdateDataModel(Datasource datasource, DataModelDTO dataModel, CancellationToken cancellationToken);
+  Task<Result> DeleteDataModel(Datasource datasource, Guid dataModelId, CancellationToken cancellationToken);
 }

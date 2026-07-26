@@ -333,7 +333,76 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
     var result = await fluent
       .DeleteAsync($"scenarios/{datasource}/{Uri.EscapeDataString(scenarioCode)}")
       .WithCancellationToken(ct)
-      .AsResult<object>(); // DELETE obvykle nevrací tělo
+      .AsResult<object>();
+
+    return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));
+  }
+
+  /// <inheritdoc/>
+  public async Task<DataModelDTO> GetDataModel(Datasource datasource, Guid dataModelId, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(GetDataModel)} starting. datasource={datasource}, dataModelId={dataModelId}");
+    var fluent = new FluentClient(_httpClient);
+    var response = await fluent
+      .GetAsync($"datamodels/{datasource}/{dataModelId}")
+      .WithCancellationToken(cancellationToken)
+      .As<DataModelDTO>();
+    return response ?? new DataModelDTO();
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result<Guid>> CreateDataModel(Datasource datasource, DataModelDTO dataModel, CancellationToken cancellationToken)
+  {
+    if (dataModel is null)
+      return Result<Guid>.Invalid(new ValidationError(nameof(dataModel), "DataModel nesmí být null."));
+
+    _logger.LogDebug($"{nameof(CreateDataModel)} starting. datasource={datasource}, code={dataModel.Code}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PostAsync("datamodels")
+      .WithBody(new { Datasource = datasource, DataModel = dataModel })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<Guid>();
+
+    if (result.IsSuccess)
+      _logger.LogInformation($"{nameof(CreateDataModel)} completed. dataModelId={result.Value}");
+    else
+      _logger.LogWarning($"{nameof(CreateDataModel)} failed. status={result.Status}");
+
+    return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result<DataModelDTO>> UpdateDataModel(Datasource datasource, DataModelDTO dataModel, CancellationToken cancellationToken)
+  {
+    if (dataModel is null)
+      return Result<DataModelDTO>.Invalid(new ValidationError(nameof(dataModel), "DataModel nesmí být null."));
+
+    _logger.LogDebug($"{nameof(UpdateDataModel)} starting. datasource={datasource}, dataModelId={dataModel.Id}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PutAsync($"datamodels/{datasource}/{dataModel.Id}")
+      .WithBody(new { Datasource = datasource, DataModelId = dataModel.Id, DataModel = dataModel })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<DataModelDTO>();
+
+    if (result.IsSuccess)
+      _logger.LogInformation($"{nameof(UpdateDataModel)} completed. dataModelId={dataModel.Id}");
+    else
+      _logger.LogWarning($"{nameof(UpdateDataModel)} failed. status={result.Status}");
+
+    return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result> DeleteDataModel(Datasource datasource, Guid dataModelId, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(DeleteDataModel)} starting. datasource={datasource}, dataModelId={dataModelId}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .DeleteAsync($"datamodels/{datasource}/{dataModelId}")
+      .WithCancellationToken(cancellationToken)
+      .AsResult<object>();
 
     return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));
   }

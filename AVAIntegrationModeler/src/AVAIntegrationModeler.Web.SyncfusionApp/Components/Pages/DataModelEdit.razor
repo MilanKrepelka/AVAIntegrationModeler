@@ -1,0 +1,93 @@
+@page "/datamodeledit/{dataSourceAsString}/{id:guid}"
+@page "/datamodeledit/{dataSourceAsString}"
+@rendermode InteractiveServer
+@using AVAIntegrationModeler.Contracts.DTO
+@using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+@using Microsoft.AspNetCore.Components.Forms
+@using Syncfusion.Blazor.Notifications
+
+<SuccessErrorToast @ref="InfoErrorToast" Title="Datový model"></SuccessErrorToast>
+
+<EditForm Model="_edit" OnValidSubmit="SaveAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="container">
+        <h2>@(IsNew ? "Nový datový model" : "Upravit datový model")</h2>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <SfTextBox CssClass="w-100"
+                           Placeholder="Kód"
+                           FloatLabelType="FloatLabelType.Always"
+                           @bind-Value="_edit.Code">
+                </SfTextBox>
+                <ValidationMessage For="@(() => _edit.Code)" />
+            </div>
+            <div class="col-12 col-md-6">
+                <SfTextBox CssClass="w-100"
+                           Placeholder="ID"
+                           FloatLabelType="FloatLabelType.Always"
+                           @bind-Value="_edit.IdText"
+                           Readonly="true">
+                </SfTextBox>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+            <div class="col-12">
+                <SfTextBox CssClass="w-100"
+                           Placeholder="Název"
+                           FloatLabelType="FloatLabelType.Always"
+                           @bind-Value="_edit.Name">
+                </SfTextBox>
+                <ValidationMessage For="@(() => _edit.Name)" />
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+            <div class="col-12">
+                <SfTextArea CssClass="w-100"
+                            Placeholder="Popis"
+                            FloatLabelType="FloatLabelType.Always"
+                            @bind-Value="_edit.Description"
+                            Rows="3">
+                </SfTextArea>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+            <div class="col-12">
+                <SfTextArea CssClass="w-100"
+                            Placeholder="Poznámky"
+                            FloatLabelType="FloatLabelType.Always"
+                            @bind-Value="_edit.Notes"
+                            Rows="3">
+                </SfTextArea>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+            <div class="col-12">
+                <SfCheckBox @bind-Checked="_edit.IsAggregateRoot" Label="Je agregátním kořenem (Aggregate Root)"></SfCheckBox>
+            </div>
+        </div>
+
+        <div style="margin-top:24px">
+            <SfButton CssClass="e-primary" Type="Submit">Uložit</SfButton>
+            <SfButton CssClass="e-outline" style="margin-left:8px" OnClick="NavigateBack">Zpět</SfButton>
+        </div>
+    </div>
+</EditForm>
+
+@code {
+    Widgets.SuccessErrorToast? InfoErrorToast;
+
+    private async Task ShowToast(bool success, string message)
+    {
+        if (InfoErrorToast != null)
+            await InfoErrorToast.Show(success, message);
+    }
+}
