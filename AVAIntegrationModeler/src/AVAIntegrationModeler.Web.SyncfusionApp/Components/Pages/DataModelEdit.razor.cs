@@ -174,7 +174,11 @@ public partial class DataModelEdit : ComponentBase, IDisposable
     }
   }
 
-  private void NavigateBack() => NavigationManager.NavigateTo($"/datamodels/{_datasource.ToString().ToLower()}");
+  private async Task NavigateBack()
+  {
+    await Task.Yield();
+    NavigationManager.NavigateTo($"/datamodels/{_datasource.ToString().ToLower()}");
+  }
 
   private async Task ShowToastSafe(bool success, string message)
   {

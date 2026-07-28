@@ -160,7 +160,11 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
     }
   }
 
-  private void GoBack() => NavigationManager.NavigateTo($"/datamodelrecords/{_datasource.ToString().ToLower()}");
+  private async Task GoBack()
+  {
+    await Task.Yield();
+    NavigationManager.NavigateTo($"/datamodelrecords/{_datasource.ToString().ToLower()}");
+  }
 
   public void Dispose()
   {
