@@ -51,7 +51,7 @@
     font-weight: bold;
 }
 
-    /* Nebo pro ještì vìtší ikonu */
+    /* Nebo pro jeï¿½tï¿½ vï¿½tï¿½ï¿½ ikonu */
     .nav-item .e-icons.e-large {
         font-weight: bold;
         font-size:1.35rem
@@ -95,6 +95,46 @@
 
 .navbar-toggler:checked ~ .nav-scrollable {
     display: block;
+}
+
+details.nav-item-group {
+    list-style: none;
+}
+
+details.nav-item-group summary {
+    list-style: none;
+    cursor: pointer;
+}
+
+details.nav-item-group summary::-webkit-details-marker {
+    display: none;
+}
+
+.nav-group-summary {
+    display: flex;
+    align-items: center;
+}
+
+.nav-chevron {
+    margin-left: auto;
+    font-size: 1.2rem;
+    line-height: 1;
+    transition: transform 0.2s;
+    display: inline-block;
+}
+
+details[open] .nav-chevron {
+    transform: rotate(90deg);
+}
+
+.nav-submenu {
+    padding-left: 1.5rem;
+}
+
+.nav-sublink {
+    font-size: 0.95rem;
+    height: 2.4rem !important;
+    line-height: 2.4rem !important;
 }
 
 @media (min-width: 641px) {

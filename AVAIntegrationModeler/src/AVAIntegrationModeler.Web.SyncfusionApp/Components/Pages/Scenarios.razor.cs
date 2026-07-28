@@ -15,9 +15,9 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
   [Inject]
   IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
 
-  
   [Inject] private NavigationManager NavigationManager { get; set; } = default!;
 
+  [Parameter] public string? Ds { get; set; }
 
   /// <inheritdoc/>
   public bool IsLoading { get; set; } = false;
@@ -74,17 +74,23 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, 
     }
   }
 
-  protected override async Task OnInitializedAsync()
+  private bool _initialized = false;
+
+  protected override async Task OnParametersSetAsync()
   {
-    await base.OnInitializedAsync();
-    
-    IsLoading = true;
+    var newDs = (Ds ?? "").Equals("avaplace", StringComparison.OrdinalIgnoreCase)
+      ? Contracts.Datasource.AVAPlace
+      : Contracts.Datasource.Database;
+
+    if (_initialized && newDs == Datasource) return;
+
+    _initialized = true;
+    Datasource = newDs;
     await LoadItemsAsync();
-    if (Grid != null)
-    {
-      await Grid.Refresh(true);
-    }
+    if (Grid != null) await Grid.Refresh(true);
   }
+
+  protected override Task OnInitializedAsync() => base.OnInitializedAsync();
     private void AddNewScenario(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {
     NavigationManager.NavigateTo($"/scenarioedit/{this.Datasource}");

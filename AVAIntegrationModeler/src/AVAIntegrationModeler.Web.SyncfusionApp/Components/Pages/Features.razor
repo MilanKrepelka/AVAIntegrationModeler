@@ -1,17 +1,14 @@
 @page "/features"
 @rendermode InteractiveServer
-@using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.DropDowns
 @using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 
-<PageTitle>Integraèní Features</PageTitle>
+<PageTitle>Integraï¿½nï¿½ Features</PageTitle>
 
 <div id="ControlRegion">
-    @* <DataSourceSelector @bind-Selected="SelectedDataSource" OnChanged="@HandleDataSourceChange" LabelText="Zdroj dat:"></DataSourceSelector> *@
-
     <SfGrid ID="Grid" 
         DataSource="@FeaturesList" 
         @ref="Grid"
@@ -31,11 +28,11 @@
         <GridEvents OnToolbarClick="ToolbarClick" TValue="FeatureListViewModel"></GridEvents>
         <GridColumns>
             <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
-            <GridColumn Field=@nameof(FeatureListViewModel.Code) HeaderText="Kód" Width="120"></GridColumn>
-            <GridColumn Field="Name.EnglishValue" HeaderText="Název" Width="200"></GridColumn>
+            <GridColumn Field=@nameof(FeatureListViewModel.Code) HeaderText="Kï¿½d" Width="120"></GridColumn>
+            <GridColumn Field="Name.EnglishValue" HeaderText="Nï¿½zev" Width="200"></GridColumn>
             <GridColumn Field="Description.EnglishValue" HeaderText="Popis" Width="250"></GridColumn>
-            <GridColumn Field=@nameof(FeatureListViewModel.IncludedFeaturesText) HeaderText="Zahrnuté Features" Width="200"></GridColumn>
-            <GridColumn Field=@nameof(FeatureListViewModel.IncludedModelsText) HeaderText="Zahrnuté Modely" Width="200"></GridColumn>
+            <GridColumn Field=@nameof(FeatureListViewModel.IncludedFeaturesText) HeaderText="Zahrnutï¿½ Features" Width="200"></GridColumn>
+            <GridColumn Field=@nameof(FeatureListViewModel.IncludedModelsText) HeaderText="Zahrnutï¿½ Modely" Width="200"></GridColumn>
             <GridColumn Field=@nameof(FeatureListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="250" Visible="false"></GridColumn>
         </GridColumns>
         
@@ -48,8 +45,8 @@
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Kód:</label>
-                                <SfTextBox Value="@feature.Code" Placeholder="Kód feature"></SfTextBox>
+                                <label>Kï¿½d:</label>
+                                <SfTextBox Value="@feature.Code" Placeholder="Kï¿½d feature"></SfTextBox>
                             </div>
                             
                             <div class="form-group">
@@ -60,20 +57,20 @@
                         
                         <div class="form-row">
                             <div class="form-group">
-                                <label>Název (Èesky):</label>
-                                <SfTextBox Value="@feature.Name.CzechValue" Placeholder="Èeský název"></SfTextBox>
+                                <label>Nï¿½zev (ï¿½esky):</label>
+                                <SfTextBox Value="@feature.Name.CzechValue" Placeholder="ï¿½eskï¿½ nï¿½zev"></SfTextBox>
                             </div>
                             
                             <div class="form-group">
-                                <label>Název (English):</label>
+                                <label>Nï¿½zev (English):</label>
                                 <SfTextBox Value="@feature.Name.EnglishValue" Placeholder="English name"></SfTextBox>
                             </div>
                         </div>
                         
                         <div class="form-row">
                             <div class="form-group full-width">
-                                <label>Popis (Èesky):</label>
-                                <SfTextBox @bind-Value="feature.Description.CzechValue" Placeholder="Èeský popis" Multiline="true"></SfTextBox>
+                                <label>Popis (ï¿½esky):</label>
+                                <SfTextBox @bind-Value="feature.Description.CzechValue" Placeholder="ï¿½eskï¿½ popis" Multiline="true"></SfTextBox>
                             </div>
                         </div>
                         
@@ -88,7 +85,7 @@
                         {
                             <div class="form-row">
                                 <div class="form-group full-width">
-                                    <label>Zahrnuté Features:</label>
+                                    <label>Zahrnutï¿½ Features:</label>
                                     <div class="included-items">
                                         @foreach (var includedFeature in feature.IncludedFeatures)
                                         {
@@ -103,7 +100,7 @@
                         {
                             <div class="form-row">
                                 <div class="form-group full-width">
-                                    <label>Zahrnuté Data Modely:</label>
+                                    <label>Zahrnutï¿½ Data Modely:</label>
                                     <div class="included-items">
                                         @foreach (var includedModel in feature.IncludedModels)
                                         {
@@ -131,15 +128,6 @@
         {
             //this.Grid?.ExportToExcelAsync();
         }
-    }
-
-    //private string SelectedDataSource = "Database";
-
-    private async Task HandleDataSourceChange(Contracts.Datasource newValue)
-    {
-        this.Datasource = newValue;
-        await LoadItemsAsync();
-        await Grid!.Refresh();
     }
 
     [Inject] private IJSRuntime JS { get; set; } = default!;

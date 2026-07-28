@@ -1,6 +1,6 @@
 ﻿@page "/datamodels"
+@page "/datamodels/{Ds}"
 @rendermode InteractiveServer
-@using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Inputs
@@ -17,10 +17,13 @@
 
 <div id="ControlRegion">
     <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px">
-        <DataSourceSelector OnChanged="@HandleDataSourceChange" LabelText="Zdroj dat:"></DataSourceSelector>
         <SfButton CssClass="e-primary" IconCss="e-icons e-plus" OnClick="AddNewDataModel">Přidat datový model</SfButton>
     </div>
 
+    @if (IsLoading)
+    {
+        <div class="loading-indicator">Načítám data...</div>
+    }
     <SfGrid ID="Grid"
             DataSource="@DataModelList"
             @ref="Grid"
@@ -100,6 +103,14 @@
                                       OnClick="@(() => ShowModelMap(model!))"
                                       title="Map">
                             </SfButton>
+                            <span style="@(Datasource == Datasource.AVAPlace ? "display:inline-flex" : "display:none")">
+                                <SfButton CssClass="e-small e-round e-outline action-button e-success"
+                                          IconCss="e-icons e-import"
+                                          IsPrimary="false"
+                                          OnClick="@(() => ImportDataModelAsync(model!))"
+                                          title="Importovat do lokální databáze">
+                                </SfButton>
+                            </span>
                             <SfButton CssClass="e-small e-round e-outline action-button e-danger"
                                       IconCss="e-icons e-delete"
                                       IsPrimary="false"
@@ -118,49 +129,49 @@
                     var dataModel = (context as DataModelListViewModel);
                     <div class="detail-form">
                         <h4>@dataModel!.Code</h4>
-                        
+
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Kód:</label>
-                                <SfTextBox Value="@dataModel.Code" Placeholder="Kód modelu" Readonly= "true"></SfTextBox>
+                                <SfTextBox Value="@dataModel.Code" Placeholder="Kód modelu" Readonly="true"></SfTextBox>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label>ID:</label>
                                 <div class="input-with-button">
                                     <SfTextBox Value="@dataModel.Id.ToString()" Readonly="true" CssClass="id-textbox"></SfTextBox>
-                                    <SfButton CssClass="e-small copy-button" 
-                                              IconCss="e-icons e-copy" 
+                                    <SfButton CssClass="e-small copy-button"
+                                              IconCss="e-icons e-copy"
                                               OnClick="@(() => CopyToClipboard(dataModel.Id.ToString()))"
                                               Content="Kopírovat">
                                     </SfButton>
                                 </div>
                             </div>
                         </div>
-                        
+
                         <div class="form-row">
                             <div class="form-group">
                                 <label>Název:</label>
                                 <SfTextBox Value="@dataModel.Name" Placeholder="Název modelu" Readonly="true"></SfTextBox>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label>Agregátní kořen:</label>
-                                <SfCheckBox @bind-Checked="@dataModel.IsAggregateRoot" Label="Je agregátním kořenem" Disabled="true"></SfCheckBox>
+                                <SfCheckBox Checked="@dataModel.IsAggregateRoot" Label="Je agregátním kořenem" Disabled="true"></SfCheckBox>
                             </div>
                         </div>
-                        
+
                         <div class="form-row">
                             <div class="form-group full-width">
                                 <label>Popis:</label>
-                                <SfTextBox @bind-Value="dataModel.Description" Placeholder="Popis modelu" Multiline="true" Readonly="true"></SfTextBox>
+                                <SfTextBox Value="@dataModel.Description" Placeholder="Popis modelu" Multiline="true" Readonly="true"></SfTextBox>
                             </div>
                         </div>
-                        
+
                         <div class="form-row">
                             <div class="form-group full-width">
                                 <label>Poznámky:</label>
-                                <SfTextBox @bind-Value="dataModel.Notes" Placeholder="" Multiline="true" Readonly="true"></SfTextBox>
+                                <SfTextBox Value="@dataModel.Notes" Placeholder="" Multiline="true" Readonly="true"></SfTextBox>
                             </div>
                         </div>
                         
@@ -266,15 +277,6 @@
         {
             //this.Grid?.ExportToExcelAsync();
         }
-    }
-
-    //private string SelectedDataSource = "Database";
-
-    private async Task HandleDataSourceChange(Contracts.Datasource newValue)
-    {
-        this.Datasource = newValue;
-        await LoadItemsAsync();
-        if (Grid != null) await Grid.Refresh();
     }
 
     [Inject] private IJSRuntime JS { get; set; } = default!;

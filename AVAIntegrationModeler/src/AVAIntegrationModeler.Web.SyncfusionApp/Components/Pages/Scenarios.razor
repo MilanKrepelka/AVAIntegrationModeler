@@ -1,6 +1,6 @@
 ﻿@page "/scenarios"
+@page "/scenarios/{Ds}"
 @rendermode @(new InteractiveServerRenderMode(prerender: true))
-@using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Inputs
@@ -12,8 +12,6 @@
 <PageTitle>Integrační scénáře</PageTitle>
 
 <div id="ControlRegion">
-    <DataSourceSelector OnChanged="@HandleDataSourceChange" LabelText="Zdroj dat:"></DataSourceSelector>
-
     <div id="GridContainer">
         <SfGrid ID="Grid" 
             DataSource="@ScenariosList" 
@@ -195,25 +193,6 @@
         if (args.Item.Id == "AddNew")
         {
             //this.Grid?.ExportToExcelAsync();
-        }
-    }
-
-    private async Task HandleDataSourceChange(Contracts.Datasource newValue)
-    {
-        this.IsLoading = true;
-        StateHasChanged();
-
-        try
-        {
-            this.Datasource = newValue;
-            await LoadItemsAsync();
-            if (Grid is not null)
-                await Grid.Refresh();
-        }
-        finally
-        {
-            IsLoading = false;
-            StateHasChanged();
         }
     }
 

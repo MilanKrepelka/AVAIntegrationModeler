@@ -6,40 +6,44 @@ using Microsoft.JSInterop;
 
 namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
 
-public partial class DataModels : ComponentBase
+public partial class DataModels : ComponentBase, IDisposable
 {
+  [Inject] IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
 
-  [Inject]
-  IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
+  [Parameter] public string? Ds { get; set; }
 
-  /// <inheritdoc/>
   public bool IsLoading { get; set; } = false;
-    
-    /// <inheritdoc/>
-    public Datasource Datasource { get; set; } = Datasource.Database;
-    
-    /// <inheritdoc/>
-    public string FilterString { get; set; } = string.Empty;
+  public Datasource Datasource { get; set; } = Datasource.Database;
+  public string FilterString { get; set; } = string.Empty;
+  public List<DataModelListViewModel> DataModelList { get; set; } = new();
 
-    public List<DataModelListViewModel> DataModelList { get; set; } = new();
+  private CancellationTokenSource _cts = new();
 
   protected async Task LoadItemsAsync()
   {
+    // Cancel any in-progress load (previous call or prior datasource switch)
+    _cts.Cancel();
+    _cts.Dispose();
+    _cts = new CancellationTokenSource();
+    var token = _cts.Token;
+
     try
     {
       IsLoading = true;
-      StateHasChanged();
-      DataModelList.Clear();
+      await InvokeAsync(StateHasChanged);
 
-      var dataModelListResponse = await _apiClient.GetDataModels(this.Datasource, CancellationToken.None);
+      var newList = new List<DataModelListViewModel>();
+      var dataModelListResponse = await _apiClient.GetDataModels(this.Datasource, token);
 
       foreach (var dataModel in dataModelListResponse.DataModels)
       {
-        DataModelListViewModel? dataModelListViewModel = Mapping.DataModelMapper.MapToViewModel(dataModel, dataModelListResponse.DataModels);
-        if (dataModelListViewModel != null)
-          DataModelList.Add(dataModelListViewModel);
+        var vm = Mapping.DataModelMapper.MapToViewModel(dataModel, dataModelListResponse.DataModels);
+        if (vm != null) newList.Add(vm);
       }
+
+      DataModelList = newList;
     }
+    catch (OperationCanceledException) { }
     catch (Exception ex)
     {
       Console.WriteLine($"Chyba při načítání datových modelů: {ex.Message}");
@@ -47,18 +51,30 @@ public partial class DataModels : ComponentBase
     }
     finally
     {
-      IsLoading = false;
-      StateHasChanged();
+      if (!token.IsCancellationRequested)
+      {
+        IsLoading = false;
+        await InvokeAsync(StateHasChanged);
+      }
     }
   }
 
-  protected override async Task OnInitializedAsync()
+  private bool _initialized = false;
+
+  protected override async Task OnParametersSetAsync()
   {
-    await base.OnInitializedAsync();
+    var newDs = (Ds ?? "").Equals("avaplace", StringComparison.OrdinalIgnoreCase)
+      ? Contracts.Datasource.AVAPlace
+      : Contracts.Datasource.Database;
+
+    if (_initialized && newDs == Datasource) return;
+
+    _initialized = true;
+    Datasource = newDs;
     await LoadItemsAsync();
-    if (Grid != null)
-      await Grid.Refresh(true);
   }
+
+  protected override Task OnInitializedAsync() => base.OnInitializedAsync();
 
   private void AddNewDataModel()
     => NavigationManager.NavigateTo($"/datamodeledit/{Datasource}");
@@ -78,5 +94,25 @@ public partial class DataModels : ComponentBase
     {
       await ShowToast($"Chyba při mazání: {string.Join(", ", result.Errors)}");
     }
+  }
+
+  private async Task ImportDataModelAsync(DataModelListViewModel model)
+  {
+    var result = await _apiClient.ImportDataModelFromAvaPlace(model.Id, CancellationToken.None);
+    if (result.IsSuccess)
+    {
+      await ShowToast($"Model '{model.Code}' importován do lokální DB. ID: {result.Value.ToString()[..8]}...");
+      await LoadItemsAsync();
+    }
+    else if (result.Status == Ardalis.Result.ResultStatus.NotFound)
+      await ShowToast($"Model '{model.Code}' nebyl nalezen v AVAPlace.");
+    else
+      await ShowToast($"Chyba importu '{model.Code}': {string.Join(", ", result.Errors)}");
+  }
+
+  public void Dispose()
+  {
+    _cts.Cancel();
+    _cts.Dispose();
   }
 }

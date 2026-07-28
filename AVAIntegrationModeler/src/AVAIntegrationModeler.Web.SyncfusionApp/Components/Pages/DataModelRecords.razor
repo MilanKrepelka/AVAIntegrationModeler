@@ -1,0 +1,114 @@
+@page "/datamodelrecords"
+@page "/datamodelrecords/{Ds}"
+@rendermode InteractiveServer
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Notifications
+@using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List
+@using AVAIntegrationModeler.Contracts
+@using AVAIntegrationModeler.Contracts.DTO
+
+<PageTitle>Záznamy datových modelů</PageTitle>
+
+<div id="ControlRegion">
+    <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px; flex-wrap:wrap">
+        <div style="display:flex; align-items:center; gap:8px">
+            <label>Model:</label>
+            <SfDropDownList TItem="DataModelDTO" TValue="Guid?" Placeholder="-- Všechny modely --"
+                            DataSource="@_dataModelList"
+                            Value="@SelectedModelId"
+                            ValueChanged="@HandleModelChange">
+                <DropDownListFieldSettings Value="Id" Text="Code"></DropDownListFieldSettings>
+            </SfDropDownList>
+        </div>
+
+        <SfButton CssClass="e-primary" IconCss="e-icons e-plus" OnClick="AddNewRecord" Disabled="@(SelectedModelId == null)">
+            Přidat záznam
+        </SfButton>
+    </div>
+
+    @if (IsLoading)
+    {
+        <p><em>Načítám...</em></p>
+    }
+    else
+    {
+        <SfGrid ID="RecordsGrid"
+                DataSource="@RecordList"
+                @ref="Grid"
+                EnableAltRow="false"
+                AllowPaging="true"
+                AllowFiltering="true"
+                AllowSorting="true"
+                AllowResizing="true"
+                Toolbar="@(new List<string>() { "Search" })">
+
+            <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
+            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
+            <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
+
+            <GridColumns>
+                <GridColumn Field=@nameof(DataModelRecordListViewModel.ExternalId) HeaderText="External ID" Width="300"></GridColumn>
+                <GridColumn Field=@nameof(DataModelRecordListViewModel.FieldsSummary) HeaderText="Hodnoty polí" Width="400"></GridColumn>
+                <GridColumn Field=@nameof(DataModelRecordListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="100" Visible="false"></GridColumn>
+                <GridColumn HeaderText="Akce" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+                    <Template>
+                        @{
+                            var record = (context as DataModelRecordListViewModel);
+                            <div class="action-buttons">
+                                <SfButton CssClass="e-small e-round e-outline action-button"
+                                          IconCss="e-icons e-edit"
+                                          OnClick="@(() => EditRecord(record!))"
+                                          title="Editovat">
+                                </SfButton>
+                                <SfButton CssClass="e-small e-round e-outline action-button e-danger"
+                                          IconCss="e-icons e-delete"
+                                          OnClick="@(() => DeleteRecordAsync(record!))"
+                                          title="Smazat">
+                                </SfButton>
+                            </div>
+                        }
+                    </Template>
+                </GridColumn>
+            </GridColumns>
+
+            <GridTemplates>
+                <DetailTemplate>
+                    @{
+                        var record = (context as DataModelRecordListViewModel);
+                        <div class="detail-form">
+                            <h4>@record!.ExternalId</h4>
+                            <div class="fields-section">
+                                <div class="fields-grid">
+                                    @foreach (var field in record.Fields)
+                                    {
+                                        <div class="field-card">
+                                            <div class="field-header">
+                                                <strong>@field.Key</strong>
+                                                @if (field.IsLocalized)
+                                                {
+                                                    <span class="field-type-badge">Lokalizované</span>
+                                                }
+                                            </div>
+                                            @if (field.IsLocalized)
+                                            {
+                                                <div class="field-detail"><span class="field-label">CZ:</span> @field.CzechValue</div>
+                                                <div class="field-detail"><span class="field-label">EN:</span> @field.EnglishValue</div>
+                                            }
+                                            else
+                                            {
+                                                <div class="field-detail">@field.StringValue</div>
+                                            }
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </DetailTemplate>
+            </GridTemplates>
+        </SfGrid>
+    }
+</div>
