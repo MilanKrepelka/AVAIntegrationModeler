@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.Web.SyncfusionApp.Extensions;
+using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets;
 using Microsoft.AspNetCore.Components;
 
 namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
@@ -20,6 +20,9 @@ public partial class DataModelEdit : ComponentBase, IDisposable
 
   private Datasource _datasource = Datasource.Database;
   private bool IsNew => id is null || id == Guid.Empty;
+
+  private List<DataModelFieldEditModel> _fields = [];
+  private List<DataModelSummaryDTO> _availableModels = [];
 
   private class DataModelEditModel
   {
@@ -55,16 +58,19 @@ public partial class DataModelEdit : ComponentBase, IDisposable
       ds = Datasource.Database;
     _datasource = ds;
 
+    var token = _cts?.Token ?? CancellationToken.None;
+
     if (IsNew)
     {
       var newId = Guid.NewGuid();
       _edit = new DataModelEditModel { Id = newId, IdText = newId.ToString() };
+      _fields = [];
     }
     else
     {
       try
       {
-        var dto = await _apiClient.GetDataModel(_datasource, id!.Value, _cts?.Token ?? CancellationToken.None);
+        var dto = await _apiClient.GetDataModel(_datasource, id!.Value, token);
         _edit = new DataModelEditModel
         {
           Id = dto.Id,
@@ -75,10 +81,33 @@ public partial class DataModelEdit : ComponentBase, IDisposable
           Notes = dto.Notes,
           IsAggregateRoot = dto.IsAggregateRoot
         };
+        _fields = dto.Fields.Select(f => new DataModelFieldEditModel
+        {
+          Id = f.Id,
+          Name = f.Name,
+          Label = f.Label,
+          Description = f.Description,
+          FieldType = f.FieldType,
+          IsPublishedForLookup = f.IsPublishedForLookup,
+          IsCollection = f.IsCollection,
+          IsLocalized = f.IsLocalized,
+          IsNullable = f.IsNullable,
+          ReferencedEntityTypeIds = [.. f.ReferencedEntityTypeIds]
+        }).ToList();
       }
       catch (OperationCanceledException) { }
       catch (Exception ex) { Console.WriteLine($"Error loading DataModel: {ex.Message}"); }
     }
+
+    try
+    {
+      var modelsResponse = await _apiClient.GetDataModels(Datasource.Database, token);
+      _availableModels = modelsResponse.DataModels
+        .Select(m => new DataModelSummaryDTO { Id = m.Id, Code = m.Code, Name = m.Name })
+        .OrderBy(m => m.Code)
+        .ToList();
+    }
+    catch (Exception ex) { Console.WriteLine($"Error loading available models: {ex.Message}"); }
   }
 
   private async Task SaveAsync()
@@ -93,7 +122,19 @@ public partial class DataModelEdit : ComponentBase, IDisposable
       Description = _edit.Description,
       Notes = _edit.Notes,
       IsAggregateRoot = _edit.IsAggregateRoot,
-      Fields = []
+      Fields = _fields.Select(f => new DataModelFieldDTO
+      {
+        Id = f.Id,
+        Name = f.Name,
+        Label = f.Label,
+        Description = f.Description,
+        FieldType = f.FieldType,
+        IsPublishedForLookup = f.IsPublishedForLookup,
+        IsCollection = f.IsCollection,
+        IsLocalized = f.IsLocalized,
+        IsNullable = f.IsNullable,
+        ReferencedEntityTypeIds = [.. f.ReferencedEntityTypeIds]
+      }).ToList()
     };
 
     try
@@ -103,7 +144,7 @@ public partial class DataModelEdit : ComponentBase, IDisposable
         var result = await _apiClient.CreateDataModel(_datasource, dto, _cts?.Token ?? CancellationToken.None);
         if (result.IsSuccess)
         {
-          NavigationManager.NavigateTo("/datamodels");
+          NavigationManager.NavigateTo($"/datamodels/{_datasource.ToString().ToLower()}");
         }
         else
         {
@@ -118,7 +159,7 @@ public partial class DataModelEdit : ComponentBase, IDisposable
         var result = await _apiClient.UpdateDataModel(_datasource, dto, _cts?.Token ?? CancellationToken.None);
         if (result.IsSuccess)
         {
-          NavigationManager.NavigateTo("/datamodels");
+          NavigationManager.NavigateTo($"/datamodels/{_datasource.ToString().ToLower()}");
         }
         else
         {
@@ -137,7 +178,7 @@ public partial class DataModelEdit : ComponentBase, IDisposable
     }
   }
 
-  private void NavigateBack() => NavigationManager.NavigateTo("/datamodels");
+  private void NavigateBack() => NavigationManager.NavigateTo($"/datamodels/{_datasource.ToString().ToLower()}");
 
   private async Task ShowToastSafe(bool success, string message)
   {
