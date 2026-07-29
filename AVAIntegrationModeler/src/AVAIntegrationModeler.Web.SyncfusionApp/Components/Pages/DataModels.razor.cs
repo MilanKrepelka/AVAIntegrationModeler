@@ -63,7 +63,7 @@ public partial class DataModels : ComponentBase, IDisposable
     await LoadItemsAsync();
   }
 
-  private void AddNewDataModel()
+  private void AddNewDataModel(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     => NavigationManager.NavigateTo($"/datamodeledit/{Datasource}");
 
   private async Task DeleteDataModelAsync(DataModelListViewModel model)

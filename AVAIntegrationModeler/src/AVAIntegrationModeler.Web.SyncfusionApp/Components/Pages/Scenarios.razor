@@ -13,18 +13,16 @@
 
 <div id="ControlRegion">
     <div id="GridContainer">
-        <SfGrid ID="Grid" 
-            DataSource="@ScenariosList" 
+        <SfGrid ID="Grid"
+            DataSource="@ScenariosList"
             @ref="Grid"
             EnableAltRow="false"
             AllowPaging="true"
             AllowFiltering="true"
             AllowSorting="true"
             AllowResizing="true"
-            AllowSelection="true"
-            
-            Toolbar="@ToolbarItems"
-            >
+            AllowSelection="true">
+
             <Syncfusion.Blazor.Navigations.SfToolbar>
                 <Syncfusion.Blazor.Navigations.ToolbarItems>
                     <Syncfusion.Blazor.Navigations.ToolbarItem Text="Přidat scénář" PrefixIcon="e-icons e-add" Id="AddNew" OnClick="AddNewScenario"></Syncfusion.Blazor.Navigations.ToolbarItem>
@@ -41,8 +39,6 @@
             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple" 
                                    Mode="Syncfusion.Blazor.Grids.SelectionMode.Row">
             </GridSelectionSettings>
-            <GridEvents OnToolbarClick="ToolbarClick" TValue="ScenarioListViewModel"></GridEvents>
-            
             <GridColumns>
                 <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
                 <GridColumn Field=@nameof(ScenarioListViewModel.Code) HeaderText="Kód" Width="120"></GridColumn>
@@ -176,25 +172,8 @@
 
 @code
 {
-    List<object> ToolbarItems = new()
-    {
-        new { Text = "Přidat", PrefixIcon = "e-icons e-add", Id = "AddNew" },
-        new { Text = "Přidat", PrefixIcon = "e-icons e-add", Id = "AddNew2" }
-    };
-
-   
-
-    
     SfGrid<ScenarioListViewModel>? Grid;
     SfToast? ToastObj;
-
-    public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
-    {
-        if (args.Item.Id == "AddNew")
-        {
-            //this.Grid?.ExportToExcelAsync();
-        }
-    }
 
     [Inject] private IJSRuntime JS { get; set; } = default!;
 

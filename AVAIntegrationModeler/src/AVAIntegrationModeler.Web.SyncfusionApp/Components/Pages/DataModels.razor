@@ -16,7 +16,6 @@
 
 <div id="ControlRegion">
     <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px">
-        <SfButton CssClass="e-primary" IconCss="e-icons e-plus" OnClick="AddNewDataModel">Přidat datový model</SfButton>
         <SfButton CssClass="e-outline" IconCss="e-icons e-export" Type="Button" OnClick="ExportAsync">Export</SfButton>
     </div>
 
@@ -34,6 +33,12 @@
             AllowResizing="true"
             AllowSelection="true"
             Toolbar="@(new List<string>() { "Search" })">
+
+        <Syncfusion.Blazor.Navigations.SfToolbar>
+            <Syncfusion.Blazor.Navigations.ToolbarItems>
+                <Syncfusion.Blazor.Navigations.ToolbarItem Text="Přidat datový model" PrefixIcon="e-icons e-add" Id="AddNewDataModel" OnClick="AddNewDataModel"></Syncfusion.Blazor.Navigations.ToolbarItem>
+            </Syncfusion.Blazor.Navigations.ToolbarItems>
+        </Syncfusion.Blazor.Navigations.SfToolbar>
 
         <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
         <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Grids.EditMode.Normal"></GridEditSettings>

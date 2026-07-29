@@ -184,6 +184,29 @@ Složka `Components/Pages/ComponentsSyncfusion/` (~40 souborů) je **pouze refer
 
 **`SuccessErrorToast`** (widget) — **NEPOUŽÍVAT na edit formulářích.** `SfToast` způsobuje `removeChild` crash při navigaci pryč ze stránky. Místo toho použít inline Bootstrap alert (`_saveMessage` / `_saveSuccess` state + `<div class="alert alert-success/danger">`), viz `DataModelRecordEdit.razor`.
 
+### Tlačítko „Přidat" v toolbaru SfGrid
+
+Akce vytvoření nového záznamu **patří dovnitř toolbaru SfGrid** jako `ToolbarItem`, ne jako samostatné `SfButton` mimo grid. Všechny list stránky s odpovídající edit stránkou tento vzor dodržují (Areas, Scenarios, DataModels).
+
+```razor
+<SfGrid ...>
+    <Syncfusion.Blazor.Navigations.SfToolbar>
+        <Syncfusion.Blazor.Navigations.ToolbarItems>
+            <Syncfusion.Blazor.Navigations.ToolbarItem
+                Text="Přidat oblast"
+                PrefixIcon="e-icons e-add"
+                Id="AddNew"
+                OnClick="AddNew">
+            </Syncfusion.Blazor.Navigations.ToolbarItem>
+        </Syncfusion.Blazor.Navigations.ToolbarItems>
+    </Syncfusion.Blazor.Navigations.SfToolbar>
+    ...
+</SfGrid>
+```
+
+Handler musí mít signaturu `void Handler(Syncfusion.Blazor.Navigations.ClickEventArgs args)`.  
+Výjimky, kde tlačítko může zůstat vně: kontextové akce závislé na výběru (např. DataModelRecords — "Přidat záznam" závisí na vybraném modelu).
+
 ### Vzor pro list stránky (SfGrid + načítání dat)
 
 **Rendermode**: List stránky s `SfGrid` používají `@rendermode InteractiveServer` (bez prerender). **Nepoužívat `InteractiveServerRenderMode(prerender: true)` na list stránkách** — kombinace prerender + `OnInitializedAsync` způsobuje dvojitou inicializaci a SfGrid nedetekuje změnu dat při navigaci zpět.
