@@ -83,7 +83,17 @@ public partial class DataModels : ComponentBase, IDisposable
     }
   }
 
-public void Dispose()
+  private async Task ExportAsync()
+  {
+    if (Grid is null) return;
+    var selected = await Grid.GetSelectedRecordsAsync();
+    if (!selected.Any()) return;
+    var ids = selected.Select(r => r.Id).ToList();
+    var bytes = await _apiClient.ExportDataModels(Datasource, ids, CancellationToken.None);
+    await JS.InvokeVoidAsync("downloadFile", "export.zip", "application/zip", bytes);
+  }
+
+  public void Dispose()
   {
     _cts.Cancel();
     _cts.Dispose();

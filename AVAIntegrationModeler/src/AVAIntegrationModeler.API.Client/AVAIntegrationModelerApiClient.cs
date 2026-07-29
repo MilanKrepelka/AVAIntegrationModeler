@@ -395,6 +395,18 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
   }
 
   /// <inheritdoc/>
+  public async Task<byte[]> ExportDataModels(Datasource datasource, List<Guid> modelIds, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(ExportDataModels)} starting. datasource={datasource}, count={modelIds?.Count}");
+    var response = await _httpClient.PostAsJsonAsync(
+      "datamodels/export",
+      new { Datasource = datasource, ModelIds = modelIds },
+      cancellationToken);
+    response.EnsureSuccessStatusCode();
+    return await response.Content.ReadAsByteArrayAsync(cancellationToken);
+  }
+
+  /// <inheritdoc/>
   public async Task<Result> DeleteDataModel(Datasource datasource, Guid dataModelId, CancellationToken cancellationToken)
   {
     _logger.LogDebug($"{nameof(DeleteDataModel)} starting. datasource={datasource}, dataModelId={dataModelId}");

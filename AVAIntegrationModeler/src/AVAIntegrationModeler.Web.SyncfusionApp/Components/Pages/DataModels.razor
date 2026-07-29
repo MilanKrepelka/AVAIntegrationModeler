@@ -17,6 +17,7 @@
 <div id="ControlRegion">
     <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px">
         <SfButton CssClass="e-primary" IconCss="e-icons e-plus" OnClick="AddNewDataModel">Přidat datový model</SfButton>
+        <SfButton CssClass="e-outline" IconCss="e-icons e-export" Type="Button" OnClick="ExportAsync">Export</SfButton>
     </div>
 
     @if (IsLoading)
