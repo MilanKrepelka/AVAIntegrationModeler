@@ -1,0 +1,100 @@
+@page "/datamodelrecordedit/{dataSourceAsString}/{modelId:guid}/{recordId:guid}"
+@page "/datamodelrecordedit/{dataSourceAsString}/{modelId:guid}"
+@rendermode InteractiveServer
+@using AVAIntegrationModeler.Contracts.DTO
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+@using Microsoft.AspNetCore.Components.Forms
+
+<EditForm Model="_edit" OnValidSubmit="SaveAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="container">
+        <h2>@(IsCreate ? "Nový záznam" : "Upravit záznam")</h2>
+
+        <div class="row" style="margin-bottom:16px">
+            <div class="col-12 col-md-8">
+                <SfTextBox CssClass="w-100"
+                           Placeholder="External ID"
+                           FloatLabelType="FloatLabelType.Always"
+                           @bind-Value="_edit.ExternalId">
+                </SfTextBox>
+            </div>
+        </div>
+
+        @if (_dataModel is not null && _dataModel.Fields.Any())
+        {
+            <h4 style="margin-top:16px">Pole záznamu</h4>
+
+            @foreach (var field in _dataModel.Fields)
+            {
+                var key = field.Name;
+                if (!_fieldValues.ContainsKey(key)) continue;
+                var fv = _fieldValues[key];
+
+                <div class="row" style="margin-bottom:12px">
+                    <div class="col-12">
+                        <strong>@field.Label (@field.Name)</strong>
+                        @if (!string.IsNullOrEmpty(field.Description))
+                        {
+                            <small class="text-muted"> — @field.Description</small>
+                        }
+                    </div>
+                    @if (field.IsLocalized)
+                    {
+                        <div class="col-12 col-md-6" style="margin-top:4px">
+                            <SfTextBox CssClass="w-100"
+                                       Placeholder="Česky"
+                                       FloatLabelType="FloatLabelType.Always"
+                                       Value="@fv.CzechValue"
+                                       ValueChanged="@((string v) => fv.CzechValue = v)">
+                            </SfTextBox>
+                        </div>
+                        <div class="col-12 col-md-6" style="margin-top:4px">
+                            <SfTextBox CssClass="w-100"
+                                       Placeholder="English"
+                                       FloatLabelType="FloatLabelType.Always"
+                                       Value="@fv.EnglishValue"
+                                       ValueChanged="@((string v) => fv.EnglishValue = v)">
+                            </SfTextBox>
+                        </div>
+                    }
+                    else
+                    {
+                        <div class="col-12 col-md-6" style="margin-top:4px">
+                            <SfTextBox CssClass="w-100"
+                                       Placeholder="@field.Label"
+                                       FloatLabelType="FloatLabelType.Always"
+                                       Value="@fv.StringValue"
+                                       ValueChanged="@((string v) => fv.StringValue = v)">
+                            </SfTextBox>
+                        </div>
+                    }
+                </div>
+            }
+        }
+        else if (IsLoading)
+        {
+            <p><em>Načítám schéma modelu...</em></p>
+        }
+        else
+        {
+            <p class="text-muted">Tento datový model nemá definovaná žádná pole.</p>
+        }
+
+        @if (_saveMessage is not null)
+        {
+            <div class="alert @(_saveSuccess ? "alert-success" : "alert-danger")" style="margin-top:16px">
+                @_saveMessage
+            </div>
+        }
+
+        <div style="margin-top:16px; display:flex; gap:8px">
+            <SfButton CssClass="e-primary" HtmlAttributes="@(new Dictionary<string, object> { { "type", "submit" } })">
+                Uložit
+            </SfButton>
+            <SfButton CssClass="e-outline" Type="Button" OnClick="GoBack">Zpět</SfButton>
+        </div>
+    </div>
+</EditForm>

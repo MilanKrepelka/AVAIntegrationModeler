@@ -27,6 +27,13 @@
         <SfButton CssClass="e-primary" IconCss="e-icons e-plus" OnClick="AddNewRecord" Disabled="@(SelectedModelId == null)">
             Přidat záznam
         </SfButton>
+
+        @if (Datasource == Datasource.Database)
+        {
+            <SfButton CssClass="e-outline" IconCss="e-icons e-export" Type="Button" OnClick="ExportAsync">
+                Export
+            </SfButton>
+        }
     </div>
 
     @if (IsLoading)
@@ -48,8 +55,10 @@
             <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
             <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
+            <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple" Mode="Syncfusion.Blazor.Grids.SelectionMode.Row" />
 
             <GridColumns>
+                <GridColumn Type="Syncfusion.Blazor.Grids.ColumnType.CheckBox" Width="50"></GridColumn>
                 <GridColumn Field=@nameof(DataModelRecordListViewModel.ExternalId) HeaderText="External ID" Width="300"></GridColumn>
                 <GridColumn Field=@nameof(DataModelRecordListViewModel.FieldsSummary) HeaderText="Hodnoty polí" Width="400"></GridColumn>
                 <GridColumn Field=@nameof(DataModelRecordListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="100" Visible="false"></GridColumn>

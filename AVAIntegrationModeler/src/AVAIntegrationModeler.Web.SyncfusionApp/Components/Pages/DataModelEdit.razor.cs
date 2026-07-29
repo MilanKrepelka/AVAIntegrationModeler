@@ -142,66 +142,34 @@ public partial class DataModelEdit : ComponentBase, IDisposable
       if (IsNew)
       {
         var result = await _apiClient.CreateDataModel(_datasource, dto, _cts?.Token ?? CancellationToken.None);
-        if (result.IsSuccess)
-          await ShowToastSafe(true, "Datový model byl úspěšně vytvořen.");
-        else
-        {
-          var msg = result.Status == Ardalis.Result.ResultStatus.Invalid
-            ? string.Join(", ", result.ValidationErrors.Select(e => e.ErrorMessage))
-            : string.Join(", ", result.Errors);
-          await ShowToastSafe(false, $"Chyba při vytváření: {msg}");
-        }
+        if (!result.IsSuccess)
+          Console.WriteLine($"CreateDataModel error: {string.Join(", ", result.Errors)}");
       }
       else
       {
         var result = await _apiClient.UpdateDataModel(_datasource, dto, _cts?.Token ?? CancellationToken.None);
-        if (result.IsSuccess)
-          await ShowToastSafe(true, "Datový model byl úspěšně uložen.");
-        else
-        {
-          var msg = result.Status == Ardalis.Result.ResultStatus.Invalid
-            ? string.Join(", ", result.ValidationErrors.Select(e => e.ErrorMessage))
-            : string.Join(", ", result.Errors);
-          await ShowToastSafe(false, $"Chyba při ukládání: {msg}");
-        }
+        if (!result.IsSuccess)
+          Console.WriteLine($"UpdateDataModel error: {string.Join(", ", result.Errors)}");
       }
     }
     catch (OperationCanceledException) { }
     catch (Exception ex)
     {
       Console.WriteLine($"Error in SaveAsync: {ex.Message}");
-      await ShowToastSafe(false, "Došlo k neočekávané chybě.");
     }
   }
 
-  private async Task NavigateBack()
+  private void NavigateBack()
   {
-    await Task.Yield();
     NavigationManager.NavigateTo($"/datamodels/{_datasource.ToString().ToLower()}");
-  }
-
-  private async Task ShowToastSafe(bool success, string message)
-  {
-    if (_disposed || _cts?.Token.IsCancellationRequested == true) return;
-    try
-    {
-      await InvokeAsync(async () =>
-      {
-        if (!_disposed)
-          await ShowToast(success, message);
-      });
-    }
-    catch (Exception ex) { Console.WriteLine($"Toast error: {ex.Message}"); }
   }
 
   public void Dispose()
   {
-    if (!_disposed)
-    {
-      _disposed = true;
-      _cts?.Cancel();
-      _cts?.Dispose();
-      _cts = null;
-    }
+    if (_disposed) return;
+    _disposed = true;
+    _cts?.Cancel();
+    _cts?.Dispose();
+    _cts = null;
   }
 }

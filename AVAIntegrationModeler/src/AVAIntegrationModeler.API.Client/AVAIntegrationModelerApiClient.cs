@@ -406,4 +406,103 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
 
     return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));
   }
+
+  /// <inheritdoc/>
+  public async Task<DataModelRecordListResponse> GetDataModelRecords(Datasource datasource, Guid? modelId, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(GetDataModelRecords)} starting. datasource={datasource}, modelId={modelId}");
+    var fluent = new FluentClient(_httpClient);
+    var request = fluent.GetAsync("datamodelrecords").WithArgument("datasource", datasource);
+    if (modelId.HasValue) request = request.WithArgument("modelId", modelId.Value);
+    var response = await request.WithCancellationToken(cancellationToken).As<DataModelRecordListResponse>();
+    return response ?? new DataModelRecordListResponse();
+  }
+
+  /// <inheritdoc/>
+  public async Task<DataModelRecordDTO> GetDataModelRecord(Datasource datasource, Guid recordId, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(GetDataModelRecord)} starting. datasource={datasource}, recordId={recordId}");
+    var fluent = new FluentClient(_httpClient);
+    var response = await fluent
+      .GetAsync($"datamodelrecords/{datasource}/{recordId}/detail")
+      .WithCancellationToken(cancellationToken)
+      .As<DataModelRecordDTO>();
+    return response ?? new DataModelRecordDTO();
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result<Guid>> CreateDataModelRecord(Datasource datasource, DataModelRecordDTO record, CancellationToken cancellationToken)
+  {
+    if (record is null)
+      return Result<Guid>.Invalid(new ValidationError(nameof(record), "Record nesmí být null."));
+    _logger.LogDebug($"{nameof(CreateDataModelRecord)} starting. datasource={datasource}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PostAsync("datamodelrecords")
+      .WithBody(new { Datasource = datasource, Record = record })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<Guid>();
+    return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result<Guid>> UpdateDataModelRecord(Datasource datasource, DataModelRecordDTO record, CancellationToken cancellationToken)
+  {
+    if (record is null)
+      return Result<Guid>.Invalid(new ValidationError(nameof(record), "Record nesmí být null."));
+    _logger.LogDebug($"{nameof(UpdateDataModelRecord)} starting. datasource={datasource}, recordId={record.Id}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PutAsync($"datamodelrecords/{datasource}/{record.Id}")
+      .WithBody(new { Datasource = datasource, RecordId = record.Id, Record = record })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<Guid>();
+    return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<byte[]> ExportDataModelRecords(Datasource datasource, List<Guid> recordIds, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(ExportDataModelRecords)} starting. datasource={datasource}, count={recordIds?.Count}");
+    var response = await _httpClient.PostAsJsonAsync(
+      "datamodelrecords/export",
+      new { Datasource = datasource, RecordIds = recordIds },
+      cancellationToken);
+    response.EnsureSuccessStatusCode();
+    return await response.Content.ReadAsByteArrayAsync(cancellationToken);
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result> DeleteDataModelRecord(Datasource datasource, Guid recordId, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(DeleteDataModelRecord)} starting. datasource={datasource}, recordId={recordId}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .DeleteAsync($"datamodelrecords/{datasource}/{recordId}")
+      .WithCancellationToken(cancellationToken)
+      .AsResult<object>();
+    return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result<Guid>> ImportDataModelFromAvaPlace(Guid avaPlaceModelId, CancellationToken cancellationToken)
+  {
+    if (avaPlaceModelId == Guid.Empty)
+      return Result<Guid>.Invalid(new ValidationError(nameof(avaPlaceModelId), "AvaPlaceModelId nesmí být prázdný."));
+
+    _logger.LogDebug($"{nameof(ImportDataModelFromAvaPlace)} starting. avaPlaceModelId={avaPlaceModelId}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PostAsync(ImportDataModelFromAvaPlaceRequest.Route)
+      .WithBody(new { AvaPlaceModelId = avaPlaceModelId })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<Guid>();
+
+    if (result.IsSuccess)
+      _logger.LogInformation($"{nameof(ImportDataModelFromAvaPlace)} completed. avaPlaceModelId={avaPlaceModelId}, localModelId={result.Value}");
+    else
+      _logger.LogWarning($"{nameof(ImportDataModelFromAvaPlace)} failed. avaPlaceModelId={avaPlaceModelId}, status={result.Status}");
+
+    return result;
+  }
 }

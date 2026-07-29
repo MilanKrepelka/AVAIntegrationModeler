@@ -83,4 +83,20 @@ public interface IAVAIntegrationModelerApiClient
   Task<Result<Guid>> CreateDataModel(Datasource datasource, DataModelDTO dataModel, CancellationToken cancellationToken);
   Task<Result<DataModelDTO>> UpdateDataModel(Datasource datasource, DataModelDTO dataModel, CancellationToken cancellationToken);
   Task<Result> DeleteDataModel(Datasource datasource, Guid dataModelId, CancellationToken cancellationToken);
+
+  Task<DataModelRecordListResponse> GetDataModelRecords(Datasource datasource, Guid? modelId, CancellationToken cancellationToken);
+  Task<DataModelRecordDTO> GetDataModelRecord(Datasource datasource, Guid recordId, CancellationToken cancellationToken);
+  Task<Result<Guid>> CreateDataModelRecord(Datasource datasource, DataModelRecordDTO record, CancellationToken cancellationToken);
+  Task<Result<Guid>> UpdateDataModelRecord(Datasource datasource, DataModelRecordDTO record, CancellationToken cancellationToken);
+  Task<Result> DeleteDataModelRecord(Datasource datasource, Guid recordId, CancellationToken cancellationToken);
+  Task<byte[]> ExportDataModelRecords(Datasource datasource, List<Guid> recordIds, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Importuje datový model z AVAPlace do lokální databáze.
+  /// Pokud model se stejným kódem již existuje, provede aktualizaci (upsert).
+  /// </summary>
+  /// <param name="avaPlaceModelId">Identifikátor datového modelu v AVAPlace.</param>
+  /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+  /// <returns>Identifikátor importovaného modelu v lokální databázi.</returns>
+  Task<Result<Guid>> ImportDataModelFromAvaPlace(Guid avaPlaceModelId, CancellationToken cancellationToken);
 }

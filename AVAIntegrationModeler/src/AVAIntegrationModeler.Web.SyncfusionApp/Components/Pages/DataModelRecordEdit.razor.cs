@@ -3,7 +3,6 @@ using Ardalis.Result;
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets;
 using Microsoft.AspNetCore.Components;
 
 namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
@@ -20,10 +19,11 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
   [Parameter] public Guid modelId { get; set; }
   [Parameter] public Guid recordId { get; set; }
 
-  private SuccessErrorToast? _toast;
   private Datasource _datasource;
   private DataModelDTO? _dataModel;
   private DataModelRecordDTO? _existingRecord;
+  private string? _saveMessage;
+  private bool _saveSuccess;
 
   public bool IsLoading { get; set; } = true;
   public bool IsCreate => recordId == Guid.Empty;
@@ -141,39 +141,37 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
 
       if (result.IsSuccess)
       {
-        if (_toast != null) await _toast.Show(true, $"Záznam byl v pořádku {(IsCreate ? "vytvořen" : "uložen")}.");
+        _saveSuccess = true;
+        _saveMessage = $"Záznam byl v pořádku {(IsCreate ? "vytvořen" : "uložen")}.";
       }
       else
       {
-        var msg = result.IsInvalid()
+        _saveSuccess = false;
+        _saveMessage = result.IsInvalid()
           ? string.Join(", ", result.ValidationErrors.Select(e => e.ErrorMessage))
           : string.Join(", ", result.Errors);
-        if (_toast != null) await _toast.Show(false, $"Chyba: {msg}");
       }
     }
     catch (OperationCanceledException) { }
     catch (Exception ex)
     {
-      if (!_disposed && _toast != null)
-        await _toast.Show(false, "Došlo k neočekávané chybě.");
+      _saveSuccess = false;
+      _saveMessage = "Došlo k neočekávané chybě.";
       Console.WriteLine($"SaveAsync error: {ex.Message}");
     }
   }
 
-  private async Task GoBack()
+  private void GoBack()
   {
-    await Task.Yield();
     NavigationManager.NavigateTo($"/datamodelrecords/{_datasource.ToString().ToLower()}");
   }
 
   public void Dispose()
   {
-    if (!_disposed)
-    {
-      _disposed = true;
-      _cts?.Cancel();
-      _cts?.Dispose();
-      _cts = null;
-    }
+    if (_disposed) return;
+    _disposed = true;
+    _cts?.Cancel();
+    _cts?.Dispose();
+    _cts = null;
   }
 }

@@ -25,4 +25,10 @@ public partial class SuccessErrorToast
   {
     await this.ShowToast(Success, Message);
   }
+
+  public async Task Hide()
+  {
+    if (ToastWidget != default)
+      await ToastWidget.HideAsync();
+  }
 }

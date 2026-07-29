@@ -86,4 +86,14 @@ public partial class DataModelRecords : ComponentBase
     await LoadRecordsAsync();
     if (Grid != null) await Grid.Refresh();
   }
+
+  private async Task ExportAsync()
+  {
+    if (Grid is null) return;
+    var selected = await Grid.GetSelectedRecordsAsync();
+    if (!selected.Any()) return;
+    var ids = selected.Select(r => r.Id).ToList();
+    var bytes = await _apiClient.ExportDataModelRecords(Datasource, ids, CancellationToken.None);
+    await JS.InvokeVoidAsync("downloadFile", "export.zip", "application/zip", bytes);
+  }
 }
