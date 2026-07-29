@@ -5,6 +5,7 @@
 @using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.DropDowns
 @using Microsoft.AspNetCore.Components.Forms
 
 <EditForm Model="_edit" OnValidSubmit="SaveAsync">
@@ -69,6 +70,20 @@
         <div class="row" style="margin-top:16px">
             <div class="col-12">
                 <SfCheckBox @bind-Checked="_edit.IsAggregateRoot" Label="Je agregátním kořenem (Aggregate Root)"></SfCheckBox>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+            <div class="col-12 col-md-6">
+                <SfDropDownList TItem="AreaDTO" TValue="Guid?"
+                                DataSource="@_availableAreas"
+                                @bind-Value="_edit.AreaId"
+                                Placeholder="Oblast (nepovinná)"
+                                FloatLabelType="FloatLabelType.Always"
+                                ShowClearButton="true"
+                                CssClass="w-100">
+                    <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
+                </SfDropDownList>
             </div>
         </div>
 

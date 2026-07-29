@@ -1,5 +1,6 @@
 ﻿using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -33,9 +34,17 @@ public partial class DataModels : ComponentBase, IDisposable
       var newList = new List<DataModelListViewModel>();
       var dataModelListResponse = await _apiClient.GetDataModels(this.Datasource, token);
 
+      List<AreaDTO> areas = [];
+      try
+      {
+        var areasResponse = await _apiClient.GetAreas(Datasource.Database, token);
+        areas = areasResponse?.Areas ?? [];
+      }
+      catch { }
+
       foreach (var dataModel in dataModelListResponse.DataModels)
       {
-        var vm = Mapping.DataModelMapper.MapToViewModel(dataModel, dataModelListResponse.DataModels);
+        var vm = Mapping.DataModelMapper.MapToViewModel(dataModel, dataModelListResponse.DataModels, areas);
         if (vm != null) newList.Add(vm);
       }
 

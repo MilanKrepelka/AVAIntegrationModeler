@@ -58,6 +58,11 @@ public class DataModelListViewModel
   public Guid? AreaId { get; set; }
 
   /// <summary>
+  /// Název oblasti, ke které datový model patří. Prázdný řetězec, pokud oblast není přiřazena.
+  /// </summary>
+  public string AreaName { get; set; } = string.Empty;
+
+  /// <summary>
   /// <see cref="DataModelDTO.Fields"/>
   /// </summary>
   public List<DataModelFieldListViewModel> Fields { get; set; } = [];

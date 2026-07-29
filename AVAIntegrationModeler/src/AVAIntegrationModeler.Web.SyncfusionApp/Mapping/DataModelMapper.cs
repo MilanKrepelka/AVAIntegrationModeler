@@ -14,10 +14,15 @@ public static class DataModelMapper
   /// </summary>
   /// <param name="dto">DTO datového modelu k namapování.</param>
   /// <param name="dataModels">Seznam všech datových modelů pro mapování referencí.</param>
+  /// <param name="areas">Seznam oblastí pro překlad AreaId na název. Může být null nebo prázdný.</param>
   /// <returns>ViewModel datového modelu.</returns>
-  public static DataModelListViewModel MapToViewModel(DataModelDTO dto, IEnumerable<DataModelDTO> dataModels)
+  public static DataModelListViewModel MapToViewModel(DataModelDTO dto, IEnumerable<DataModelDTO> dataModels, IEnumerable<AreaDTO>? areas = null)
   {
     Guard.Against.Null(dto, $"{nameof(DataModelMapper)} - {nameof(dto)}");
+
+    var areaName = dto.AreaId.HasValue
+      ? areas?.FirstOrDefault(a => a.Id == dto.AreaId)?.Name ?? string.Empty
+      : string.Empty;
 
     return new DataModelListViewModel
     {
@@ -28,6 +33,7 @@ public static class DataModelMapper
       Notes = dto.Notes,
       IsAggregateRoot = dto.IsAggregateRoot,
       AreaId = dto.AreaId,
+      AreaName = areaName,
       Fields = dto.Fields.Select(field => MapFieldToViewModel(field, dataModels)).ToList()
     };
   }

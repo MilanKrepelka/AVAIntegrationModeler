@@ -30,6 +30,8 @@ public class CreateDataModelHandler(IRepository<DataModel> repository, IDataMode
         dataModel.MarkAsAggregateRoot();
       else
         dataModel.MarkAsNestedEntity();
+
+      dataModel.SetArea(request.DataModel.AreaId);
     }
     catch (ArgumentException ex)
     {

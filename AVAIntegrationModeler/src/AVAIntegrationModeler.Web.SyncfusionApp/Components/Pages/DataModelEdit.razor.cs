@@ -23,6 +23,7 @@ public partial class DataModelEdit : ComponentBase, IDisposable
 
   private List<DataModelFieldEditModel> _fields = [];
   private List<DataModelSummaryDTO> _availableModels = [];
+  private List<AreaDTO> _availableAreas = [];
 
   private class DataModelEditModel
   {
@@ -44,6 +45,8 @@ public partial class DataModelEdit : ComponentBase, IDisposable
     public string Notes { get; set; } = string.Empty;
 
     public bool IsAggregateRoot { get; set; } = false;
+
+    public Guid? AreaId { get; set; }
   }
 
   private DataModelEditModel _edit = new();
@@ -79,7 +82,8 @@ public partial class DataModelEdit : ComponentBase, IDisposable
           Name = dto.Name,
           Description = dto.Description,
           Notes = dto.Notes,
-          IsAggregateRoot = dto.IsAggregateRoot
+          IsAggregateRoot = dto.IsAggregateRoot,
+          AreaId = dto.AreaId
         };
         _fields = dto.Fields.Select(f => new DataModelFieldEditModel
         {
@@ -108,6 +112,13 @@ public partial class DataModelEdit : ComponentBase, IDisposable
         .ToList();
     }
     catch (Exception ex) { Console.WriteLine($"Error loading available models: {ex.Message}"); }
+
+    try
+    {
+      var areasResponse = await _apiClient.GetAreas(Datasource.Database, token);
+      _availableAreas = areasResponse?.Areas?.OrderBy(a => a.Name).ToList() ?? [];
+    }
+    catch (Exception ex) { Console.WriteLine($"Error loading areas: {ex.Message}"); }
   }
 
   private async Task SaveAsync()
@@ -122,6 +133,7 @@ public partial class DataModelEdit : ComponentBase, IDisposable
       Description = _edit.Description,
       Notes = _edit.Notes,
       IsAggregateRoot = _edit.IsAggregateRoot,
+      AreaId = _edit.AreaId,
       Fields = _fields.Select(f => new DataModelFieldDTO
       {
         Id = f.Id,

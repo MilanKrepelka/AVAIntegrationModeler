@@ -50,6 +50,7 @@
         <GridEvents OnToolbarClick="ToolbarClick" TValue="DataModelListViewModel"></GridEvents>
         <GridColumns>
             <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.AreaName) HeaderText="Oblast" Width="150"></GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.Code) HeaderText="Kód" Width="120"></GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.Name) HeaderText="Název" Width="200"></GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.Description) HeaderText="Popis" Width="250"></GridColumn>
