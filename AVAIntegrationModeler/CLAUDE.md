@@ -156,7 +156,7 @@ Hlavní používané komponenty:
 | `SfDropDownList<TItem,TValue>` | `Syncfusion.Blazor.DropDowns` | Výběry na formuláři ScenarioEdit |
 | `SfTextBox`, `SfTextArea` | `Syncfusion.Blazor.Inputs` | Textové vstupy na formulářích |
 | `SfRadioButton`, `SfCheckBox`, `SfButton` | `Syncfusion.Blazor.Buttons` | Akce a přepínače |
-| `SfToast` | `Syncfusion.Blazor.Notifications` | Zpětná vazba po uložení (`SuccessErrorToast`) |
+| `SfToast` | `Syncfusion.Blazor.Notifications` | Zpětná vazba — pouze na list stránkách (kopírovat ID). **Na edit formulářích nepoužívat** — způsobuje `removeChild` crash při navigaci. |
 | `SfToolbar` | `Syncfusion.Blazor.Navigations` | Nástrojová lišta na Scenarios |
 
 Globální `@using Syncfusion.Blazor` a `@using Syncfusion.Blazor.Diagram` jsou v `_Imports.razor`; ostatní namespace se přidávají lokálně.
@@ -171,6 +171,8 @@ Globální `@using Syncfusion.Blazor` a `@using Syncfusion.Blazor.Diagram` jsou 
 | `Scenarios.razor` | `/scenarios` | SfGrid seznam scénářů |
 | `ScenarioEdit.razor` | `/scenarioedit/{ds}/{code}` nebo `/scenarioedit/{ds}` | Formulář pro vytvoření / editaci scénáře |
 | `ScenariosMap.razor` | `/scenariomap/{ds}/{code}` | Diagram scénáře (SfDiagramComponent, RadialTree) |
+| `Areas.razor` | `/areas` | SfGrid seznam oblastí |
+| `AreaEdit.razor` | `/areaedit/{code}` nebo `/areaedit` | Formulář pro vytvoření / editaci oblasti (inline alert, bez SfToast) |
 
 Složka `Components/Pages/ComponentsSyncfusion/` (~40 souborů) je **pouze referenční demo** Syncfusion Template Studio — není součástí navigace aplikace.
 
@@ -180,7 +182,40 @@ Složka `Components/Pages/ComponentsSyncfusion/` (~40 souborů) je **pouze refer
 
 **`DataSourceSelector`** (widget) — dva `SfRadioButton` pro přepínání mezi `Datasource.Database` a `Datasource.AVAPlace`. Parametry: `@bind-Selected`, `OnChanged` (typovaný callback s `Datasource` enum), `LabelText`, `CssClass`.
 
-**`SuccessErrorToast`** (widget) — tenký obal nad `SfToast`; volá se přes `await toast.Show(success, message)` v ScenarioEdit po uložení.
+**`SuccessErrorToast`** (widget) — **NEPOUŽÍVAT na edit formulářích.** `SfToast` způsobuje `removeChild` crash při navigaci pryč ze stránky. Místo toho použít inline Bootstrap alert (`_saveMessage` / `_saveSuccess` state + `<div class="alert alert-success/danger">`), viz `DataModelRecordEdit.razor`.
+
+### Vzor pro list stránky (SfGrid + načítání dat)
+
+**Rendermode**: List stránky s `SfGrid` používají `@rendermode InteractiveServer` (bez prerender). **Nepoužívat `InteractiveServerRenderMode(prerender: true)` na list stránkách** — kombinace prerender + `OnInitializedAsync` způsobuje dvojitou inicializaci a SfGrid nedetekuje změnu dat při navigaci zpět.
+
+**Načítání dat**: Vždy vytvořit novou instanci listu a přiřadit ji (ne mutovat existující):
+```csharp
+// ✅ SPRÁVNĚ — nová instance, SfGrid detekuje změnu reference
+var newList = new List<AreaListViewModel>();
+// ... naplnit newList ...
+AreasList = newList;
+
+// ❌ ŠPATNĚ — SfGrid nedetekuje mutaci stejné instance
+AreasList.Clear();
+AreasList.Add(...);
+```
+
+**StateHasChanged**: Používat `await InvokeAsync(StateHasChanged)` místo přímého `StateHasChanged()`.
+
+**Grid Refresh**: Po přiřazení nového listu volat `if (Grid != null) await Grid.Refresh()` pro explicitní reload gridu.
+
+**Vzorový LoadItemsAsync** (viz `Areas.razor.cs`, `DataModels.razor.cs`):
+```csharp
+IsLoading = true;
+await InvokeAsync(StateHasChanged);
+var newList = new List<TViewModel>();
+// ... načíst data, naplnit newList ...
+DataList = newList;
+// finally:
+IsLoading = false;
+await InvokeAsync(StateHasChanged);
+if (Grid != null) await Grid.Refresh();
+```
 
 ### ViewModels a mapování
 
@@ -189,3 +224,10 @@ Stránky pracují s vlastními view modely ze složky `ViewModels/List/` (`Scena
 ### Přístup k datům
 
 Stránky injektují `IAVAIntegrationModelerApiClient` (z projektu `API.Client`) pro volání API. `DataModelTree` (namespace `AVAIntegrationModeler.Infrastructure`) builduje rekurzivní strom referencí pro `DataModelMap.razor`.
+
+# Pravidla pro implementaci
+
+## Obecná pravidla
+- Dodržuj jmenné konvence Microsoftu a strukturu složek dle existujícího řešení.
+- Všech kód musí mít dokumentaci v češtině(XML doc) a být pokrytý testy.
+- Všechny nové funkce musí být implementovány v souladu s Clean Architecture A DDD principy.
