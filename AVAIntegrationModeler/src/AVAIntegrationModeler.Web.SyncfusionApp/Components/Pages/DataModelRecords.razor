@@ -5,7 +5,6 @@
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor.Notifications
 @using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List
 @using AVAIntegrationModeler.Contracts
 @using AVAIntegrationModeler.Contracts.DTO
@@ -13,14 +12,6 @@
 <PageTitle>Záznamy datových modelů</PageTitle>
 
 <div id="ControlRegion">
-    @if (Datasource == Datasource.AVAPlace)
-    {
-        <div class="alert alert-info">
-            Záznamy datových modelů jsou dostupné pouze pro zdroj <strong>Database</strong>. Pro AVAPlace není tato funkce podporována.
-        </div>
-    }
-    else
-    {
     <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px; flex-wrap:wrap">
         <div style="display:flex; align-items:center; gap:8px">
             <label>Model:</label>
@@ -32,17 +23,23 @@
             </SfDropDownList>
         </div>
 
-        <SfButton CssClass="e-primary" IconCss="e-icons e-plus" OnClick="AddNewRecord" Disabled="@(SelectedModelId == null)">
-            Přidat záznam
-        </SfButton>
-
         @if (Datasource == Datasource.Database)
         {
+            <SfButton CssClass="e-primary" IconCss="e-icons e-plus" OnClick="AddNewRecord" Disabled="@(SelectedModelId == null)">
+                Přidat záznam
+            </SfButton>
             <SfButton CssClass="e-outline" IconCss="e-icons e-export" Type="Button" OnClick="ExportAsync">
                 Export
             </SfButton>
         }
     </div>
+
+    @if (Datasource == Datasource.AVAPlace)
+    {
+        <div class="alert alert-info" style="margin-bottom:8px">
+            Zobrazení záznamů z <strong>AVAPlace</strong> — pouze pro čtení.
+        </div>
+    }
 
     @if (IsLoading)
     {
@@ -70,7 +67,7 @@
                 <GridColumn Field=@nameof(DataModelRecordListViewModel.ExternalId) HeaderText="External ID" Width="300"></GridColumn>
                 <GridColumn Field=@nameof(DataModelRecordListViewModel.FieldsSummary) HeaderText="Hodnoty polí" Width="400"></GridColumn>
                 <GridColumn Field=@nameof(DataModelRecordListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="100" Visible="false"></GridColumn>
-                <GridColumn HeaderText="Akce" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+                <GridColumn HeaderText="Akce" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Visible="@(Datasource == Datasource.Database)">
                     <Template>
                         @{
                             var record = (context as DataModelRecordListViewModel);
@@ -128,5 +125,4 @@
             </GridTemplates>
         </SfGrid>
     }
-    } @* else AVAPlace *@
 </div>
