@@ -1,3 +1,4 @@
+using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Domain.DataModelRecordAggregate;
 using AVAIntegrationModeler.Domain.DataModelRecordAggregate.Specifications;
@@ -11,6 +12,10 @@ public class UpdateDataModelRecordHandler(
 {
   public async Task<Result<Guid>> Handle(UpdateDataModelRecordCommand request, CancellationToken cancellationToken)
   {
+    if (request.Datasource != Datasource.Database)
+      return Result<Guid>.Invalid(
+        new ValidationError("Datasource", "Záznamy datových modelů jsou dostupné pouze pro zdroj Database."));
+
     Guard.Against.Null(request.Record, nameof(request.Record));
 
     var existing = await repository.FirstOrDefaultAsync(

@@ -1,3 +1,4 @@
+using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Domain.DataModelRecordAggregate;
 using AVAIntegrationModeler.Domain.DataModelRecordAggregate.Specifications;
 
@@ -10,6 +11,9 @@ public class DeleteDataModelRecordHandler(
 {
   public async Task<Result> Handle(DeleteDataModelRecordCommand request, CancellationToken cancellationToken)
   {
+    if (request.Datasource != Datasource.Database)
+      return Result.Invalid(new ValidationError("Datasource", "Záznamy datových modelů jsou dostupné pouze pro zdroj Database."));
+
     var record = await repository.FirstOrDefaultAsync(new DataModelRecordByIdSpec(request.RecordId), cancellationToken);
     if (record is null) return Result.NotFound();
 

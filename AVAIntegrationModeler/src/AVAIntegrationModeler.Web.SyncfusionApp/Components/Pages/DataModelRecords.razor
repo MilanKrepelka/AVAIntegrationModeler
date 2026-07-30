@@ -13,6 +13,14 @@
 <PageTitle>Záznamy datových modelů</PageTitle>
 
 <div id="ControlRegion">
+    @if (Datasource == Datasource.AVAPlace)
+    {
+        <div class="alert alert-info">
+            Záznamy datových modelů jsou dostupné pouze pro zdroj <strong>Database</strong>. Pro AVAPlace není tato funkce podporována.
+        </div>
+    }
+    else
+    {
     <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px; flex-wrap:wrap">
         <div style="display:flex; align-items:center; gap:8px">
             <label>Model:</label>
@@ -120,4 +128,5 @@
             </GridTemplates>
         </SfGrid>
     }
+    } @* else AVAPlace *@
 </div>
