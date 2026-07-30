@@ -5,12 +5,17 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using ASOL.Core.ApiConnector;
+using ASOL.Core.Paging.Contracts.Filters;
 using ASOL.DataService.Connector.Options;
 using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.AVAPlace.API.Connectors;
+using AVAIntegrationModeler.AVAPlace.Options;
+using AVAIntegrationModeler.AVAPlaceTests.Fixtures;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Shouldly;
+using Xunit.Microsoft.DependencyInjection.Abstracts;
 
 namespace AVAIntegrationModeler.AVAPlaceTests;
 
@@ -261,5 +266,45 @@ public class CustomDataServiceClientTests
   {
     public Task<AuthenticationHeaderValue> GetAuthenticationHeaderAsync(IApiClient apiClient, CancellationToken ct = default)
       => Task.FromResult(new AuthenticationHeaderValue("Bearer", "fake-test-token"));
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Live integrační testy — volání skutečného AVAPlace demo prostředí
+// ---------------------------------------------------------------------------
+
+/// <summary>
+/// Integrační testy <see cref="ICustomDataServiceClient"/> proti AVAPlace demo prostředí.
+/// Vyžaduje připojení k internetu a platnou konfiguraci v <c>appsettings.demo.json</c>.
+/// </summary>
+public class CustomDataServiceClientLiveTests : TestBed<AVAPlaceDemoFixture>
+{
+  public CustomDataServiceClientLiveTests(ITestOutputHelper testOutputHelper, AVAPlaceDemoFixture fixture)
+    : base(testOutputHelper, fixture)
+  {
+  }
+
+  /// <summary>
+  /// Volání <c>GetDataModelsAsync</c> přes bázového klienta musí vrátit neprázdný seznam datových modelů.
+  /// Ověřuje, že klient je správně nakonfigurován, autentizace funguje a základní HTTP komunikace probíhá.
+  /// </summary>
+  [Fact]
+  public async Task GetDataModels_ReturnsNonEmptyList()
+  {
+    var serviceProvider = _fixture.GetServiceProvider(_testOutputHelper);
+    var options = serviceProvider.GetRequiredService<IOptions<AVAPlaceOptions>>();
+    var tenantId = options.Value.TenantId;
+
+    var result = await ServiceRuntimeTenantContext.ExecuteInContextAsync<ICustomDataServiceClient, object>(
+      serviceProvider, tenantId, async client =>
+      {
+        var models = await client.GetDataModelsAsync(new PagingFilter(), CancellationToken.None);
+        return models;
+      });
+
+    result.ShouldNotBeNull();
+    var list = result as System.Collections.IEnumerable;
+    list.ShouldNotBeNull();
+    list.Cast<object>().ShouldNotBeEmpty();
   }
 }
