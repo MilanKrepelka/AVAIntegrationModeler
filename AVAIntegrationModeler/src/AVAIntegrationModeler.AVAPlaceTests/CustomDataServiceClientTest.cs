@@ -1,43 +1,265 @@
-﻿using AVAIntegrationModeler.AVAPlace;
-using AVAIntegrationModeler.AVAPlaceTests.Fixtures;
-using AVAIntegrationModeler.Contracts.DTO;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Testing.Platform.Services;
-using Xunit.Microsoft.DependencyInjection.Abstracts;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using ASOL.Core.ApiConnector;
+using ASOL.DataService.Connector.Options;
+using AVAIntegrationModeler.AVAPlace;
+using AVAIntegrationModeler.AVAPlace.API.Connectors;
+using Microsoft.Extensions.Logging.Abstractions;
+using Microsoft.Extensions.Options;
+using Shouldly;
 
 namespace AVAIntegrationModeler.AVAPlaceTests;
 
-public class CustomDataServiceClientTest : TestBed<Fixtures.AVAPlaceDemoFixture>
+/// <summary>
+/// Unit testy pro vlastní metody <see cref="CustomDataServiceClient"/>.
+/// HTTP volání jsou zachycena pomocí <see cref="FakeHttpMessageHandler"/> — bez připojení k AVAPlace.
+/// </summary>
+public class CustomDataServiceClientTests
 {
-  public CustomDataServiceClientTest(ITestOutputHelper testOutputHelper, AVAPlaceDemoFixture fixture) : base(testOutputHelper, fixture)
+  // ---------------------------------------------------------------------------
+  // GetDataAgentByCodeAsync
+  // ---------------------------------------------------------------------------
+
+  /// <summary>
+  /// Prázdný kód agenta musí způsobit ArgumentNullException ještě před HTTP voláním.
+  /// </summary>
+  [Fact]
+  public async Task GetDataAgentByCodeAsync_EmptyCode_ThrowsArgumentNullException()
   {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.OK));
+
+    await Should.ThrowAsync<ArgumentNullException>(() =>
+      client.GetDataAgentByCodeAsync(string.Empty, acceptNotFound: false, CancellationToken.None));
   }
 
+  /// <summary>
+  /// Null kód agenta musí způsobit ArgumentNullException.
+  /// </summary>
   [Fact]
-  public Task GetScenariosTest()
+  public async Task GetDataAgentByCodeAsync_NullCode_ThrowsArgumentNullException()
   {
-    
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.OK));
 
-    /*
-    ServiceRuntimeTenantContext.ExecuteInContextAsync(_fixture.GetServiceProvider(_testOutputHelper)).
-    var result = await dataserviceClient.GetDataAgentsAsync(new ASOL.Core.Paging.Contracts.Filters.PagingFilter() { }, "ASOLEU-DEV-fd9ad6b9-2f29-4c7a-9a3a-c7469e19b1ff-AVAPlaceModeler-ACw4KkqwqV8E9MFdnIumTmzv9R5IUPsO", CancellationToken.None);
-    */
+    await Should.ThrowAsync<ArgumentNullException>(() =>
+      client.GetDataAgentByCodeAsync(null!, acceptNotFound: false, CancellationToken.None));
+  }
 
-    //var serviceProvirer = _fixture.GetServiceProvider(_testOutputHelper);
+  /// <summary>
+  /// Pokud server vrátí 404 a <c>acceptNotFound=true</c>, výsledek je <c>null</c>.
+  /// </summary>
+  [Fact]
+  public async Task GetDataAgentByCodeAsync_NotFound_AcceptNotFound_ReturnsNull()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.NotFound));
 
-    //using (var scope = serviceProvirer.CreateScope())
-    //{
-    //  var scopedProvider = scope.ServiceProvider;
-    //  //get connector instance via dependency injection and use impersonated context
-      
-    //  _ = await ServiceRuntimeTenantContext.ExecuteInContextAsync<ICustomDataServiceClient, IEnumerable<ScenarioDTO>>(scopedProvider, "ASOLEU-DEV-fd9ad6b9-2f29-4c7a-9a3a-c7469e19b1ff", async connector =>
-    //  {
-    //    var result = await connector.GetScenarios(CancellationToken.None);
-    //    Assert.NotNull(result);
-    //    Assert.NotEmpty(result);
-    //    return result;
-    //  });
-    //}
-    return Task.CompletedTask;
+    var result = await client.GetDataAgentByCodeAsync("NEEXISTUJICI-AGENT", acceptNotFound: true, CancellationToken.None);
+
+    result.ShouldBeNull();
+  }
+
+  /// <summary>
+  /// URL pro GetDataAgentByCodeAsync musí obsahovat URL-zakódovaný kód agenta.
+  /// </summary>
+  [Fact]
+  public async Task GetDataAgentByCodeAsync_SpecialCharactersInCode_UrlEncodesCode()
+  {
+    var handler = new FakeHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.NotFound));
+    var client = CreateClient(handler);
+    var code = "Agent/With Spaces&Special=Chars";
+
+    await client.GetDataAgentByCodeAsync(code, acceptNotFound: true, CancellationToken.None);
+
+    var requestUri = handler.LastRequest?.RequestUri?.ToString();
+    requestUri.ShouldNotBeNull();
+    // Lomítko a speciální znaky musí být zakódovány; mezery může .NET normalizovat (%20 ↔ space)
+    requestUri.ShouldContain("Agent%2FWith"); // '/' → %2F
+    requestUri.ShouldContain("Special%3DChars"); // '=' → %3D
+  }
+
+  // ---------------------------------------------------------------------------
+  // SwitchEnabledDataAgentAsync
+  // ---------------------------------------------------------------------------
+
+  /// <summary>
+  /// Prázdné ID data-agenta musí způsobit ArgumentNullException.
+  /// </summary>
+  [Fact]
+  public async Task SwitchEnabledDataAgentAsync_EmptyId_ThrowsArgumentNullException()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.OK));
+
+    await Should.ThrowAsync<ArgumentNullException>(() =>
+      client.SwitchEnabledDataAgentAsync(string.Empty, enabled: true, CancellationToken.None));
+  }
+
+  /// <summary>
+  /// HTTP 404 — data-agent neexistuje, vrátí <c>false</c>.
+  /// </summary>
+  [Fact]
+  public async Task SwitchEnabledDataAgentAsync_NotFound_ReturnsFalse()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.NotFound));
+
+    var result = await client.SwitchEnabledDataAgentAsync("neexistujici-id", enabled: true, CancellationToken.None);
+
+    result.ShouldBeFalse();
+  }
+
+  /// <summary>
+  /// HTTP 200 — přepnutí proběhlo úspěšně, vrátí <c>true</c>.
+  /// </summary>
+  [Fact]
+  public async Task SwitchEnabledDataAgentAsync_Success_ReturnsTrue()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.OK));
+
+    var result = await client.SwitchEnabledDataAgentAsync("existing-agent-id", enabled: true, CancellationToken.None);
+
+    result.ShouldBeTrue();
+  }
+
+  /// <summary>
+  /// HTTP 204 No Content — přepnutí proběhlo úspěšně, vrátí <c>true</c>.
+  /// </summary>
+  [Fact]
+  public async Task SwitchEnabledDataAgentAsync_NoContent_ReturnsTrue()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.NoContent));
+
+    var result = await client.SwitchEnabledDataAgentAsync("existing-agent-id", enabled: false, CancellationToken.None);
+
+    result.ShouldBeTrue();
+  }
+
+  // ---------------------------------------------------------------------------
+  // SwitchEnabledDataSourceAsync
+  // ---------------------------------------------------------------------------
+
+  /// <summary>
+  /// Prázdné ID datového zdroje musí způsobit ArgumentNullException.
+  /// </summary>
+  [Fact]
+  public async Task SwitchEnabledDataSourceAsync_EmptyId_ThrowsArgumentNullException()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.OK));
+
+    await Should.ThrowAsync<ArgumentNullException>(() =>
+      client.SwitchEnabledDataSourceAsync(string.Empty, enabled: true, CancellationToken.None));
+  }
+
+  /// <summary>
+  /// HTTP 404 — datový zdroj neexistuje, vrátí <c>false</c>.
+  /// </summary>
+  [Fact]
+  public async Task SwitchEnabledDataSourceAsync_NotFound_ReturnsFalse()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.NotFound));
+
+    var result = await client.SwitchEnabledDataSourceAsync("neexistujici-zdroj", enabled: true, CancellationToken.None);
+
+    result.ShouldBeFalse();
+  }
+
+  /// <summary>
+  /// HTTP 200 — přepnutí proběhlo úspěšně, vrátí <c>true</c>.
+  /// </summary>
+  [Fact]
+  public async Task SwitchEnabledDataSourceAsync_Success_ReturnsTrue()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.OK));
+
+    var result = await client.SwitchEnabledDataSourceAsync("existing-source-id", enabled: false, CancellationToken.None);
+
+    result.ShouldBeTrue();
+  }
+
+  /// <summary>
+  /// URL pro SwitchEnabledDataSourceAsync musí obsahovat ID zdroje a segment SwitchEnabled.
+  /// </summary>
+  [Fact]
+  public async Task SwitchEnabledDataSourceAsync_BuildsCorrectUrl()
+  {
+    var handler = new FakeHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.OK));
+    var client = CreateClient(handler);
+    var sourceId = "test-source-123";
+
+    await client.SwitchEnabledDataSourceAsync(sourceId, enabled: true, CancellationToken.None);
+
+    var requestUri = handler.LastRequest?.RequestUri?.ToString();
+    requestUri.ShouldNotBeNull();
+    requestUri.ShouldContain(sourceId);
+    requestUri.ShouldContain("SwitchEnabled");
+  }
+
+  // ---------------------------------------------------------------------------
+  // Pomocné třídy
+  // ---------------------------------------------------------------------------
+
+  private static ICustomDataServiceClient CreateClient(HttpResponseMessage response)
+    => CreateClient(new FakeHttpMessageHandler(response));
+
+  private static ICustomDataServiceClient CreateClient(FakeHttpMessageHandler handler)
+  {
+    var httpClient = new HttpClient(handler)
+    {
+      BaseAddress = new Uri("http://avaplace-test.local")
+    };
+
+    var options = DataServiceClientOptions.Default;
+    options.BaseUrl = "http://avaplace-test.local";
+
+    return new TestableCustomDataServiceClient(Options.Create(options), httpClient);
+  }
+
+  // ---------------------------------------------------------------------------
+
+  /// <summary>
+  /// Testovatelná podtřída zpřístupňující protected konstruktor.
+  /// </summary>
+  private class TestableCustomDataServiceClient : CustomDataServiceClient
+  {
+    public TestableCustomDataServiceClient(
+      IOptions<DataServiceClientOptions> options,
+      HttpClient httpClient)
+      : base(options.Value, NullLogger<CustomDataServiceClient>.Instance,
+             new FakeTokenProvider(), [], httpClient, manageBaseClient: false)
+    {
+    }
+  }
+
+  /// <summary>
+  /// Fake HTTP handler zachycující volání a vracející přednastavený response.
+  /// </summary>
+  private class FakeHttpMessageHandler : HttpMessageHandler
+  {
+    private readonly HttpResponseMessage _response;
+
+    /// <summary>Poslední zachycený request (pro ověření URL).</summary>
+    public HttpRequestMessage? LastRequest { get; private set; }
+
+    public FakeHttpMessageHandler(HttpResponseMessage response)
+    {
+      _response = response;
+    }
+
+    protected override Task<HttpResponseMessage> SendAsync(
+      HttpRequestMessage request, CancellationToken cancellationToken)
+    {
+      LastRequest = request;
+      return Task.FromResult(_response);
+    }
+  }
+
+  /// <summary>
+  /// Fake implementace <see cref="IConnectorTokenProvider"/> vracející testovací Bearer token.
+  /// </summary>
+  private class FakeTokenProvider : IConnectorTokenProvider
+  {
+    public Task<AuthenticationHeaderValue> GetAuthenticationHeaderAsync(IApiClient apiClient, CancellationToken ct = default)
+      => Task.FromResult(new AuthenticationHeaderValue("Bearer", "fake-test-token"));
   }
 }
