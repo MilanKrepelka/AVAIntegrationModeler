@@ -1,28 +1,19 @@
-﻿using AVAIntegrationModeler.Domain.Interfaces;
+﻿using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Delete;
 
-public class DeleteScenarioHandler(IRepository<Scenario> repository) : ICommandHandler<DeleteScenarioCommand, Result>
+public class DeleteScenarioHandler(IRepository<Scenario> repository, IScenariosQueryService scenariosQueryService)
+  : ICommandHandler<DeleteScenarioCommand, Result>
 {
-  private readonly IRepository<Scenario> _repository = repository;
-
-  public async Task<Result> Handle(DeleteScenarioCommand request, CancellationToken cancellationToken) 
-    {
-    // This Approach: Keep Domain Events in the Domain Model / Domain project; this becomes a pass-through
-    // This is @ardalis's preferred approach
-    
-    // Another Approach: Do the real work here including dispatching domain events - change the event from internal to public
-    // @ardalis prefers using the service above so that **domain** event behavior remains in the **domain model** (core project)
-     var aggregateToDelete = await _repository.FirstOrDefaultAsync(new Domain.ScenarioAggregate.Specifications.ScenarioByCodeSpec(request.ScenarioCode), cancellationToken);
+  public async Task<Result> Handle(DeleteScenarioCommand request, CancellationToken cancellationToken)
+  {
+    var aggregateToDelete = await repository.FirstOrDefaultAsync(
+      new Domain.ScenarioAggregate.Specifications.ScenarioByCodeSpec(request.ScenarioCode), cancellationToken);
     if (aggregateToDelete == null) return Result.NotFound();
 
-    await _repository.DeleteAsync(aggregateToDelete, cancellationToken);
+    await repository.DeleteAsync(aggregateToDelete, cancellationToken);
+    scenariosQueryService.InvalidateCache(Datasource.Database);
     return Result.Success();
-    
-    // if (aggregateToDelete == null) return Result.NotFound();
-    // await _repository.DeleteAsync(aggregateToDelete);
-    // var domainEvent = new ContributorDeletedEvent(request.ContributorId);
-    // await _mediator.Publish(domainEvent);// return Result.Success();
   }
 }

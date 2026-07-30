@@ -68,8 +68,11 @@ public class UpdateDataModelHandler(IDataModelRepository repository, IDataModelQ
       }
     }
 
+    // Zachytíme DTO z in-memory stavu PŘED uložením — stav entity po SyncFieldsAndSaveAsync
+    // (zejm. State = Unchanged) může ovlivnit EF sledování, ale CLR vlastnosti jsou již nastaveny správně.
+    var responseDto = DataModelMapper.MapToDataModelDTO(existing);
     await repository.SyncFieldsAndSaveAsync(existing, fieldsToDelete, fieldsToAdd, cancellationToken);
     queryService.InvalidateCache(request.Datasource);
-    return Result<DataModelDTO>.Success(DataModelMapper.MapToDataModelDTO(existing));
+    return Result<DataModelDTO>.Success(responseDto);
   }
 }

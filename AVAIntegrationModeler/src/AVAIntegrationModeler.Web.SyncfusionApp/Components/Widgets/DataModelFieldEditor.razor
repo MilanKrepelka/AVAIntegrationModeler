@@ -1,0 +1,109 @@
+@using AVAIntegrationModeler.Contracts
+@using AVAIntegrationModeler.Contracts.DTO
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Popups
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+
+<div class="fields-editor">
+    <div class="d-flex justify-content-between align-items-center mb-2">
+        <h5 class="mb-0">Datová pole</h5>
+        <SfButton CssClass="e-primary e-small" OnClick="OpenAdd">+ Přidat pole</SfButton>
+    </div>
+
+    <SfGrid DataSource="@Fields" @ref="FieldGrid" AllowSorting="true" EnableAltRow="false">
+        <GridColumns>
+            <GridColumn Field="@nameof(DataModelFieldEditModel.Name)" HeaderText="Název" Width="160" />
+            <GridColumn HeaderText="Typ" Width="180">
+                <Template>
+                    @{ var row = (DataModelFieldEditModel)context; }
+                    <span>@GetFieldTypeLabel(row.FieldType)</span>
+                </Template>
+            </GridColumn>
+            <GridColumn Field="@nameof(DataModelFieldEditModel.Label)" HeaderText="Popisek" Width="160" />
+            <GridColumn HeaderText="Příznaky" Width="200">
+                <Template>
+                    @{ var r = (DataModelFieldEditModel)context; }
+                    @if (r.IsCollection) { <span class="badge bg-info me-1">Kolekce</span> }
+                    @if (r.IsNullable) { <span class="badge bg-secondary me-1">Nullable</span> }
+                    @if (r.IsLocalized) { <span class="badge bg-primary me-1">Lok.</span> }
+                    @if (r.IsPublishedForLookup) { <span class="badge bg-success me-1">Lookup</span> }
+                </Template>
+            </GridColumn>
+            <GridColumn HeaderText="Akce" Width="130" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+                <Template>
+                    @{ var item = (DataModelFieldEditModel)context; }
+                    <SfButton CssClass="e-small e-outline" OnClick="@(() => OpenEdit(item))">Upravit</SfButton>
+                    <SfButton CssClass="e-small e-danger e-outline" style="margin-left:4px" OnClick="@(() => Delete(item))">Smazat</SfButton>
+                </Template>
+            </GridColumn>
+        </GridColumns>
+    </SfGrid>
+</div>
+
+<SfDialog @bind-Visible="_isDialogOpen" Width="620px" ShowCloseIcon="true" IsModal="true">
+    <DialogTemplates>
+        <Header>@(_isNew ? "Přidat pole" : "Upravit pole")</Header>
+        <Content>
+            @if (_editingField is not null)
+            {
+                <div class="row g-3">
+                    <div class="col-12 col-md-6">
+                        <SfTextBox Placeholder="Název *" FloatLabelType="FloatLabelType.Always"
+                                   @bind-Value="_editingField.Name" CssClass="w-100" />
+                        @if (!string.IsNullOrEmpty(_nameError))
+                        {
+                            <small class="text-danger">@_nameError</small>
+                        }
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <SfTextBox Placeholder="Popisek" FloatLabelType="FloatLabelType.Always"
+                                   @bind-Value="_editingField.Label" CssClass="w-100" />
+                    </div>
+                    <div class="col-12">
+                        <SfTextArea Placeholder="Popis" FloatLabelType="FloatLabelType.Always"
+                                    @bind-Value="_editingField.Description" Rows="2" CssClass="w-100" />
+                    </div>
+                    <div class="col-12">
+                        <SfDropDownList TItem="FieldTypeItem" TValue="DataModelFieldType"
+                                        DataSource="@FieldTypeOptions"
+                                        @bind-Value="_editingField.FieldType"
+                                        Placeholder="Typ pole" FloatLabelType="FloatLabelType.Always"
+                                        CssClass="w-100">
+                            <DropDownListFieldSettings Value="Value" Text="Text" />
+                        </SfDropDownList>
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <SfCheckBox @bind-Checked="_editingField.IsCollection" Label="Kolekce (více hodnot)" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <SfCheckBox @bind-Checked="_editingField.IsNullable" Label="Nullable" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <SfCheckBox @bind-Checked="_editingField.IsLocalized" Label="Lokalizované" />
+                    </div>
+                    <div class="col-12 col-md-6">
+                        <SfCheckBox @bind-Checked="_editingField.IsPublishedForLookup" Label="Publikováno pro lookup" />
+                    </div>
+                    @if (NeedsReferences && AvailableModels.Count > 0)
+                    {
+                        <div class="col-12">
+                            <SfMultiSelect TItem="DataModelSummaryDTO" TValue="List<Guid>"
+                                           DataSource="@AvailableModels"
+                                           @bind-Value="_editingField.ReferencedEntityTypeIds"
+                                           Placeholder="Odkazované modely" FloatLabelType="FloatLabelType.Always"
+                                           CssClass="w-100">
+                                <MultiSelectFieldSettings Value="Id" Text="Code" />
+                            </SfMultiSelect>
+                        </div>
+                    }
+                </div>
+            }
+        </Content>
+    </DialogTemplates>
+    <DialogButtons>
+        <DialogButton Content="Uložit" IsPrimary="true" OnClick="@(async (args) => await Confirm())" />
+        <DialogButton Content="Zrušit" OnClick="@((args) => Cancel())" />
+    </DialogButtons>
+</SfDialog>

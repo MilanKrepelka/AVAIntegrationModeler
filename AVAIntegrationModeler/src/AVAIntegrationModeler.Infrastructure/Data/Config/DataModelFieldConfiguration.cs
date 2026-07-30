@@ -21,7 +21,7 @@ public class DataModelFieldConfiguration : IEntityTypeConfiguration<DataModelFie
     
     builder.Property(e => e.Description)
       .HasMaxLength(1000);
-builder.HasKey(e => e.Id);    
+
     builder.Property(e => e.IsPublishedForLookup).IsRequired();
     builder.Property(e => e.IsCollection).IsRequired();
     builder.Property(e => e.IsLocalized).IsRequired();

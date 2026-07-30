@@ -380,18 +380,27 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
 
     _logger.LogDebug($"{nameof(UpdateDataModel)} starting. datasource={datasource}, dataModelId={dataModel.Id}");
     var fluent = new FluentClient(_httpClient);
-    var result = await fluent
+    // Endpoint vrací UpdateDataModelResponse { DataModel = dto } — musíme přečíst wrapper a rozbalit.
+    var rawResult = await fluent
       .PutAsync($"datamodels/{datasource}/{dataModel.Id}")
       .WithBody(new { Datasource = datasource, DataModelId = dataModel.Id, DataModel = dataModel })
       .WithCancellationToken(cancellationToken)
-      .AsResult<DataModelDTO>();
+      .AsResult<UpdateDataModelResponse>();
 
-    if (result.IsSuccess)
+    if (rawResult.IsSuccess)
+    {
       _logger.LogInformation($"{nameof(UpdateDataModel)} completed. dataModelId={dataModel.Id}");
-    else
-      _logger.LogWarning($"{nameof(UpdateDataModel)} failed. status={result.Status}");
+      return Result<DataModelDTO>.Success(rawResult.Value.DataModel);
+    }
 
-    return result;
+    _logger.LogWarning($"{nameof(UpdateDataModel)} failed. status={rawResult.Status}");
+    return rawResult.Status switch
+    {
+      ResultStatus.NotFound => Result<DataModelDTO>.NotFound(),
+      ResultStatus.Invalid => Result<DataModelDTO>.Invalid(rawResult.ValidationErrors),
+      ResultStatus.Conflict => Result<DataModelDTO>.Conflict(string.Join("; ", rawResult.Errors)),
+      _ => Result<DataModelDTO>.Error(string.Join("; ", rawResult.Errors))
+    };
   }
 
   /// <inheritdoc/>
@@ -516,5 +525,84 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
       _logger.LogWarning($"{nameof(ImportDataModelFromAvaPlace)} failed. avaPlaceModelId={avaPlaceModelId}, status={result.Status}");
 
     return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<Contracts.Areas.AreaListResponse> GetAreas(Datasource datasource, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(GetAreas)} starting. datasource={datasource}");
+    var fluent = new FluentClient(_httpClient);
+    var response = await fluent
+      .GetAsync("areas")
+      .WithArgument("datasource", datasource)
+      .WithCancellationToken(cancellationToken)
+      .As<Contracts.Areas.AreaListResponse>();
+    return response ?? new Contracts.Areas.AreaListResponse();
+  }
+
+  /// <inheritdoc/>
+  public async Task<AreaDTO> GetArea(Datasource datasource, Guid areaId, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(GetArea)} starting. datasource={datasource}, areaId={areaId}");
+    var fluent = new FluentClient(_httpClient);
+    var response = await fluent
+      .GetAsync($"areas/by-id/{datasource}/{areaId}")
+      .WithCancellationToken(cancellationToken)
+      .As<AreaDTO>();
+    return response ?? new AreaDTO();
+  }
+
+  /// <inheritdoc/>
+  public async Task<AreaDTO> GetArea(Datasource datasource, string areaCode, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(GetArea)} starting. datasource={datasource}, areaCode={areaCode}");
+    var fluent = new FluentClient(_httpClient);
+    var response = await fluent
+      .GetAsync($"areas/{datasource}/{Uri.EscapeDataString(areaCode)}")
+      .WithCancellationToken(cancellationToken)
+      .As<AreaDTO>();
+    return response ?? new AreaDTO();
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result<Guid>> CreateArea(Datasource datasource, AreaDTO area, CancellationToken cancellationToken)
+  {
+    if (area is null)
+      return Result<Guid>.Invalid(new ValidationError(nameof(area), "Oblast nesmí být null."));
+    _logger.LogDebug($"{nameof(CreateArea)} starting. datasource={datasource}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PostAsync("areas")
+      .WithBody(new { Datasource = datasource, Area = area })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<Guid>();
+    return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result<AreaDTO>> UpdateArea(Datasource datasource, AreaDTO area, CancellationToken cancellationToken)
+  {
+    if (area is null)
+      return Result<AreaDTO>.Invalid(new ValidationError(nameof(area), "Oblast nesmí být null."));
+    _logger.LogDebug($"{nameof(UpdateArea)} starting. datasource={datasource}, areaCode={area.Code}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PutAsync($"areas/{datasource}/{Uri.EscapeDataString(area.Code)}")
+      .WithBody(new { Datasource = datasource, AreaCode = area.Code, Area = area })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<AreaDTO>();
+    return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result> DeleteArea(Datasource datasource, string areaCode, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(DeleteArea)} starting. datasource={datasource}, areaCode={areaCode}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .DeleteAsync($"areas/{datasource}/{Uri.EscapeDataString(areaCode)}")
+      .WithCancellationToken(cancellationToken)
+      .AsResult<object>();
+    return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));
   }
 }

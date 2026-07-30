@@ -100,4 +100,34 @@ public interface IAVAIntegrationModelerApiClient
   /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
   /// <returns>Identifikátor importovaného modelu v lokální databázi.</returns>
   Task<Result<Guid>> ImportDataModelFromAvaPlace(Guid avaPlaceModelId, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Vrátí seznam oblastí ze zadaného datového zdroje.
+  /// </summary>
+  Task<Contracts.Areas.AreaListResponse> GetAreas(Datasource datasource, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Vrátí oblast podle identifikátoru.
+  /// </summary>
+  Task<AreaDTO> GetArea(Datasource datasource, Guid areaId, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Vrátí oblast podle kódu.
+  /// </summary>
+  Task<AreaDTO> GetArea(Datasource datasource, string areaCode, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Vytvoří novou oblast a vrátí výsledek obsahující ID nové oblasti.
+  /// </summary>
+  Task<Result<Guid>> CreateArea(Datasource datasource, AreaDTO area, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Aktualizuje oblast a vrátí výsledek obsahující aktualizovanou oblast.
+  /// </summary>
+  Task<Result<AreaDTO>> UpdateArea(Datasource datasource, AreaDTO area, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Smaže oblast podle kódu a vrátí výsledek operace.
+  /// </summary>
+  Task<Result> DeleteArea(Datasource datasource, string areaCode, CancellationToken cancellationToken);
 }

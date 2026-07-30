@@ -182,7 +182,41 @@ Složka `Components/Pages/ComponentsSyncfusion/` (~40 souborů) je **pouze refer
 
 **`DataSourceSelector`** (widget) — dva `SfRadioButton` pro přepínání mezi `Datasource.Database` a `Datasource.AVAPlace`. Parametry: `@bind-Selected`, `OnChanged` (typovaný callback s `Datasource` enum), `LabelText`, `CssClass`.
 
-**`SuccessErrorToast`** (widget) — **NEPOUŽÍVAT na edit formulářích.** `SfToast` způsobuje `removeChild` crash při navigaci pryč ze stránky. Místo toho použít inline Bootstrap alert (`_saveMessage` / `_saveSuccess` state + `<div class="alert alert-success/danger">`), viz `DataModelRecordEdit.razor`.
+**`SuccessErrorToast`** (widget) — **NEPOUŽÍVAT na edit formulářích.** `SfToast` způsobuje `removeChild` crash při navigaci pryč ze stránky. Místo toho použít inline Bootstrap alert (`_saveMessage` / `_saveSuccess` state + `<div class="alert alert-success/danger">`).
+
+### Vzor zprávy o uložení na edit formulářích
+
+Každá edit stránka musí zobrazit zprávu o výsledku uložení. Vzor je jednotný pro všechny edit stránky (AreaEdit, DataModelEdit, DataModelRecordEdit, ScenarioEdit):
+
+**code-behind (`.razor.cs`)**:
+```csharp
+private string? _saveMessage;
+private bool _saveSuccess;
+
+private async Task SaveAsync()
+{
+  // ...
+  var result = await _apiClient.CreateXxx(...) / UpdateXxx(...);
+  if (_disposed) return;
+  _saveSuccess = result.IsSuccess;
+  _saveMessage = result.IsSuccess
+    ? $"Xxx {dto.Code} byl(a) {(IsNew ? "vytvořen(a)" : "uložen(a)")}."
+    : result.IsInvalid()
+      ? string.Join(", ", result.ValidationErrors.Select(e => e.ErrorMessage))
+      : string.Join(", ", result.Errors);
+  // ...
+}
+```
+
+**šablona (`.razor`)** — umístit před tlačítka Uložit/Zpět:
+```razor
+@if (_saveMessage is not null)
+{
+    <div class="alert @(_saveSuccess ? "alert-success" : "alert-danger")" style="margin-top:16px">
+        @_saveMessage
+    </div>
+}
+```
 
 ### Tlačítko „Přidat" v toolbaru SfGrid
 

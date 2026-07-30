@@ -1,0 +1,1728 @@
+2026-07-29 19:54:50.728 +02:00 [INF] Registered 32 endpoints in 3 916 milliseconds.
+2026-07-29 19:54:53.273 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:54:53.843 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 116
+2026-07-29 19:54:53.897 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:54:53.898 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 19:54:53.984 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 19:54:53.984 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:54:53.987 +02:00 [INF] Property Area : {"Id":"23060b35-0f4a-4f35-9367-e12e8413411c","Code":"TEST_CREATE","Name":"Test Create Area","$type":"AreaDTO"}
+2026-07-29 19:54:54.123 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 133 ms
+2026-07-29 19:54:54.167 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 19:54:54.173 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 201 null application/json; charset=utf-8 330.9974ms
+2026-07-29 19:54:54.515 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:54:54.522 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:54:54.523 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:54:54.538 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:54:54.538 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:54:54.593 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 54 ms
+2026-07-29 19:54:54.602 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:54:54.602 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:54:54.602 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 87.7208ms
+2026-07-29 19:54:54.627 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 108
+2026-07-29 19:54:54.628 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 19:54:54.628 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 19:54:54.628 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:54:54.629 +02:00 [INF] Property Area : {"Id":"d89ec678-d5db-480d-85f1-6cabb15f6e8c","Code":"SALES","Name":"Duplicate Area","$type":"AreaDTO"}
+2026-07-29 19:54:54.632 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 3 ms
+2026-07-29 19:54:54.636 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 19:54:54.636 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 409 null application/problem+json; charset=utf-8 8.6521ms
+2026-07-29 19:54:54.943 +02:00 [INF] Registered 32 endpoints in 254 milliseconds.
+2026-07-29 19:54:54.984 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:54:55.100 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:54:55.114 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:54:55.114 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:54:55.114 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:54:55.115 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:54:55.115 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:54:55.119 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 3 ms
+2026-07-29 19:54:55.119 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:54:55.119 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:54:55.119 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 19.7513ms
+2026-07-29 19:54:55.122 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:54:55.123 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:54:55.123 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:54:55.123 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:54:55.123 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:54:55.124 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:54:55.124 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:54:55.124 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:54:55.124 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 2.0462ms
+2026-07-29 19:54:55.168 +02:00 [INF] Registered 32 endpoints in 34 milliseconds.
+2026-07-29 19:54:55.174 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:54:55.285 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 19:54:55.307 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:54:55.307 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:54:55.307 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:54:55.311 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 19:54:55.311 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:54:55.311 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 19:54:55.326 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:54:55.326 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+Ardalis.GuardClauses.NotFoundException: Queried object Area was not found, Key: NONEXISTENT_CODE
+   at AVAIntegrationModeler.Infrastructure.Data.Queries.AreasQueryService.GetArea(Datasource datasource, String areaCode, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.Infrastructure\Data\Queries\AreasQueryService.cs:line 56
+   at AVAIntegrationModeler.UseCases.Areas.Get.GetAreaHandler.Handle(GetAreaByCodeQuery request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.UseCases\Areas\Get\GetAreaHandler.cs:line 20
+   at Ardalis.SharedKernel.LoggingBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.API.Areas.GetAreaByCodeEndpoint.HandleAsync(GetAreaByCodeRequest request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.API\Areas\GetByCode.cs:line 20
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware.Invoke(HttpContext httpContext)
+   at Ardalis.ListStartupServices.ShowAllServicesMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-07-29 19:54:55.370 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - 500 null text/plain; charset=utf-8 85.7263ms
+2026-07-29 19:54:55.422 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - null null
+2026-07-29 19:54:55.425 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:54:55.425 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:54:55.426 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 19:54:55.426 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:54:55.426 +02:00 [INF] Property AreaCode : FINANCE
+2026-07-29 19:54:55.429 +02:00 [INF] Handled GetAreaByCodeQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 3 ms
+2026-07-29 19:54:55.431 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:54:55.431 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:54:55.431 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - 200 null application/json; charset=utf-8 8.8406ms
+2026-07-29 19:54:55.481 +02:00 [INF] Registered 32 endpoints in 38 milliseconds.
+2026-07-29 19:54:55.486 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:54:55.571 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 19:54:55.587 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:54:55.588 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:54:55.594 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 19:54:55.594 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 19:54:55.610 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 15 ms
+2026-07-29 19:54:55.612 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:54:55.612 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - 404 null null 40.5956ms
+2026-07-29 19:54:55.614 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:54:55.615 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:54:55.615 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:54:55.616 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:54:55.616 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:54:55.617 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:54:55.617 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:54:55.617 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:54:55.617 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 3.0392ms
+2026-07-29 19:54:55.618 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - null null
+2026-07-29 19:54:55.618 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:54:55.618 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 19:54:55.618 +02:00 [INF] Property AreaCode : PRODUCTION
+2026-07-29 19:54:55.636 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 17 ms
+2026-07-29 19:54:55.636 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:54:55.636 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - 204 null null 18.2578ms
+2026-07-29 19:54:55.636 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:54:55.636 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:54:55.636 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:54:55.637 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:54:55.637 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:54:55.637 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:54:55.637 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:54:55.637 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:54:55.637 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 0.7055ms
+2026-07-29 19:54:55.684 +02:00 [INF] Registered 32 endpoints in 38 milliseconds.
+2026-07-29 19:54:55.695 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:54:55.796 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/36031931-2809-4867-bf15-b9ad758b3de6 - null null
+2026-07-29 19:54:55.819 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:54:55.820 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:54:55.820 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:54:55.827 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 19:54:55.827 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:54:55.827 +02:00 [INF] Property AreaId : "36031931-2809-4867-bf15-b9ad758b3de6"
+2026-07-29 19:54:55.837 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:54:55.837 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+Ardalis.GuardClauses.NotFoundException: Queried object Area was not found, Key: 36031931-2809-4867-bf15-b9ad758b3de6
+   at AVAIntegrationModeler.Infrastructure.Data.Queries.AreasQueryService.GetArea(Datasource datasource, Guid areaId, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.Infrastructure\Data\Queries\AreasQueryService.cs:line 46
+   at AVAIntegrationModeler.UseCases.Areas.Get.GetAreaHandler.Handle(GetAreaQuery request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.UseCases\Areas\Get\GetAreaHandler.cs:line 13
+   at Ardalis.SharedKernel.LoggingBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.API.Areas.GetAreaByIdEndpoint.HandleAsync(GetAreaByIdRequest request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.API\Areas\GetById.cs:line 20
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware.Invoke(HttpContext httpContext)
+   at Ardalis.ListStartupServices.ShowAllServicesMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-07-29 19:54:55.839 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/36031931-2809-4867-bf15-b9ad758b3de6 - 500 null text/plain; charset=utf-8 42.7085ms
+2026-07-29 19:54:55.843 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - null null
+2026-07-29 19:54:55.844 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:54:55.844 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:54:55.845 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 19:54:55.846 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:54:55.846 +02:00 [INF] Property AreaId : "a1000000-0000-0000-0000-000000000001"
+2026-07-29 19:54:55.848 +02:00 [INF] Handled GetAreaQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 1 ms
+2026-07-29 19:54:55.848 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:54:55.848 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:54:55.848 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - 200 null application/json; charset=utf-8 5.6199ms
+2026-07-29 19:55:12.897 +02:00 [INF] Registered 32 endpoints in 329 milliseconds.
+2026-07-29 19:55:13.986 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:55:14.621 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 116
+2026-07-29 19:55:14.665 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:55:14.666 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 19:55:14.731 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 19:55:14.731 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:55:14.733 +02:00 [INF] Property Area : {"Id":"a2602216-d193-4304-9da4-057fe63f5a25","Code":"TEST_CREATE","Name":"Test Create Area","$type":"AreaDTO"}
+2026-07-29 19:55:14.820 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 85 ms
+2026-07-29 19:55:14.860 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 19:55:14.869 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:55:14.864 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 201 null application/json; charset=utf-8 244.0356ms
+2026-07-29 19:55:14.873 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:55:14.875 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:14.882 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:55:14.882 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:55:14.921 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 39 ms
+2026-07-29 19:55:14.929 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:14.929 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:55:14.930 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 60.5869ms
+2026-07-29 19:55:14.950 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 108
+2026-07-29 19:55:14.950 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 19:55:14.950 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 19:55:14.951 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:55:14.951 +02:00 [INF] Property Area : {"Id":"4a55f3dd-fd05-4ae3-bb42-4f6a00dd54a2","Code":"SALES","Name":"Duplicate Area","$type":"AreaDTO"}
+2026-07-29 19:55:14.955 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 3 ms
+2026-07-29 19:55:14.958 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 19:55:14.958 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 409 null application/problem+json; charset=utf-8 8.439ms
+2026-07-29 19:55:15.043 +02:00 [INF] Registered 32 endpoints in 65 milliseconds.
+2026-07-29 19:55:15.066 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:55:15.160 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:55:15.172 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:55:15.172 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:55:15.172 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:15.172 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:55:15.172 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:55:15.176 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 3 ms
+2026-07-29 19:55:15.176 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:15.176 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:55:15.177 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 16.8655ms
+2026-07-29 19:55:15.179 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:55:15.180 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:55:15.180 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:15.180 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:55:15.180 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:55:15.181 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:55:15.181 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:15.181 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:55:15.181 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 1.4458ms
+2026-07-29 19:55:15.227 +02:00 [INF] Registered 32 endpoints in 36 milliseconds.
+2026-07-29 19:55:15.232 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:55:15.320 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 19:55:15.334 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:55:15.334 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:55:15.334 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:55:15.339 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 19:55:15.339 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:55:15.339 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 19:55:15.351 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:55:15.352 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+Ardalis.GuardClauses.NotFoundException: Queried object Area was not found, Key: NONEXISTENT_CODE
+   at AVAIntegrationModeler.Infrastructure.Data.Queries.AreasQueryService.GetArea(Datasource datasource, String areaCode, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.Infrastructure\Data\Queries\AreasQueryService.cs:line 56
+   at AVAIntegrationModeler.UseCases.Areas.Get.GetAreaHandler.Handle(GetAreaByCodeQuery request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.UseCases\Areas\Get\GetAreaHandler.cs:line 20
+   at Ardalis.SharedKernel.LoggingBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.API.Areas.GetAreaByCodeEndpoint.HandleAsync(GetAreaByCodeRequest request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.API\Areas\GetByCode.cs:line 20
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware.Invoke(HttpContext httpContext)
+   at Ardalis.ListStartupServices.ShowAllServicesMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-07-29 19:55:15.361 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - 500 null text/plain; charset=utf-8 40.7212ms
+2026-07-29 19:55:15.394 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - null null
+2026-07-29 19:55:15.395 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:55:15.395 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:55:15.395 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 19:55:15.395 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:55:15.395 +02:00 [INF] Property AreaCode : FINANCE
+2026-07-29 19:55:15.396 +02:00 [INF] Handled GetAreaByCodeQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 1 ms
+2026-07-29 19:55:15.397 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:55:15.397 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:55:15.397 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - 200 null application/json; charset=utf-8 3.4813ms
+2026-07-29 19:55:15.439 +02:00 [INF] Registered 32 endpoints in 32 milliseconds.
+2026-07-29 19:55:15.444 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:55:15.530 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 19:55:15.544 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:55:15.545 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:55:15.553 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 19:55:15.553 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 19:55:15.569 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 16 ms
+2026-07-29 19:55:15.570 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:55:15.570 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - 404 null null 40.1969ms
+2026-07-29 19:55:15.573 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:55:15.574 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:55:15.574 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:15.574 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:55:15.574 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:55:15.575 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:55:15.575 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:15.575 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:55:15.575 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 2.4817ms
+2026-07-29 19:55:15.576 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - null null
+2026-07-29 19:55:15.576 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:55:15.576 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 19:55:15.576 +02:00 [INF] Property AreaCode : PRODUCTION
+2026-07-29 19:55:15.594 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 17 ms
+2026-07-29 19:55:15.594 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:55:15.594 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - 204 null null 18.206ms
+2026-07-29 19:55:15.594 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:55:15.594 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:55:15.594 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:15.594 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:55:15.594 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:55:15.595 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:55:15.595 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:15.595 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:55:15.595 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 0.6753ms
+2026-07-29 19:55:15.676 +02:00 [INF] Registered 32 endpoints in 73 milliseconds.
+2026-07-29 19:55:15.682 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:55:15.764 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/fb6377ae-688a-40e5-845e-6fddf2aa8a51 - null null
+2026-07-29 19:55:15.783 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:55:15.783 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:55:15.783 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:55:15.787 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 19:55:15.787 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:55:15.787 +02:00 [INF] Property AreaId : "fb6377ae-688a-40e5-845e-6fddf2aa8a51"
+2026-07-29 19:55:15.796 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:55:15.796 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+Ardalis.GuardClauses.NotFoundException: Queried object Area was not found, Key: fb6377ae-688a-40e5-845e-6fddf2aa8a51
+   at AVAIntegrationModeler.Infrastructure.Data.Queries.AreasQueryService.GetArea(Datasource datasource, Guid areaId, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.Infrastructure\Data\Queries\AreasQueryService.cs:line 46
+   at AVAIntegrationModeler.UseCases.Areas.Get.GetAreaHandler.Handle(GetAreaQuery request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.UseCases\Areas\Get\GetAreaHandler.cs:line 13
+   at Ardalis.SharedKernel.LoggingBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.API.Areas.GetAreaByIdEndpoint.HandleAsync(GetAreaByIdRequest request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.API\Areas\GetById.cs:line 20
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware.Invoke(HttpContext httpContext)
+   at Ardalis.ListStartupServices.ShowAllServicesMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-07-29 19:55:15.797 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/fb6377ae-688a-40e5-845e-6fddf2aa8a51 - 500 null text/plain; charset=utf-8 32.8875ms
+2026-07-29 19:55:15.800 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - null null
+2026-07-29 19:55:15.802 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:55:15.802 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:55:15.802 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 19:55:15.802 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:55:15.802 +02:00 [INF] Property AreaId : "a1000000-0000-0000-0000-000000000001"
+2026-07-29 19:55:15.804 +02:00 [INF] Handled GetAreaQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 1 ms
+2026-07-29 19:55:15.804 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:55:15.804 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:55:15.805 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - 200 null application/json; charset=utf-8 4.6325ms
+2026-07-29 19:55:35.517 +02:00 [INF] Registered 32 endpoints in 343 milliseconds.
+2026-07-29 19:55:36.863 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:55:37.509 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 19:55:37.567 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:55:37.569 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:55:37.607 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 19:55:37.608 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 19:55:37.756 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 147 ms
+2026-07-29 19:55:37.759 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:55:37.764 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - 404 null null 258.8138ms
+2026-07-29 19:55:37.793 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:55:37.796 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:55:37.797 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:37.809 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:55:37.809 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:55:37.828 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 18 ms
+2026-07-29 19:55:37.844 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:37.844 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:55:37.845 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 51.4427ms
+2026-07-29 19:55:37.849 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - null null
+2026-07-29 19:55:37.850 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:55:37.850 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 19:55:37.850 +02:00 [INF] Property AreaCode : PRODUCTION
+2026-07-29 19:55:37.877 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 27 ms
+2026-07-29 19:55:37.878 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:55:37.878 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - 204 null null 28.4169ms
+2026-07-29 19:55:37.878 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:55:37.878 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:55:37.878 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:37.879 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:55:37.879 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:55:37.879 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:55:37.880 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:55:37.880 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:55:37.880 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 1.5968ms
+2026-07-29 19:56:43.305 +02:00 [INF] Registered 32 endpoints in 277 milliseconds.
+2026-07-29 19:56:44.695 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:56:45.408 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 116
+2026-07-29 19:56:45.476 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:56:45.478 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 19:56:45.549 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 19:56:45.550 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:56:45.551 +02:00 [INF] Property Area : {"Id":"6a1a3f85-99c9-431d-a492-6d98ce72cf1f","Code":"TEST_CREATE","Name":"Test Create Area","$type":"AreaDTO"}
+2026-07-29 19:56:45.648 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 94 ms
+2026-07-29 19:56:45.676 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 19:56:45.686 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:56:45.689 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:56:45.681 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 201 null application/json; charset=utf-8 273.7882ms
+2026-07-29 19:56:45.690 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:56:45.700 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:56:45.700 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:56:45.737 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 36 ms
+2026-07-29 19:56:45.748 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:56:45.749 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:56:45.749 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 62.9941ms
+2026-07-29 19:56:45.770 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 108
+2026-07-29 19:56:45.770 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 19:56:45.770 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 19:56:45.770 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:56:45.771 +02:00 [INF] Property Area : {"Id":"ae45aa61-9b2f-4ca8-8a05-9ededd3396b5","Code":"SALES","Name":"Duplicate Area","$type":"AreaDTO"}
+2026-07-29 19:56:45.774 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 3 ms
+2026-07-29 19:56:45.779 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 19:56:45.779 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 409 null application/problem+json; charset=utf-8 9.6308ms
+2026-07-29 19:56:45.951 +02:00 [INF] Registered 32 endpoints in 153 milliseconds.
+2026-07-29 19:56:45.997 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:56:46.134 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:56:46.238 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:56:46.238 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:56:46.239 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:56:46.240 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:56:46.240 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:56:46.249 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 8 ms
+2026-07-29 19:56:46.250 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:56:46.250 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:56:46.251 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 116.8072ms
+2026-07-29 19:56:46.255 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:56:46.256 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:56:46.257 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:56:46.258 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:56:46.258 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:56:46.259 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:56:46.259 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:56:46.259 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:56:46.259 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 4.5269ms
+2026-07-29 19:56:46.443 +02:00 [INF] Registered 32 endpoints in 160 milliseconds.
+2026-07-29 19:56:46.485 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:56:46.627 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 19:56:46.648 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:56:46.648 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:56:46.648 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:56:46.654 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 19:56:46.654 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:56:46.654 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 19:56:46.677 +02:00 [INF] Handled GetAreaByCodeQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 22 ms
+2026-07-29 19:56:46.678 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:56:46.678 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:56:46.678 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - 404 null null 50.905ms
+2026-07-29 19:56:46.682 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - null null
+2026-07-29 19:56:46.683 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:56:46.684 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:56:46.684 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 19:56:46.684 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:56:46.685 +02:00 [INF] Property AreaCode : FINANCE
+2026-07-29 19:56:46.687 +02:00 [INF] Handled GetAreaByCodeQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 2 ms
+2026-07-29 19:56:46.691 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:56:46.691 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:56:46.691 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - 200 null application/json; charset=utf-8 9.4395ms
+2026-07-29 19:56:46.812 +02:00 [INF] Registered 32 endpoints in 89 milliseconds.
+2026-07-29 19:56:46.819 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:56:46.918 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 19:56:46.937 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:56:46.937 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:56:46.946 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 19:56:46.947 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 19:56:46.962 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 15 ms
+2026-07-29 19:56:46.964 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:56:46.964 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - 404 null null 45.6792ms
+2026-07-29 19:56:46.967 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:56:46.968 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:56:46.968 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:56:46.968 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:56:46.968 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:56:46.969 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:56:46.970 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:56:46.970 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:56:46.970 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 3.0179ms
+2026-07-29 19:56:46.970 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - null null
+2026-07-29 19:56:46.970 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:56:46.971 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 19:56:46.971 +02:00 [INF] Property AreaCode : PRODUCTION
+2026-07-29 19:56:46.987 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 15 ms
+2026-07-29 19:56:46.987 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:56:46.987 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - 204 null null 16.7894ms
+2026-07-29 19:56:46.987 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:56:46.987 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:56:46.988 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:56:46.988 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:56:46.988 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:56:46.989 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 1 ms
+2026-07-29 19:56:46.990 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:56:46.990 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:56:46.990 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 2.4731ms
+2026-07-29 19:56:47.065 +02:00 [INF] Registered 32 endpoints in 64 milliseconds.
+2026-07-29 19:56:47.072 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:56:47.159 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/e4a20aa3-c3b1-4d73-aec4-d0ec550e0b63 - null null
+2026-07-29 19:56:47.172 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:56:47.172 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:56:47.172 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:56:47.176 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 19:56:47.176 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:56:47.176 +02:00 [INF] Property AreaId : "e4a20aa3-c3b1-4d73-aec4-d0ec550e0b63"
+2026-07-29 19:56:47.184 +02:00 [INF] Handled GetAreaQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 8 ms
+2026-07-29 19:56:47.185 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:56:47.185 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:56:47.185 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/e4a20aa3-c3b1-4d73-aec4-d0ec550e0b63 - 404 null null 26.0719ms
+2026-07-29 19:56:47.187 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - null null
+2026-07-29 19:56:47.188 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:56:47.188 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:56:47.189 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 19:56:47.189 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:56:47.189 +02:00 [INF] Property AreaId : "a1000000-0000-0000-0000-000000000001"
+2026-07-29 19:56:47.190 +02:00 [INF] Handled GetAreaQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 1 ms
+2026-07-29 19:56:47.191 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:56:47.191 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:56:47.191 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - 200 null application/json; charset=utf-8 4.6522ms
+2026-07-29 19:57:01.230 +02:00 [INF] Registered 32 endpoints in 294 milliseconds.
+2026-07-29 19:57:02.450 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:03.201 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 116
+2026-07-29 19:57:03.245 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:03.246 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 19:57:03.312 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 19:57:03.313 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:03.314 +02:00 [INF] Property Area : {"Id":"21d1ba6a-a32d-4fd9-93a4-e549c1ff07d2","Code":"TEST_CREATE","Name":"Test Create Area","$type":"AreaDTO"}
+2026-07-29 19:57:03.413 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 96 ms
+2026-07-29 19:57:03.437 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 19:57:03.442 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 201 null application/json; charset=utf-8 242.911ms
+2026-07-29 19:57:03.453 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:57:03.459 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:03.459 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:03.469 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:57:03.469 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:03.511 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 41 ms
+2026-07-29 19:57:03.520 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:03.520 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:03.521 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 67.786ms
+2026-07-29 19:57:03.545 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 108
+2026-07-29 19:57:03.546 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 19:57:03.546 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 19:57:03.546 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:03.547 +02:00 [INF] Property Area : {"Id":"49fcec15-2b23-42d7-a90c-e99c190eb492","Code":"SALES","Name":"Duplicate Area","$type":"AreaDTO"}
+2026-07-29 19:57:03.550 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 3 ms
+2026-07-29 19:57:03.554 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 19:57:03.555 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 409 null application/problem+json; charset=utf-8 9.1545ms
+2026-07-29 19:57:03.650 +02:00 [INF] Registered 32 endpoints in 73 milliseconds.
+2026-07-29 19:57:03.673 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:03.929 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:57:03.946 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:03.946 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:03.946 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:03.947 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:57:03.947 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:03.951 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 3 ms
+2026-07-29 19:57:03.951 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:03.951 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:03.951 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 22.1339ms
+2026-07-29 19:57:03.954 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:57:03.955 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:03.955 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:03.955 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:57:03.955 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:03.955 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:57:03.955 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:03.955 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:03.955 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 1.7615ms
+2026-07-29 19:57:04.048 +02:00 [INF] Registered 32 endpoints in 81 milliseconds.
+2026-07-29 19:57:04.056 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:04.285 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 19:57:04.304 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:04.304 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:04.304 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:04.309 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 19:57:04.309 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:04.309 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 19:57:04.325 +02:00 [INF] Handled GetAreaByCodeQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 15 ms
+2026-07-29 19:57:04.326 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:04.326 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:04.326 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - 404 null null 40.3567ms
+2026-07-29 19:57:04.329 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - null null
+2026-07-29 19:57:04.330 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:04.330 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:04.331 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 19:57:04.331 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:04.331 +02:00 [INF] Property AreaCode : FINANCE
+2026-07-29 19:57:04.333 +02:00 [INF] Handled GetAreaByCodeQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 1 ms
+2026-07-29 19:57:04.334 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:04.334 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:04.334 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - 200 null application/json; charset=utf-8 4.8774ms
+2026-07-29 19:57:04.419 +02:00 [INF] Registered 32 endpoints in 63 milliseconds.
+2026-07-29 19:57:04.430 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:04.550 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 19:57:04.567 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:04.567 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:04.567 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:04.570 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 19:57:04.570 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:04.570 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:04.571 +02:00 [INF] Property Take : null
+2026-07-29 19:57:04.729 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 158 ms
+2026-07-29 19:57:04.735 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 19:57:04.735 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:04.735 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:04.735 +02:00 [INF] Property Take : null
+2026-07-29 19:57:04.736 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:57:04.744 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:04.744 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:04.744 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 193.8102ms
+2026-07-29 19:57:04.820 +02:00 [INF] Registered 32 endpoints in 61 milliseconds.
+2026-07-29 19:57:04.832 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:05.052 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Contributors - null null
+2026-07-29 19:57:05.072 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:05.072 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:05.072 +02:00 [INF] Executing endpoint 'HTTP: GET /Contributors'
+2026-07-29 19:57:05.084 +02:00 [INF] Handling ListContributorsQuery
+2026-07-29 19:57:05.085 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:05.085 +02:00 [INF] Property Take : null
+2026-07-29 19:57:05.119 +02:00 [INF] Handled ListContributorsQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO]] in 33 ms
+2026-07-29 19:57:05.121 +02:00 [INF] Handling ListContributorsQuery2
+2026-07-29 19:57:05.121 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:05.121 +02:00 [INF] Property Take : null
+2026-07-29 19:57:05.123 +02:00 [INF] Handled ListContributorsQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO]] in 2 ms
+2026-07-29 19:57:05.133 +02:00 [INF] Executed endpoint 'HTTP: GET /Contributors'
+2026-07-29 19:57:05.133 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:05.133 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Contributors - 200 null application/json; charset=utf-8 80.7307ms
+2026-07-29 19:57:05.206 +02:00 [INF] Registered 32 endpoints in 51 milliseconds.
+2026-07-29 19:57:05.213 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:05.555 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 19:57:05.603 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:05.603 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:05.603 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:05.604 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 19:57:05.604 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:05.604 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:05.605 +02:00 [INF] Property Take : null
+2026-07-29 19:57:05.611 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 6 ms
+2026-07-29 19:57:05.612 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 19:57:05.612 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:05.612 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:05.613 +02:00 [INF] Property Take : null
+2026-07-29 19:57:05.613 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:57:05.614 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:05.614 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:05.614 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 59.0128ms
+2026-07-29 19:57:05.615 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - null null
+2026-07-29 19:57:05.616 +02:00 [INF] Executing endpoint '405 HTTP Method Not Supported'
+2026-07-29 19:57:05.616 +02:00 [INF] Executed endpoint '405 HTTP Method Not Supported'
+2026-07-29 19:57:05.617 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - 405 null null 1.5927ms
+2026-07-29 19:57:05.617 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 19:57:05.617 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:05.617 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:05.618 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 19:57:05.618 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:05.618 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:05.618 +02:00 [INF] Property Take : null
+2026-07-29 19:57:05.618 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:57:05.618 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 19:57:05.618 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:05.619 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:05.619 +02:00 [INF] Property Take : null
+2026-07-29 19:57:05.619 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:57:05.619 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:05.619 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:05.619 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 2.0789ms
+2026-07-29 19:57:05.700 +02:00 [INF] Registered 32 endpoints in 36 milliseconds.
+2026-07-29 19:57:05.707 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:05.899 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 19:57:05.918 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:05.918 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:05.930 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 19:57:05.930 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 19:57:05.961 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 30 ms
+2026-07-29 19:57:05.963 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:05.963 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - 404 null null 63.521ms
+2026-07-29 19:57:05.965 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:57:05.966 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:05.966 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:05.967 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:57:05.967 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:05.968 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:57:05.970 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:05.970 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:05.970 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 4.7304ms
+2026-07-29 19:57:05.970 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - null null
+2026-07-29 19:57:05.971 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:05.971 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 19:57:05.971 +02:00 [INF] Property AreaCode : PRODUCTION
+2026-07-29 19:57:05.994 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 23 ms
+2026-07-29 19:57:05.995 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:05.995 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - 204 null null 24.7198ms
+2026-07-29 19:57:05.996 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:57:05.996 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:05.996 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:05.996 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:57:05.996 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:05.998 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 1 ms
+2026-07-29 19:57:05.998 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:05.998 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:05.999 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 2.8928ms
+2026-07-29 19:57:06.051 +02:00 [INF] Registered 32 endpoints in 38 milliseconds.
+2026-07-29 19:57:06.056 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:06.155 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/5fe58335-d782-431c-a72e-d04d86c41e2c - null null
+2026-07-29 19:57:06.170 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:06.170 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:06.170 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:57:06.173 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 19:57:06.173 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:06.173 +02:00 [INF] Property AreaId : "5fe58335-d782-431c-a72e-d04d86c41e2c"
+2026-07-29 19:57:06.183 +02:00 [INF] Handled GetAreaQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 9 ms
+2026-07-29 19:57:06.184 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:57:06.184 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:06.184 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/5fe58335-d782-431c-a72e-d04d86c41e2c - 404 null null 29.1346ms
+2026-07-29 19:57:06.186 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - null null
+2026-07-29 19:57:06.187 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:06.187 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:57:06.187 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 19:57:06.187 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:06.187 +02:00 [INF] Property AreaId : "a1000000-0000-0000-0000-000000000001"
+2026-07-29 19:57:06.189 +02:00 [INF] Handled GetAreaQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 0 ms
+2026-07-29 19:57:06.189 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:57:06.189 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:06.189 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - 200 null application/json; charset=utf-8 3.2893ms
+2026-07-29 19:57:06.242 +02:00 [INF] Registered 32 endpoints in 45 milliseconds.
+2026-07-29 19:57:06.248 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:06.345 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - null null
+2026-07-29 19:57:06.364 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:06.364 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:06.365 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 19:57:06.382 +02:00 [INF] Handling GetScenarioQuery
+2026-07-29 19:57:06.383 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:06.383 +02:00 [INF] Property ScenarioId : "b36e1803-a6e7-4841-8de6-859a6dee43bf"
+2026-07-29 19:57:06.397 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 19:57:06.397 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The expression 's.InputFeature' is invalid inside an 'Include' operation, since it does not represent a property access: 't => t.MyProperty'. To target navigations declared on derived types, use casting ('t => ((Derived)t).MyProperty') or the 'as' operator ('t => (t as Derived).MyProperty'). Collection navigation access can be filtered by composing Where, OrderBy(Descending), ThenBy(Descending), Skip or Take operations. For more information on including related data, see https://go.microsoft.com/fwlink/?LinkID=746393.
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.PopulateIncludeTree(IncludeTreeNode includeTreeNode, Expression expression, Boolean setLoaded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.ProcessInclude(NavigationExpansionExpression source, Expression expression, Boolean thenInclude, Boolean setLoaded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.Expand(Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessor.Process(Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutorExpression[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass11_0`1.<ExecuteCore>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteCore[TResult](Expression query, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, LambdaExpression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstOrDefaultAsync[TSource](IQueryable`1 source, Expression`1 predicate, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.Infrastructure.Data.Queries.ScenariosQueryService.GetScenario(Datasource dataSource, Guid scenarioId, CancellationToken ct) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.Infrastructure\Data\Queries\ScenariosQueryService.cs:line 113
+   at AVAIntegrationModeler.UseCases.Scenarios.Get.GetScenarioHandler.Handle(GetScenarioQuery request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.UseCases\Scenarios\Get\GetScenarioHandler.cs:line 19
+   at Ardalis.SharedKernel.LoggingBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.API.Scenarios.GetById.HandleAsync(GetScenarioByIdRequest request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.API\Scenarios\GetById.cs:line 24
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware.Invoke(HttpContext httpContext)
+   at Ardalis.ListStartupServices.ShowAllServicesMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-07-29 19:57:06.430 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - 500 null text/plain; charset=utf-8 84.5459ms
+2026-07-29 19:57:06.483 +02:00 [INF] Registered 32 endpoints in 41 milliseconds.
+2026-07-29 19:57:06.488 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:06.589 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Contributors/1 - null null
+2026-07-29 19:57:06.610 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:06.610 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:06.610 +02:00 [INF] Executing endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 19:57:06.630 +02:00 [INF] Handling GetContributorQuery
+2026-07-29 19:57:06.630 +02:00 [INF] Property ContributorId : 1
+2026-07-29 19:57:06.659 +02:00 [INF] Handled GetContributorQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO] in 28 ms
+2026-07-29 19:57:06.660 +02:00 [INF] Executed endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 19:57:06.661 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:06.661 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Contributors/1 - 200 null application/json; charset=utf-8 71.6712ms
+2026-07-29 19:57:06.664 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Contributors/1000 - null null
+2026-07-29 19:57:06.667 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:06.667 +02:00 [INF] Executing endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 19:57:06.668 +02:00 [INF] Handling GetContributorQuery
+2026-07-29 19:57:06.668 +02:00 [INF] Property ContributorId : 1000
+2026-07-29 19:57:06.669 +02:00 [INF] Handled GetContributorQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO] in 1 ms
+2026-07-29 19:57:06.670 +02:00 [INF] Executed endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 19:57:06.670 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:06.670 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Contributors/1000 - 404 null null 5.5062ms
+2026-07-29 19:57:20.494 +02:00 [INF] Registered 32 endpoints in 292 milliseconds.
+2026-07-29 19:57:21.690 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:22.332 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 116
+2026-07-29 19:57:22.397 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:22.399 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 19:57:22.476 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 19:57:22.476 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:22.477 +02:00 [INF] Property Area : {"Id":"e50e099c-72e2-4bdd-a107-c7222f5a0905","Code":"TEST_CREATE","Name":"Test Create Area","$type":"AreaDTO"}
+2026-07-29 19:57:22.570 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 91 ms
+2026-07-29 19:57:22.609 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 19:57:22.619 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:57:22.613 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 201 null application/json; charset=utf-8 284.8217ms
+2026-07-29 19:57:22.622 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:22.622 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:22.631 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:57:22.631 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:22.664 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 33 ms
+2026-07-29 19:57:22.672 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:22.672 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:22.673 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 54.1441ms
+2026-07-29 19:57:22.695 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 108
+2026-07-29 19:57:22.695 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 19:57:22.695 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 19:57:22.695 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:22.696 +02:00 [INF] Property Area : {"Id":"ae6d256a-5953-4c05-9cda-3c0bdce8ec05","Code":"SALES","Name":"Duplicate Area","$type":"AreaDTO"}
+2026-07-29 19:57:22.699 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 3 ms
+2026-07-29 19:57:22.702 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 19:57:22.702 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 409 null application/problem+json; charset=utf-8 7.8567ms
+2026-07-29 19:57:22.789 +02:00 [INF] Registered 32 endpoints in 66 milliseconds.
+2026-07-29 19:57:22.811 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:22.898 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:57:22.914 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:22.914 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:22.914 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:22.915 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:57:22.915 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:22.919 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 3 ms
+2026-07-29 19:57:22.920 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:22.920 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:22.920 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 22.6364ms
+2026-07-29 19:57:22.923 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:57:22.924 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:22.924 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:22.925 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:57:22.925 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:22.925 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:57:22.925 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:22.925 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:22.925 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 1.8121ms
+2026-07-29 19:57:22.979 +02:00 [INF] Registered 32 endpoints in 45 milliseconds.
+2026-07-29 19:57:22.985 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:23.095 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 19:57:23.111 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:23.112 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:23.112 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:23.114 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 19:57:23.114 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:23.114 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 19:57:23.126 +02:00 [INF] Handled GetAreaByCodeQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 11 ms
+2026-07-29 19:57:23.127 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:23.127 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:23.127 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - 404 null null 31.769ms
+2026-07-29 19:57:23.129 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - null null
+2026-07-29 19:57:23.130 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:23.130 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:23.130 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 19:57:23.130 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:23.131 +02:00 [INF] Property AreaCode : FINANCE
+2026-07-29 19:57:23.133 +02:00 [INF] Handled GetAreaByCodeQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 2 ms
+2026-07-29 19:57:23.134 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:23.134 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:23.134 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - 200 null application/json; charset=utf-8 5.2499ms
+2026-07-29 19:57:23.215 +02:00 [INF] Registered 32 endpoints in 61 milliseconds.
+2026-07-29 19:57:23.223 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:23.337 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 19:57:23.352 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:23.353 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:23.353 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:23.355 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 19:57:23.355 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:23.355 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:23.355 +02:00 [INF] Property Take : null
+2026-07-29 19:57:23.495 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 139 ms
+2026-07-29 19:57:23.505 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 19:57:23.505 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:23.505 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:23.505 +02:00 [INF] Property Take : null
+2026-07-29 19:57:23.507 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 1 ms
+2026-07-29 19:57:23.521 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:23.521 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:23.521 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 183.8979ms
+2026-07-29 19:57:23.623 +02:00 [INF] Registered 32 endpoints in 87 milliseconds.
+2026-07-29 19:57:23.630 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:23.731 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Contributors - null null
+2026-07-29 19:57:23.749 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:23.749 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:23.749 +02:00 [INF] Executing endpoint 'HTTP: GET /Contributors'
+2026-07-29 19:57:23.761 +02:00 [INF] Handling ListContributorsQuery
+2026-07-29 19:57:23.761 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:23.761 +02:00 [INF] Property Take : null
+2026-07-29 19:57:23.792 +02:00 [INF] Handled ListContributorsQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO]] in 30 ms
+2026-07-29 19:57:23.794 +02:00 [INF] Handling ListContributorsQuery2
+2026-07-29 19:57:23.795 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:23.795 +02:00 [INF] Property Take : null
+2026-07-29 19:57:23.796 +02:00 [INF] Handled ListContributorsQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO]] in 1 ms
+2026-07-29 19:57:23.803 +02:00 [INF] Executed endpoint 'HTTP: GET /Contributors'
+2026-07-29 19:57:23.803 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:23.803 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Contributors - 200 null application/json; charset=utf-8 71.9742ms
+2026-07-29 19:57:23.873 +02:00 [INF] Registered 32 endpoints in 54 milliseconds.
+2026-07-29 19:57:23.879 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:23.968 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 19:57:23.989 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:23.989 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:23.990 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:23.991 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 19:57:23.991 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:23.991 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:23.991 +02:00 [INF] Property Take : null
+2026-07-29 19:57:23.998 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 6 ms
+2026-07-29 19:57:23.999 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 19:57:23.999 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:23.999 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:23.999 +02:00 [INF] Property Take : null
+2026-07-29 19:57:23.999 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:57:24.000 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:24.000 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:24.001 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 32.5846ms
+2026-07-29 19:57:24.001 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - null null
+2026-07-29 19:57:24.002 +02:00 [INF] Executing endpoint '405 HTTP Method Not Supported'
+2026-07-29 19:57:24.002 +02:00 [INF] Executed endpoint '405 HTTP Method Not Supported'
+2026-07-29 19:57:24.002 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - 405 null null 1.1506ms
+2026-07-29 19:57:24.003 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 19:57:24.003 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:24.003 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:24.003 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 19:57:24.003 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:24.003 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:24.003 +02:00 [INF] Property Take : null
+2026-07-29 19:57:24.004 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:57:24.004 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 19:57:24.004 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:24.004 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:24.004 +02:00 [INF] Property Take : null
+2026-07-29 19:57:24.004 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:57:24.004 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:24.004 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:24.004 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 1.8027ms
+2026-07-29 19:57:24.103 +02:00 [INF] Registered 32 endpoints in 56 milliseconds.
+2026-07-29 19:57:24.112 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:24.233 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 19:57:24.252 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:24.252 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:24.261 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 19:57:24.261 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 19:57:24.277 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 16 ms
+2026-07-29 19:57:24.279 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:24.279 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - 404 null null 45.8031ms
+2026-07-29 19:57:24.281 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:57:24.283 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:24.283 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:24.283 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:57:24.283 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:24.284 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:57:24.285 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:24.285 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:24.286 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 4.1207ms
+2026-07-29 19:57:24.286 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - null null
+2026-07-29 19:57:24.286 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:24.286 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 19:57:24.287 +02:00 [INF] Property AreaCode : PRODUCTION
+2026-07-29 19:57:24.306 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 19 ms
+2026-07-29 19:57:24.306 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:57:24.306 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - 204 null null 20.2689ms
+2026-07-29 19:57:24.307 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:57:24.307 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:24.307 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:24.307 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:57:24.307 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:24.308 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 1 ms
+2026-07-29 19:57:24.308 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:57:24.308 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:24.309 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 1.8144ms
+2026-07-29 19:57:24.383 +02:00 [INF] Registered 32 endpoints in 58 milliseconds.
+2026-07-29 19:57:24.390 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:24.490 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/55df14e5-a969-4ba9-b61f-c59bae7836b9 - null null
+2026-07-29 19:57:24.505 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:24.505 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:24.505 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:57:24.508 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 19:57:24.509 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:24.509 +02:00 [INF] Property AreaId : "55df14e5-a969-4ba9-b61f-c59bae7836b9"
+2026-07-29 19:57:24.517 +02:00 [INF] Handled GetAreaQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 8 ms
+2026-07-29 19:57:24.518 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:57:24.518 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:24.518 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/55df14e5-a969-4ba9-b61f-c59bae7836b9 - 404 null null 27.4755ms
+2026-07-29 19:57:24.519 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - null null
+2026-07-29 19:57:24.520 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:24.520 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:57:24.521 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 19:57:24.521 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:24.521 +02:00 [INF] Property AreaId : "a1000000-0000-0000-0000-000000000001"
+2026-07-29 19:57:24.522 +02:00 [INF] Handled GetAreaQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 0 ms
+2026-07-29 19:57:24.522 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 19:57:24.523 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:24.523 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - 200 null application/json; charset=utf-8 3.133ms
+2026-07-29 19:57:24.569 +02:00 [INF] Registered 32 endpoints in 39 milliseconds.
+2026-07-29 19:57:24.577 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:24.714 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - null null
+2026-07-29 19:57:24.734 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:24.734 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:24.734 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 19:57:24.749 +02:00 [INF] Handling GetScenarioQuery
+2026-07-29 19:57:24.749 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:24.749 +02:00 [INF] Property ScenarioId : "b36e1803-a6e7-4841-8de6-859a6dee43bf"
+2026-07-29 19:57:24.760 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 19:57:24.760 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The expression 's.InputFeature' is invalid inside an 'Include' operation, since it does not represent a property access: 't => t.MyProperty'. To target navigations declared on derived types, use casting ('t => ((Derived)t).MyProperty') or the 'as' operator ('t => (t as Derived).MyProperty'). Collection navigation access can be filtered by composing Where, OrderBy(Descending), ThenBy(Descending), Skip or Take operations. For more information on including related data, see https://go.microsoft.com/fwlink/?LinkID=746393.
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.PopulateIncludeTree(IncludeTreeNode includeTreeNode, Expression expression, Boolean setLoaded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.ProcessInclude(NavigationExpansionExpression source, Expression expression, Boolean thenInclude, Boolean setLoaded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.Expand(Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessor.Process(Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutorExpression[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass11_0`1.<ExecuteCore>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteCore[TResult](Expression query, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, LambdaExpression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstOrDefaultAsync[TSource](IQueryable`1 source, Expression`1 predicate, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.Infrastructure.Data.Queries.ScenariosQueryService.GetScenario(Datasource dataSource, Guid scenarioId, CancellationToken ct) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.Infrastructure\Data\Queries\ScenariosQueryService.cs:line 113
+   at AVAIntegrationModeler.UseCases.Scenarios.Get.GetScenarioHandler.Handle(GetScenarioQuery request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.UseCases\Scenarios\Get\GetScenarioHandler.cs:line 19
+   at Ardalis.SharedKernel.LoggingBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.API.Scenarios.GetById.HandleAsync(GetScenarioByIdRequest request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.API\Scenarios\GetById.cs:line 24
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware.Invoke(HttpContext httpContext)
+   at Ardalis.ListStartupServices.ShowAllServicesMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-07-29 19:57:24.767 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - 500 null text/plain; charset=utf-8 52.9215ms
+2026-07-29 19:57:24.827 +02:00 [INF] Registered 32 endpoints in 43 milliseconds.
+2026-07-29 19:57:24.834 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:24.934 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Contributors/1 - null null
+2026-07-29 19:57:24.946 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:24.946 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:24.946 +02:00 [INF] Executing endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 19:57:24.957 +02:00 [INF] Handling GetContributorQuery
+2026-07-29 19:57:24.957 +02:00 [INF] Property ContributorId : 1
+2026-07-29 19:57:24.974 +02:00 [INF] Handled GetContributorQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO] in 17 ms
+2026-07-29 19:57:24.975 +02:00 [INF] Executed endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 19:57:24.975 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:24.976 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Contributors/1 - 200 null application/json; charset=utf-8 41.9814ms
+2026-07-29 19:57:24.978 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Contributors/1000 - null null
+2026-07-29 19:57:24.979 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:24.979 +02:00 [INF] Executing endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 19:57:24.979 +02:00 [INF] Handling GetContributorQuery
+2026-07-29 19:57:24.979 +02:00 [INF] Property ContributorId : 1000
+2026-07-29 19:57:24.981 +02:00 [INF] Handled GetContributorQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO] in 1 ms
+2026-07-29 19:57:24.981 +02:00 [INF] Executed endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 19:57:24.981 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:24.981 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Contributors/1000 - 404 null null 3.1657ms
+2026-07-29 19:57:37.850 +02:00 [INF] Registered 32 endpoints in 277 milliseconds.
+2026-07-29 19:57:39.126 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:39.757 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 19:57:39.800 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:39.804 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:39.806 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:39.837 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 19:57:39.837 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:39.838 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:39.838 +02:00 [INF] Property Take : null
+2026-07-29 19:57:40.061 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 223 ms
+2026-07-29 19:57:40.066 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 19:57:40.066 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:40.066 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:40.066 +02:00 [INF] Property Take : null
+2026-07-29 19:57:40.067 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:57:40.088 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:40.088 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:40.091 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 336.2191ms
+2026-07-29 19:57:40.229 +02:00 [INF] Registered 32 endpoints in 94 milliseconds.
+2026-07-29 19:57:40.261 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:40.352 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 19:57:40.365 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:40.365 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:40.365 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:40.365 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 19:57:40.366 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:40.366 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:40.366 +02:00 [INF] Property Take : null
+2026-07-29 19:57:40.371 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 4 ms
+2026-07-29 19:57:40.372 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 19:57:40.372 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:40.372 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:40.372 +02:00 [INF] Property Take : null
+2026-07-29 19:57:40.373 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:57:40.374 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:40.374 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:40.374 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 22.228ms
+2026-07-29 19:57:40.376 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - null null
+2026-07-29 19:57:40.377 +02:00 [INF] Executing endpoint '405 HTTP Method Not Supported'
+2026-07-29 19:57:40.377 +02:00 [INF] Executed endpoint '405 HTTP Method Not Supported'
+2026-07-29 19:57:40.377 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - 405 null null 1.5967ms
+2026-07-29 19:57:40.377 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 19:57:40.378 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:40.378 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:40.378 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 19:57:40.378 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:40.378 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:40.378 +02:00 [INF] Property Take : null
+2026-07-29 19:57:40.378 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:57:40.378 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 19:57:40.378 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:40.378 +02:00 [INF] Property Skip : null
+2026-07-29 19:57:40.378 +02:00 [INF] Property Take : null
+2026-07-29 19:57:40.378 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:57:40.378 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:57:40.378 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:57:40.379 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 1.1294ms
+2026-07-29 19:57:40.481 +02:00 [INF] Registered 32 endpoints in 41 milliseconds.
+2026-07-29 19:57:40.487 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:57:40.591 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - null null
+2026-07-29 19:57:40.605 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:57:40.605 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:57:40.605 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 19:57:40.623 +02:00 [INF] Handling GetScenarioQuery
+2026-07-29 19:57:40.623 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:57:40.624 +02:00 [INF] Property ScenarioId : "b36e1803-a6e7-4841-8de6-859a6dee43bf"
+2026-07-29 19:57:40.638 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 19:57:40.638 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The expression 's.InputFeature' is invalid inside an 'Include' operation, since it does not represent a property access: 't => t.MyProperty'. To target navigations declared on derived types, use casting ('t => ((Derived)t).MyProperty') or the 'as' operator ('t => (t as Derived).MyProperty'). Collection navigation access can be filtered by composing Where, OrderBy(Descending), ThenBy(Descending), Skip or Take operations. For more information on including related data, see https://go.microsoft.com/fwlink/?LinkID=746393.
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.PopulateIncludeTree(IncludeTreeNode includeTreeNode, Expression expression, Boolean setLoaded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.ProcessInclude(NavigationExpansionExpression source, Expression expression, Boolean thenInclude, Boolean setLoaded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.Expand(Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessor.Process(Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutorExpression[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass11_0`1.<ExecuteCore>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteCore[TResult](Expression query, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, LambdaExpression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstOrDefaultAsync[TSource](IQueryable`1 source, Expression`1 predicate, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.Infrastructure.Data.Queries.ScenariosQueryService.GetScenario(Datasource dataSource, Guid scenarioId, CancellationToken ct) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.Infrastructure\Data\Queries\ScenariosQueryService.cs:line 113
+   at AVAIntegrationModeler.UseCases.Scenarios.Get.GetScenarioHandler.Handle(GetScenarioQuery request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.UseCases\Scenarios\Get\GetScenarioHandler.cs:line 19
+   at Ardalis.SharedKernel.LoggingBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.API.Scenarios.GetById.HandleAsync(GetScenarioByIdRequest request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.API\Scenarios\GetById.cs:line 24
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware.Invoke(HttpContext httpContext)
+   at Ardalis.ListStartupServices.ShowAllServicesMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-07-29 19:57:40.644 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - 500 null text/plain; charset=utf-8 52.746ms
+2026-07-29 19:59:55.632 +02:00 [INF] Registered 32 endpoints in 308 milliseconds.
+2026-07-29 19:59:57.089 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:59:58.047 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 116
+2026-07-29 19:59:58.125 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:59:58.127 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 19:59:58.205 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 19:59:58.205 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:59:58.207 +02:00 [INF] Property Area : {"Id":"a4f4e103-caaf-4aa9-ac43-128a7d362486","Code":"TEST_CREATE","Name":"Test Create Area","$type":"AreaDTO"}
+2026-07-29 19:59:58.316 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 108 ms
+2026-07-29 19:59:58.376 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 19:59:58.387 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:59:58.390 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:59:58.390 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:59:58.382 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 201 null application/json; charset=utf-8 337.5088ms
+2026-07-29 19:59:58.400 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:59:58.400 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:59:58.459 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 58 ms
+2026-07-29 19:59:58.470 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:59:58.470 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:59:58.470 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 84.0471ms
+2026-07-29 19:59:58.504 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 108
+2026-07-29 19:59:58.505 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 19:59:58.506 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 19:59:58.506 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:59:58.506 +02:00 [INF] Property Area : {"Id":"e90833df-e782-478c-861b-389ce6ab6c06","Code":"SALES","Name":"Duplicate Area","$type":"AreaDTO"}
+2026-07-29 19:59:58.510 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 4 ms
+2026-07-29 19:59:58.517 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 19:59:58.517 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 409 null application/problem+json; charset=utf-8 13.0336ms
+2026-07-29 19:59:58.651 +02:00 [INF] Registered 32 endpoints in 109 milliseconds.
+2026-07-29 19:59:58.682 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:59:58.801 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:59:58.828 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:59:58.828 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:59:58.828 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:59:58.830 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:59:58.830 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:59:58.836 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 5 ms
+2026-07-29 19:59:58.837 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:59:58.837 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:59:58.837 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 36.273ms
+2026-07-29 19:59:58.840 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 19:59:58.841 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:59:58.842 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 19:59:58.842 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 19:59:58.842 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:59:58.842 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 19:59:58.842 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 19:59:58.842 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:59:58.842 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 2.0779ms
+2026-07-29 19:59:58.912 +02:00 [INF] Registered 32 endpoints in 58 milliseconds.
+2026-07-29 19:59:58.922 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:59:59.032 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 19:59:59.046 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:59:59.046 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:59:59.046 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:59:59.050 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 19:59:59.050 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:59:59.051 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 19:59:59.064 +02:00 [INF] Handled GetAreaByCodeQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 13 ms
+2026-07-29 19:59:59.064 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:59:59.064 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:59:59.064 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - 404 null null 32.8938ms
+2026-07-29 19:59:59.067 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - null null
+2026-07-29 19:59:59.068 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:59:59.068 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:59:59.068 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 19:59:59.069 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:59:59.069 +02:00 [INF] Property AreaCode : FINANCE
+2026-07-29 19:59:59.070 +02:00 [INF] Handled GetAreaByCodeQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 1 ms
+2026-07-29 19:59:59.071 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 19:59:59.071 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:59:59.071 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - 200 null application/json; charset=utf-8 3.9852ms
+2026-07-29 19:59:59.157 +02:00 [INF] Registered 32 endpoints in 68 milliseconds.
+2026-07-29 19:59:59.168 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:59:59.280 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 19:59:59.296 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:59:59.296 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:59:59.297 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:59:59.302 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 19:59:59.302 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:59:59.302 +02:00 [INF] Property Skip : null
+2026-07-29 19:59:59.303 +02:00 [INF] Property Take : null
+2026-07-29 19:59:59.419 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 116 ms
+2026-07-29 19:59:59.424 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 19:59:59.425 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:59:59.425 +02:00 [INF] Property Skip : null
+2026-07-29 19:59:59.425 +02:00 [INF] Property Take : null
+2026-07-29 19:59:59.426 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:59:59.434 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:59:59.435 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:59:59.435 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 154.7074ms
+2026-07-29 19:59:59.505 +02:00 [INF] Registered 32 endpoints in 56 milliseconds.
+2026-07-29 19:59:59.512 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:59:59.636 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Contributors - null null
+2026-07-29 19:59:59.653 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:59:59.653 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:59:59.653 +02:00 [INF] Executing endpoint 'HTTP: GET /Contributors'
+2026-07-29 19:59:59.663 +02:00 [INF] Handling ListContributorsQuery
+2026-07-29 19:59:59.663 +02:00 [INF] Property Skip : null
+2026-07-29 19:59:59.664 +02:00 [INF] Property Take : null
+2026-07-29 19:59:59.696 +02:00 [INF] Handled ListContributorsQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO]] in 32 ms
+2026-07-29 19:59:59.698 +02:00 [INF] Handling ListContributorsQuery2
+2026-07-29 19:59:59.698 +02:00 [INF] Property Skip : null
+2026-07-29 19:59:59.698 +02:00 [INF] Property Take : null
+2026-07-29 19:59:59.700 +02:00 [INF] Handled ListContributorsQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO]] in 1 ms
+2026-07-29 19:59:59.705 +02:00 [INF] Executed endpoint 'HTTP: GET /Contributors'
+2026-07-29 19:59:59.705 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:59:59.705 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Contributors - 200 null application/json; charset=utf-8 69.0172ms
+2026-07-29 19:59:59.755 +02:00 [INF] Registered 32 endpoints in 38 milliseconds.
+2026-07-29 19:59:59.761 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 19:59:59.871 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 19:59:59.921 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:59:59.921 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 19:59:59.921 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:59:59.922 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 19:59:59.922 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:59:59.922 +02:00 [INF] Property Skip : null
+2026-07-29 19:59:59.922 +02:00 [INF] Property Take : null
+2026-07-29 19:59:59.929 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 6 ms
+2026-07-29 19:59:59.930 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 19:59:59.931 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:59:59.931 +02:00 [INF] Property Skip : null
+2026-07-29 19:59:59.931 +02:00 [INF] Property Take : null
+2026-07-29 19:59:59.931 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:59:59.932 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:59:59.932 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:59:59.932 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 60.6749ms
+2026-07-29 19:59:59.933 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Scenarios/Database/scenario3Code - null null
+2026-07-29 19:59:59.934 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Scenarios/{Datasource}/{ScenarioCode}'
+2026-07-29 19:59:59.943 +02:00 [INF] Handling DeleteScenarioCommand
+2026-07-29 19:59:59.943 +02:00 [INF] Property ScenarioCode : scenario3Code
+2026-07-29 19:59:59.986 +02:00 [INF] Handled DeleteScenarioCommand with Ardalis.Result.Result in 42 ms
+2026-07-29 19:59:59.987 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Scenarios/{Datasource}/{ScenarioCode}'
+2026-07-29 19:59:59.987 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Scenarios/Database/scenario3Code - 204 null null 54.3616ms
+2026-07-29 19:59:59.987 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 19:59:59.987 +02:00 [INF] No cached response available for this request.
+2026-07-29 19:59:59.988 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:59:59.988 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 19:59:59.988 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:59:59.988 +02:00 [INF] Property Skip : null
+2026-07-29 19:59:59.988 +02:00 [INF] Property Take : null
+2026-07-29 19:59:59.994 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 5 ms
+2026-07-29 19:59:59.994 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 19:59:59.994 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 19:59:59.994 +02:00 [INF] Property Skip : null
+2026-07-29 19:59:59.994 +02:00 [INF] Property Take : null
+2026-07-29 19:59:59.994 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 19:59:59.995 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 19:59:59.995 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 19:59:59.995 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 7.2665ms
+2026-07-29 20:00:00.053 +02:00 [INF] Registered 32 endpoints in 48 milliseconds.
+2026-07-29 20:00:00.059 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:00:00.169 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 20:00:00.184 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:00:00.184 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 20:00:00.186 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 20:00:00.187 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 20:00:00.196 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 9 ms
+2026-07-29 20:00:00.197 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 20:00:00.197 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - 404 null null 27.5763ms
+2026-07-29 20:00:00.199 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 20:00:00.200 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:00:00.200 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 20:00:00.200 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 20:00:00.201 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:00:00.201 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 20:00:00.203 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 20:00:00.203 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:00:00.203 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 3.9271ms
+2026-07-29 20:00:00.203 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - null null
+2026-07-29 20:00:00.203 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 20:00:00.204 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 20:00:00.204 +02:00 [INF] Property AreaCode : PRODUCTION
+2026-07-29 20:00:00.212 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 7 ms
+2026-07-29 20:00:00.212 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 20:00:00.212 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - 204 null null 8.6768ms
+2026-07-29 20:00:00.213 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 20:00:00.213 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:00:00.213 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 20:00:00.213 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 20:00:00.214 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:00:00.215 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 1 ms
+2026-07-29 20:00:00.215 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 20:00:00.215 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:00:00.216 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 2.9246ms
+2026-07-29 20:00:00.263 +02:00 [INF] Registered 32 endpoints in 36 milliseconds.
+2026-07-29 20:00:00.268 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:00:00.389 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/c07f8613-a7ce-45e0-a2bf-8ac4dd1e2b9c - null null
+2026-07-29 20:00:00.405 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:00:00.405 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:00:00.405 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 20:00:00.409 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 20:00:00.409 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:00:00.409 +02:00 [INF] Property AreaId : "c07f8613-a7ce-45e0-a2bf-8ac4dd1e2b9c"
+2026-07-29 20:00:00.421 +02:00 [INF] Handled GetAreaQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 11 ms
+2026-07-29 20:00:00.421 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 20:00:00.421 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:00:00.421 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/c07f8613-a7ce-45e0-a2bf-8ac4dd1e2b9c - 404 null null 32.1086ms
+2026-07-29 20:00:00.424 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - null null
+2026-07-29 20:00:00.425 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:00:00.425 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 20:00:00.425 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 20:00:00.426 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:00:00.426 +02:00 [INF] Property AreaId : "a1000000-0000-0000-0000-000000000001"
+2026-07-29 20:00:00.427 +02:00 [INF] Handled GetAreaQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 1 ms
+2026-07-29 20:00:00.427 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 20:00:00.428 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:00:00.428 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - 200 null application/json; charset=utf-8 3.8968ms
+2026-07-29 20:00:00.487 +02:00 [INF] Registered 32 endpoints in 48 milliseconds.
+2026-07-29 20:00:00.494 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:00:00.597 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - null null
+2026-07-29 20:00:00.611 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:00:00.611 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:00:00.611 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 20:00:00.626 +02:00 [INF] Handling GetScenarioQuery
+2026-07-29 20:00:00.626 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:00:00.626 +02:00 [INF] Property ScenarioId : "b36e1803-a6e7-4841-8de6-859a6dee43bf"
+2026-07-29 20:00:00.637 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 20:00:00.637 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The expression 's.InputFeature' is invalid inside an 'Include' operation, since it does not represent a property access: 't => t.MyProperty'. To target navigations declared on derived types, use casting ('t => ((Derived)t).MyProperty') or the 'as' operator ('t => (t as Derived).MyProperty'). Collection navigation access can be filtered by composing Where, OrderBy(Descending), ThenBy(Descending), Skip or Take operations. For more information on including related data, see https://go.microsoft.com/fwlink/?LinkID=746393.
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.PopulateIncludeTree(IncludeTreeNode includeTreeNode, Expression expression, Boolean setLoaded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.ProcessInclude(NavigationExpansionExpression source, Expression expression, Boolean thenInclude, Boolean setLoaded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.Expand(Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessor.Process(Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutorExpression[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass11_0`1.<ExecuteCore>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteCore[TResult](Expression query, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, LambdaExpression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstOrDefaultAsync[TSource](IQueryable`1 source, Expression`1 predicate, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.Infrastructure.Data.Queries.ScenariosQueryService.GetScenario(Datasource dataSource, Guid scenarioId, CancellationToken ct) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.Infrastructure\Data\Queries\ScenariosQueryService.cs:line 113
+   at AVAIntegrationModeler.UseCases.Scenarios.Get.GetScenarioHandler.Handle(GetScenarioQuery request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.UseCases\Scenarios\Get\GetScenarioHandler.cs:line 17
+   at Ardalis.SharedKernel.LoggingBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.API.Scenarios.GetById.HandleAsync(GetScenarioByIdRequest request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.API\Scenarios\GetById.cs:line 24
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware.Invoke(HttpContext httpContext)
+   at Ardalis.ListStartupServices.ShowAllServicesMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-07-29 20:00:00.681 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - 500 null text/plain; charset=utf-8 83.3605ms
+2026-07-29 20:00:00.741 +02:00 [INF] Registered 32 endpoints in 42 milliseconds.
+2026-07-29 20:00:00.747 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:00:00.852 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Contributors/1 - null null
+2026-07-29 20:00:00.867 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:00:00.867 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:00:00.867 +02:00 [INF] Executing endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 20:00:00.883 +02:00 [INF] Handling GetContributorQuery
+2026-07-29 20:00:00.883 +02:00 [INF] Property ContributorId : 1
+2026-07-29 20:00:00.902 +02:00 [INF] Handled GetContributorQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO] in 18 ms
+2026-07-29 20:00:00.903 +02:00 [INF] Executed endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 20:00:00.903 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:00:00.903 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Contributors/1 - 200 null application/json; charset=utf-8 51.293ms
+2026-07-29 20:00:00.906 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Contributors/1000 - null null
+2026-07-29 20:00:00.907 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:00:00.907 +02:00 [INF] Executing endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 20:00:00.908 +02:00 [INF] Handling GetContributorQuery
+2026-07-29 20:00:00.908 +02:00 [INF] Property ContributorId : 1000
+2026-07-29 20:00:00.909 +02:00 [INF] Handled GetContributorQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO] in 1 ms
+2026-07-29 20:00:00.909 +02:00 [INF] Executed endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 20:00:00.909 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:00:00.910 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Contributors/1000 - 404 null null 3.6162ms
+2026-07-29 20:00:46.498 +02:00 [INF] Registered 32 endpoints in 281 milliseconds.
+2026-07-29 20:00:47.628 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:00:48.190 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - null null
+2026-07-29 20:00:48.256 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:00:48.260 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:00:48.262 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 20:00:48.315 +02:00 [INF] Handling GetScenarioQuery
+2026-07-29 20:00:48.316 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:00:48.316 +02:00 [INF] Property ScenarioId : "b36e1803-a6e7-4841-8de6-859a6dee43bf"
+2026-07-29 20:00:48.377 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 20:00:48.378 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The expression 's.InputFeature' is invalid inside an 'Include' operation, since it does not represent a property access: 't => t.MyProperty'. To target navigations declared on derived types, use casting ('t => ((Derived)t).MyProperty') or the 'as' operator ('t => (t as Derived).MyProperty'). Collection navigation access can be filtered by composing Where, OrderBy(Descending), ThenBy(Descending), Skip or Take operations. For more information on including related data, see https://go.microsoft.com/fwlink/?LinkID=746393.
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.PopulateIncludeTree(IncludeTreeNode includeTreeNode, Expression expression, Boolean setLoaded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.ProcessInclude(NavigationExpansionExpression source, Expression expression, Boolean thenInclude, Boolean setLoaded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.Expand(Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessor.Process(Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutorExpression[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass11_0`1.<ExecuteCore>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteCore[TResult](Expression query, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, LambdaExpression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstOrDefaultAsync[TSource](IQueryable`1 source, Expression`1 predicate, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.Infrastructure.Data.Queries.ScenariosQueryService.GetScenario(Datasource dataSource, Guid scenarioId, CancellationToken ct) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.Infrastructure\Data\Queries\ScenariosQueryService.cs:line 113
+   at AVAIntegrationModeler.UseCases.Scenarios.Get.GetScenarioHandler.Handle(GetScenarioQuery request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.UseCases\Scenarios\Get\GetScenarioHandler.cs:line 17
+   at Ardalis.SharedKernel.LoggingBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.API.Scenarios.GetById.HandleAsync(GetScenarioByIdRequest request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.API\Scenarios\GetById.cs:line 24
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware.Invoke(HttpContext httpContext)
+   at Ardalis.ListStartupServices.ShowAllServicesMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-07-29 20:00:48.393 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - 500 null text/plain; charset=utf-8 204.4001ms
+2026-07-29 20:01:18.804 +02:00 [INF] Registered 32 endpoints in 229 milliseconds.
+2026-07-29 20:01:19.915 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:01:20.457 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - null null
+2026-07-29 20:01:20.518 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:01:20.522 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:01:20.523 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 20:01:20.574 +02:00 [INF] Handling GetScenarioQuery
+2026-07-29 20:01:20.574 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:01:20.574 +02:00 [INF] Property ScenarioId : "b36e1803-a6e7-4841-8de6-859a6dee43bf"
+2026-07-29 20:01:20.635 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 20:01:20.636 +02:00 [ERR] An unhandled exception has occurred while executing the request.
+System.InvalidOperationException: The expression 's.InputFeature' is invalid inside an 'Include' operation, since it does not represent a property access: 't => t.MyProperty'. To target navigations declared on derived types, use casting ('t => ((Derived)t).MyProperty') or the 'as' operator ('t => (t as Derived).MyProperty'). Collection navigation access can be filtered by composing Where, OrderBy(Descending), ThenBy(Descending), Skip or Take operations. For more information on including related data, see https://go.microsoft.com/fwlink/?LinkID=746393.
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.PopulateIncludeTree(IncludeTreeNode includeTreeNode, Expression expression, Boolean setLoaded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.ProcessInclude(NavigationExpansionExpression source, Expression expression, Boolean thenInclude, Boolean setLoaded)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.VisitMethodCall(MethodCallExpression methodCallExpression)
+   at Microsoft.EntityFrameworkCore.Query.Internal.NavigationExpandingExpressionVisitor.Expand(Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryTranslationPreprocessor.Process(Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutorExpression[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Query.QueryCompilationContext.CreateQueryExecutor[TResult](Expression query)
+   at Microsoft.EntityFrameworkCore.Storage.Database.CompileQuery[TResult](Expression query, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.CompileQueryCore[TResult](IDatabase database, Expression query, IModel model, Boolean async)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.<>c__DisplayClass11_0`1.<ExecuteCore>b__0()
+   at Microsoft.EntityFrameworkCore.Query.Internal.CompiledQueryCache.GetOrAddQuery[TResult](Object cacheKey, Func`1 compiler)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteCore[TResult](Expression query, Boolean async, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.QueryCompiler.ExecuteAsync[TResult](Expression query, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.Query.Internal.EntityQueryProvider.ExecuteAsync[TResult](Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, Expression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.ExecuteAsync[TSource,TResult](MethodInfo operatorMethodInfo, IQueryable`1 source, LambdaExpression expression, CancellationToken cancellationToken)
+   at Microsoft.EntityFrameworkCore.EntityFrameworkQueryableExtensions.FirstOrDefaultAsync[TSource](IQueryable`1 source, Expression`1 predicate, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.Infrastructure.Data.Queries.ScenariosQueryService.GetScenario(Datasource dataSource, Guid scenarioId, CancellationToken ct) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.Infrastructure\Data\Queries\ScenariosQueryService.cs:line 113
+   at AVAIntegrationModeler.UseCases.Scenarios.Get.GetScenarioHandler.Handle(GetScenarioQuery request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.UseCases\Scenarios\Get\GetScenarioHandler.cs:line 17
+   at Ardalis.SharedKernel.LoggingBehavior`2.Handle(TRequest request, RequestHandlerDelegate`1 next, CancellationToken cancellationToken)
+   at AVAIntegrationModeler.API.Scenarios.GetById.HandleAsync(GetScenarioByIdRequest request, CancellationToken cancellationToken) in C:\Users\Křepelka\source\GITHUB\AVAIntegrationModeler\AVAIntegrationModeler\src\AVAIntegrationModeler.API\Scenarios\GetById.cs:line 24
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at FastEndpoints.Endpoint`2.ExecAsync(CancellationToken ct)
+   at Microsoft.AspNetCore.Routing.EndpointMiddleware.<Invoke>g__AwaitRequestTask|7_0(Endpoint endpoint, Task requestTask, ILogger logger)
+   at NSwag.AspNetCore.Middlewares.SwaggerUiIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.RedirectToIndexMiddleware.Invoke(HttpContext context)
+   at NSwag.AspNetCore.Middlewares.OpenApiDocumentMiddleware.Invoke(HttpContext context)
+   at Microsoft.AspNetCore.ResponseCaching.ResponseCachingMiddleware.Invoke(HttpContext httpContext)
+   at Ardalis.ListStartupServices.ShowAllServicesMiddleware.Invoke(HttpContext httpContext)
+   at Microsoft.AspNetCore.Diagnostics.DeveloperExceptionPageMiddlewareImpl.Invoke(HttpContext context)
+2026-07-29 20:01:20.651 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - 500 null text/plain; charset=utf-8 194.8463ms
+2026-07-29 20:03:24.780 +02:00 [INF] Registered 32 endpoints in 322 milliseconds.
+2026-07-29 20:03:26.010 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:03:26.669 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 116
+2026-07-29 20:03:26.723 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:03:26.725 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 20:03:26.780 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 20:03:26.780 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:26.782 +02:00 [INF] Property Area : {"Id":"401a0d83-5670-49f2-a1ce-91de1af1a383","Code":"TEST_CREATE","Name":"Test Create Area","$type":"AreaDTO"}
+2026-07-29 20:03:26.874 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 90 ms
+2026-07-29 20:03:26.908 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 20:03:26.915 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 20:03:26.911 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 201 null application/json; charset=utf-8 243.5616ms
+2026-07-29 20:03:26.919 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:26.922 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 20:03:26.928 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 20:03:26.928 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:26.960 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 32 ms
+2026-07-29 20:03:26.969 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 20:03:26.969 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:26.969 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 54.1913ms
+2026-07-29 20:03:27.005 +02:00 [INF] Request starting HTTP/1.1 POST http://localhost/Areas - application/json; charset=utf-8 108
+2026-07-29 20:03:27.005 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-07-29 20:03:27.005 +02:00 [INF] Handling CreateAreaCommand
+2026-07-29 20:03:27.006 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:27.006 +02:00 [INF] Property Area : {"Id":"79793846-4f9c-4298-8d5d-f52b54ca609f","Code":"SALES","Name":"Duplicate Area","$type":"AreaDTO"}
+2026-07-29 20:03:27.010 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 3 ms
+2026-07-29 20:03:27.014 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-07-29 20:03:27.014 +02:00 [INF] Request finished HTTP/1.1 POST http://localhost/Areas - 409 null application/problem+json; charset=utf-8 9.2452ms
+2026-07-29 20:03:27.137 +02:00 [INF] Registered 32 endpoints in 96 milliseconds.
+2026-07-29 20:03:27.161 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:03:27.256 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 20:03:27.269 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:27.270 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:03:27.270 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 20:03:27.270 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 20:03:27.270 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:27.273 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 3 ms
+2026-07-29 20:03:27.274 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 20:03:27.274 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:27.274 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 18.5396ms
+2026-07-29 20:03:27.276 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 20:03:27.278 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:27.278 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 20:03:27.278 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 20:03:27.278 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:27.278 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 20:03:27.279 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 20:03:27.279 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:27.279 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 2.3211ms
+2026-07-29 20:03:27.338 +02:00 [INF] Registered 32 endpoints in 48 milliseconds.
+2026-07-29 20:03:27.343 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:03:27.464 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 20:03:27.482 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:27.482 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:03:27.482 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 20:03:27.487 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 20:03:27.487 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:27.487 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 20:03:27.500 +02:00 [INF] Handled GetAreaByCodeQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 13 ms
+2026-07-29 20:03:27.501 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 20:03:27.501 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:27.501 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/NONEXISTENT_CODE - 404 null null 37.0544ms
+2026-07-29 20:03:27.504 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - null null
+2026-07-29 20:03:27.504 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:27.505 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 20:03:27.505 +02:00 [INF] Handling GetAreaByCodeQuery
+2026-07-29 20:03:27.505 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:27.505 +02:00 [INF] Property AreaCode : FINANCE
+2026-07-29 20:03:27.507 +02:00 [INF] Handled GetAreaByCodeQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 1 ms
+2026-07-29 20:03:27.507 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/{Datasource}/{AreaCode}'
+2026-07-29 20:03:27.507 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:27.507 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/Database/FINANCE - 200 null application/json; charset=utf-8 3.7367ms
+2026-07-29 20:03:27.598 +02:00 [INF] Registered 32 endpoints in 73 milliseconds.
+2026-07-29 20:03:27.606 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:03:27.703 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 20:03:27.718 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:27.718 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:03:27.719 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 20:03:27.722 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 20:03:27.723 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:27.723 +02:00 [INF] Property Skip : null
+2026-07-29 20:03:27.723 +02:00 [INF] Property Take : null
+2026-07-29 20:03:27.873 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 149 ms
+2026-07-29 20:03:27.882 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 20:03:27.882 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:27.882 +02:00 [INF] Property Skip : null
+2026-07-29 20:03:27.883 +02:00 [INF] Property Take : null
+2026-07-29 20:03:27.885 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 2 ms
+2026-07-29 20:03:27.895 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 20:03:27.895 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:27.895 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 192.2775ms
+2026-07-29 20:03:27.979 +02:00 [INF] Registered 32 endpoints in 66 milliseconds.
+2026-07-29 20:03:27.986 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:03:28.098 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Contributors - null null
+2026-07-29 20:03:28.119 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:28.120 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:03:28.120 +02:00 [INF] Executing endpoint 'HTTP: GET /Contributors'
+2026-07-29 20:03:28.131 +02:00 [INF] Handling ListContributorsQuery
+2026-07-29 20:03:28.131 +02:00 [INF] Property Skip : null
+2026-07-29 20:03:28.131 +02:00 [INF] Property Take : null
+2026-07-29 20:03:28.166 +02:00 [INF] Handled ListContributorsQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO]] in 34 ms
+2026-07-29 20:03:28.168 +02:00 [INF] Handling ListContributorsQuery2
+2026-07-29 20:03:28.169 +02:00 [INF] Property Skip : null
+2026-07-29 20:03:28.169 +02:00 [INF] Property Take : null
+2026-07-29 20:03:28.170 +02:00 [INF] Handled ListContributorsQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO]] in 1 ms
+2026-07-29 20:03:28.178 +02:00 [INF] Executed endpoint 'HTTP: GET /Contributors'
+2026-07-29 20:03:28.178 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:28.178 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Contributors - 200 null application/json; charset=utf-8 79.9831ms
+2026-07-29 20:03:28.236 +02:00 [INF] Registered 32 endpoints in 42 milliseconds.
+2026-07-29 20:03:28.242 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:03:28.358 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 20:03:28.371 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:28.371 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:03:28.371 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 20:03:28.371 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 20:03:28.371 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:28.371 +02:00 [INF] Property Skip : null
+2026-07-29 20:03:28.372 +02:00 [INF] Property Take : null
+2026-07-29 20:03:28.378 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 6 ms
+2026-07-29 20:03:28.379 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 20:03:28.379 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:28.379 +02:00 [INF] Property Skip : null
+2026-07-29 20:03:28.379 +02:00 [INF] Property Take : null
+2026-07-29 20:03:28.379 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 20:03:28.380 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 20:03:28.380 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:28.380 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 22.4025ms
+2026-07-29 20:03:28.381 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Scenarios/Database/scenario3Code - null null
+2026-07-29 20:03:28.382 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Scenarios/{Datasource}/{ScenarioCode}'
+2026-07-29 20:03:28.389 +02:00 [INF] Handling DeleteScenarioCommand
+2026-07-29 20:03:28.389 +02:00 [INF] Property ScenarioCode : scenario3Code
+2026-07-29 20:03:28.429 +02:00 [INF] Handled DeleteScenarioCommand with Ardalis.Result.Result in 39 ms
+2026-07-29 20:03:28.430 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Scenarios/{Datasource}/{ScenarioCode}'
+2026-07-29 20:03:28.430 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Scenarios/Database/scenario3Code - 204 null null 49.4755ms
+2026-07-29 20:03:28.431 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios - null null
+2026-07-29 20:03:28.431 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:28.431 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-07-29 20:03:28.431 +02:00 [INF] Handling ListScenariosQuery
+2026-07-29 20:03:28.431 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:28.431 +02:00 [INF] Property Skip : null
+2026-07-29 20:03:28.432 +02:00 [INF] Property Take : null
+2026-07-29 20:03:28.438 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 6 ms
+2026-07-29 20:03:28.439 +02:00 [INF] Handling ListScenariosQuery2
+2026-07-29 20:03:28.439 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:28.439 +02:00 [INF] Property Skip : null
+2026-07-29 20:03:28.439 +02:00 [INF] Property Take : null
+2026-07-29 20:03:28.439 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-07-29 20:03:28.439 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-07-29 20:03:28.439 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:28.439 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios - 200 null application/json; charset=utf-8 8.5798ms
+2026-07-29 20:03:28.485 +02:00 [INF] Registered 32 endpoints in 37 milliseconds.
+2026-07-29 20:03:28.491 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:03:28.603 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - null null
+2026-07-29 20:03:28.621 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:03:28.621 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 20:03:28.624 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 20:03:28.624 +02:00 [INF] Property AreaCode : NONEXISTENT_CODE
+2026-07-29 20:03:28.634 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 10 ms
+2026-07-29 20:03:28.635 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 20:03:28.635 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/NONEXISTENT_CODE - 404 null null 32.1624ms
+2026-07-29 20:03:28.637 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 20:03:28.638 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:28.638 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 20:03:28.639 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 20:03:28.639 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:28.640 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 0 ms
+2026-07-29 20:03:28.641 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 20:03:28.641 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:28.641 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 3.977ms
+2026-07-29 20:03:28.642 +02:00 [INF] Request starting HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - null null
+2026-07-29 20:03:28.642 +02:00 [INF] Executing endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 20:03:28.642 +02:00 [INF] Handling DeleteAreaCommand
+2026-07-29 20:03:28.642 +02:00 [INF] Property AreaCode : PRODUCTION
+2026-07-29 20:03:28.649 +02:00 [INF] Handled DeleteAreaCommand with Ardalis.Result.Result in 6 ms
+2026-07-29 20:03:28.649 +02:00 [INF] Executed endpoint 'HTTP: DELETE /Areas/{Datasource}/{AreaCode}'
+2026-07-29 20:03:28.649 +02:00 [INF] Request finished HTTP/1.1 DELETE http://localhost/Areas/Database/PRODUCTION - 204 null null 7.6479ms
+2026-07-29 20:03:28.650 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas - null null
+2026-07-29 20:03:28.650 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:28.650 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas'
+2026-07-29 20:03:28.650 +02:00 [INF] Handling ListAreasQuery
+2026-07-29 20:03:28.650 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:28.651 +02:00 [INF] Handled ListAreasQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO]] in 1 ms
+2026-07-29 20:03:28.652 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas'
+2026-07-29 20:03:28.652 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:28.652 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas - 200 null application/json; charset=utf-8 2.0223ms
+2026-07-29 20:03:28.707 +02:00 [INF] Registered 32 endpoints in 45 milliseconds.
+2026-07-29 20:03:28.712 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:03:28.847 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/9a4d7ed0-ebb8-46f7-b1cd-364f8cf6326a - null null
+2026-07-29 20:03:28.865 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:28.865 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:03:28.866 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 20:03:28.870 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 20:03:28.870 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:28.870 +02:00 [INF] Property AreaId : "9a4d7ed0-ebb8-46f7-b1cd-364f8cf6326a"
+2026-07-29 20:03:28.879 +02:00 [INF] Handled GetAreaQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 8 ms
+2026-07-29 20:03:28.879 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 20:03:28.880 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:28.880 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/9a4d7ed0-ebb8-46f7-b1cd-364f8cf6326a - 404 null null 33.0313ms
+2026-07-29 20:03:28.882 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - null null
+2026-07-29 20:03:28.883 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:28.883 +02:00 [INF] Executing endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 20:03:28.883 +02:00 [INF] Handling GetAreaQuery
+2026-07-29 20:03:28.883 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:28.883 +02:00 [INF] Property AreaId : "a1000000-0000-0000-0000-000000000001"
+2026-07-29 20:03:28.885 +02:00 [INF] Handled GetAreaQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.AreaDTO] in 1 ms
+2026-07-29 20:03:28.886 +02:00 [INF] Executed endpoint 'HTTP: GET /Areas/by-id/{Datasource}/{AreaId:guid}'
+2026-07-29 20:03:28.886 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:28.886 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Areas/by-id/Database/a1000000-0000-0000-0000-000000000001 - 200 null application/json; charset=utf-8 4.4607ms
+2026-07-29 20:03:28.932 +02:00 [INF] Registered 32 endpoints in 39 milliseconds.
+2026-07-29 20:03:28.939 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:03:29.046 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - null null
+2026-07-29 20:03:29.067 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:29.067 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:03:29.067 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 20:03:29.079 +02:00 [INF] Handling GetScenarioQuery
+2026-07-29 20:03:29.079 +02:00 [INF] Property Datasource : "Database"
+2026-07-29 20:03:29.079 +02:00 [INF] Property ScenarioId : "b36e1803-a6e7-4841-8de6-859a6dee43bf"
+2026-07-29 20:03:29.095 +02:00 [INF] Handled GetScenarioQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO] in 15 ms
+2026-07-29 20:03:29.096 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios/by-id/{Datasource}/{ScenarioId:guid}'
+2026-07-29 20:03:29.096 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:29.096 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Scenarios/by-id/Database/b36e1803-a6e7-4841-8de6-859a6dee43bf - 200 null application/json; charset=utf-8 49.5023ms
+2026-07-29 20:03:29.156 +02:00 [INF] Registered 32 endpoints in 52 milliseconds.
+2026-07-29 20:03:29.161 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-07-29 20:03:29.268 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Contributors/1 - null null
+2026-07-29 20:03:29.281 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:29.281 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-07-29 20:03:29.281 +02:00 [INF] Executing endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 20:03:29.294 +02:00 [INF] Handling GetContributorQuery
+2026-07-29 20:03:29.294 +02:00 [INF] Property ContributorId : 1
+2026-07-29 20:03:29.318 +02:00 [INF] Handled GetContributorQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO] in 23 ms
+2026-07-29 20:03:29.319 +02:00 [INF] Executed endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 20:03:29.319 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:29.319 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Contributors/1 - 200 null application/json; charset=utf-8 51.0792ms
+2026-07-29 20:03:29.322 +02:00 [INF] Request starting HTTP/1.1 GET http://localhost/Contributors/1000 - null null
+2026-07-29 20:03:29.323 +02:00 [INF] No cached response available for this request.
+2026-07-29 20:03:29.323 +02:00 [INF] Executing endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 20:03:29.324 +02:00 [INF] Handling GetContributorQuery
+2026-07-29 20:03:29.324 +02:00 [INF] Property ContributorId : 1000
+2026-07-29 20:03:29.325 +02:00 [INF] Handled GetContributorQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Contributors.ContributorDTO] in 1 ms
+2026-07-29 20:03:29.325 +02:00 [INF] Executed endpoint 'HTTP: GET /Contributors/{ContributorId:int}'
+2026-07-29 20:03:29.325 +02:00 [INF] The response could not be cached for this request.
+2026-07-29 20:03:29.326 +02:00 [INF] Request finished HTTP/1.1 GET http://localhost/Contributors/1000 - 404 null null 3.5616ms

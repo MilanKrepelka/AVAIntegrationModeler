@@ -1,4 +1,6 @@
-﻿using AVAIntegrationModeler.Infrastructure.Data;
+﻿using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Contracts.Scenarios;
+using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.API.Scenarios;
 
 namespace AVAIntegrationModeler.FunctionalTests.ApiEndpoints.Scenarios;
@@ -15,7 +17,7 @@ public class ScenarioDeleteTest(CustomWebApplicationFactory<Program> factory) : 
 
     result.Scenarios.Count.ShouldBe(3);
 
-     _=  await _client.DeleteAsync(GetScenarioByIdRequest.BuildRoute(SeedData.Scenario3.Id));
+    _ = await _client.DeleteAsync(DeleteScenarioRequest.BuildRoute(Datasource.Database, SeedData.Scenario3.Code));
 
     var resultAfterDelete = await _client.GetAndDeserializeAsync<ScenarioListResponse>("/Scenarios");
 

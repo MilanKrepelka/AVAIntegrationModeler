@@ -203,5 +203,14 @@ namespace AVAIntegrationModeler.Localization {
                 return ResourceManager.GetString("Scenarios", resourceCulture);
             }
         }
+
+        /// <summary>
+        ///   Looks up a localized string similar to Records.
+        /// </summary>
+        public static string DataModelRecords {
+            get {
+                return ResourceManager.GetString("DataModelRecords", resourceCulture);
+            }
+        }
     }
 }

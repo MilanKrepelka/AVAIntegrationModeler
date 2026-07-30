@@ -7,13 +7,6 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Buttons
 @using Microsoft.AspNetCore.Components.Forms
-@using Syncfusion.Blazor.Notifications
-
-<SuccessErrorToast @ref="InfoErrorToast" Title="Integrační scénář" >
-</SuccessErrorToast>
-<SfToast @ref="SaveToast" Title="Uložení scénáře" Timeout="3000" ShowCloseButton="true">
-    <ToastPosition X="Right" Y="Top"></ToastPosition>
-</SfToast>
 <EditForm Model="_edit" OnValidSubmit="SaveAsync">
     <DataAnnotationsValidator />
     <ValidationSummary />
@@ -83,22 +76,16 @@
             </div>
         </div>
 
+        @if (_saveMessage is not null)
+        {
+            <div class="alert @(_saveSuccess ? "alert-success" : "alert-danger")" style="margin-top:16px">
+                @_saveMessage
+            </div>
+        }
+
         <div style="margin-top:16px">
             <SfButton CssClass="e-primary" Type="Submit">Uložit</SfButton>
-            
         </div>
     </div>
 </EditForm>
-@code
-{
-    SfToast? SaveToast;
-    Widgets.SuccessErrorToast? InfoErrorToast;
-    private async Task ShowToast(bool success,string message)
-    {
-        if (InfoErrorToast != null)
-        {
-            await InfoErrorToast.Show(success, message);
-        }
-    }
-}
     

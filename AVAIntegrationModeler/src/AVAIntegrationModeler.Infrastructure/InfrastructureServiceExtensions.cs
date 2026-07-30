@@ -4,7 +4,9 @@ using AVAIntegrationModeler.Domain.Services;
 using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.Infrastructure.Data.Queries;
 using AVAIntegrationModeler.Infrastructure.Infrastructure.Data;
+using AVAIntegrationModeler.UseCases.Areas;
 using AVAIntegrationModeler.UseCases.Contributors.List;
+using AVAIntegrationModeler.UseCases.DataModelRecords;
 using AVAIntegrationModeler.UseCases.DataModels;
 using AVAIntegrationModeler.UseCases.Features;
 using AVAIntegrationModeler.UseCases.IntegrationMaps;
@@ -19,7 +21,11 @@ public static class InfrastructureServiceExtensions
   {
     services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>))
             .AddScoped(typeof(IReadRepository<>), typeof(EfRepository<>))
+            .AddScoped<IDataModelRepository, DataModelRepository>()
+            .AddScoped<IDataModelRecordRepository, DataModelRecordRepository>()
+            .AddScoped<IDataModelRecordQueryService, DataModelRecordsQueryService>()
             .AddScoped<IListContributorsQueryService, ListContributorsQueryService>()
+            .AddScoped<IAreasQueryService, AreasQueryService>()
             .AddScoped<IScenariosQueryService, ScenariosQueryService>()
             .AddScoped<IFeaturesQueryService, FeaturesQueryService>()
             .AddScoped<IDataModelQueryService, DataModelsQueryService>()

@@ -1,4 +1,5 @@
 using System.ComponentModel.DataAnnotations;
+using Ardalis.Result;
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
@@ -20,6 +21,9 @@ public partial class DataModelEdit : ComponentBase, IDisposable
 
   private Datasource _datasource = Datasource.Database;
   private bool IsNew => id is null || id == Guid.Empty;
+
+  private string? _saveMessage;
+  private bool _saveSuccess;
 
   private List<DataModelFieldEditModel> _fields = [];
   private List<DataModelSummaryDTO> _availableModels = [];
@@ -154,20 +158,35 @@ public partial class DataModelEdit : ComponentBase, IDisposable
       if (IsNew)
       {
         var result = await _apiClient.CreateDataModel(_datasource, dto, _cts?.Token ?? CancellationToken.None);
-        if (!result.IsSuccess)
-          Console.WriteLine($"CreateDataModel error: {string.Join(", ", result.Errors)}");
+        if (_disposed) return;
+        _saveSuccess = result.IsSuccess;
+        _saveMessage = result.IsSuccess
+          ? $"Datový model {dto.Code} byl vytvořen."
+          : result.IsInvalid()
+            ? string.Join(", ", result.ValidationErrors.Select(e => e.ErrorMessage))
+            : string.Join(", ", result.Errors);
       }
       else
       {
         var result = await _apiClient.UpdateDataModel(_datasource, dto, _cts?.Token ?? CancellationToken.None);
-        if (!result.IsSuccess)
-          Console.WriteLine($"UpdateDataModel error: {string.Join(", ", result.Errors)}");
+        if (_disposed) return;
+        _saveSuccess = result.IsSuccess;
+        _saveMessage = result.IsSuccess
+          ? $"Datový model {dto.Code} byl uložen."
+          : result.IsInvalid()
+            ? string.Join(", ", result.ValidationErrors.Select(e => e.ErrorMessage))
+            : string.Join(", ", result.Errors);
       }
     }
     catch (OperationCanceledException) { }
     catch (Exception ex)
     {
       Console.WriteLine($"Error in SaveAsync: {ex.Message}");
+      if (!_disposed)
+      {
+        _saveSuccess = false;
+        _saveMessage = "Došlo k neočekávané chybě.";
+      }
     }
   }
 

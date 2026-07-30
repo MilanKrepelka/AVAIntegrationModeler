@@ -53,4 +53,14 @@ public class IntegrationMapTestCollection : ICollectionFixture<EfSqlClientTestFi
   // Slouží pouze pro registraci collection fixture.
 }
 
+/// <summary>
+/// Test collection pro DataModelSyncFieldsAndSaveTests - izolovaná databáze.
+/// </summary>
+[CollectionDefinition("DataModelSyncTestCollection")]
+public class DataModelSyncTestCollection : ICollectionFixture<EfSqlClientTestFixture>
+{
+  // Tato třída se nikdy neinstancuje.
+  // Slouží pouze pro registraci collection fixture.
+}
+
 

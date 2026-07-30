@@ -87,6 +87,13 @@
             </div>
         </div>
 
+        @if (_saveMessage is not null)
+        {
+            <div class="alert @(_saveSuccess ? "alert-success" : "alert-danger")" style="margin-top:16px">
+                @_saveMessage
+            </div>
+        }
+
         <div style="margin-top:24px">
             <SfButton CssClass="e-primary" Type="Submit">Uložit</SfButton>
             <SfButton CssClass="e-outline" Type="Button" style="margin-left:8px" OnClick="NavigateBack">Zpět</SfButton>

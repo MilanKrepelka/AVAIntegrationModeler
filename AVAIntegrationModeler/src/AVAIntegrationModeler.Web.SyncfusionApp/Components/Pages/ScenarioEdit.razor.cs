@@ -1,12 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Ardalis.Result;
-using Ardalis.Specification;
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Web.SyncfusionApp.Extensions;
 using Microsoft.AspNetCore.Components;
-using Syncfusion.Blazor.Inputs.Internal;
 
 namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
 
@@ -24,6 +22,9 @@ public partial class ScenarioEdit : ComponentBase, IDisposable
   public Datasource datasource { get; set; }
 
   DataOperation dataOperation = DataOperation.Update;
+
+  private string? _saveMessage;
+  private bool _saveSuccess;
 
   private ScenarioDTO? _scenarioDTO;
   private List<FeatureDTO> _features = new();
@@ -139,7 +140,8 @@ public partial class ScenarioEdit : ComponentBase, IDisposable
     
     if (!Guid.TryParse(_edit.IdText, out var parsedId))
     {
-      await ShowToastSafe(false, "Neplatný formát GUID.");
+      _saveSuccess = false;
+      _saveMessage = "Neplatný formát GUID.";
       return;
     }
     
@@ -175,96 +177,31 @@ public partial class ScenarioEdit : ComponentBase, IDisposable
         result = updateResult.ToResult();
       }
 
-      // Zkontroluj disposed stav před zobrazením toast
       if (_disposed || _cts?.Token.IsCancellationRequested == true) return;
 
-      if (result.IsSuccess)
-      {
-        string operationText = dataOperation == DataOperation.Create ? "vytvořen" : "uložen";
-        await ShowToastSafe(true, $"Integrační scénář {updated.Code} byl v pořádku {operationText}");
-      }
-      else
-      {
-        string operationText = dataOperation == DataOperation.Create ? "vytvoření" : "uložení";
-
-        if (result.IsError())
-        {
-          await ShowToastSafe(false, $"Chyba při {operationText} integračního scénáře: {string.Join(", ", result.Errors)}");
-        }
-        else if (result.IsInvalid())
-        {
-          await ShowToastSafe(false, $"Chyba při {operationText} integračního scénáře: {string.Join(", ", result.ValidationErrors)}");
-        }
-        else
-        {
-          await ShowToastSafe(false, $"Chyba při {operationText} integračního scénáře: {string.Join(", ", result.Errors)}");
-        }
-      }
+      string operationText = dataOperation == DataOperation.Create ? "vytvořen" : "uložen";
+      _saveSuccess = result.IsSuccess;
+      _saveMessage = result.IsSuccess
+        ? $"Integrační scénář {updated.Code} byl v pořádku {operationText}."
+        : result.IsInvalid()
+          ? string.Join(", ", result.ValidationErrors.Select(e => e.ErrorMessage))
+          : string.Join(", ", result.Errors);
     }
     catch (OperationCanceledException)
     {
-      // Operace byla zrušena - komponenta byla disposed
       Console.WriteLine("SaveAsync was cancelled");
     }
     catch (Exception ex)
     {
       Console.WriteLine($"Error in SaveAsync: {ex.Message}");
-      if (!_disposed && _cts?.Token.IsCancellationRequested == false)
+      if (!_disposed)
       {
-        await ShowToastSafe(false, "Došlo k neočekávané chybě.");
+        _saveSuccess = false;
+        _saveMessage = "Došlo k neočekávané chybě.";
       }
     }
   }
 
-  /// <summary>
-  /// Bezpečné zobrazení toast notifikace s ochranou proti disposed stavu
-  /// </summary>
-  private async Task ShowToastSafe(bool success, string message)
-  {
-    if (_disposed || _cts?.Token.IsCancellationRequested == true) return;
-
-    try
-    {
-      // Pokud máte SfToast komponentu, použijte ji zde
-      // Například:
-      // if (ToastObj != null)
-      // {
-      //   var toastModel = new ToastModel
-      //   {
-      //     Content = message,
-      //     CssClass = success ? "e-toast-success" : "e-toast-danger",
-      //     Icon = success ? "e-success toast-icons" : "e-error toast-icons"
-      //   };
-      //   await ToastObj.ShowAsync(toastModel);
-      // }
-      
-      // Nebo použijte InvokeAsync pro bezpečné volání
-      await InvokeAsync(async () =>
-      {
-        if (!_disposed && _cts?.Token.IsCancellationRequested == false)
-        {
-          // Zde volejte váš Toast mechanismus
-          await ShowToast(success, message);
-        }
-      });
-    }
-    catch (ObjectDisposedException)
-    {
-      // Toast komponenta byla disposed - ignoruj
-      Console.WriteLine($"Toast disposed: {message}");
-    }
-    catch (InvalidOperationException)
-    {
-      // Renderer byl disposed - ignoruj
-      Console.WriteLine($"Renderer disposed: {message}");
-    }
-    catch (Exception ex)
-    {
-      // Log chybu, ale nepropauj ji
-      Console.WriteLine($"Toast error: {ex.Message}");
-    }
-  }
-  
   public void Dispose()
   {
     if (!_disposed)

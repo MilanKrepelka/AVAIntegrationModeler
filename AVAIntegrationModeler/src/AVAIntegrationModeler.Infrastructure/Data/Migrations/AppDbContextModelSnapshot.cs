@@ -171,6 +171,63 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.ToTable("DataModelFieldEntityTypeReferences", (string)null);
                 });
 
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelRecordAggregate.DataModelRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExternalId")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ModelId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DataModelRecords", (string)null);
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelRecordAggregate.DataModelRecordField", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CzechValue")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("DataModelRecordId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EnglishValue")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsLocalized")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StringValue")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DataModelRecordId");
+
+                    b.ToTable("DataModelRecordFields", (string)null);
+                });
+
             modelBuilder.Entity("AVAIntegrationModeler.Domain.FeatureAggregate.Feature", b =>
                 {
                     b.Property<Guid>("Id")
@@ -282,6 +339,15 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.HasOne("AVAIntegrationModeler.Domain.DataModelAggregate.DataModelField", null)
                         .WithMany("EntityTypeReferences")
                         .HasForeignKey("DataModelFieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelRecordAggregate.DataModelRecordField", b =>
+                {
+                    b.HasOne("AVAIntegrationModeler.Domain.DataModelRecordAggregate.DataModelRecord", null)
+                        .WithMany("Fields")
+                        .HasForeignKey("DataModelRecordId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -532,6 +598,11 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
             modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelAggregate.DataModelField", b =>
                 {
                     b.Navigation("EntityTypeReferences");
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelRecordAggregate.DataModelRecord", b =>
+                {
+                    b.Navigation("Fields");
                 });
 #pragma warning restore 612, 618
         }

@@ -132,4 +132,19 @@ public interface IIntegrationDataProvider
     /// <param name="cancelationToken">Token pro zrušení operace.</param>
     /// <returns>Úloha reprezentující asynchronní operaci. Výsledek úlohy obsahuje <see cref="IEnumerable{T}"/> objektů <see cref="IntegrationMapSummaryDTO"/> reprezentujících souhrnné informace o integračních mapách.</returns>
     Task<IEnumerable<IntegrationMapSummaryDTO>> GetIntegrationMapSummaryAsync(CancellationToken cancelationToken = default);
+
+    /// <summary>
+    /// Asynchronně získá záznamy datového modelu.
+    /// </summary>
+    Task<IEnumerable<DataModelRecordDTO>> GetDataModelRecordsAsync(Guid modelId, CancellationToken cancelationToken = default);
+
+    /// <summary>
+    /// Asynchronně získá datový model podle jeho identifikátoru z AVAPlace.
+    /// Protože ASOL DataService neposkytuje endpoint pro načtení modelu dle Id,
+    /// načte kompletní seznam a filtruje v paměti.
+    /// </summary>
+    /// <param name="modelId">Identifikátor datového modelu v AVAPlace.</param>
+    /// <param name="cancelationToken">Token pro zrušení operace.</param>
+    /// <returns>DataModelDTO nebo null pokud model neexistuje.</returns>
+    Task<DataModelDTO?> GetDataModelByIdAsync(Guid modelId, CancellationToken cancelationToken = default);
 }

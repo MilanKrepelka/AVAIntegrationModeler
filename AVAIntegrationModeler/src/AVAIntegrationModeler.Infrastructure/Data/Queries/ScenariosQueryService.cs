@@ -110,7 +110,7 @@ public class ScenariosQueryService(
     }
     else
     {
-      var scenario = await databaseContext.Scenarios.Include(s => s.InputFeature).Include(s => s.OutputFeature).FirstOrDefaultAsync(s => s.Id == scenarioId, ct);
+      var scenario = await databaseContext.Scenarios.FirstOrDefaultAsync(s => s.Id == scenarioId, ct);
       if (scenario == null)
       {
         throw new NotFoundException(scenarioId.ToString(), "Scenario");
