@@ -212,4 +212,157 @@ public class DataModelMapperTests
     Assert.NotNull(result.Fields[0].ReferencedEntityTypeIds);
     Assert.Empty(result.Fields[0].ReferencedEntityTypeIds);
   }
+
+  [Fact]
+  public void MapToDefinition_WithValidDataModelDTO_ReturnsMappedDefinition()
+  {
+    // Arrange
+    var dto = new DataModelDTO
+    {
+      Id = Guid.NewGuid(),
+      Code = "TestCode",
+      Name = "Test Model",
+      Description = "Test Description",
+      Notes = "Test Notes",
+      IsAggregateRoot = true,
+      Fields = new List<DataModelFieldDTO>
+      {
+        new DataModelFieldDTO
+        {
+          Name = "TestField",
+          Label = "Test Label",
+          Description = "Field Description",
+          IsPublishedForLookup = true,
+          IsCollection = false,
+          IsLocalized = false,
+          IsNullable = true,
+          FieldType = DataModelFieldType.Text,
+          ReferencedEntityTypeIds = new List<Guid>()
+        }
+      }
+    };
+
+    // Act
+    var result = DataModelMapper.MapToDefinition(dto);
+
+    // Assert
+    Assert.NotNull(result);
+    Assert.Equal(dto.Id, result.Id);
+    Assert.Equal(dto.Code, result.Code);
+    Assert.Equal(dto.Name, result.Name);
+    Assert.Equal(dto.Description, result.Description);
+    Assert.Equal(dto.Notes, result.Notes);
+    Assert.Equal(dto.IsAggregateRoot, result.IsAggregateRoot);
+    Assert.Single(result.Fields);
+    Assert.Equal("TestField", result.Fields.ElementAt(0).Name);
+    Assert.Equal(ASOL.DataService.Domain.Model.DataModelFieldType.Text, result.Fields.ElementAt(0).FieldType);
+  }
+
+  [Fact]
+  public void MapToDefinition_WithNullDataModelDTO_ThrowsArgumentNullException()
+  {
+    // Act & Assert
+    Assert.Throws<ArgumentNullException>(() => DataModelMapper.MapToDefinition(null!));
+  }
+
+  [Fact]
+  public void MapToDefinition_FieldsSortedAlphabeticallyByName()
+  {
+    // Arrange
+    var dto = new DataModelDTO
+    {
+      Id = Guid.NewGuid(),
+      Code = "TestCode",
+      Name = "Test Model",
+      Fields = new List<DataModelFieldDTO>
+      {
+        new DataModelFieldDTO { Name = "Zebra", FieldType = DataModelFieldType.Text, ReferencedEntityTypeIds = new List<Guid>() },
+        new DataModelFieldDTO { Name = "Apple", FieldType = DataModelFieldType.Text, ReferencedEntityTypeIds = new List<Guid>() },
+        new DataModelFieldDTO { Name = "Mango", FieldType = DataModelFieldType.Text, ReferencedEntityTypeIds = new List<Guid>() }
+      }
+    };
+
+    // Act
+    var result = DataModelMapper.MapToDefinition(dto);
+
+    // Assert
+    Assert.Equal(3, result.Fields.Count);
+    var fieldList = result.Fields.ToList();
+    Assert.Equal("Apple", fieldList[0].Name);
+    Assert.Equal("Mango", fieldList[1].Name);
+    Assert.Equal("Zebra", fieldList[2].Name);
+  }
+
+  [Theory]
+  [InlineData(DataModelFieldType.Text, ASOL.DataService.Domain.Model.DataModelFieldType.Text)]
+  [InlineData(DataModelFieldType.MultilineText, ASOL.DataService.Domain.Model.DataModelFieldType.MultilineText)]
+  [InlineData(DataModelFieldType.TwoOptions, ASOL.DataService.Domain.Model.DataModelFieldType.TwoOptions)]
+  [InlineData(DataModelFieldType.WholeNumber, ASOL.DataService.Domain.Model.DataModelFieldType.WholeNumber)]
+  [InlineData(DataModelFieldType.DecimalNumber, ASOL.DataService.Domain.Model.DataModelFieldType.DecimalNumber)]
+  [InlineData(DataModelFieldType.UniqueIdentifier, ASOL.DataService.Domain.Model.DataModelFieldType.UniqueIdentifier)]
+  [InlineData(DataModelFieldType.UtcDateTime, ASOL.DataService.Domain.Model.DataModelFieldType.UtcDateTime)]
+  [InlineData(DataModelFieldType.LookupEntity, ASOL.DataService.Domain.Model.DataModelFieldType.LookupEntity)]
+  [InlineData(DataModelFieldType.NestedEntity, ASOL.DataService.Domain.Model.DataModelFieldType.NestedEntity)]
+  [InlineData(DataModelFieldType.Date, ASOL.DataService.Domain.Model.DataModelFieldType.Date)]
+  [InlineData(DataModelFieldType.FileReference, ASOL.DataService.Domain.Model.DataModelFieldType.FileReference)]
+  [InlineData(DataModelFieldType.CurrencyNumber, ASOL.DataService.Domain.Model.DataModelFieldType.CurrencyNumber)]
+  [InlineData(DataModelFieldType.SingleSelectOptionSet, ASOL.DataService.Domain.Model.DataModelFieldType.SingleSelectOptionSet)]
+  [InlineData(DataModelFieldType.MultiSelectOptionSet, ASOL.DataService.Domain.Model.DataModelFieldType.MultiSelectOptionSet)]
+  public void MapToDefinition_MapsFieldTypeCorrectly(DataModelFieldType sourceType, ASOL.DataService.Domain.Model.DataModelFieldType expectedType)
+  {
+    // Arrange
+    var dto = new DataModelDTO
+    {
+      Id = Guid.NewGuid(),
+      Code = "TestCode",
+      Name = "Test Model",
+      Fields = new List<DataModelFieldDTO>
+      {
+        new DataModelFieldDTO
+        {
+          Name = "TestField",
+          FieldType = sourceType,
+          ReferencedEntityTypeIds = new List<Guid>()
+        }
+      }
+    };
+
+    // Act
+    var result = DataModelMapper.MapToDefinition(dto);
+
+    // Assert
+    Assert.Equal(expectedType, result.Fields.ElementAt(0).FieldType);
+  }
+
+  [Fact]
+  public void MapToDefinition_WithReferencedEntityTypeIds_MapsList()
+  {
+    // Arrange
+    var entityId1 = Guid.NewGuid();
+    var entityId2 = Guid.NewGuid();
+    var dto = new DataModelDTO
+    {
+      Id = Guid.NewGuid(),
+      Code = "TestCode",
+      Name = "Test Model",
+      Fields = new List<DataModelFieldDTO>
+      {
+        new DataModelFieldDTO
+        {
+          Name = "LookupField",
+          FieldType = DataModelFieldType.LookupEntity,
+          ReferencedEntityTypeIds = new List<Guid> { entityId1, entityId2 }
+        }
+      }
+    };
+
+    // Act
+    var result = DataModelMapper.MapToDefinition(dto);
+
+    // Assert
+    var field = result.Fields.ElementAt(0);
+    Assert.Equal(2, field.ReferencedEntityTypeIds.Count);
+    Assert.Contains(entityId1, field.ReferencedEntityTypeIds);
+    Assert.Contains(entityId2, field.ReferencedEntityTypeIds);
+  }
 }

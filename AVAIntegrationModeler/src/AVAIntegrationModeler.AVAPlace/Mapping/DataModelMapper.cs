@@ -35,7 +35,7 @@ public static class DataModelMapper
   }
 
   /// <summary>
-  /// Převede DataModelDefinition na DataModelSummaryDTO.
+  /// Převede DataModelSummaryDTO na DataModelSummaryDTO.
   /// </summary>
   /// <param name="dataModelDefinition">Definice datového modelu z DataService.</param>
   /// <returns>DataModelSummaryDTO.</returns>
@@ -48,6 +48,31 @@ public static class DataModelMapper
       Id = dataModelDefinition.Id,
       Code = dataModelDefinition.Code ?? string.Empty,
       Name = dataModelDefinition.Name ?? string.Empty
+    };
+  }
+
+  /// <summary>
+  /// Převede DataModelDTO na DataModelDefinition pro export do ASOL DataService.
+  /// Pole jsou seřazena abecedně dle Name.
+  /// </summary>
+  /// <param name="dto">DTO datového modelu.</param>
+  /// <returns>DataModelDefinition.</returns>
+  public static DataModelDefinition MapToDefinition(DataModelDTO dto)
+  {
+    Guard.Against.Null(dto, nameof(dto));
+
+    return new DataModelDefinition
+    {
+      Id = dto.Id,
+      Code = dto.Code,
+      Name = dto.Name,
+      Description = dto.Description,
+      Notes = dto.Notes,
+      IsAggregateRoot = dto.IsAggregateRoot,
+      Fields = dto.Fields
+        .OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase)
+        .Select(MapFieldToDefinition)
+        .ToList()
     };
   }
 
@@ -76,6 +101,29 @@ public static class DataModelMapper
   }
 
   /// <summary>
+  /// Převede DataModelFieldDTO na DataModelFieldDefinition.
+  /// </summary>
+  /// <param name="fieldDto">DTO pole datového modelu.</param>
+  /// <returns>DataModelFieldDefinition.</returns>
+  private static DataModelFieldDefinition MapFieldToDefinition(DataModelFieldDTO fieldDto)
+  {
+    Guard.Against.Null(fieldDto, nameof(fieldDto));
+
+    return new DataModelFieldDefinition
+    {
+      Name = fieldDto.Name,
+      Label = fieldDto.Label,
+      Description = fieldDto.Description,
+      IsPublishedForLookup = fieldDto.IsPublishedForLookup,
+      IsCollection = fieldDto.IsCollection,
+      IsLocalized = fieldDto.IsLocalized,
+      IsNullable = fieldDto.IsNullable,
+      FieldType = MapFieldTypeToAsol(fieldDto.FieldType),
+      ReferencedEntityTypeIds = fieldDto.ReferencedEntityTypeIds?.ToList() ?? new List<Guid>()
+    };
+  }
+
+  /// <summary>
   /// Mapuje DataModelFieldType z DataService na aplikační DataModelFieldType.
   /// </summary>
   /// <param name="fieldType">Typ pole z DataService.</param>
@@ -98,7 +146,34 @@ public static class DataModelMapper
       ASOL.DataService.Domain.Model.DataModelFieldType.CurrencyNumber => Contracts.DataModelFieldType.CurrencyNumber,
       ASOL.DataService.Domain.Model.DataModelFieldType.SingleSelectOptionSet => Contracts.DataModelFieldType.SingleSelectOptionSet,
       ASOL.DataService.Domain.Model.DataModelFieldType.MultiSelectOptionSet => Contracts.DataModelFieldType.MultiSelectOptionSet,
-      _ => Contracts.DataModelFieldType.Text // Default fallback
+      _ => Contracts.DataModelFieldType.Text
+    };
+  }
+
+  /// <summary>
+  /// Mapuje aplikační DataModelFieldType na DataModelFieldType z DataService.
+  /// </summary>
+  /// <param name="fieldType">Aplikační typ pole.</param>
+  /// <returns>DataService DataModelFieldType.</returns>
+  private static ASOL.DataService.Domain.Model.DataModelFieldType MapFieldTypeToAsol(Contracts.DataModelFieldType fieldType)
+  {
+    return fieldType switch
+    {
+      Contracts.DataModelFieldType.Text => ASOL.DataService.Domain.Model.DataModelFieldType.Text,
+      Contracts.DataModelFieldType.MultilineText => ASOL.DataService.Domain.Model.DataModelFieldType.MultilineText,
+      Contracts.DataModelFieldType.TwoOptions => ASOL.DataService.Domain.Model.DataModelFieldType.TwoOptions,
+      Contracts.DataModelFieldType.WholeNumber => ASOL.DataService.Domain.Model.DataModelFieldType.WholeNumber,
+      Contracts.DataModelFieldType.DecimalNumber => ASOL.DataService.Domain.Model.DataModelFieldType.DecimalNumber,
+      Contracts.DataModelFieldType.UniqueIdentifier => ASOL.DataService.Domain.Model.DataModelFieldType.UniqueIdentifier,
+      Contracts.DataModelFieldType.UtcDateTime => ASOL.DataService.Domain.Model.DataModelFieldType.UtcDateTime,
+      Contracts.DataModelFieldType.LookupEntity => ASOL.DataService.Domain.Model.DataModelFieldType.LookupEntity,
+      Contracts.DataModelFieldType.NestedEntity => ASOL.DataService.Domain.Model.DataModelFieldType.NestedEntity,
+      Contracts.DataModelFieldType.Date => ASOL.DataService.Domain.Model.DataModelFieldType.Date,
+      Contracts.DataModelFieldType.FileReference => ASOL.DataService.Domain.Model.DataModelFieldType.FileReference,
+      Contracts.DataModelFieldType.CurrencyNumber => ASOL.DataService.Domain.Model.DataModelFieldType.CurrencyNumber,
+      Contracts.DataModelFieldType.SingleSelectOptionSet => ASOL.DataService.Domain.Model.DataModelFieldType.SingleSelectOptionSet,
+      Contracts.DataModelFieldType.MultiSelectOptionSet => ASOL.DataService.Domain.Model.DataModelFieldType.MultiSelectOptionSet,
+      _ => ASOL.DataService.Domain.Model.DataModelFieldType.Text
     };
   }
 }
