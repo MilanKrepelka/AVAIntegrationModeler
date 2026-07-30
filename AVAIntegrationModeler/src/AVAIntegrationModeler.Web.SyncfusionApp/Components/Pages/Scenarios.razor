@@ -5,7 +5,6 @@
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.DropDowns
-@using Syncfusion.Blazor.Notifications
 @using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 
 
@@ -159,9 +158,12 @@
     </div>
 </div>
 
-<SfToast @ref="ToastObj" Title="Zkopírováno" Timeout="3000" ShowCloseButton="true">
-    <ToastPosition X="Right" Y="Top"></ToastPosition>
-</SfToast>
+@if (_notification != null)
+{
+    <div style="position:fixed;top:1.2rem;right:1.2rem;z-index:9999;@(_notificationSuccess?"background:#198754":"background:#dc3545");color:#fff;padding:.5rem 1.1rem;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.18);font-size:.875rem;">
+        @(_notificationSuccess ? "✓" : "✗") @_notification
+    </div>
+}
 
 @if (IsLoading)
 {
@@ -173,32 +175,27 @@
 @code
 {
     SfGrid<ScenarioListViewModel>? Grid;
-    SfToast? ToastObj;
+    string? _notification;
+    bool _notificationSuccess = true;
 
     [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    private async Task ShowNotification(string message, bool success = true)
+    {
+        _notificationSuccess = success;
+        _notification = message;
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(3000);
+        _notification = null;
+        await InvokeAsync(StateHasChanged);
+    }
 
     private async Task CopyToClipboard(string text)
     {
         await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
-
-        // Zobrazit toast s ID hodnotou
-        await ShowToast($"ID zkopírováno: {text.Substring(0, 8)}...");
+        await ShowNotification($"ID zkopírováno: {text.Substring(0, 8)}...");
     }
 
-    private async Task ShowToast(string message)
-    {
-        if (ToastObj != null)
-        {
-            var toastModel = new ToastModel
-            {
-                Content = message,
-                CssClass = "e-toast-success",
-                Icon = "e-success toast-icons"
-            };
-            await ToastObj.ShowAsync(toastModel);
-        }
-    }
-    
     private async Task ShowModelMap(ScenarioListViewModel scenario)
     {
         // Open Data Model Map in a new browser tab

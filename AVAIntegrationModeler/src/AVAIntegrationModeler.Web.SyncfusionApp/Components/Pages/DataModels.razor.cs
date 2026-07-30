@@ -88,7 +88,7 @@ public partial class DataModels : ComponentBase, IDisposable
     }
     else
     {
-      await ShowToast($"Chyba při mazání: {string.Join(", ", result.Errors)}");
+      await ShowNotification($"Chyba při mazání: {string.Join(", ", result.Errors)}", false);
     }
   }
 

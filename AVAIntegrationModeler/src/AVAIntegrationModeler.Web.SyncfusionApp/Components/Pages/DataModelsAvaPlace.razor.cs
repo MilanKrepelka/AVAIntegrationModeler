@@ -64,11 +64,11 @@ public partial class DataModelsAvaPlace : ComponentBase, IDisposable
   {
     var result = await _apiClient.ImportDataModelFromAvaPlace(model.Id, CancellationToken.None);
     if (result.IsSuccess)
-      await ShowToast($"Model '{model.Code}' importován do lokální DB. ID: {result.Value.ToString()[..8]}...");
+      await ShowNotification($"Model '{model.Code}' importován do lokální DB. ID: {result.Value.ToString()[..8]}...");
     else if (result.Status == Ardalis.Result.ResultStatus.NotFound)
-      await ShowToast($"Model '{model.Code}' nebyl nalezen v AVAPlace.");
+      await ShowNotification($"Model '{model.Code}' nebyl nalezen v AVAPlace.", false);
     else
-      await ShowToast($"Chyba importu '{model.Code}': {string.Join(", ", result.Errors)}");
+      await ShowNotification($"Chyba importu '{model.Code}': {string.Join(", ", result.Errors)}", false);
   }
 
   public void Dispose()
