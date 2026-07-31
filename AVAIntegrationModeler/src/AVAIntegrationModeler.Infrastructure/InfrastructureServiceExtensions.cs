@@ -31,6 +31,7 @@ public static class InfrastructureServiceExtensions
             .AddScoped<IFeaturesQueryService, FeaturesQueryService>()
             .AddScoped<IDataModelQueryService, DataModelsQueryService>()
             .AddScoped<IIntegrationMapsQueryService, IntegrationMapsQueryService>()
+            .AddScoped<IDeploymentRepository, DeploymentRepository>()
             .AddScoped<IDeploymentsQueryService, DeploymentsQueryService>()
             .AddScoped<IDeleteContributorService, DeleteContributorService>();
 

@@ -7,7 +7,7 @@ namespace AVAIntegrationModeler.UseCases.Deployments.Create;
 /// Handler pro příkaz vytvoření nasazení.
 /// </summary>
 public class CreateDeploymentHandler(
-  IRepository<Deployment> repository,
+  IDeploymentRepository repository,
   IDeploymentsQueryService queryService
 ) : ICommandHandler<CreateDeploymentCommand, Result<Guid>>
 {
@@ -20,7 +20,7 @@ public class CreateDeploymentHandler(
         request.Deployment.Id == Guid.Empty ? Guid.NewGuid() : request.Deployment.Id,
         request.Deployment.Code);
       deployment.SetName(request.Deployment.Name);
-      foreach (var id in request.Deployment.DataModelIds)
+      foreach (var id in request.Deployment.DataModelIds ?? [])
         deployment.AddDataModel(id);
     }
     catch (ArgumentException ex)

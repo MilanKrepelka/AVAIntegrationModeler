@@ -1,5 +1,6 @@
 using System.Net.Http.Json;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Contracts.Deployments;
 using AVAIntegrationModeler.Infrastructure.Data;
 
 namespace AVAIntegrationModeler.FunctionalTests.ApiEndpoints.Deployments;
@@ -32,6 +33,57 @@ public class DeploymentUpdateTest(CustomWebApplicationFactory<Program> factory) 
     var dto = await response.Content.ReadFromJsonAsync<DeploymentDTO>();
     dto.ShouldNotBeNull();
     dto!.Name.ShouldBe("Updated Finance Deployment");
+  }
+
+  [Fact]
+  public async Task UpdateDeployment_OdebereDataModely_UloziDoDb()
+  {
+    // Deployment1 má v seed datech 2 DataModely — po update s prázdným seznamem musí zmizet z DB
+    var updated = new DeploymentDTO
+    {
+      Id = SeedData.Deployment1.Id,
+      Code = SeedData.Deployment1.Code,
+      Name = SeedData.Deployment1.Name,
+      DataModelIds = new List<Guid>()
+    };
+
+    var putResponse = await _client.PutAsJsonAsync(
+      $"/Deployments/{SeedData.Deployment1.Code}",
+      new { DeploymentCode = SeedData.Deployment1.Code, Deployment = updated });
+    putResponse.StatusCode.ShouldBe(System.Net.HttpStatusCode.OK);
+
+    // Ověř, že GET vrátí prázdný seznam DataModelů
+    var getResponse = await _client.GetAsync($"/Deployments/{SeedData.Deployment1.Code}");
+    getResponse.StatusCode.ShouldBe(System.Net.HttpStatusCode.OK);
+    var dto = await getResponse.Content.ReadFromJsonAsync<DeploymentDTO>();
+    dto.ShouldNotBeNull();
+    dto!.DataModelIds.ShouldBeEmpty();
+  }
+
+  [Fact]
+  public async Task UpdateDeployment_PridaDataModely_UloziDoDb()
+  {
+    // Deployment3 nemá žádné DataModely — přidáme jeden
+    var newModelId = SeedData.DataModel1.Id;
+    var updated = new DeploymentDTO
+    {
+      Id = SeedData.Deployment3.Id,
+      Code = SeedData.Deployment3.Code,
+      Name = SeedData.Deployment3.Name,
+      DataModelIds = new List<Guid> { newModelId }
+    };
+
+    var putResponse = await _client.PutAsJsonAsync(
+      $"/Deployments/{SeedData.Deployment3.Code}",
+      new { DeploymentCode = SeedData.Deployment3.Code, Deployment = updated });
+    putResponse.StatusCode.ShouldBe(System.Net.HttpStatusCode.OK);
+
+    // Ověř, že GET vrátí přidaný DataModel
+    var getResponse = await _client.GetAsync($"/Deployments/{SeedData.Deployment3.Code}");
+    getResponse.StatusCode.ShouldBe(System.Net.HttpStatusCode.OK);
+    var dto = await getResponse.Content.ReadFromJsonAsync<DeploymentDTO>();
+    dto.ShouldNotBeNull();
+    dto!.DataModelIds.ShouldContain(newModelId);
   }
 
   [Fact]

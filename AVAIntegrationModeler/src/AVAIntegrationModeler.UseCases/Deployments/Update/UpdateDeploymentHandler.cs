@@ -10,7 +10,7 @@ namespace AVAIntegrationModeler.UseCases.Deployments.Update;
 /// Handler pro příkaz aktualizace nasazení.
 /// </summary>
 public class UpdateDeploymentHandler(
-  IRepository<Deployment> repository,
+  IDeploymentRepository repository,
   IDeploymentsQueryService queryService
 ) : ICommandHandler<UpdateDeploymentCommand, Result<DeploymentDTO>>
 {
@@ -35,15 +35,39 @@ public class UpdateDeploymentHandler(
       });
     }
 
-    // Synchronizace DataModels — odebrat vše, přidat nové
-    foreach (var dm in existing.DataModels.ToList())
+    var requestedIds = (request.Deployment.DataModelIds ?? []).ToHashSet();
+    var existingIds = existing.DataModels.Select(dm => dm.DataModelId).ToHashSet();
+
+    // Záznamy k odebrání: jsou v DB, ale nejsou v požadavku
+    var toDelete = existing.DataModels
+      .Where(dm => !requestedIds.Contains(dm.DataModelId))
+      .ToList();
+
+    // Záznamy k přidání: jsou v požadavku, ale nejsou v DB
+    var toAddIds = requestedIds.Where(id => !existingIds.Contains(id)).ToList();
+
+    foreach (var dm in toDelete)
       existing.RemoveDataModel(dm.DataModelId);
-    foreach (var id in request.Deployment.DataModelIds)
+    foreach (var id in toAddIds)
       existing.AddDataModel(id);
 
-    await repository.UpdateAsync(existing, cancellationToken);
+    var toAdd = existing.DataModels
+      .Where(dm => toAddIds.Contains(dm.DataModelId))
+      .ToList();
+
+    // DTO sestavíme před sync — EntityState.Unchanged v SyncDataModelsAndSaveAsync
+    // resetuje EF snapshot a může vrátit skalární hodnoty na původní.
+    var resultDto = new DeploymentDTO
+    {
+      Id = existing.Id,
+      Code = request.Deployment.Code,
+      Name = request.Deployment.Name,
+      DataModelIds = requestedIds.ToList()
+    };
+
+    await repository.SyncDataModelsAndSaveAsync(existing, toDelete, toAdd, cancellationToken);
     queryService.InvalidateCache(Datasource.Database);
 
-    return Result<DeploymentDTO>.Success(DeploymentMapper.MapToDTO(existing)!);
+    return Result<DeploymentDTO>.Success(resultDto);
   }
 }
