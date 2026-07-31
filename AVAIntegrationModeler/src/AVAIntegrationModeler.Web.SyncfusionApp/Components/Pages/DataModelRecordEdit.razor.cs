@@ -64,8 +64,7 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
     {
       var ct = _cts?.Token ?? CancellationToken.None;
 
-      var modelsResp = await _apiClient.GetDataModels(_datasource, ct);
-      _dataModel = modelsResp.DataModels?.FirstOrDefault(m => m.Id == modelId);
+      _dataModel = await _apiClient.GetDataModel(_datasource, modelId, ct);
 
       _fieldValues.Clear();
       if (_dataModel is not null)

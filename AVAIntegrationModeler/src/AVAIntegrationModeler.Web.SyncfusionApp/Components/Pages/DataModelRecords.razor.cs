@@ -55,6 +55,13 @@ public partial class DataModelRecords : ComponentBase
 
   private async Task LoadRecordsAsync()
   {
+    if (Datasource == Datasource.AVAPlace && !SelectedModelId.HasValue)
+    {
+      RecordList = new List<DataModelRecordListViewModel>();
+      IsLoading = false;
+      return;
+    }
+
     IsLoading = true;
     var response = await _apiClient.GetDataModelRecords(Datasource, SelectedModelId, CancellationToken.None);
     RecordList = response.Records.Select(DataModelRecordMapper.MapToViewModel).ToList();

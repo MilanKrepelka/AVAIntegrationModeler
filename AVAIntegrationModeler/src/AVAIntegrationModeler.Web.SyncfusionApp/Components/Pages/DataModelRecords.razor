@@ -15,7 +15,8 @@
     <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px; flex-wrap:wrap">
         <div style="display:flex; align-items:center; gap:8px">
             <label>Model:</label>
-            <SfDropDownList TItem="DataModelDTO" TValue="Guid?" Placeholder="-- Všechny modely --"
+            <SfDropDownList TItem="DataModelDTO" TValue="Guid?"
+                            Placeholder="@(Datasource == Datasource.AVAPlace ? "-- Vyberte model --" : "-- Všechny modely --")"
                             DataSource="@_dataModelList"
                             Value="@SelectedModelId"
                             ValueChanged="@HandleModelChange">
@@ -41,7 +42,13 @@
         </div>
     }
 
-    @if (IsLoading)
+    @if (Datasource == Datasource.AVAPlace && SelectedModelId == null)
+    {
+        <div class="alert alert-warning" style="margin-top:8px">
+            Pro zobrazení záznamů z <strong>AVAPlace</strong> vyberte datový model.
+        </div>
+    }
+    else if (IsLoading)
     {
         <p><em>Načítám...</em></p>
     }
