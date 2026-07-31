@@ -288,3 +288,21 @@ Stránky injektují `IAVAIntegrationModelerApiClient` (z projektu `API.Client`) 
 - Dodržuj jmenné konvence Microsoftu a strukturu složek dle existujícího řešení.
 - Všech kód musí mít dokumentaci v češtině(XML doc) a být pokrytý testy.
 - Všechny nové funkce musí být implementovány v souladu s Clean Architecture A DDD principy.
+
+## JSON serializace — exporty
+
+Všechny exportní endpointy v projektu `API` **musí** používat sdílenou instanci `ExportJsonOptions.Instance` z `AVAIntegrationModeler.API.Serialization.ExportJsonOptions` — nikdy nevytvářet lokální `JsonSerializerOptions` v exportních endpointech.
+
+Sdílená instance zajišťuje:
+- `WriteIndented = true` — čitelný odsazený výstup
+- `JsonStringEnumConverter` — enumy serializovány jako textové názvy (např. `"FieldType": "LookupEntity"` místo `"FieldType": 8`)
+
+```csharp
+// ✅ SPRÁVNĚ — použít sdílenou instanci
+await JsonSerializer.SerializeAsync(stream, data, ExportJsonOptions.Instance, ct);
+
+// ❌ ŠPATNĚ — lokální options bez StringEnumConverter → enumy jako čísla
+private static readonly JsonSerializerOptions _jsonOptions = new() { WriteIndented = true };
+```
+
+Soubor: `src/AVAIntegrationModeler.API/Serialization/ExportJsonOptions.cs`
