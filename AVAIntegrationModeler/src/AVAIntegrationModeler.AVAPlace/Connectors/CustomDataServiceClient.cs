@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using ASOL.Core.ApiConnector;
@@ -9,9 +10,11 @@ using ASOL.DataService.Connector;
 using ASOL.DataService.Connector.Options;
 using ASOL.DataService.Contracts;
 using AVAIntegrationModeler.AVAPlace;
+using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Newtonsoft.Json.Linq;
 using Pathoschild.Http.Client;
 
 namespace AVAIntegrationModeler.AVAPlace.API.Connectors;
@@ -116,4 +119,30 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
         return true;
     }
   }
+
+  /// <summary>
+  /// Vrátí unifikovaná data pro daný model.
+  /// </summary>
+  /// <param name="ModelId">Identifikátor modelu</param>
+  /// <param name="ct">Token pro zrušení operace</param>
+  /// <returns>Seznam unifikovaných datových objektů</returns>
+  public async Task<IList<Models.DataModelRecord>> GetUnifiedDataAsync(Guid ModelId, CancellationToken ct = default)
+  {
+    var resource = $"{ApiVersionPrefix}/Process/GetUnifiedData/{ModelId}";
+    Logger.LogDebug($"Retrieving unified data for model on {CombineUri(resource)}");
+
+    var response = await (await AddAuthentication(Client.GetAsync(resource), ct))
+        .WithOptions(ignoreHttpErrors: true)
+        .WithCancellationToken(ct);
+
+    if (response.Status == System.Net.HttpStatusCode.NotFound)
+    {
+      Logger.LogWarning($"Model {ModelId} not found, returning empty list");
+      return new List<Models.DataModelRecord>();
+    }
+
+    var result = await response.As<DataCollection<Models.DataModelRecord>>();
+    return result?.Items ?? new List<Models.DataModelRecord>();
+  }
 }
+

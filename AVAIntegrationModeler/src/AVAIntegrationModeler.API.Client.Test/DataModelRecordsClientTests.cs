@@ -1,4 +1,4 @@
-using AVAIntegrationModeler.Contracts;
+﻿using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Logging.Abstractions;
@@ -82,7 +82,7 @@ public class DataModelRecordsClientTests : IClassFixture<AVAIntegrationModelerAP
     var modelId = await CreateDataModelAsync(client);
     var externalId = $"EXT-{Guid.NewGuid().ToString()[..8].ToUpper()}";
     await CreateRecordAsync(client, modelId, externalId);
-
+    
     var response = await client.GetDataModelRecords(Datasource.Database, modelId, CancellationToken.None);
 
     Assert.NotNull(response);

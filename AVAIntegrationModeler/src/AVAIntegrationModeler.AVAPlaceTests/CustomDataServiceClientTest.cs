@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
@@ -306,5 +306,29 @@ public class CustomDataServiceClientLiveTests : TestBed<AVAPlaceDemoFixture>
     var list = result as System.Collections.IEnumerable;
     list.ShouldNotBeNull();
     list.Cast<object>().ShouldNotBeEmpty();
+    
   }
+
+  
+  [Fact]
+  public async Task GetUnifiedDataAsync_ReturnsNonEmptyList()
+  {
+    var serviceProvider = _fixture.GetServiceProvider(_testOutputHelper);
+    var options = serviceProvider.GetRequiredService<IOptions<AVAPlaceOptions>>();
+    var tenantId = options.Value.TenantId;
+
+    var result = await ServiceRuntimeTenantContext.ExecuteInContextAsync<ICustomDataServiceClient, object>(
+      serviceProvider, tenantId, async client =>
+      {
+        var models = await client.GetUnifiedDataAsync(Guid.Parse("35d31a32-1189-4e22-8e33-0a7d1128983c"), CancellationToken.None);
+        return models;
+      });
+
+    result.ShouldNotBeNull();
+    var list = result as System.Collections.IEnumerable;
+    list.ShouldNotBeNull();
+    list.Cast<object>().ShouldNotBeEmpty();
+
+  }
+
 }

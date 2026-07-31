@@ -569,10 +569,25 @@ public class IntegrationDataProvider : IIntegrationDataProvider
     return result;
   }
 
-  public Task<IEnumerable<DataModelRecordDTO>> GetDataModelRecordsAsync(Guid modelId, CancellationToken cancelationToken = default)
+  public async Task<IEnumerable<DataModelRecordDTO>> GetDataModelRecordsAsync(Guid modelId, CancellationToken cancelationToken = default)
   {
-    // AVAPlace DataService zatím neposkytuje záznamy přes API — vracíme prázdný seznam
-    return Task.FromResult(Enumerable.Empty<DataModelRecordDTO>());
+    var result = await RTX.ExecuteInContextAsync<ICustomDataServiceClient, IList<Models.DataModelRecord>>(
+      _serviceProvider,
+      tenantId,
+      async client =>
+      {
+        var definition = await client.GetUnifiedDataAsync(modelId, cancelationToken);
+        if (definition == null) return new List<Models.DataModelRecord>();
+        return definition;
+      }
+    );
+
+    if (result == null)
+      return Enumerable.Empty<DataModelRecordDTO>();
+
+    List<DataModelRecordDTO> records = new List<DataModelRecordDTO>();
+
+    return result.Select(r => Mapping.DataModelRecordMapper.MapToDTO(r )).ToList();
   }
 
   /// <inheritdoc/>
