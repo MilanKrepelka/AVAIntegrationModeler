@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Result;
 using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Contracts.Deployments;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Contracts.Scenarios;
 using Microsoft.Extensions.Logging;
@@ -601,6 +602,84 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
     var fluent = new FluentClient(_httpClient);
     var result = await fluent
       .DeleteAsync($"areas/{datasource}/{Uri.EscapeDataString(areaCode)}")
+      .WithCancellationToken(cancellationToken)
+      .AsResult<object>();
+    return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));
+  }
+
+  /// <inheritdoc/>
+  public async Task<DeploymentListResponse> GetDeployments(CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(GetDeployments)} starting.");
+    var fluent = new FluentClient(_httpClient);
+    var response = await fluent
+      .GetAsync("deployments")
+      .WithCancellationToken(cancellationToken)
+      .As<DeploymentListResponse>();
+    return response ?? new DeploymentListResponse();
+  }
+
+  /// <inheritdoc/>
+  public async Task<DeploymentDTO> GetDeployment(Guid id, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(GetDeployment)} starting. id={id}");
+    var fluent = new FluentClient(_httpClient);
+    var response = await fluent
+      .GetAsync($"deployments/by-id/{id}")
+      .WithCancellationToken(cancellationToken)
+      .As<DeploymentDTO>();
+    return response ?? new DeploymentDTO();
+  }
+
+  /// <inheritdoc/>
+  public async Task<DeploymentDTO> GetDeployment(string code, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(GetDeployment)} starting. code={code}");
+    var fluent = new FluentClient(_httpClient);
+    var response = await fluent
+      .GetAsync($"deployments/{Uri.EscapeDataString(code)}")
+      .WithCancellationToken(cancellationToken)
+      .As<DeploymentDTO>();
+    return response ?? new DeploymentDTO();
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result<Guid>> CreateDeployment(DeploymentDTO deployment, CancellationToken cancellationToken)
+  {
+    if (deployment is null)
+      return Result<Guid>.Invalid(new ValidationError(nameof(deployment), "Nasazení nesmí být null."));
+    _logger.LogDebug($"{nameof(CreateDeployment)} starting. code={deployment.Code}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PostAsync("deployments")
+      .WithBody(new { Deployment = deployment })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<Guid>();
+    return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result<DeploymentDTO>> UpdateDeployment(DeploymentDTO deployment, CancellationToken cancellationToken)
+  {
+    if (deployment is null)
+      return Result<DeploymentDTO>.Invalid(new ValidationError(nameof(deployment), "Nasazení nesmí být null."));
+    _logger.LogDebug($"{nameof(UpdateDeployment)} starting. id={deployment.Id}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PutAsync($"deployments/{Uri.EscapeDataString(deployment.Code)}")
+      .WithBody(new { DeploymentCode = deployment.Code, Deployment = deployment })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<DeploymentDTO>();
+    return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result> DeleteDeployment(string code, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(DeleteDeployment)} starting. code={code}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .DeleteAsync($"deployments/{Uri.EscapeDataString(code)}")
       .WithCancellationToken(cancellationToken)
       .AsResult<object>();
     return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));

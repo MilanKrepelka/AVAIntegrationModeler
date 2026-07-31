@@ -1,0 +1,111 @@
+@page "/deployments"
+@rendermode InteractiveServer
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Grids
+@using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List
+
+<PageTitle>Nasazení</PageTitle>
+
+<div id="ControlRegion">
+    <div id="GridContainer">
+        <SfGrid ID="Grid"
+                DataSource="@DeploymentsList"
+                @ref="Grid"
+                EnableAltRow="false"
+                AllowPaging="true"
+                AllowFiltering="true"
+                AllowSorting="true"
+                AllowResizing="true"
+                AllowSelection="true">
+
+            <Syncfusion.Blazor.Navigations.SfToolbar>
+                <Syncfusion.Blazor.Navigations.ToolbarItems>
+                    <Syncfusion.Blazor.Navigations.ToolbarItem Text="Přidat nasazení" PrefixIcon="e-icons e-add" Id="AddNew" OnClick="AddNew"></Syncfusion.Blazor.Navigations.ToolbarItem>
+                </Syncfusion.Blazor.Navigations.ToolbarItems>
+            </Syncfusion.Blazor.Navigations.SfToolbar>
+
+            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
+            <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
+
+            <GridColumns>
+                <GridColumn Field=@nameof(DeploymentListViewModel.Code) HeaderText="Kód" Width="150"></GridColumn>
+                <GridColumn Field=@nameof(DeploymentListViewModel.Name) HeaderText="Název" Width="300"></GridColumn>
+                <GridColumn Field=@nameof(DeploymentListViewModel.DataModelCount) HeaderText="Datové modely" Width="150"></GridColumn>
+                <GridColumn Field=@nameof(DeploymentListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="true">
+                    <Template>
+                        @{
+                            var dep = (context as DeploymentListViewModel);
+                            <div class="id-cell-container">
+                                <span class="id-text">@dep!.Id.ToString()</span>
+                                <SfButton CssClass="e-small e-round action-button copy-icon-button"
+                                          IconCss="e-icons e-copy"
+                                          IsPrimary="false"
+                                          OnClick="@(() => CopyToClipboard(dep.Id.ToString()))"
+                                          title="Kopírovat ID do schránky">
+                                </SfButton>
+                            </div>
+                        }
+                    </Template>
+                </GridColumn>
+                <GridColumn HeaderText="Akce" Width="100" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+                    <Template>
+                        @{
+                            var model = (context as DeploymentListViewModel);
+                            <div class="action-buttons">
+                                <SfButton CssClass="e-small e-round e-outline action-button"
+                                          IconCss="e-icons e-edit"
+                                          IsPrimary="false"
+                                          OnClick="@(() => EditDeployment(model!))"
+                                          title="Editovat">
+                                </SfButton>
+                            </div>
+                        }
+                    </Template>
+                </GridColumn>
+            </GridColumns>
+        </SfGrid>
+    </div>
+</div>
+
+@if (_notification != null)
+{
+    <div style="position:fixed;top:1.2rem;right:1.2rem;z-index:9999;@(_notificationSuccess?"background:#198754":"background:#dc3545");color:#fff;padding:.5rem 1.1rem;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.18);font-size:.875rem;">
+        @(_notificationSuccess ? "✓" : "✗") @_notification
+    </div>
+}
+
+@if (IsLoading)
+{
+    <div class="progress-bar-container">
+        <div class="progress-bar-indeterminate"></div>
+    </div>
+}
+
+@code {
+    SfGrid<DeploymentListViewModel>? Grid;
+    string? _notification;
+    bool _notificationSuccess = true;
+
+    [Inject] private IJSRuntime JS { get; set; } = default!;
+
+    private async Task ShowNotification(string message, bool success = true)
+    {
+        _notificationSuccess = success;
+        _notification = message;
+        await InvokeAsync(StateHasChanged);
+        await Task.Delay(3000);
+        _notification = null;
+        await InvokeAsync(StateHasChanged);
+    }
+
+    private async Task CopyToClipboard(string text)
+    {
+        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
+        await ShowNotification($"ID zkopírováno: {text.Substring(0, 8)}...");
+    }
+
+    private void EditDeployment(DeploymentListViewModel deployment)
+    {
+        NavigationManager.NavigateTo($"/deploymentedit/{deployment.Code}");
+    }
+}

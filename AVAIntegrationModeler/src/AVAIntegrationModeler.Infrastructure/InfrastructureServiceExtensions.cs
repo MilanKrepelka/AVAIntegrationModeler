@@ -8,6 +8,7 @@ using AVAIntegrationModeler.UseCases.Areas;
 using AVAIntegrationModeler.UseCases.Contributors.List;
 using AVAIntegrationModeler.UseCases.DataModelRecords;
 using AVAIntegrationModeler.UseCases.DataModels;
+using AVAIntegrationModeler.UseCases.Deployments;
 using AVAIntegrationModeler.UseCases.Features;
 using AVAIntegrationModeler.UseCases.IntegrationMaps;
 using AVAIntegrationModeler.UseCases.Scenarios;
@@ -30,6 +31,7 @@ public static class InfrastructureServiceExtensions
             .AddScoped<IFeaturesQueryService, FeaturesQueryService>()
             .AddScoped<IDataModelQueryService, DataModelsQueryService>()
             .AddScoped<IIntegrationMapsQueryService, IntegrationMapsQueryService>()
+            .AddScoped<IDeploymentsQueryService, DeploymentsQueryService>()
             .AddScoped<IDeleteContributorService, DeleteContributorService>();
 
     logger.LogInformation("{Project} services registered", "Infrastructure");

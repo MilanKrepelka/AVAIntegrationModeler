@@ -47,13 +47,15 @@ public abstract class BaseDbTests : TestBed<EfSqlClientTestFixture>
     // Owned entity collections
     DbContext.DataModelFields.RemoveRange(DbContext.DataModelFields);
     DbContext.DataModelFieldEntityTypeReferences.RemoveRange(DbContext.DataModelFieldEntityTypeReferences);
-    
+    DbContext.DeploymentDataModels.RemoveRange(DbContext.DeploymentDataModels);
+
     // Aggregate roots - v pořadí od nejzávislejších
     DbContext.Scenarios.RemoveRange(DbContext.Scenarios);
     DbContext.Features.RemoveRange(DbContext.Features);
     DbContext.DataModels.RemoveRange(DbContext.DataModels);
     DbContext.Areas.RemoveRange(DbContext.Areas);
     DbContext.Contributors.RemoveRange(DbContext.Contributors);
+    DbContext.Deployments.RemoveRange(DbContext.Deployments);
 
     await DbContext.SaveChangesAsync();
 

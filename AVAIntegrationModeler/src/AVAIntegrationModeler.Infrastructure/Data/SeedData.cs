@@ -2,6 +2,7 @@
 using AVAIntegrationModeler.Domain.AreaAggregate;
 using AVAIntegrationModeler.Domain.ContributorAggregate;
 using AVAIntegrationModeler.Domain.DataModelAggregate;
+using AVAIntegrationModeler.Domain.DeploymentAggregate;
 using AVAIntegrationModeler.Domain.FeatureAggregate;
 using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
@@ -103,6 +104,22 @@ public static class SeedData
   public static DataModel DataModel5 { get; set; } = new(
     Guid.Parse("d1000000-0000-0000-0000-000000000005"),
     "EMPLOYEE"
+  );
+
+  // Deployments
+  public static Deployment Deployment1 { get; set; } = new(
+    Guid.Parse("e1000000-0000-0000-0000-000000000001"),
+    "DEPLOY-SALES"
+  );
+
+  public static Deployment Deployment2 { get; set; } = new(
+    Guid.Parse("e1000000-0000-0000-0000-000000000002"),
+    "DEPLOY-FINANCE"
+  );
+
+  public static Deployment Deployment3 { get; set; } = new(
+    Guid.Parse("e1000000-0000-0000-0000-000000000003"),
+    "DEPLOY-HR"
   );
 
   // Integrations Maps
@@ -404,6 +421,16 @@ public static class SeedData
         .SetLabel("Is Active")
         .SetDescription("Employment status"));
 
+    // Deployments
+    Deployment1.SetName("Sales Deployment");
+    Deployment1.AddDataModel(DataModel1.Id);
+    Deployment1.AddDataModel(DataModel2.Id);
+
+    Deployment2.SetName("Finance Deployment");
+    Deployment2.AddDataModel(DataModel3.Id);
+
+    Deployment3.SetName("HR Deployment");
+
     // ============================================
     // Integration Maps
     // ============================================
@@ -440,7 +467,9 @@ public static class SeedData
     
     // ✅ PŘIDAT INTEGRATION MAPS
     dbContext.IntegrationMaps.AddRange([IntegrationMap1, IntegrationMap2]);
-    
+
+    dbContext.Deployments.AddRange([Deployment1, Deployment2, Deployment3]);
+
     await dbContext.SaveChangesAsync();
   }
 }

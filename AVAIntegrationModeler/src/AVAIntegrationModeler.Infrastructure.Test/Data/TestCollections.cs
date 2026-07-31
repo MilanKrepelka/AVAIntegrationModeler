@@ -63,4 +63,14 @@ public class DataModelSyncTestCollection : ICollectionFixture<EfSqlClientTestFix
   // Slouží pouze pro registraci collection fixture.
 }
 
+/// <summary>
+/// Test collection pro DeploymentTests - izolovaná databáze.
+/// </summary>
+[CollectionDefinition("DeploymentTestCollection")]
+public class DeploymentTestCollection : ICollectionFixture<EfSqlClientTestFixture>
+{
+  // Tato třída se nikdy neinstancuje.
+  // Slouží pouze pro registraci collection fixture.
+}
+
 

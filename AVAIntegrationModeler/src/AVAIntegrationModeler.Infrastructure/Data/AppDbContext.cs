@@ -2,6 +2,7 @@
 using AVAIntegrationModeler.Domain.AreaAggregate;
 using AVAIntegrationModeler.Domain.ContributorAggregate;
 using AVAIntegrationModeler.Domain.DataModelAggregate;
+using AVAIntegrationModeler.Domain.DeploymentAggregate;
 using AVAIntegrationModeler.Domain.FeatureAggregate;
 using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
@@ -43,6 +44,9 @@ public class AppDbContext : DbContext
   /// Integration maps - mapování integračních scénářů k oblastem.
   /// </summary>
   public DbSet<IntegrationsMap> IntegrationMaps => Set<IntegrationsMap>();
+
+  public DbSet<Deployment> Deployments => Set<Deployment>();
+  public DbSet<DeploymentDataModel> DeploymentDataModels => Set<DeploymentDataModel>();
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {

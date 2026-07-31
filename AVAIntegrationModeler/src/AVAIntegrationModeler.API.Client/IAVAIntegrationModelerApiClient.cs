@@ -1,5 +1,6 @@
 ﻿using Ardalis.Result;
 using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Contracts.Deployments;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Contracts.Scenarios;
 
@@ -130,4 +131,34 @@ public interface IAVAIntegrationModelerApiClient
   /// Smaže oblast podle kódu a vrátí výsledek operace.
   /// </summary>
   Task<Result> DeleteArea(Datasource datasource, string areaCode, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Vrátí seznam nasazení.
+  /// </summary>
+  Task<DeploymentListResponse> GetDeployments(CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Vrátí nasazení podle identifikátoru.
+  /// </summary>
+  Task<DeploymentDTO> GetDeployment(Guid id, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Vrátí nasazení podle kódu.
+  /// </summary>
+  Task<DeploymentDTO> GetDeployment(string code, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Vytvoří nové nasazení.
+  /// </summary>
+  Task<Result<Guid>> CreateDeployment(DeploymentDTO deployment, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Aktualizuje nasazení.
+  /// </summary>
+  Task<Result<DeploymentDTO>> UpdateDeployment(DeploymentDTO deployment, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Smaže nasazení podle kódu.
+  /// </summary>
+  Task<Result> DeleteDeployment(string code, CancellationToken cancellationToken);
 }
