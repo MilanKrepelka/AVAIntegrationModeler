@@ -118,10 +118,13 @@ public class ImportDataModelHandler(
       {
         var newRecord = new DataModelRecord(Guid.NewGuid(), localModelId);
         newRecord.SetExternalId(avaRecord.ExternalId);
-        var fieldsToAdd = BuildRecordFields(newRecord, avaRecord.Fields);
         var created = await recordRepository.AddAsync(newRecord, ct);
-        if (created is not null && fieldsToAdd.Count > 0)
-          await recordRepository.SyncFieldsAndSaveAsync(created, new List<DataModelRecordField>(), fieldsToAdd, ct);
+        if (created is not null)
+        {
+          var fieldsToAdd = BuildRecordFields(created, avaRecord.Fields);
+          if (fieldsToAdd.Count > 0)
+            await recordRepository.SyncFieldsAndSaveAsync(created, new List<DataModelRecordField>(), fieldsToAdd, ct);
+        }
       }
       else
       {
