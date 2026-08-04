@@ -1,14 +1,27 @@
-﻿namespace AVAIntegrationModeler.API.Scenarios;
+﻿using AVAIntegrationModeler.Contracts;
+
+namespace AVAIntegrationModeler.API.Scenarios;
 
 /// <summary>
-/// Požadavek na smazání scénáře podle jeho ID.
+/// Požadavek na smazání scénáře podle jeho kódu a datového zdroje.
 /// </summary>
 public record DeleteScenarioRequest
 {
-  public const string Route = "/Features/{ScenarioId:guid}";
-  public static string BuildRoute(int scenarioId) => Route.Replace("{ScenarioId:guid}", scenarioId.ToString());
+  // ✅ Doporučený formát: /Scenarios/{Datasource}/{ScenarioCode}
+  public const string Route = "/Scenarios/{Datasource}/{ScenarioCode}";
+  
+  public static string BuildRoute(Datasource datasource, string scenarioCode) => 
+    Route
+      .Replace("{Datasource}", datasource.ToString())
+      .Replace("{ScenarioCode}", Uri.EscapeDataString(scenarioCode));
+  
   /// <summary>
-  /// Identifikátor scénáře, který má být smazán.
+  /// Kód scénáře, který má být smazán.
   /// </summary>
-  public Guid ScenarioId { get; set; }
+  public string ScenarioCode { get; set; } = string.Empty;
+
+  /// <summary>
+  /// Datový zdroj, ze kterého má být scénář smazán.
+  /// </summary>
+  public Datasource Datasource { get; set; }
 }

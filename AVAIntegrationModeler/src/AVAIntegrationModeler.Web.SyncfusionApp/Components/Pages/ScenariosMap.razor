@@ -1,0 +1,145 @@
+﻿@page "/scenariomap/{dataSourceAsString}/{scenarioCode}"
+@rendermode InteractiveServer
+@using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.DropDowns
+@using Syncfusion.Blazor.Notifications
+@using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
+
+<SfDiagramComponent @ref="@diagram" Connectors="@connectors" Height="700px" Nodes="@nodes">
+    <Layout Type="LayoutType.RadialTree"
+            Orientation="LayoutOrientation.TopToBottom"
+            HorizontalSpacing="100"
+            VerticalSpacing="80">
+    </Layout>
+</SfDiagramComponent>
+
+
+@code
+{
+    PageSettings pageSettings = new PageSettings()
+    {
+        
+        // Set your desired page settings here
+        // For example:
+        // Width = "100%",
+        // Height = "100%",
+        // BackgroundColor = "transparent"
+    };
+    SfDiagramComponent? diagram;
+    int connectorCount = 0;
+    //Defines Diagram's nodes collection.
+    DiagramObjectCollection<Node> nodes = new DiagramObjectCollection<Node>();
+    //Defines Diagram's connectors collection.
+    DiagramObjectCollection<Connector> connectors = new DiagramObjectCollection<Connector>();
+
+    private bool _needsLayout;
+
+    // protected override async Task OnInitializedAsync()
+    // {
+    //     // Load data
+    //     _scenarioDTO = await _apiClient.GetScenario(Contracts.Datasource.AVAPlace, scenarioCode, CancellationToken.None);
+
+    //     // Build model
+    //     InitDiagramModel();
+
+    //     // Defer layout until @ref is ready
+    //     _needsLayout = true;
+    // }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (_needsLayout && diagram is not null)
+        {
+            // Re-run layout after nodes/connectors are added
+            await diagram.DoLayoutAsync();
+            _needsLayout = false;
+        }
+    }
+
+    private void InitDiagramModel()
+    {
+        if (_scenarioDTO is null) return;
+
+        // Bez absolutních souřadnic – nechte layout uzly rozmisťovat
+        CreateNode("Scenario", 0, 0, NodeFlowShapes.Terminator, _scenarioDTO.Code ?? string.Empty, true);
+
+        if (_scenarioDTO.InputFeatureSummary is not null)
+        {
+            CreateNode("InputFeature", 0, 0, NodeFlowShapes.Terminator, _scenarioDTO.InputFeatureSummary.Code ?? string.Empty, false);
+            CreateConnector("Scenario", "InputFeature", "Vstupní feature");
+        }
+
+        if (_scenarioDTO.OutputFeatureSummary is not null)
+        {
+            CreateNode("OutputFeature", 0, 0, NodeFlowShapes.Terminator, _scenarioDTO.OutputFeatureSummary.Code ?? string.Empty, false);
+            CreateConnector("Scenario", "OutputFeature", "Výstupní feature");
+        }
+    }
+
+    // Method to create connector.
+    private void CreateConnector(string sourceId, string targetId, string? label = default(string), OrthogonalSegment? segment1 = null, OrthogonalSegment? segment2 = null)
+    {
+        Connector diagramConnector = new Connector()
+        {
+            // Represents the unique id of the connector.
+            ID = string.Format("connector{0}", ++connectorCount),
+            SourceID = sourceId,
+            TargetID = targetId,
+        };
+        if (label != default(string))
+        {
+            // Represents the annotation of the connector.
+            PathAnnotation annotation = new PathAnnotation()
+            {
+                Content = label,
+                Style = new TextStyle() { Fill = "white" }
+            };
+            diagramConnector.Annotations = new DiagramObjectCollection<PathAnnotation>() { annotation };
+        }
+        if (segment1 != null)
+        {
+            // Represents the segment type of the connector.
+            diagramConnector.Type = ConnectorSegmentType.Orthogonal;
+            if (segment2 != null)
+            {
+                diagramConnector.Segments = new DiagramObjectCollection<ConnectorSegment> { segment1, segment2 };
+            }else
+            {
+                diagramConnector.Segments = new DiagramObjectCollection<ConnectorSegment> { segment1 };
+            }
+        }
+        connectors.Add(diagramConnector);
+    }
+
+    // Method to create node.
+    private void CreateNode(string id, double x, double y, NodeFlowShapes shape, string label, bool isRoot)
+    {
+        var fillColor = isRoot ? "var(--accent, #FF7043)" : "var(--primary-500, #357BD2)";
+        var textColor = isRoot ? "black" : "white";
+
+        Node diagramNode = new Node()
+        {
+            ID = id,
+            // Aktivuj počáteční pozici, aby se nody nepřekrývaly, když layout nemá co rozmisťovat
+            //OffsetX = x,
+            //OffsetY = y,
+
+            Width = 9*(label.Length),
+            Height = 60,
+            Style = new ShapeStyle { Fill = fillColor, StrokeColor = "White" },
+            Shape = new FlowShape { Type = NodeShapes.Flow, Shape = NodeFlowShapes.Process },
+            Annotations = new DiagramObjectCollection<ShapeAnnotation>
+        {
+            new ShapeAnnotation
+            {
+                Content = label,
+                Style = new TextStyle { Color = textColor, Fill = "transparent" }
+            }
+        }
+        };
+        nodes.Add(diagramNode);
+    }
+}

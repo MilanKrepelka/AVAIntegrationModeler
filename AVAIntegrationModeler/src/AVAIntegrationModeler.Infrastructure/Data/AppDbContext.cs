@@ -1,5 +1,12 @@
-﻿using AVAIntegrationModeler.Domain.ContributorAggregate;
+﻿using System.Reflection;
+using AVAIntegrationModeler.Domain.AreaAggregate;
+using AVAIntegrationModeler.Domain.ContributorAggregate;
+using AVAIntegrationModeler.Domain.DataModelAggregate;
+using AVAIntegrationModeler.Domain.DeploymentAggregate;
+using AVAIntegrationModeler.Domain.FeatureAggregate;
+using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
+using AVAIntegrationModeler.Infrastructure.Data.Config;
 using Microsoft.AspNetCore.Components;
 using Microsoft.Extensions.Options;
 
@@ -17,7 +24,7 @@ public class AppDbContext : DbContext
     _options = null!;
     _dispatcher = null!;
   }
-  public AppDbContext(DbContextOptions<AppDbContext> options,IDomainEventDispatcher? dispatcher)
+  public AppDbContext(DbContextOptions<AppDbContext> options, IDomainEventDispatcher? dispatcher)
   {
     this._options = options;
     this._dispatcher = dispatcher;
@@ -26,12 +33,32 @@ public class AppDbContext : DbContext
 
   public DbSet<Contributor> Contributors => Set<Contributor>();
   public DbSet<Scenario> Scenarios => Set<Scenario>();
+  public DbSet<DataModel> DataModels => Set<DataModel>();
+  public DbSet<Area> Areas => Set<Area>();
+
+  public DbSet<DataModelField> DataModelFields => Set<DataModelField>(); // ✅
+  public DbSet<DataModelFieldEntityTypeReference> DataModelFieldEntityTypeReferences => Set<DataModelFieldEntityTypeReference>(); // ✅ NOVÉ
+  public DbSet<Feature> Features => Set<Feature>(); // ✅ PŘIDÁNO
+
+  /// <summary>
+  /// Integration maps - mapování integračních scénářů k oblastem.
+  /// </summary>
+  public DbSet<IntegrationsMap> IntegrationMaps => Set<IntegrationsMap>();
+
+  public DbSet<Deployment> Deployments => Set<Deployment>();
+  public DbSet<DeploymentDataModel> DeploymentDataModels => Set<DeploymentDataModel>();
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
     base.OnModelCreating(modelBuilder);
-    // Toto zaregistruje všechny konfigurace entit ve shodě s IEntityTypeConfiguration v aktuálním sestavení
+
+    // ✅ Ignorovat SmartEnum typy jako entity
+    modelBuilder.Ignore<ContributorStatus>();
+
+    // ✅ Aplikovat všechny konfigurace najednou z aktuálního sestavení
     modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    
+    
   }
 
   public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())

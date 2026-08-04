@@ -1,16 +1,14 @@
-﻿using AVAIntegrationModeler.UseCases.Contributors.Get;
+﻿using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.UseCases.Contributors.Get;
 using AVAIntegrationModeler.UseCases.Scenarios.Get;
 
 namespace AVAIntegrationModeler.API.Scenarios;
 
 /// <summary>
-/// Get a Contributor by integer ID.
+/// Get a Scenario by Scenario Id.
 /// </summary>
-/// <remarks>
-/// Takes a positive integer ID and returns a matching Contributor record.
-/// </remarks>
 public class GetById(IMediator _mediator)
-  : Endpoint<GetScenarioByIdRequest, ScenarioRecord>
+  : Endpoint<GetScenarioByIdRequest, ScenarioDTO>
 {
   public override void Configure()
   {
@@ -21,7 +19,7 @@ public class GetById(IMediator _mediator)
   public override async Task HandleAsync(GetScenarioByIdRequest request,
     CancellationToken cancellationToken)
   {
-    var query = new GetScenarioQuery(request.ScenarioId);
+    var query = new GetScenarioQuery(request.Datasource, request.ScenarioId);
 
     var result = await _mediator.Send(query, cancellationToken);
 
@@ -33,8 +31,7 @@ public class GetById(IMediator _mediator)
 
     if (result.IsSuccess)
     {
-      
-     Response = new ScenarioRecord(result.Value);
+     Response = result.Value;
     }
   }
 }

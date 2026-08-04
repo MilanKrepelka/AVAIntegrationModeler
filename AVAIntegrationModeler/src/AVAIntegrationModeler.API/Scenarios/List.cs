@@ -10,7 +10,7 @@ namespace AVAIntegrationModeler.API.Scenarios;
 /// <remarks>
 /// List all contributors - returns a ContributorListResponse containing the Scenarios.
 /// </remarks>
-public class List(IMediator _mediator) : Endpoint<ScenarioListRequest,ScenarioListResponse>
+public class List(IMediator _mediator) : Endpoint<Contracts.Scenarios.ScenarioListRequest,Contracts.Scenarios.ScenarioListResponse>
 {
   public override void Configure()
   {
@@ -19,7 +19,7 @@ public class List(IMediator _mediator) : Endpoint<ScenarioListRequest,ScenarioLi
     Options(x => x.CacheOutput(p => p.Expire(TimeSpan.FromSeconds(5))));
   }
 
-  public override async Task HandleAsync(ScenarioListRequest request, CancellationToken cancellationToken)
+  public override async Task HandleAsync(Contracts.Scenarios.ScenarioListRequest request, CancellationToken cancellationToken)
   {
 
     Result<IEnumerable<ScenarioDTO>> result = await _mediator.Send(new ListScenariosQuery(request.Datasource, null, null), cancellationToken);
@@ -29,7 +29,7 @@ public class List(IMediator _mediator) : Endpoint<ScenarioListRequest,ScenarioLi
 
     if (result.IsSuccess)
     {
-      Response = new ScenarioListResponse
+      Response = new Contracts.Scenarios.ScenarioListResponse
       {
         Scenarios = result.Value.ToList()
       };

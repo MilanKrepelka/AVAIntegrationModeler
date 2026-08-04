@@ -11,3 +11,11 @@ global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Logging;
 global using Microsoft.Extensions.Options;
 global using MimeKit;
+
+// Domain Aggregates
+global using AVAIntegrationModeler.Domain.AreaAggregate;
+global using AVAIntegrationModeler.Domain.ContributorAggregate;
+global using AVAIntegrationModeler.Domain.DataModelAggregate;
+global using AVAIntegrationModeler.Domain.FeatureAggregate; // ✅ PŘIDÁNO
+global using AVAIntegrationModeler.Domain.ScenarioAggregate;
+global using AVAIntegrationModeler.Domain.ValueObjects;

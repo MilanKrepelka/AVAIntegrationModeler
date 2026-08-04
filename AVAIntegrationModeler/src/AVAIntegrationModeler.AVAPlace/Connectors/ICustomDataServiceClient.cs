@@ -5,38 +5,46 @@ using ASOL.DataService.Contracts;
 
 namespace AVAIntegrationModeler.AVAPlace;
 
+/// <summary>
+/// Represents the custom client of DataService client.
+/// </summary>
+/// <summary>
+/// Represents the custom client of PlatformStore Order API service extending its standard connector.
+/// </summary>
+public interface ICustomDataServiceClient : IDataServiceClient
+{
   /// <summary>
-  /// Represents the custom client of DataService client.
+  /// Get Data Agent By Code
   /// </summary>
+  /// <param name="agentCode"></param>
+  /// <param name="acceptNotFound"></param>
+  /// <param name="ct"></param>
+  /// <returns></returns>
+  Task<DataAgentDefinition?> GetDataAgentByCodeAsync(string agentCode, bool acceptNotFound = false, CancellationToken ct = default);
+
   /// <summary>
-  /// Represents the custom client of PlatformStore Order API service extending its standard connector.
+  /// Switch Enabled Data Agent
   /// </summary>
-  public interface ICustomDataServiceClient : IDataServiceClient
-  {
-      /// <summary>
-      /// Get Data Agent By Code
-      /// </summary>
-      /// <param name="agentCode"></param>
-      /// <param name="acceptNotFound"></param>
-      /// <param name="ct"></param>
-      /// <returns></returns>
-      Task<DataAgentDefinition?> GetDataAgentByCodeAsync(string agentCode, bool acceptNotFound = false, CancellationToken ct = default);
+  /// <param name="dataAgentId"></param>
+  /// <param name="enabled"></param>
+  /// <param name="ct"></param>
+  /// <returns></returns>
+  Task<bool> SwitchEnabledDataAgentAsync(string dataAgentId, bool enabled, CancellationToken ct = default);
 
-      /// <summary>
-      /// Switch Enabled Data Agent
-      /// </summary>
-      /// <param name="dataAgentId"></param>
-      /// <param name="enabled"></param>
-      /// <param name="ct"></param>
-      /// <returns></returns>
-      Task<bool> SwitchEnabledDataAgentAsync(string dataAgentId, bool enabled, CancellationToken ct = default);
+  /// <summary>
+  /// Switch Enabled Data Source
+  /// </summary>
+  /// <param name="dataSourceId"></param>
+  /// <param name="enabled"></param>
+  /// <param name="ct"></param>
+  /// <returns></returns>
+  Task<bool> SwitchEnabledDataSourceAsync(string dataSourceId, bool enabled, CancellationToken ct = default);
 
-      /// <summary>
-      /// Switch Enabled Data Source
-      /// </summary>
-      /// <param name="dataSourceId"></param>
-      /// <param name="enabled"></param>
-      /// <param name="ct"></param>
-      /// <returns></returns>
-      Task<bool> SwitchEnabledDataSourceAsync(string dataSourceId, bool enabled, CancellationToken ct = default);
-  }
+  /// <summary>
+  /// Vrátí unifikovaná data pro daný model. 
+  /// </summary>
+  /// <param name="ModelId">Identifikátor modelu</param>
+  /// <param name="ct">Token pro zrušení operace</param>
+  /// <returns>Seznam unifikovaných datových objektů</returns>
+  Task<IList<Models.DataModelRecord>> GetUnifiedDataAsync(Guid ModelId, CancellationToken ct = default);
+}

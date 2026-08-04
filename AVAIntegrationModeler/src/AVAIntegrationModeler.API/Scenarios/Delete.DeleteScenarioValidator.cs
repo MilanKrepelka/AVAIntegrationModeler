@@ -12,7 +12,7 @@ public class DeleteScenarioValidator : Validator<DeleteScenarioRequest>
 {
   public DeleteScenarioValidator()
   {
-    RuleFor(x => x.ScenarioId)
+    RuleFor(x => x.ScenarioCode)
       .NotEmpty();
   }
 }

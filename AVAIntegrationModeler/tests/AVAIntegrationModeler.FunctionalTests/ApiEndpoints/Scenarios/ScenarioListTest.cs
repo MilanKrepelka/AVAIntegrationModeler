@@ -1,4 +1,5 @@
-﻿using AVAIntegrationModeler.Infrastructure.Data;
+﻿using AVAIntegrationModeler.Contracts.Scenarios;
+using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.API.Scenarios;
 
 namespace AVAIntegrationModeler.FunctionalTests.ApiEndpoints.Scenarios;

@@ -1,11 +1,12 @@
-﻿using AVAIntegrationModeler.Contracts.DTO;
+﻿using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Contracts.DTO;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Update;
 
 
 /// <summary>
-/// Příkaz pro aktualizaci integračním scénáři.
+/// Příkaz pro aktualizaci integračního scénáře.
 /// </summary>
-/// <param name="ContributorId">Identifikátor přispěvatele, který má být aktualizován.</param>
-/// <param name="NewName">Nové jméno přispěvatele.</param>
-public record UpdateScenarioCommand(ScenarioDTO Scenario) : ICommand<Result<ScenarioDTO>>;
+/// <param name="datasource">Datový zdroj, ve kterém se scénář nachází.</param>
+/// <param name="Scenario">Aktualizovaný integrační scénář.</param>
+public record UpdateScenarioCommand(Datasource datasource, ScenarioDTO Scenario) : ICommand<Result<ScenarioDTO>>;

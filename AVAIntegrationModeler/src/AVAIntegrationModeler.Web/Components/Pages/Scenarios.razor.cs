@@ -9,13 +9,16 @@ using static MudBlazor.Colors;
 
 namespace AVAIntegrationModeler.Web.Components.Pages;
 
-public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase
+public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase, IPageListBase
 {
-  protected bool IsLoading { get; set; } = false;
+  /// <inheritdoc/>
+  public bool IsLoading { get; set; } = false;
+  /// <inheritdoc/>
+  public Datasource Datasource { get; set; } = Datasource.Database;
+  /// <inheritdoc/>
+  public string FilterString { get; set; } = string.Empty;
 
-  protected Datasource Datasource = Datasource.Database;
-
-  protected List<ScenarioListViewModel> ScenariosList { get; set; } = new();
+  public List<ScenarioListViewModel> ScenariosList { get; set; } = new();
 
   protected async Task onDatasourceChanded(Datasource datasource)
   {
@@ -23,23 +26,23 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase
     await LoadItemsAsync();
   }
 
-  protected string filterString = "";
+  
 
   protected bool FilterFunc(ScenarioListViewModel scenario)
   {
-    if (string.IsNullOrEmpty(filterString)) return true;
+    if (string.IsNullOrEmpty(FilterString)) return true;
 
-    return scenario.Code.Contains(filterString, StringComparison.OrdinalIgnoreCase)
-      || scenario.Id.ToString().Contains(filterString, StringComparison.OrdinalIgnoreCase)
+    return scenario.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+      || scenario.Id.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
       
-      || scenario.Name.CzechValue.ToString().Contains(filterString, StringComparison.OrdinalIgnoreCase)
-      || scenario.Name.EnglishValue.ToString().Contains(filterString, StringComparison.OrdinalIgnoreCase)
+      || scenario.Name.CzechValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+      || scenario.Name.EnglishValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
 
-      || scenario.Description.CzechValue.ToString().Contains(filterString, StringComparison.OrdinalIgnoreCase)
-      || scenario.Description.EnglishValue.ToString().Contains(filterString, StringComparison.OrdinalIgnoreCase)
+      || scenario.Description.CzechValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+      || scenario.Description.EnglishValue.ToString().Contains(FilterString, StringComparison.OrdinalIgnoreCase)
 
-      || scenario.InputFeature.Code.Contains(filterString, StringComparison.OrdinalIgnoreCase)
-      || scenario.OutputFeature.Code.Contains(filterString, StringComparison.OrdinalIgnoreCase)
+      || scenario.InputFeature.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)
+      || scenario.OutputFeature.Code.Contains(FilterString, StringComparison.OrdinalIgnoreCase)
 
       ;
   }
@@ -51,19 +54,19 @@ public partial class Scenarios : Microsoft.AspNetCore.Components.ComponentBase
       ScenariosList.Clear();
       // Načtení scénářů z AVAIntegrationModeler.API
       using var httpClient = new HttpClient();
-      var response = await httpClient.GetAsync($"http://localhost:57679/Features?datasource={this.Datasource}");
+      var response = await httpClient.GetAsync($"http://localhost:57679/Scenarios?datasource={this.Datasource}");
       response.EnsureSuccessStatusCode();
 
-      var scenarioListResponse = await response.Content.ReadFromJsonAsync<ScenarioListResponse>();
+      var scenarioListResponse = await response.Content.ReadFromJsonAsync<Contracts.Scenarios.ScenarioListResponse>();
       
       if (scenarioListResponse?.Scenarios != null)
       {
         foreach (var scenario in scenarioListResponse?.Scenarios!)
         {
 
-          ScenarioListViewModel scenarioListViewModel = new ScenarioListViewModel();
-          Mapping.ScenarioMapper.MapToViewModel(scenario!, out scenarioListViewModel);
-          ScenariosList.Add(scenarioListViewModel);
+          ScenarioListViewModel? scenarioListViewModel = new ScenarioListViewModel();
+          scenarioListViewModel = Mapping.ScenarioMapper.MapToScenarioListViewModel(scenario);
+          if (scenarioListViewModel != null)ScenariosList.Add(scenarioListViewModel);
         }
       }
     }

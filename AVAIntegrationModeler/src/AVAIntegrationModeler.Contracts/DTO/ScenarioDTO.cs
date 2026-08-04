@@ -44,12 +44,12 @@ public record ScenarioDTO
   /// <summary>
   /// Souhrnné informace o vstupní feature (volitelně plně vyplněno pokud klient požádá o include).
   /// </summary>
-  public FeatureSummaryDTO? InputFeatureSummary { get; init; }
+  public FeatureSummaryDTO? InputFeatureSummary { get; set; }
 
   /// <summary>
   /// Souhrnné informace o výstupní feature (volitelně plně vyplněno pokud klient požádá o include).
   /// </summary>
-  public FeatureSummaryDTO? OutputFeatureSummary { get; init; }
+  public FeatureSummaryDTO? OutputFeatureSummary { get; set; }
 }
 
 

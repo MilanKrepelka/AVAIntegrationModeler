@@ -1,26 +1,39 @@
-﻿using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.Domain.ContributorAggregate;
-using AVAIntegrationModeler.Domain.ContributorAggregate.Specifications;
-using AVAIntegrationModeler.Domain.ScenarioAggregate;
-using AVAIntegrationModeler.Domain.ScenarioAggregate.Specifications;
-using AVAIntegrationModeler.UseCases.Contributors;
-using AVAIntegrationModeler.UseCases.Contributors.Get;
+﻿using Ardalis.GuardClauses;
+using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.UseCases.Scenarios.Mapping;
 
 namespace AVAIntegrationModeler.UseCases.Scenarios.Get;
+
 /// <summary>
 /// Queries don't necessarily need to use repository methods, but they can if it's convenient
 /// </summary>
-public class GetScenarioHandler(IReadRepository<Scenario> _repository)
-  : IQueryHandler<GetScenarioQuery, Result<ScenarioDTO>>
+public class GetScenarioHandler(IScenariosQueryService query)
+  : IQueryHandler<GetScenarioQuery, Result<ScenarioDTO>>, IQueryHandler<GetScenarioByCodeQuery, Result<ScenarioDTO>>
 {
   public async Task<Result<ScenarioDTO>> Handle(GetScenarioQuery request, CancellationToken cancellationToken)
   {
-    var spec = new ScenarioByIdSpec(request.ScenarioId);
-    var entity = await _repository.FirstOrDefaultAsync(spec, cancellationToken);
-    if (entity == null) return Result.NotFound();
+    try
+    {
+      var scenario = await query.GetScenario(request.Datasource, request.ScenarioId, cancellationToken);
+      return Result.Success(scenario);
+    }
+    catch (NotFoundException)
+    {
+      return Result.NotFound();
+    }
+  }
 
-    return ScenarioMapper.MapToDTO(entity);
+  public async Task<Result<ScenarioDTO>> Handle(GetScenarioByCodeQuery request, CancellationToken cancellationToken)
+  {
+    try
+    {
+      var scenario = await query.GetScenario(request.Datasource, request.ScenarioCode, cancellationToken);
+      return Result.Success(scenario);
+    }
+    catch (NotFoundException)
+    {
+      return Result.NotFound();
+    }
   }
 }
 

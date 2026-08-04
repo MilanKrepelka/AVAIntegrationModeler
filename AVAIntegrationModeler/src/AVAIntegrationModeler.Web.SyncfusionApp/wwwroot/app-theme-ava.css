@@ -1,0 +1,33 @@
+
+@property --super-light-bg-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: white;
+}
+
+
+@property --font-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #333333;
+}
+@property --font-dark-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: black;
+}
+@property --font-super-light-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: white;
+}
+@property --font-light-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #A1BFC7;
+}
+@property --border-main-color {
+    syntax: "<color>";
+    inherits: false;
+    initial-value: #dee2e6;
+}

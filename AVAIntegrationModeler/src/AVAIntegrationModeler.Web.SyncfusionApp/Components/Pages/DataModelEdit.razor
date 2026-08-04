@@ -1,0 +1,107 @@
+@page "/datamodeledit/{dataSourceAsString}/{id:guid}"
+@page "/datamodeledit/{dataSourceAsString}"
+@rendermode InteractiveServer
+@using AVAIntegrationModeler.Contracts.DTO
+@using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+@using Syncfusion.Blazor.DropDowns
+@using Microsoft.AspNetCore.Components.Forms
+
+<EditForm Model="_edit" OnValidSubmit="SaveAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="container">
+        <h2>@(IsNew ? "Nový datový model" : "Upravit datový model")</h2>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <SfTextBox CssClass="w-100"
+                           Placeholder="Kód"
+                           FloatLabelType="FloatLabelType.Always"
+                           @bind-Value="_edit.Code">
+                </SfTextBox>
+                <ValidationMessage For="@(() => _edit.Code)" />
+            </div>
+            <div class="col-12 col-md-6">
+                <SfTextBox CssClass="w-100"
+                           Placeholder="ID"
+                           FloatLabelType="FloatLabelType.Always"
+                           @bind-Value="_edit.IdText"
+                           Readonly="true">
+                </SfTextBox>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+            <div class="col-12">
+                <SfTextBox CssClass="w-100"
+                           Placeholder="Název"
+                           FloatLabelType="FloatLabelType.Always"
+                           @bind-Value="_edit.Name">
+                </SfTextBox>
+                <ValidationMessage For="@(() => _edit.Name)" />
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+            <div class="col-12">
+                <SfTextArea CssClass="w-100"
+                            Placeholder="Popis"
+                            FloatLabelType="FloatLabelType.Always"
+                            @bind-Value="_edit.Description"
+                            Rows="3">
+                </SfTextArea>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+            <div class="col-12">
+                <SfTextArea CssClass="w-100"
+                            Placeholder="Poznámky"
+                            FloatLabelType="FloatLabelType.Always"
+                            @bind-Value="_edit.Notes"
+                            Rows="3">
+                </SfTextArea>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+            <div class="col-12">
+                <SfCheckBox @bind-Checked="_edit.IsAggregateRoot" Label="Je agregátním kořenem (Aggregate Root)"></SfCheckBox>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+            <div class="col-12 col-md-6">
+                <SfDropDownList TItem="AreaDTO" TValue="Guid?"
+                                DataSource="@_availableAreas"
+                                @bind-Value="_edit.AreaId"
+                                Placeholder="Oblast (nepovinná)"
+                                FloatLabelType="FloatLabelType.Always"
+                                ShowClearButton="true"
+                                CssClass="w-100">
+                    <DropDownListFieldSettings Text="Name" Value="Id"></DropDownListFieldSettings>
+                </SfDropDownList>
+            </div>
+        </div>
+
+        @if (_saveMessage is not null)
+        {
+            <div class="alert @(_saveSuccess ? "alert-success" : "alert-danger")" style="margin-top:16px">
+                @_saveMessage
+            </div>
+        }
+
+        <div style="margin-top:24px">
+            <SfButton CssClass="e-primary" Type="Submit">Uložit</SfButton>
+            <SfButton CssClass="e-outline" Type="Button" style="margin-left:8px" OnClick="NavigateBack">Zpět</SfButton>
+        </div>
+    </div>
+</EditForm>
+
+<div class="container" style="margin-top:32px">
+    <DataModelFieldEditor Fields="_fields" AvailableModels="_availableModels" />
+</div>
+

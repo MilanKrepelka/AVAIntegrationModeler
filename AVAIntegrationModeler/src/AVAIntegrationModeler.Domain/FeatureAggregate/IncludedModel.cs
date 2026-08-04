@@ -9,7 +9,7 @@ namespace AVAIntegrationModeler.Domain.FeatureAggregate;
 /// <summary>
 /// Model AVA virtuálního modelu
 /// </summary>
-public class IncludedModel
+public class IncludedModel : EntityBase<Guid>
 {
   /// <summary>
   /// Základní konstruktor
@@ -17,17 +17,25 @@ public class IncludedModel
   /// <param name="modelId">Identifikátor modelu</param>
   public IncludedModel(Guid modelId)
   {
+    Id = Guid.NewGuid();
     ModelId = modelId;
   }
 
   /// <summary>
-  /// Příznak určující, zda je model pouze pro konzumaci
+  /// Privátní konstruktor pro EF Core.
   /// </summary>
-  public bool ConsumeOnly { get; set; }
+  private IncludedModel()
+  {
+    // EF Core vyžaduje bezparametrový konstruktor
+  }
 
   /// <summary>
   /// Identifikátor modelu
   /// </summary>
-  public Guid ModelId { get; }
+  public Guid ModelId { get; private set; }
 
+  /// <summary>
+  /// Příznak určující, zda je model pouze ke čtení
+  /// </summary>
+  public bool ReadOnly { get; set; }
 }

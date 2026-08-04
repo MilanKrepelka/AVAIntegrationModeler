@@ -7,30 +7,39 @@ using System.Threading.Tasks;
 namespace AVAIntegrationModeler.Domain.FeatureAggregate;
 
 /// <summary>
-/// Reprezentuje zahrnutou (vnořenou) featureId v rámci většího systému.
+/// Reprezentuje zahrnutou (vnořenou) feature v rámci většího systému.
 /// </summary>
-/// <remarks>Třída slouží jako zástupce nebo označení pro featureId, které jsou součástí většího systému. Sama o sobě neobsahuje žádnou funkcionalitu,
-/// ale může být použita k identifikaci nebo kategorizaci zahrnutých featureId v aplikaci.</remarks>
-public class IncludedFeature
+/// <remarks>Třída slouží jako zástupce nebo označení pro feature, které jsou součástí většího systému. Sama o sobě neobsahuje žádnou funkcionalitu,
+/// ale může být použita k identifikaci nebo kategorizaci zahrnutých features v aplikaci.</remarks>
+public class IncludedFeature : EntityBase<Guid>
 {
   /// <summary>
   /// Základní konstruktor.
   /// </summary>
-  /// <param name="featureId">Instanční objekt <see cref="FeatureId"/> představující zahrnutou featureId.</param>
-  /// <param name="consumeOnly">Indikuje, zda je featureId pouze pro konzumaci.</param>
+  /// <param name="featureId">Instanční objekt <see cref="Feature"/> představující zahrnutou feature.</param>
+  /// <param name="consumeOnly">Indikuje, zda je feature pouze pro konzumaci.</param>
   public IncludedFeature(Guid featureId, bool consumeOnly)
   {
-    this.FeatureId = featureId;
-    this.ConsumeOnly = consumeOnly;
+    Id = Guid.NewGuid(); // Generování primárního klíče
+    FeatureId = featureId;
+    ConsumeOnly = consumeOnly;
   }
 
   /// <summary>
-  /// Propojená featureId (<see cref="FeatureId"/>).
+  /// Privátní konstruktor pro EF Core.
   /// </summary>
-  public Guid FeatureId { get; init; }
+  private IncludedFeature()
+  {
+    // EF Core vyžaduje bezparametrový konstruktor
+  }
 
   /// <summary>
-  /// Příznak určující, zda je featureId pouze pro konzumaci.
+  /// Propojená feature (<see cref="Feature"/>).
   /// </summary>
-  public bool ConsumeOnly { get; init; }
+  public Guid FeatureId { get; private set; }
+
+  /// <summary>
+  /// Příznak určující, zda je feature pouze pro konzumaci.
+  /// </summary>
+  public bool ConsumeOnly { get; private set; }
 }

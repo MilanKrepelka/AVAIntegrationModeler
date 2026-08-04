@@ -1,0 +1,39 @@
+﻿@using AVAIntegrationModeler.Contracts.DTO
+@using AVAIntegrationModeler.Web.Components.Widgets.IncludedFeatureWidget
+
+<MudText Typo="Typo.h6" Class="mb-3">Zahrnut� featury</MudText>
+
+@if (Features == null || !Features.Any())
+{
+    <MudText Typo="Typo.body2" Color="Color.Secondary">��dn� zahrnut� featury</MudText>
+}
+else
+{
+    <MudDataGrid Items="@Features" Dense="true" Hover="true" >
+        <Columns>
+            <PropertyColumn Property="x => x.Feature.Code" 
+                            Title="K�d"
+                            CellClass="included-features-widget-code-column"
+                            HeaderClass="included-features-widget-code-column" />
+            <PropertyColumn Property="x => x.ConsumeOnly" Title="Pouze konzumace">
+                <CellTemplate>
+                    @if (@context.Item.ConsumeOnly)
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Check" Size="Size.Small" Color="Color.Success" />
+                    }
+                    else
+                    {
+                        <MudIcon Icon="@Icons.Material.Filled.Close" Size="Size.Small" Color="Color.Error" />
+                    }
+                </CellTemplate>
+            </PropertyColumn>
+        </Columns>
+    </MudDataGrid>
+}
+
+<style>
+    .included-features-widget-code-column {
+        width: 30%;
+        max-width: 30%
+    }
+</style>

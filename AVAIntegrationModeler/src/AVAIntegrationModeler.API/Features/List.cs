@@ -10,7 +10,7 @@ namespace AVAIntegrationModeler.API.Features;
 /// <remarks>
 /// List all contributors - returns a ContributorListResponse containing the Features.
 /// </remarks>
-public class List(IMediator _mediator) : Endpoint<FeatureListRequest, FeatureListResponse>
+public class List(IMediator _mediator) : Endpoint<FeatureListRequest, Contracts.FeatureListResponse>
 {
   public override void Configure()
   {
@@ -29,7 +29,7 @@ public class List(IMediator _mediator) : Endpoint<FeatureListRequest, FeatureLis
 
     if (result.IsSuccess)
     {
-      Response = new FeatureListResponse
+      Response = new Contracts.FeatureListResponse
       {
         Features = result.Value.ToList()
       };

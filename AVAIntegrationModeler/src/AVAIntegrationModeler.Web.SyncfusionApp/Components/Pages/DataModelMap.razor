@@ -1,0 +1,322 @@
+﻿@page "/datamodelmap/{modelId:guid}"
+@rendermode InteractiveServer
+@using System.Text.Json
+@using AVAIntegrationModeler.Contracts
+@using AVAIntegrationModeler.Contracts.DTO
+@using AVAIntegrationModeler.Infrastructure
+@using Syncfusion.Blazor.Diagram
+@using System.Collections.ObjectModel
+@using System.Text.Json.Serialization
+@inject IJSRuntime JS
+@inject NavigationManager NavigationManager
+
+<PageTitle>Data Model Map</PageTitle>
+
+<h3>Data Model Map</h3>
+
+@if (IsLoading)
+{
+    <p>Načítám modely…</p>
+}
+else if (nodes == null || nodes.Count == 0)
+{
+    <p>Žádné uzly k zobrazení.</p>
+}
+else
+{
+    <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="700px" Nodes="@nodes">
+        <Layout Type="LayoutType.RadialTree" HorizontalSpacing="30" VerticalSpacing="30">
+            
+        </Layout>
+    </SfDiagramComponent>
+}
+
+@code {
+    [Parameter] public Guid modelId { get; set; }
+
+    // Diagram state
+    SfDiagramComponent? diagram;
+    int connectorCount = 0;
+    DiagramObjectCollection<Node> nodes = new DiagramObjectCollection<Node>();
+    DiagramObjectCollection<Connector> connectors = new DiagramObjectCollection<Connector>();
+
+    // Which models are referenced as NestedEntity -> render slightly lighter
+    HashSet<Guid> nestedEntityIds = new HashSet<Guid>(GuidComparer.Instance);
+
+    // RadialTree root id (string for markup)
+    string radialRoot = string.Empty;
+
+    // Loading state
+    bool IsLoading { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await LoadModelsAndRenderTreeAsync();
+    }
+
+    private async Task LoadModelsAndRenderTreeAsync()
+    {
+        try
+        {
+            IsLoading = true;
+            nodes.Clear();
+            connectors.Clear();
+            connectorCount = 0;
+            nestedEntityIds.Clear();
+
+            using var http = new HttpClient();
+            var url = $"http://localhost:57679/DataModels?datasource={Datasource.AVAPlace}";
+            var res = await http.GetAsync(url);
+            res.EnsureSuccessStatusCode();
+            var json = await res.Content.ReadAsStringAsync();
+
+            var options = new JsonSerializerOptions
+            {
+                Converters = { new JsonStringEnumConverter() },
+                PropertyNameCaseInsensitive = true
+            };
+
+            List<DataModelDTO>? dtos = null;
+            var dataModelListResponse = JsonSerializer.Deserialize<DataModelListResponse>(json, options);
+            dtos ??= dataModelListResponse?.DataModels;
+
+            if (dtos == null)
+            {
+                using var doc = JsonDocument.Parse(json);
+                if (doc.RootElement.ValueKind == JsonValueKind.Object)
+                {
+                    var arrayProp = doc.RootElement.EnumerateObject()
+                        .FirstOrDefault(p => p.Value.ValueKind == JsonValueKind.Array);
+                    if (arrayProp.Value.ValueKind == JsonValueKind.Array)
+                    {
+                        var arrJson = arrayProp.Value.GetRawText();
+                        try { dtos = JsonSerializer.Deserialize<List<DataModelDTO>>(arrJson, options); } catch { }
+                    }
+                }
+                else if (doc.RootElement.ValueKind == JsonValueKind.Array)
+                {
+                    dtos = JsonSerializer.Deserialize<List<DataModelDTO>>(doc.RootElement.GetRawText(), options);
+                }
+            }
+
+            dtos ??= new List<DataModelDTO>();
+
+            // Collect IDs that are referenced as NestedEntity (to render them lighter)
+            foreach (var dto in dtos)
+            {
+                var fields = dto.Fields ?? Enumerable.Empty<DataModelFieldDTO>();
+                foreach (var field in fields)
+                {
+                    if (field.FieldType == DataModelFieldType.NestedEntity)
+                    {
+                        foreach (var rid in field.ReferencedEntityTypeIds ?? Enumerable.Empty<Guid>())
+                        {
+                            if (rid != Guid.Empty) nestedEntityIds.Add(rid);
+                        }
+                    }
+                }
+            }
+
+            // build forest of subtrees (each subtree contains only outgoing references from its root)
+            var forest = new List<DataModelTree>();
+            foreach (var dto in dtos)
+            {
+                // BuildTree here returns a single DataModelTree (or null) for the starting root.
+                var tree = DataModelTree.BuildTree(dtos, dto.Id);
+                if (tree != null && !forest.Exists(f => f.Id == tree.Id))
+                {
+                    forest.Add(tree);
+                }
+            }
+
+            // choose forest to render (route param or whole forest)
+            List<DataModelTree> forestToRender;
+            if (modelId != Guid.Empty)
+            {
+                var found = FindNodeInForest(forest, modelId);
+                forestToRender = found != null ? new List<DataModelTree> { CloneSubtree(found) } : new List<DataModelTree>();
+            }
+            else
+            {
+                forestToRender = forest;
+            }
+
+            // set Radial root: prefer route modelId, otherwise first root id
+            var chosenRootId = modelId != Guid.Empty ? modelId : (forestToRender.FirstOrDefault()?.Id ?? Guid.Empty);
+            radialRoot = chosenRootId == Guid.Empty ? string.Empty : chosenRootId.ToString();
+
+            // create nodes/connectors (no manual positioning)
+            var renderedIds = new HashSet<Guid>();
+            var createdConnectorPairs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+            bool NodeExists(string id)
+            {
+                foreach (var n in nodes)
+                {
+                    if (string.Equals(n.ID, id, StringComparison.OrdinalIgnoreCase)) return true;
+                }
+                return false;
+            }
+
+            void CreateNodeIfNotExists(string id, string label)
+            {
+                if (NodeExists(id)) return;
+                CreateNode(id, label);
+            }
+
+            void CreateConnectorIfNotExists(string sourceId, string targetId, string? label = null)
+            {
+                var key = $"{sourceId}->{targetId}";
+                if (createdConnectorPairs.Contains(key)) return;
+                createdConnectorPairs.Add(key);
+                CreateConnector(sourceId, targetId, label);
+            }
+
+            void RenderNode(DataModelTree node)
+            {
+                if (renderedIds.Contains(node.Id)) return; // ochrana proti cyklům/a duplicitám
+                renderedIds.Add(node.Id);
+
+                CreateNodeIfNotExists(node.Id.ToString(), node.Name ?? node.Id.ToString());
+
+                foreach (var child in node.Children)
+                {
+                    CreateConnectorIfNotExists(node.Id.ToString(), child.Id.ToString());
+                    RenderNode(child);
+                }
+            }
+
+            foreach (var root in forestToRender)
+                RenderNode(root);
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Chyba při načítání modelů: {ex.Message}");
+            nodes.Clear();
+            connectors.Clear();
+        }
+        finally
+        {
+            IsLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private DataModelTree CloneSubtree(DataModelTree node)
+    {
+        var visited = new HashSet<Guid>();
+        DataModelTree Copy(DataModelTree n)
+        {
+            if (visited.Contains(n.Id)) return null!;
+            visited.Add(n.Id);
+
+            var copy = new DataModelTree
+            {
+                Id = n.Id,
+                Name = n.Name,
+                Model = n.Model
+            };
+            foreach (var ch in n.Children)
+            {
+                if (visited.Contains(ch.Id)) continue;
+                var childCopy = Copy(ch);
+                if (childCopy != null) copy.Children.Add(childCopy);
+            }
+            return copy;
+        }
+        return Copy(node)!;
+    }
+
+    private DataModelTree? FindNodeInForest(IEnumerable<DataModelTree> forest, Guid id)
+    {
+        foreach (var root in forest)
+        {
+            var found = FindNode(root, id);
+            if (found != null) return found;
+        }
+        return null;
+    }
+
+    // wrapper volání, inicializuje visited set
+    private DataModelTree? FindNode(DataModelTree node, Guid id)
+        => FindNode(node, id, new HashSet<Guid>());
+
+    // rekurzivní variant pro bezpečné prohledávání i v cyklickém grafu
+    private DataModelTree? FindNode(DataModelTree node, Guid id, HashSet<Guid> visited)
+    {
+        if (visited.Contains(node.Id)) return null;
+        visited.Add(node.Id);
+
+        if (node.Id == id) return node;
+        foreach (var c in node.Children)
+        {
+            var f = FindNode(c, id, visited);
+            if (f != null) return f;
+        }
+        return null;
+    }
+
+    private void CreateConnector(string sourceId, string targetId, string? label = null, OrthogonalSegment? segment1 = null, OrthogonalSegment? segment2 = null)
+    {
+        var diagramConnector = new Connector
+        {
+            ID = string.Format("connector{0}", ++connectorCount),
+            SourceID = sourceId,
+            TargetID = targetId
+        };
+
+        if (!string.IsNullOrEmpty(label))
+        {
+            var annotation = new PathAnnotation { Content = label, Style = new TextStyle { Fill = "white" } };
+            diagramConnector.Annotations = new DiagramObjectCollection<PathAnnotation> { annotation };
+        }
+
+        connectors.Add(diagramConnector);
+    }
+
+    private void CreateNode(string id, string label)
+    {
+        var parsed = Guid.TryParse(id, out var gid) ? gid : Guid.Empty;
+        var isRoot = parsed != Guid.Empty && !string.IsNullOrEmpty(radialRoot) && string.Equals(id, radialRoot, StringComparison.OrdinalIgnoreCase);
+        var isNested = parsed != Guid.Empty && nestedEntityIds.Contains(parsed);
+
+        // choose fill color:
+        // - root: highlighted accent
+        // - nested entity: slightly lighter (--primary-300)
+        // - default: primary 500
+        var fillColor = isRoot
+            ? "var(--accent, #FF7043)"
+            : isNested
+                ? "var(--primary-300, #93c5fd)"   // light variant fallback
+                : "var(--primary-500, #357BD2)";
+
+        var textColor = isRoot ? "black" : (isNested ? "#0b1826" : "white");
+
+        var diagramNode = new Node
+        {
+            ID = id,
+            Width = 180,
+            Height = 60,
+            Style = new ShapeStyle { Fill = fillColor, StrokeColor = "White" },
+            Shape = new FlowShape { Type = NodeShapes.Flow, Shape = NodeFlowShapes.Process },
+            Annotations = new DiagramObjectCollection<ShapeAnnotation>
+            {
+                new ShapeAnnotation
+                {
+                    Content = label,
+                    Style = new TextStyle { Color = textColor, Fill = "transparent" }
+                }
+            }
+        };
+        nodes.Add(diagramNode);
+    }
+
+    // small comparer for HashSet<Guid> initialization above
+    private class GuidComparer : IEqualityComparer<Guid>
+    {
+        public static readonly GuidComparer Instance = new();
+        public bool Equals(Guid x, Guid y) => x == y;
+        public int GetHashCode(Guid obj) => obj.GetHashCode();
+    }
+}

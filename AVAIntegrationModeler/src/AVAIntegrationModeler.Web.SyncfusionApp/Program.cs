@@ -1,0 +1,36 @@
+﻿using AVAIntegrationModeler.API.Client;
+using AVAIntegrationModeler.Web.SyncfusionApp;
+using AVAIntegrationModeler.Web.SyncfusionApp.Components;
+using Syncfusion.Blazor;
+
+var builder = WebApplication.CreateBuilder(args);
+
+Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("Ngo9BigBOggjHTQxAR8/V1JFaF5cXGRCf1FpRmJGdld5fUVHYVZUTXxaS00DNHVRdkdmWH5ed3VWRWJfV0ZxWEtWYEg=");
+builder.Services.AddRazorComponents()
+    .AddInteractiveServerComponents();
+builder.Services.AddSyncfusionBlazor();
+builder.Services.AddAVAIntegrationModelerApiClient(builder.Configuration);
+//builder.Services.AddWebAppHttpClientFactory(builder.Configuration);
+
+var app = builder.Build();
+//Register Syncfusion license https://help.syncfusion.com/common/essential-studio/licensing/how-to-generate
+//Syncfusion.Licensing.SyncfusionLicenseProvider.RegisterLicense("YOUR LICENSE KEY");
+
+// Configure the HTTP request pipeline.
+if (!app.Environment.IsDevelopment())
+{
+  app.UseExceptionHandler("/Error", createScopeForErrors: true);
+  // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+  app.UseHsts();
+}
+
+app.UseHttpsRedirection();
+
+
+app.UseAntiforgery();
+
+app.MapStaticAssets();
+app.MapRazorComponents<App>()
+    .AddInteractiveServerRenderMode();
+
+app.Run();

@@ -1,0 +1,193 @@
+﻿
+
+/* Fields section styling */
+.fields-section {
+    margin-top: 20px;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-default);
+}
+
+.fields-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 15px;
+    margin-top: 15px;
+}
+
+.field-card {
+    padding: 15px;
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-default);
+    border-radius: 8px;
+    transition: box-shadow 0.2s;
+}
+
+    .field-card:hover {
+        box-shadow: var(--shadow-md);
+    }
+
+.field-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid var(--border-default);
+}
+
+    .field-header strong {
+        font-size: 1rem;
+        color: var(--text-primary);
+    }
+
+.field-type-badge {
+    padding: 2px 8px;
+    background-color: var(--primary-500);
+    color: var(--text-on-primary);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.field-detail {
+    margin-bottom: 8px;
+    font-size: 0.875rem;
+    color: var(--text-primary);
+}
+
+.field-label {
+    font-weight: 600;
+    color: var(--text-primary);
+}
+
+.field-flags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+    margin-top: 10px;
+}
+
+.flag-badge {
+    padding: 2px 8px;
+    background-color: var(--secondary-500);
+    color: var(--text-on-secondary);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.flag-badge-muted {
+    padding: 2px 8px;
+    background-color: var(--muted-400);
+    color: var(--text-muted);
+    border-radius: 8px;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+.field-references {
+    margin-top: 10px;
+    padding-top: 8px;
+    border-top: 1px solid var(--border-light);
+}
+
+.reference-badge {
+    display: inline-block;
+    padding: 2px 4px;
+    margin: 2px;
+    background-color: var(--accent-500);
+    color: var(--text-on-accent);
+    border-radius: 1rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+}
+
+/* Grid selection colors */
+::deep .e-grid .e-row.e-selectionbackground,
+::deep .e-grid .e-row.e-active {
+    background-color: var(--primary-100) !important;
+}
+
+::deep .e-grid .e-rowcell.e-selectionbackground,
+::deep .e-grid .e-rowcell.e-active {
+    background-color: var(--primary-200) !important;
+    border-color: var(--primary-500) !important;
+}
+
+::deep .e-grid .e-row.e-selectionbackground:hover {
+    background-color: var(--primary-300) !important;
+}
+
+/* Toast styling */
+::deep .e-toast-success {
+    background-color: var(--text-success);
+    color: var(--text-on-success);
+}
+
+::deep .toast-icons {
+    font-size: 20px;
+}
+
+/* ID cell with copy button */
+.id-cell-container {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: space-between;
+}
+
+
+
+/* Input with button (detail template) */
+.input-with-button {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+    .input-with-button .id-textbox {
+        flex: 1;
+    }
+
+
+/* Disable cell focus outline - COMPLETE SOLUTION */
+::deep .e-grid .e-rowcell.e-focus,
+::deep .e-grid .e-rowcell.e-focused,
+::deep .e-grid .e-rowcell.e-cellselectionbackground,
+::deep .e-grid .e-detailrowcollapse.e-focus,
+::deep .e-grid .e-detailrowexpand.e-focus,
+::deep .e-grid td.e-rowcell:focus,
+::deep .e-grid td.e-rowcell.e-focus,
+::deep .e-grid .e-gridcontent td.e-rowcell.e-focus {
+    outline: none !important;
+    box-shadow: none !important;
+    border: none !important;
+}
+
+/* Remove focus styling completely */
+::deep .e-grid .e-rowcell::after {
+    display: none !important;
+}
+
+/* Ensure row selection is visible but not cell focus */
+::deep .e-grid .e-row[aria-selected="true"] {
+    background-color: var(--primary-100) !important;
+}
+
+    ::deep .e-grid .e-row[aria-selected="true"] .e-rowcell {
+        background-color: var(--primary-100) !important;
+        border-color: transparent !important;
+    }
+
+    ::deep .e-grid .e-row[aria-selected="true"]:hover {
+        background-color: var(--primary-200) !important;
+    }
+
+        ::deep .e-grid .e-row[aria-selected="true"]:hover .e-rowcell {
+            background-color: var(--primary-200) !important;
+        }
+
+/* Action buttons - Enhanced specificity */
+
+
+

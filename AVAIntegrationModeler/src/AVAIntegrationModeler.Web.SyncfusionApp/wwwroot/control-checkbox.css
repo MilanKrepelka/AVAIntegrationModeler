@@ -1,0 +1,34 @@
+﻿.e-checkbox-wrapper {
+    background-color: transparent;
+}
+
+.e-checkbox-wrapper .e-frame {
+    background-color: white;
+    border-color: #ccc;
+}
+
+/* Zaškrtnutý stav - toto je klíčové */
+.e-checkbox-wrapper .e-frame.e-check {
+    background-color: #3eced0 !important; /* Vaše AVA barva */
+    border-color: #3eced0 !important;
+}
+    .e-checkbox-wrapper .e-frame.e-stop {
+        background-color: #3eced0 !important; /* Vaše AVA barva */
+        border-color: #3eced0 !important;
+    }
+
+/* Barva fajfky/checkmarku uvnitř */
+.e-checkbox-wrapper .e-frame.e-check .e-check {
+    color: white !important;
+}
+
+/* Hover stav */
+.e-checkbox-wrapper:hover .e-frame {
+    border-color: #3eced0;
+}
+
+/* Focus stav */
+.e-checkbox-wrapper .e-frame:focus {
+    border-color: #3eced0;
+    box-shadow: 0 0 0 2px rgba(62, 206, 208, 0.2);
+}

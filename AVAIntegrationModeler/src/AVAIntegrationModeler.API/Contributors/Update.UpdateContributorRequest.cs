@@ -4,8 +4,8 @@ namespace AVAIntegrationModeler.API.Contributors;
 
 public class UpdateContributorRequest
 {
-  public const string Route = "/Contributors/{ScenarioId:int}";
-  public static string BuildRoute(int contributorId) => Route.Replace("{ScenarioId:int}", contributorId.ToString());
+  public const string Route = "/Contributors/{ScenarioCode:int}";
+  public static string BuildRoute(int contributorId) => Route.Replace("{ScenarioCode:int}", contributorId.ToString());
 
   public int ContributorId { get; set; }
 

@@ -8,19 +8,21 @@ namespace AVAIntegrationModeler.Web.Mapping;
 /// <summary>
 /// Implementuje mapování mezi datovým přenosovým objektem funkce (<see cref="FeatureDTO"/>) a jeho zobrazeními ve webovém rozhraní.
 /// </summary>
-public class FeatureMapper :
-  IViewModelMapper<FeatureDTO, ViewModels.List.FeatureViewModel, FeatureMapper>
+public static class FeatureMapper
 {
   /// <inheritdoc/>
-  public static void MapToViewModel(FeatureDTO dto, out FeatureViewModel result)
+  public static FeatureListViewModel MapToViewModel(FeatureDTO dto)
   {
     Guard.Against.Null(dto, $"{nameof(FeatureMapper)} - {nameof(dto)}");
 
-    result = new FeatureViewModel
+    return new FeatureListViewModel
     {
       Id = dto.Id,
       Description = dto.Description,
       Name = dto.Name,
+      IncludedFeatures = dto.IncludedFeatures,
+      IncludedModels = dto.IncludedModels,
+      Code = dto.Code
     };
   }
 }

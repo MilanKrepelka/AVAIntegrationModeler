@@ -1,0 +1,26 @@
+
+@using Syncfusion.Blazor.Buttons
+@using Microsoft.AspNetCore.Components
+@using Syncfusion.Blazor.Notifications
+
+<SfToast @ref="ToastWidget" Title="@Title" CssClass="@CssClass">
+    <ToastPosition X="Right" Y="Bottom"></ToastPosition>
+</SfToast>
+
+@code{
+    private SfToast ToastWidget = new SfToast();
+    private async Task ShowToast(bool success, string message)
+    {
+        if(ToastWidget!= default)
+        {
+            var toastModel = new ToastModel
+            {
+                Content = message,
+                CssClass = success ? "e-toast-success" : "e-toast-danger", // nebo "e-toast-warning", "e-toast-info"
+                Icon = success ? "e-icons e-check" : "e-icons e-close"
+
+            };
+            await ToastWidget.ShowAsync(toastModel);
+        }
+    }
+}

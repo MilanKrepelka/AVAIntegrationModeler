@@ -17,6 +17,30 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "9.0.6");
 
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.AreaAggregate.Area", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Areas", (string)null);
+                });
+
             modelBuilder.Entity("AVAIntegrationModeler.Domain.ContributorAggregate.Contributor", b =>
                 {
                     b.Property<int>("Id")
@@ -34,6 +58,260 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contributors");
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelAggregate.DataModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid?>("AreaId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsAggregateRoot")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Notes")
+                        .IsRequired()
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AreaId");
+
+                    b.ToTable("DataModels", (string)null);
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelAggregate.DataModelField", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("DataModelId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasMaxLength(1000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<int>("FieldType")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsCollection")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsLocalized")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsNullable")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<bool>("IsPublishedForLookup")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Label")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DataModelId");
+
+                    b.ToTable("DataModelFields", (string)null);
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelAggregate.DataModelFieldEntityTypeReference", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("DataModelFieldId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ReferencedEntityTypeId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DataModelFieldId");
+
+                    b.HasIndex("ReferencedEntityTypeId");
+
+                    b.HasIndex("DataModelFieldId", "ReferencedEntityTypeId")
+                        .IsUnique();
+
+                    b.ToTable("DataModelFieldEntityTypeReferences", (string)null);
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelRecordAggregate.DataModelRecord", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("ExternalId")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("ModelId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("DataModelRecords", (string)null);
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelRecordAggregate.DataModelRecordField", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("CzechValue")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("DataModelRecordId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("EnglishValue")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<bool>("IsLocalized")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER")
+                        .HasDefaultValue(false);
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("StringValue")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DataModelRecordId");
+
+                    b.ToTable("DataModelRecordFields", (string)null);
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DeploymentAggregate.Deployment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Ticket")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Deployments", (string)null);
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DeploymentAggregate.DeploymentDataModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("DataModelId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("DeploymentId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeploymentId");
+
+                    b.ToTable("DeploymentDataModels", (string)null);
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.FeatureAggregate.Feature", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Features", (string)null);
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.IntegrationMapAggregate.IntegrationsMap", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("AreaId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AreaId");
+
+                    b.ToTable("IntegrationMaps", (string)null);
                 });
 
             modelBuilder.Entity("AVAIntegrationModeler.Domain.ScenarioAggregate.Scenario", b =>
@@ -55,7 +333,10 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Scenarios");
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Scenarios", (string)null);
                 });
 
             modelBuilder.Entity("AVAIntegrationModeler.Domain.ContributorAggregate.Contributor", b =>
@@ -87,6 +368,229 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.Navigation("PhoneNumber");
                 });
 
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelAggregate.DataModel", b =>
+                {
+                    b.HasOne("AVAIntegrationModeler.Domain.AreaAggregate.Area", null)
+                        .WithMany()
+                        .HasForeignKey("AreaId")
+                        .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelAggregate.DataModelField", b =>
+                {
+                    b.HasOne("AVAIntegrationModeler.Domain.DataModelAggregate.DataModel", null)
+                        .WithMany("Fields")
+                        .HasForeignKey("DataModelId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelAggregate.DataModelFieldEntityTypeReference", b =>
+                {
+                    b.HasOne("AVAIntegrationModeler.Domain.DataModelAggregate.DataModelField", null)
+                        .WithMany("EntityTypeReferences")
+                        .HasForeignKey("DataModelFieldId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelRecordAggregate.DataModelRecordField", b =>
+                {
+                    b.HasOne("AVAIntegrationModeler.Domain.DataModelRecordAggregate.DataModelRecord", null)
+                        .WithMany("Fields")
+                        .HasForeignKey("DataModelRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DeploymentAggregate.DeploymentDataModel", b =>
+                {
+                    b.HasOne("AVAIntegrationModeler.Domain.DeploymentAggregate.Deployment", null)
+                        .WithMany("DataModels")
+                        .HasForeignKey("DeploymentId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.FeatureAggregate.Feature", b =>
+                {
+                    b.OwnsOne("AVAIntegrationModeler.Domain.ValueObjects.LocalizedValue", "Description", b1 =>
+                        {
+                            b1.Property<Guid>("FeatureId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("CzechValue")
+                                .IsRequired()
+                                .HasMaxLength(1000)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Description_CZ");
+
+                            b1.Property<string>("EnglishValue")
+                                .IsRequired()
+                                .HasMaxLength(1000)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Description_EN");
+
+                            b1.HasKey("FeatureId");
+
+                            b1.ToTable("Features");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FeatureId");
+                        });
+
+                    b.OwnsOne("AVAIntegrationModeler.Domain.ValueObjects.LocalizedValue", "Name", b1 =>
+                        {
+                            b1.Property<Guid>("FeatureId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<string>("CzechValue")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Name_CZ");
+
+                            b1.Property<string>("EnglishValue")
+                                .IsRequired()
+                                .HasMaxLength(200)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Name_EN");
+
+                            b1.HasKey("FeatureId");
+
+                            b1.ToTable("Features");
+
+                            b1.WithOwner()
+                                .HasForeignKey("FeatureId");
+                        });
+
+                    b.OwnsMany("AVAIntegrationModeler.Domain.FeatureAggregate.IncludedFeature", "IncludedFeatures", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Id");
+
+                            b1.Property<bool>("ConsumeOnly")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("INTEGER")
+                                .HasDefaultValue(false)
+                                .HasColumnName("ConsumeOnly");
+
+                            b1.Property<Guid>("FeatureId")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("IncludedFeatureId");
+
+                            b1.Property<Guid>("OwnerFeatureId")
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("FeatureId");
+
+                            b1.HasIndex("OwnerFeatureId");
+
+                            b1.ToTable("FeatureIncludedFeatures", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("OwnerFeatureId");
+                        });
+
+                    b.OwnsMany("AVAIntegrationModeler.Domain.FeatureAggregate.IncludedModel", "IncludedModels", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<Guid>("ModelId")
+                                .HasColumnType("TEXT")
+                                .HasColumnName("IncludedModelId");
+
+                            b1.Property<Guid>("OwnerFeatureId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<bool>("ReadOnly")
+                                .ValueGeneratedOnAdd()
+                                .HasColumnType("INTEGER")
+                                .HasDefaultValue(false)
+                                .HasColumnName("ReadOnly");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("ModelId");
+
+                            b1.HasIndex("OwnerFeatureId");
+
+                            b1.ToTable("FeatureIncludedModels", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("OwnerFeatureId");
+                        });
+
+                    b.Navigation("Description")
+                        .IsRequired();
+
+                    b.Navigation("IncludedFeatures");
+
+                    b.Navigation("IncludedModels");
+
+                    b.Navigation("Name")
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.IntegrationMapAggregate.IntegrationsMap", b =>
+                {
+                    b.OwnsMany("AVAIntegrationModeler.Domain.IntegrationMapAggregate.IntegrationMapItem", "Items", b1 =>
+                        {
+                            b1.Property<Guid>("Id")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<Guid>("IntegrationsMapId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<Guid>("ScenarioId")
+                                .HasColumnType("TEXT");
+
+                            b1.HasKey("Id");
+
+                            b1.HasIndex("IntegrationsMapId");
+
+                            b1.HasIndex("ScenarioId");
+
+                            b1.ToTable("IntegrationMapItems", (string)null);
+
+                            b1.WithOwner()
+                                .HasForeignKey("IntegrationsMapId");
+
+                            b1.OwnsMany("AVAIntegrationModeler.Domain.IntegrationMapAggregate.ActivationKey", "Keys", b2 =>
+                                {
+                                    b2.Property<Guid>("Id")
+                                        .HasColumnType("TEXT");
+
+                                    b2.Property<Guid>("IntegrationMapItemId")
+                                        .HasColumnType("TEXT");
+
+                                    b2.Property<string>("Key")
+                                        .IsRequired()
+                                        .HasMaxLength(200)
+                                        .HasColumnType("TEXT");
+
+                                    b2.HasKey("Id");
+
+                                    b2.HasIndex("IntegrationMapItemId");
+
+                                    b2.HasIndex("Key");
+
+                                    b2.ToTable("IntegrationMapActivationKeys", (string)null);
+
+                                    b2.WithOwner()
+                                        .HasForeignKey("IntegrationMapItemId");
+                                });
+
+                            b1.Navigation("Keys");
+                        });
+
+                    b.Navigation("Items");
+                });
+
             modelBuilder.Entity("AVAIntegrationModeler.Domain.ScenarioAggregate.Scenario", b =>
                 {
                     b.OwnsOne("AVAIntegrationModeler.Domain.ValueObjects.LocalizedValue", "Description", b1 =>
@@ -96,11 +600,15 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                             b1.Property<string>("CzechValue")
                                 .IsRequired()
-                                .HasColumnType("TEXT");
+                                .HasMaxLength(1000)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Description_CzechValue");
 
                             b1.Property<string>("EnglishValue")
                                 .IsRequired()
-                                .HasColumnType("TEXT");
+                                .HasMaxLength(1000)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Description_EnglishValue");
 
                             b1.HasKey("ScenarioId");
 
@@ -117,11 +625,15 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                             b1.Property<string>("CzechValue")
                                 .IsRequired()
-                                .HasColumnType("TEXT");
+                                .HasMaxLength(200)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Name_CzechValue");
 
                             b1.Property<string>("EnglishValue")
                                 .IsRequired()
-                                .HasColumnType("TEXT");
+                                .HasMaxLength(200)
+                                .HasColumnType("TEXT")
+                                .HasColumnName("Name_EnglishValue");
 
                             b1.HasKey("ScenarioId");
 
@@ -136,6 +648,26 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
                     b.Navigation("Name")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelAggregate.DataModel", b =>
+                {
+                    b.Navigation("Fields");
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelAggregate.DataModelField", b =>
+                {
+                    b.Navigation("EntityTypeReferences");
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelRecordAggregate.DataModelRecord", b =>
+                {
+                    b.Navigation("Fields");
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DeploymentAggregate.Deployment", b =>
+                {
+                    b.Navigation("DataModels");
                 });
 #pragma warning restore 612, 618
         }

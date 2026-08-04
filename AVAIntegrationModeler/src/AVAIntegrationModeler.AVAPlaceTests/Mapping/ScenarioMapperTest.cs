@@ -71,6 +71,7 @@ public class ScenarioMapperTest
       Description = new LocalizedValue<string>() { Values = new LocalizedValueItem<string>[] { new() { Locale = "cs-CZ", Value = "Popis scénáře" }, new() { Locale = "en-US", Value = "Scenario description" } } },
       InputFeatureId = Guid.NewGuid().ToString(),
       OutputFeatureId = Guid.NewGuid().ToString(),
+      
     };
 
     ScenarioMapper.MapToDTO(integrationScenarioSummary).Id.ShouldBe(Guid.Parse(integrationScenarioSummary.Id));
@@ -85,7 +86,7 @@ public class ScenarioMapperTest
   }
 
   [Fact]
-  public void Map_DTO_IntegrationScenarioSummary_Test()
+  public void MapToIntegrationScenarioSummary_Returns_Valid_Test()
   {
     ScenarioDTO scenarioDTO = new ScenarioDTO
     {
@@ -97,19 +98,40 @@ public class ScenarioMapperTest
       OutputFeatureId = Guid.NewGuid(),
     };
 
-    ScenarioMapper.MapToIntegrationScenarioSummary(scenarioDTO).Id.ShouldBe(scenarioDTO.Id.ToString());
-
-    /*
-    ScenarioMapper.MapToDTO(integrationScenarioSummary).Code.ShouldBe(integrationScenarioSummary.Code);
-    ScenarioMapper.MapToDTO(integrationScenarioSummary).InputFeatureId.ShouldBe(Guid.Parse(integrationScenarioSummary.InputFeatureId));
-    ScenarioMapper.MapToDTO(integrationScenarioSummary).OutputFeatureId.ShouldBe(Guid.Parse(integrationScenarioSummary.OutputFeatureId));
-
-    ScenarioMapper.MapToDTO(integrationScenarioSummary).Name.CzechValue.ShouldBe("Scénář");
-    ScenarioMapper.MapToDTO(integrationScenarioSummary).Name.EnglishValue.ShouldBe("Scenario");
-    ScenarioMapper.MapToDTO(integrationScenarioSummary).Description.CzechValue.ShouldBe("Popis scénáře");
-    ScenarioMapper.MapToDTO(integrationScenarioSummary).Description.EnglishValue.ShouldBe("Scenario description");
-    */
+    var result = ScenarioMapper.MapToIntegrationScenarioSummary(scenarioDTO);
+    result.Id.ShouldBe(scenarioDTO.Id.ToString());
+    result.Code.ShouldBe(scenarioDTO.Code);
+    result.InputFeatureId.ShouldBe(scenarioDTO.InputFeatureId.ToString());
+    result.OutputFeatureId.ShouldBe(scenarioDTO.OutputFeatureId.ToString());
+    Assert.NotEmpty(result.Name.Values!);
+    Assert.NotEmpty(result.Description.Values!);
   }
 
-  
+  [Fact]
+  public void Map_DTO_MapToIntegrationScenarioDefinition_Test()
+  {
+    ScenarioDTO scenarioDTO = new ScenarioDTO
+    {
+      Code = "Scenario",
+      Id = Guid.NewGuid(),
+      Name = new LocalizedValue() { CzechValue = "Scénář", EnglishValue = "Scenario" },
+      Description = new LocalizedValue() { CzechValue = "Popis scénáře", EnglishValue = "Scenario description" },
+      InputFeatureId = Guid.NewGuid(),
+      OutputFeatureId = Guid.NewGuid(),
+    };
+
+    ScenarioMapper.MapToIntegrationScenarioDefinition(scenarioDTO).ShouldBeEquivalentTo(new IntegrationScenarioDefinition
+    {
+      Code = scenarioDTO.Code,
+      Id = scenarioDTO.Id.ToString(),
+      InputFeatureCodeOrId = scenarioDTO.InputFeatureId?.ToString() ?? string.Empty,
+      OutputFeatureCodeOrId = scenarioDTO.OutputFeatureId?.ToString() ?? string.Empty,
+      Name = scenarioDTO.Name == default ? null : LocalizedValueMapper.MapToEntity(scenarioDTO.Name),
+      Description = scenarioDTO.Description == default ? null : LocalizedValueMapper.MapToEntity(scenarioDTO.Description),
+    });
+
+
+  }
+
+
 }

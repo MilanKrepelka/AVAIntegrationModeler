@@ -11,6 +11,7 @@ namespace AVAIntegrationModeler.Contracts.DTO;
 /// </summary>
 public record FeatureSummaryDTO
 {
+  public static FeatureSummaryDTO Empty => new FeatureSummaryDTO() { Id = Guid.Empty, Code = string.Empty };
   /// <summary>
   /// Jedinečný identifikátor feature.
   /// </summary>

@@ -1,0 +1,57 @@
+@page "/areaedit/{areaCode}"
+@page "/areaedit"
+@rendermode InteractiveServer
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+@using Microsoft.AspNetCore.Components.Forms
+
+<EditForm Model="_edit" OnValidSubmit="SaveAsync">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+
+    <div class="container">
+        <h2>@(IsEditMode ? "Upravit oblast" : "Nová oblast")</h2>
+
+        <div class="row">
+            <div class="col-12 col-md-6">
+                <SfTextBox CssClass="w-100"
+                           Placeholder="Kód oblasti"
+                           FloatLabelType="FloatLabelType.Always"
+                           @bind-Value="_edit.Code">
+                </SfTextBox>
+                <ValidationMessage For="@(() => _edit.Code)" />
+            </div>
+            <div class="col-12 col-md-6">
+                <SfTextBox CssClass="w-100"
+                           Placeholder="ID"
+                           FloatLabelType="FloatLabelType.Always"
+                           @bind-Value="_edit.IdText"
+                           Readonly="true">
+                </SfTextBox>
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+            <div class="col-12">
+                <SfTextBox CssClass="w-100"
+                           Placeholder="Název oblasti"
+                           FloatLabelType="FloatLabelType.Always"
+                           @bind-Value="_edit.Name">
+                </SfTextBox>
+                <ValidationMessage For="@(() => _edit.Name)" />
+            </div>
+        </div>
+
+        @if (_saveMessage is not null)
+        {
+            <div class="alert @(_saveSuccess ? "alert-success" : "alert-danger")" style="margin-top:16px">
+                @_saveMessage
+            </div>
+        }
+
+        <div style="margin-top:16px; display:flex; gap:8px">
+            <SfButton CssClass="e-primary" HtmlAttributes="@(new Dictionary<string, object> { { "type", "submit" } })">Uložit</SfButton>
+            <SfButton CssClass="e-outline" Type="Button" OnClick="GoBack">Zpět</SfButton>
+        </div>
+    </div>
+</EditForm>

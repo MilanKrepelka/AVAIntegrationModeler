@@ -1,4 +1,5 @@
-﻿using AVAIntegrationModeler.Infrastructure.Data;
+﻿using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.API.Scenarios;
 
 namespace AVAIntegrationModeler.FunctionalTests.ApiEndpoints.Scenarios;
@@ -11,7 +12,7 @@ public class ScenarioByIdTest(CustomWebApplicationFactory<Program> factory) : IC
   [Fact]
   public async Task Returns_Scenarios3()
   {
-    var result = await _client.GetAndDeserializeAsync<ScenarioRecord>(GetScenarioByIdRequest.BuildRoute(SeedData.Scenario3.Id));
+    var result = await _client.GetAndDeserializeAsync<ScenarioDTO>(GetScenarioByIdRequest.BuildRoute(SeedData.Scenario3.Id));
     
     result.Name.ShouldBe(SeedData.Scenario3.Name);
     result.Id.ShouldBe(SeedData.Scenario3.Id);

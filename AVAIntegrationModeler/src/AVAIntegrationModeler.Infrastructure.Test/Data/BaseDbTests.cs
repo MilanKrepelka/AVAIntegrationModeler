@@ -1,0 +1,79 @@
+﻿using Ardalis.SharedKernel;
+using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
+using AVAIntegrationModeler.Infrastructure.Data;
+using AVAIntegrationModeler.Integration.Test.Data.SqlLite.Fixtures;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
+using Xunit.Microsoft.DependencyInjection.Abstracts;
+
+namespace AVAIntegrationModeler.Infrastructure.Test.Data;
+
+/// <summary>
+/// Základní třída pro databázové testy s podporou čištění databáze.
+/// </summary>
+public abstract class BaseDbTests : TestBed<EfSqlClientTestFixture>
+{
+  protected readonly AppDbContext DbContext;
+
+  protected BaseDbTests(ITestOutputHelper testOutputHelper, EfSqlClientTestFixture fixture)
+    : base(testOutputHelper, fixture)
+  {
+    DbContext = fixture.GetService<AppDbContext>(testOutputHelper) ?? throw new InvalidOperationException();
+    
+    // ✅ DIAGNOSTIKA
+    testOutputHelper.WriteLine($"Database: {DbContext.Database.GetConnectionString()}");
+    testOutputHelper.WriteLine($"Can connect: {DbContext.Database.CanConnect()}");
+    
+    // Vytvoření databázového schématu
+    DbContext.Database.EnsureDeleted();
+    var created = DbContext.Database.EnsureCreated();
+    testOutputHelper.WriteLine($"Database created: {created}");
+    
+    // Výpis tabulek
+    var tables = DbContext.Model.GetEntityTypes().Select(t => t.GetTableName()).ToList();
+    testOutputHelper.WriteLine($"Expected tables: {string.Join(", ", tables)}");
+    
+    ClearDatabaseAsync().Wait();
+  }
+
+  /// <summary>
+  /// Vyčistí všechna data z databáze a resetuje ChangeTracker.
+  /// </summary>
+  protected async Task ClearDatabaseAsync()
+  {
+    // Smazání všech dat z tabulek v pořadí kvůli foreign keys
+    // Nejdříve závislé tabulky, pak hlavní
+    
+    // Owned entity collections
+    DbContext.DataModelFields.RemoveRange(DbContext.DataModelFields);
+    DbContext.DataModelFieldEntityTypeReferences.RemoveRange(DbContext.DataModelFieldEntityTypeReferences);
+    DbContext.DeploymentDataModels.RemoveRange(DbContext.DeploymentDataModels);
+
+    // Aggregate roots - v pořadí od nejzávislejších
+    DbContext.Scenarios.RemoveRange(DbContext.Scenarios);
+    DbContext.Features.RemoveRange(DbContext.Features);
+    DbContext.DataModels.RemoveRange(DbContext.DataModels);
+    DbContext.Areas.RemoveRange(DbContext.Areas);
+    DbContext.Contributors.RemoveRange(DbContext.Contributors);
+    DbContext.Deployments.RemoveRange(DbContext.Deployments);
+
+    await DbContext.SaveChangesAsync();
+
+    // Detach všech entit z context pro čistý stav
+    DbContext.ChangeTracker.Clear();
+  }
+
+  /// <summary>
+  /// Vytvoří repository pro daný typ agregátu.
+  /// </summary>
+  protected EfRepository<T> GetRepository<T>() where T : class, IAggregateRoot
+  {
+    return new EfRepository<T>(DbContext);
+  }
+
+  // Přidat pomocnou metodu pro IntegrationsMap repository:
+  protected EfRepository<IntegrationsMap> GetIntegrationMapRepository()
+  {
+    return new EfRepository<IntegrationsMap>(DbContext);
+  }
+}

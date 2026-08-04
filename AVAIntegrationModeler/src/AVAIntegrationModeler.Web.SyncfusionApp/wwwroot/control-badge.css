@@ -1,0 +1,32 @@
+﻿/* Badge styling */
+.badge-success {
+    padding: 4px 12px;
+    background-color: var(--text-success);
+    color: var(--text-on-success);
+    border-radius: 12px;
+    border-width: 1px;
+    border-color: var(--primary-500);
+    font-size: 0.875rem;
+}
+
+.badge-yes {
+    padding: 4px 12px;
+    border: 1px solid var(--primary-500);
+    border-radius: 12px;
+    font-size: 0.875rem;
+}
+
+.badge-no {
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.875rem;
+}
+
+.badge-default {
+    padding: 4px 12px;
+    background-color: var(--gray-500);
+    color: var(--text-on-primary);
+    border-radius: 12px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
