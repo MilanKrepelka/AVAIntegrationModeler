@@ -2,6 +2,7 @@
 using Ardalis.Result;
 using AVAIntegrationModeler.Infrastructure.Data;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace AVAIntegrationModeler.API.Configurations;
 
@@ -39,14 +40,40 @@ public static class MiddlewareConfig
     try
     {
       var context = services.GetRequiredService<AppDbContext>();
-      //          await context.Database.MigrateAsync();
-      await context.Database.EnsureCreatedAsync();
+
+      // Pokud databáze existuje ale nemá __EFMigrationsHistory (vytvořena starším EnsureCreated),
+      // smažeme ji — MigrateAsync ji znovu vytvoří kompletně správně.
+      if (await context.Database.CanConnectAsync() && !await HasMigrationHistoryAsync(context))
+      {
+        await context.Database.EnsureDeletedAsync();
+      }
+
+      await context.Database.MigrateAsync();
       await SeedData.InitializeAsync(context);
     }
     catch (Exception ex)
     {
       var logger = services.GetRequiredService<ILogger<Program>>();
       logger.LogError(ex, "An error occurred seeding the DB. {exceptionMessage}", ex.Message);
+    }
+  }
+
+  static async Task<bool> HasMigrationHistoryAsync(AppDbContext context)
+  {
+    try
+    {
+      var conn = context.Database.GetDbConnection();
+      var wasOpen = conn.State == System.Data.ConnectionState.Open;
+      if (!wasOpen) await conn.OpenAsync();
+      using var cmd = conn.CreateCommand();
+      cmd.CommandText = "SELECT COUNT(*) FROM sqlite_master WHERE type='table' AND name='__EFMigrationsHistory'";
+      var result = await cmd.ExecuteScalarAsync();
+      if (!wasOpen) await conn.CloseAsync();
+      return Convert.ToInt64(result) > 0;
+    }
+    catch
+    {
+      return false;
     }
   }
 

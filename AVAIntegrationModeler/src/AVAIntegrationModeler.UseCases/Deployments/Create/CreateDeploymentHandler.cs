@@ -20,6 +20,8 @@ public class CreateDeploymentHandler(
         request.Deployment.Id == Guid.Empty ? Guid.NewGuid() : request.Deployment.Id,
         request.Deployment.Code);
       deployment.SetName(request.Deployment.Name);
+      deployment.SetTicket(request.Deployment.Ticket);
+      deployment.SetDescription(request.Deployment.Description);
       foreach (var id in request.Deployment.DataModelIds ?? [])
         deployment.AddDataModel(id);
     }

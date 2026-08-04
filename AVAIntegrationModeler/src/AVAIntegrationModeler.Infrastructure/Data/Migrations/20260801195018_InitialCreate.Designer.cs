@@ -11,8 +11,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260727153530_AddDataModelRecordAggregate")]
-    partial class AddDataModelRecordAggregate
+    [Migration("20260801195018_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -231,6 +231,57 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.ToTable("DataModelRecordFields", (string)null);
                 });
 
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DeploymentAggregate.Deployment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(2000)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Ticket")
+                        .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Code")
+                        .IsUnique();
+
+                    b.ToTable("Deployments", (string)null);
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DeploymentAggregate.DeploymentDataModel", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("DataModelId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<Guid>("DeploymentId")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("DeploymentId");
+
+                    b.ToTable("DeploymentDataModels", (string)null);
+                });
+
             modelBuilder.Entity("AVAIntegrationModeler.Domain.FeatureAggregate.Feature", b =>
                 {
                     b.Property<Guid>("Id")
@@ -351,6 +402,15 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.HasOne("AVAIntegrationModeler.Domain.DataModelRecordAggregate.DataModelRecord", null)
                         .WithMany("Fields")
                         .HasForeignKey("DataModelRecordId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DeploymentAggregate.DeploymentDataModel", b =>
+                {
+                    b.HasOne("AVAIntegrationModeler.Domain.DeploymentAggregate.Deployment", null)
+                        .WithMany("DataModels")
+                        .HasForeignKey("DeploymentId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
@@ -606,6 +666,11 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
             modelBuilder.Entity("AVAIntegrationModeler.Domain.DataModelRecordAggregate.DataModelRecord", b =>
                 {
                     b.Navigation("Fields");
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.DeploymentAggregate.Deployment", b =>
+                {
+                    b.Navigation("DataModels");
                 });
 #pragma warning restore 612, 618
         }

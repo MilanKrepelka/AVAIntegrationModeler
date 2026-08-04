@@ -31,6 +31,16 @@ public class Deployment : EntityBase<Guid>, IAggregateRoot
   /// </summary>
   public string Name { get; private set; } = string.Empty;
 
+  /// <summary>
+  /// URL odkaz na ticket nasazení (volitelné).
+  /// </summary>
+  public string? Ticket { get; private set; }
+
+  /// <summary>
+  /// Popis nasazení (volitelné).
+  /// </summary>
+  public string? Description { get; private set; }
+
   private readonly List<DeploymentDataModel> _dataModels = new();
 
   /// <summary>
@@ -53,6 +63,24 @@ public class Deployment : EntityBase<Guid>, IAggregateRoot
   public Deployment SetName(string name)
   {
     Name = Guard.Against.NullOrEmpty(name, nameof(name));
+    return this;
+  }
+
+  /// <summary>
+  /// Nastaví URL odkaz na ticket nasazení.
+  /// </summary>
+  public Deployment SetTicket(string? ticket)
+  {
+    Ticket = ticket;
+    return this;
+  }
+
+  /// <summary>
+  /// Nastaví popis nasazení.
+  /// </summary>
+  public Deployment SetDescription(string? description)
+  {
+    Description = description;
     return this;
   }
 

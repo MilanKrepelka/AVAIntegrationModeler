@@ -21,6 +21,16 @@ public record DeploymentDTO
   public string Name { get; init; } = string.Empty;
 
   /// <summary>
+  /// URL odkaz na ticket nasazení (volitelné).
+  /// </summary>
+  public string? Ticket { get; init; }
+
+  /// <summary>
+  /// Popis nasazení (volitelné).
+  /// </summary>
+  public string? Description { get; init; }
+
+  /// <summary>
   /// Identifikátory datových modelů zahrnutých v nasazení.
   /// </summary>
   public List<Guid> DataModelIds { get; init; } = new();

@@ -34,6 +34,12 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
     [StringLength(200)]
     public string Name { get; set; } = string.Empty;
 
+    [StringLength(500)]
+    public string? Ticket { get; set; }
+
+    [StringLength(2000)]
+    public string? Description { get; set; }
+
     public string IdText { get; set; } = string.Empty;
 
     public List<Guid> DataModelIds { get; set; } = new();
@@ -85,6 +91,8 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
             IdText = dto.Id.ToString(),
             Code = dto.Code,
             Name = dto.Name,
+            Ticket = dto.Ticket,
+            Description = dto.Description,
             DataModelIds = dto.DataModelIds.ToList()
           };
         }
@@ -130,6 +138,8 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
       Id = _edit.Id,
       Code = _edit.Code,
       Name = _edit.Name,
+      Ticket = string.IsNullOrWhiteSpace(_edit.Ticket) ? null : _edit.Ticket.Trim(),
+      Description = string.IsNullOrWhiteSpace(_edit.Description) ? null : _edit.Description.Trim(),
       DataModelIds = _edit.DataModelIds.ToList()
     };
 

@@ -63,4 +63,18 @@ public partial class Deployments : ComponentBase
   {
     NavigationManager.NavigateTo("/deploymentedit");
   }
+
+  private async Task ExportDeploymentAsync(DeploymentListViewModel deployment)
+  {
+    try
+    {
+      var bytes = await ApiClient.ExportDeployment(deployment.Code, CancellationToken.None);
+      var fileName = $"deployment-{deployment.Code}-export.zip";
+      await JS.InvokeVoidAsync("downloadFile", fileName, "application/zip", bytes);
+    }
+    catch (Exception ex)
+    {
+      await ShowNotification($"Chyba exportu: {ex.Message}", false);
+    }
+  }
 }

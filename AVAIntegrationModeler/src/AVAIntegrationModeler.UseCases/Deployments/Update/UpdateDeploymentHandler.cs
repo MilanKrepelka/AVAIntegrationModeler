@@ -25,6 +25,8 @@ public class UpdateDeploymentHandler(
     {
       existing.SetCode(request.Deployment.Code);
       existing.SetName(request.Deployment.Name);
+      existing.SetTicket(request.Deployment.Ticket);
+      existing.SetDescription(request.Deployment.Description);
     }
     catch (ArgumentException ex)
     {
@@ -62,6 +64,8 @@ public class UpdateDeploymentHandler(
       Id = existing.Id,
       Code = request.Deployment.Code,
       Name = request.Deployment.Name,
+      Ticket = request.Deployment.Ticket,
+      Description = request.Deployment.Description,
       DataModelIds = requestedIds.ToList()
     };
 

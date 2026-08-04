@@ -44,6 +44,29 @@
             </div>
         </div>
 
+        <div class="row" style="margin-top:16px">
+            <div class="col-12">
+                <SfTextBox CssClass="w-100"
+                           Placeholder="Ticket URL (volitelné)"
+                           FloatLabelType="FloatLabelType.Always"
+                           @bind-Value="_edit.Ticket">
+                </SfTextBox>
+                <ValidationMessage For="@(() => _edit.Ticket)" />
+            </div>
+        </div>
+
+        <div class="row" style="margin-top:16px">
+            <div class="col-12">
+                <SfTextBox CssClass="w-100"
+                           Placeholder="Popis nasazení (volitelné)"
+                           FloatLabelType="FloatLabelType.Always"
+                           Multiline="true"
+                           @bind-Value="_edit.Description">
+                </SfTextBox>
+                <ValidationMessage For="@(() => _edit.Description)" />
+            </div>
+        </div>
+
         <div class="row" style="margin-top:24px">
             <div class="col-12">
                 <h5>Datové modely v nasazení</h5>

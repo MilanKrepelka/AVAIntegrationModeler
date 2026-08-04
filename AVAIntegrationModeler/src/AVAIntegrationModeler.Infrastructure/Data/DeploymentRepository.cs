@@ -47,7 +47,9 @@ public class DeploymentRepository : EfRepository<Deployment>, IDeploymentReposit
         .Where(d => d.Id == deployment.Id)
         .ExecuteUpdateAsync(s => s
           .SetProperty(d => d.Code, deployment.Code)
-          .SetProperty(d => d.Name, deployment.Name), ct);
+          .SetProperty(d => d.Name, deployment.Name)
+          .SetProperty(d => d.Ticket, deployment.Ticket)
+          .SetProperty(d => d.Description, deployment.Description), ct);
 
       // 4. Odpojit smazané záznamy, aby je DetectChanges nenaplánoval znovu na DELETE.
       foreach (var item in toDelete)

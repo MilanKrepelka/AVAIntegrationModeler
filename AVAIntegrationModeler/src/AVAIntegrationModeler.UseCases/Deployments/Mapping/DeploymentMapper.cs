@@ -20,6 +20,8 @@ public static class DeploymentMapper
       Id = deployment.Id,
       Code = deployment.Code,
       Name = deployment.Name,
+      Ticket = deployment.Ticket,
+      Description = deployment.Description,
       DataModelIds = deployment.DataModels.Select(m => m.DataModelId).ToList()
     };
   }
@@ -34,6 +36,8 @@ public static class DeploymentMapper
     var deployment = new Deployment(dto.Id == Guid.Empty ? Guid.NewGuid() : dto.Id, dto.Code);
     if (!string.IsNullOrEmpty(dto.Name))
       deployment.SetName(dto.Name);
+    deployment.SetTicket(dto.Ticket);
+    deployment.SetDescription(dto.Description);
     foreach (var id in dto.DataModelIds)
       deployment.AddDataModel(id);
     return deployment;

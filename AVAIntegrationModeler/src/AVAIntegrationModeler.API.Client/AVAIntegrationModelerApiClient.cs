@@ -684,4 +684,16 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
       .AsResult<object>();
     return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));
   }
+
+  /// <inheritdoc/>
+  public async Task<byte[]> ExportDeployment(string deploymentCode, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(ExportDeployment)} starting. deploymentCode={deploymentCode}");
+    var response = await _httpClient.PostAsJsonAsync(
+      $"deployments/{Uri.EscapeDataString(deploymentCode)}/export",
+      new { },
+      cancellationToken);
+    response.EnsureSuccessStatusCode();
+    return await response.Content.ReadAsByteArrayAsync(cancellationToken);
+  }
 }

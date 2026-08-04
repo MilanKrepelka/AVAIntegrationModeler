@@ -22,6 +22,14 @@ public class DeploymentConfiguration : IEntityTypeConfiguration<Deployment>
       .IsRequired()
       .HasMaxLength(200);
 
+    builder.Property(e => e.Ticket)
+      .IsRequired(false)
+      .HasMaxLength(500);
+
+    builder.Property(e => e.Description)
+      .IsRequired(false)
+      .HasMaxLength(2000);
+
     builder.HasIndex(e => e.Code).IsUnique();
 
     builder.HasMany(e => e.DataModels)

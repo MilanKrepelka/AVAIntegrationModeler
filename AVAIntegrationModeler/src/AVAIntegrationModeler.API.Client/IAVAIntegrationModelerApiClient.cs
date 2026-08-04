@@ -161,4 +161,9 @@ public interface IAVAIntegrationModelerApiClient
   /// Smaže nasazení podle kódu.
   /// </summary>
   Task<Result> DeleteDeployment(string code, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Exportuje DataModely nasazení včetně jejich záznamů jako ZIP archív.
+  /// </summary>
+  Task<byte[]> ExportDeployment(string deploymentCode, CancellationToken cancellationToken);
 }
