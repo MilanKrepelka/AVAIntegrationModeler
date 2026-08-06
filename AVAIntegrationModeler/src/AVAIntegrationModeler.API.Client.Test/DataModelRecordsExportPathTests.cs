@@ -1,4 +1,5 @@
 using System.IO.Compression;
+using System.Text.Json;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
 using Microsoft.AspNetCore.Mvc.Testing;
@@ -8,8 +9,9 @@ namespace AVAIntegrationModeler.API.Client.Test;
 
 /// <summary>
 /// Integrační testy exportu záznamů DataModelů — ověřují, že <c>POST /DataModelRecords/export</c>
-/// ukládá jednotlivé záznamy do ZIP archívu pod cestou <c>dataobjects/{Area.Code}/qd-{Model.Name}.json</c>,
-/// kde je adresář a název souboru odvozen od DataModelu, k němuž záznam patří.
+/// seskupí všechny vybrané záznamy náležící jednomu DataModelu do jednoho souboru v ZIP archívu
+/// na cestě <c>dataobjects/{Area.Code}/qd-{Model.Name}.json</c>, kde je adresář a název souboru
+/// odvozen od tohoto DataModelu.
 /// </summary>
 public class DataModelRecordsExportPathTests : IClassFixture<AVAIntegrationModelerAPIFactory>
 {
@@ -108,11 +110,10 @@ public class DataModelRecordsExportPathTests : IClassFixture<AVAIntegrationModel
   }
 
   /// <summary>
-  /// Dva záznamy téhož modelu musí mít v ZIPu shodnou cestu (kolize je akceptovaným chováním
-  /// — poslední zpracovaný záznam v archívu přepíše předchozí).
+  /// Dva záznamy téhož modelu musí být seskupeny do jednoho souboru v ZIPu jako JSON pole se dvěma prvky.
   /// </summary>
   [Fact]
-  public async Task ExportDataModelRecords_TwoRecordsSameModel_ProduceSamePath()
+  public async Task ExportDataModelRecords_TwoRecordsSameModel_ProduceSingleEntryWithBothRecords()
   {
     var client = CreateClient();
     var areaCode = $"AR-{Guid.NewGuid().ToString()[..8].ToUpper()}";
@@ -127,6 +128,42 @@ public class DataModelRecordsExportPathTests : IClassFixture<AVAIntegrationModel
     using var ms = new MemoryStream(bytes);
     using var zip = new ZipArchive(ms, ZipArchiveMode.Read);
     var expectedPath = $"dataobjects/{areaCode}/qd-{modelName}.json";
-    Assert.Equal(2, zip.Entries.Count(e => e.FullName == expectedPath));
+    var entry = Assert.Single(zip.Entries, e => e.FullName == expectedPath);
+
+    using var entryStream = entry.Open();
+    var doc = await JsonDocument.ParseAsync(entryStream);
+    Assert.Equal(JsonValueKind.Array, doc.RootElement.ValueKind);
+    Assert.Equal(2, doc.RootElement.GetArrayLength());
+  }
+
+  /// <summary>
+  /// Záznamy patřící různým modelům musí být rozděleny do samostatných souborů — každý obsahuje
+  /// pouze záznamy svého modelu.
+  /// </summary>
+  [Fact]
+  public async Task ExportDataModelRecords_RecordsFromDifferentModels_ProduceSeparateEntries()
+  {
+    var client = CreateClient();
+    var model1Name = $"Model-{Guid.NewGuid().ToString()[..8].ToUpper()}";
+    var model2Name = $"Model-{Guid.NewGuid().ToString()[..8].ToUpper()}";
+    var model1Id = await CreateDataModelAsync(client, model1Name, areaId: null);
+    var model2Id = await CreateDataModelAsync(client, model2Name, areaId: null);
+    var record1Id = await CreateRecordAsync(client, model1Id);
+    var record2Id = await CreateRecordAsync(client, model2Id);
+
+    var bytes = await client.ExportDataModelRecords(Datasource.Database, [record1Id, record2Id], CancellationToken.None);
+
+    using var ms = new MemoryStream(bytes);
+    using var zip = new ZipArchive(ms, ZipArchiveMode.Read);
+    var path1 = $"dataobjects/bez-oblasti/qd-{model1Name}.json";
+    var path2 = $"dataobjects/bez-oblasti/qd-{model2Name}.json";
+
+    var entry1 = Assert.Single(zip.Entries, e => e.FullName == path1);
+    using var doc1 = await JsonDocument.ParseAsync(entry1.Open());
+    Assert.Equal(1, doc1.RootElement.GetArrayLength());
+
+    var entry2 = Assert.Single(zip.Entries, e => e.FullName == path2);
+    using var doc2 = await JsonDocument.ParseAsync(entry2.Open());
+    Assert.Equal(1, doc2.RootElement.GetArrayLength());
   }
 }
