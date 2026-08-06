@@ -24,6 +24,12 @@ public partial class DataModelFieldEditor : ComponentBase
   [Parameter] public List<DataModelFieldEditModel> Fields { get; set; } = [];
   [Parameter] public List<DataModelSummaryDTO> AvailableModels { get; set; } = [];
 
+  /// <summary>
+  /// Vyvolá se po přidání nového pole (ne po editaci existujícího) — typicky navázáno
+  /// na uložení rodičovského DataModelu, aby se nové pole hned persistovalo.
+  /// </summary>
+  [Parameter] public EventCallback OnFieldAdded { get; set; }
+
   private SfGrid<DataModelFieldEditModel>? FieldGrid;
   private List<DataModelFieldEditModel>? _previousFields;
 
@@ -137,11 +143,16 @@ public partial class DataModelFieldEditor : ComponentBase
       }
     }
 
+    var wasNew = _isNew;
+
     _isDialogOpen = false;
     _editingField = null;
 
     if (FieldGrid is not null)
       await FieldGrid.Refresh();
+
+    if (wasNew && OnFieldAdded.HasDelegate)
+      await OnFieldAdded.InvokeAsync();
   }
 
   private void Cancel()
