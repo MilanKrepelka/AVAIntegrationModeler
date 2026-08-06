@@ -2,6 +2,7 @@ using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
 
@@ -69,6 +70,40 @@ public partial class DataModelsAvaPlace : ComponentBase, IDisposable
       await ShowNotification($"Model '{model.Code}' nebyl nalezen v AVAPlace.", false);
     else
       await ShowNotification($"Chyba importu '{model.Code}': {string.Join(", ", result.Errors)}", false);
+  }
+
+  private async Task ImportAllDataModelsAsync(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+  {
+    var confirmed = await JS.InvokeAsync<bool>("confirm",
+      "Opravdu chcete importovat všechny datové modely z AVAPlace do lokální databáze? Operace může u velkého počtu modelů trvat delší dobu.");
+    if (!confirmed) return;
+
+    IsLoading = true;
+    await InvokeAsync(StateHasChanged);
+
+    try
+    {
+      var result = await _apiClient.ImportAllDataModelsFromAvaPlace(CancellationToken.None);
+      if (result.IsSuccess)
+      {
+        var summary = result.Value;
+        var message = $"Import dokončen: {summary.SuccessCount} úspěšně, {summary.FailedCount} s chybou.";
+        if (summary.FailedCount > 0)
+          message += " Chyby: " + string.Join("; ", summary.Results
+            .Where(r => !r.Success)
+            .Select(r => $"{r.Code}: {r.ErrorMessage}"));
+        await ShowNotification(message, summary.FailedCount == 0);
+      }
+      else
+      {
+        await ShowNotification($"Hromadný import se nezdařil: {string.Join(", ", result.Errors)}", false);
+      }
+    }
+    finally
+    {
+      IsLoading = false;
+      await InvokeAsync(StateHasChanged);
+    }
   }
 
   public void Dispose()

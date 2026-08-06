@@ -27,6 +27,17 @@ public static class ApiClientServiceCollectionExtensions
       client.Timeout = TimeSpan.FromSeconds(opts.TimeoutInSeconds);
     });
 
+    // Samostatný HttpClient s delším timeoutem pro hromadný import datových modelů z AVAPlace —
+    // ten může u velkého počtu modelů trvat výrazně déle než běžná volání API.
+    services.AddHttpClient(AVAIntegrationModelerApiClient.BulkImportHttpClientName, client =>
+    {
+      if (!string.IsNullOrWhiteSpace(opts.BaseUrl))
+      {
+        client.BaseAddress = new Uri(opts.BaseUrl);
+      }
+      client.Timeout = TimeSpan.FromSeconds(opts.BulkImportTimeoutInSeconds);
+    });
+
     return services;
   }
 }

@@ -29,7 +29,7 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
     using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions() { BaseAddress = new Uri("http://0.0.0.0:5005") });
 
     // Create the typed client wrapper
-    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, NullLogger<AVAIntegrationModelerApiClient>.Instance);
+    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, new TestHttpClientFactory(client), NullLogger<AVAIntegrationModelerApiClient>.Instance);
 
     // Act: call the API method
     var result = await apiClient.GetDataModels(Contracts.Datasource.Database, CancellationToken.None);
@@ -55,7 +55,7 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
     using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions() { BaseAddress = new Uri("http://0.0.0.0:5005") });
 
     // Create the typed client wrapper
-    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, NullLogger<AVAIntegrationModelerApiClient>.Instance);
+    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, new TestHttpClientFactory(client), NullLogger<AVAIntegrationModelerApiClient>.Instance);
 
     // Act: call the API method
     var result = await apiClient.GetScenarios(Contracts.Datasource.Database, CancellationToken.None);
@@ -81,7 +81,7 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
     using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions() { BaseAddress = new Uri("http://0.0.0.0:5005") });
 
     // Create the typed client wrapper
-    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, NullLogger<AVAIntegrationModelerApiClient>.Instance);
+    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, new TestHttpClientFactory(client), NullLogger<AVAIntegrationModelerApiClient>.Instance);
 
     // Act: call the API method
     var scenariosResult = await apiClient.GetScenarios(Contracts.Datasource.AVAPlace, CancellationToken.None);
@@ -99,7 +99,7 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
     using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions() { BaseAddress = new Uri("http://0.0.0.0:5005") });
 
     // Create the typed client wrapper
-    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, NullLogger<AVAIntegrationModelerApiClient>.Instance);
+    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, new TestHttpClientFactory(client), NullLogger<AVAIntegrationModelerApiClient>.Instance);
 
     // Act: call the API method
     
@@ -121,7 +121,7 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
     using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions() { BaseAddress = new Uri("http://0.0.0.0:5005") });
 
     // Create the typed client wrapper
-    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, NullLogger<AVAIntegrationModelerApiClient>.Instance);
+    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, new TestHttpClientFactory(client), NullLogger<AVAIntegrationModelerApiClient>.Instance);
 
     // Act: call the API method
     var featuresResult = await apiClient.GetFeatures(Contracts.Datasource.AVAPlace, CancellationToken.None);
@@ -139,7 +139,7 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
     using var client = _factory.CreateClient(new WebApplicationFactoryClientOptions() { BaseAddress = new Uri("http://0.0.0.0:5005") });
 
     // Create the typed client wrapper
-    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, NullLogger<AVAIntegrationModelerApiClient>.Instance);
+    IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(client, new TestHttpClientFactory(client), NullLogger<AVAIntegrationModelerApiClient>.Instance);
 
     // Act: call the API method
     var scenariosResponse = await apiClient.GetScenarios(Contracts.Datasource.Database, CancellationToken.None);
@@ -161,7 +161,8 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
     });
 
     IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(
-      client, 
+      client,
+      new TestHttpClientFactory(client),
       NullLogger<AVAIntegrationModelerApiClient>.Instance);
 
     var scenariosResponse = await apiClient.GetScenarios(Contracts.Datasource.Database, CancellationToken.None);
@@ -186,7 +187,8 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
     });
 
     IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(
-      client, 
+      client,
+      new TestHttpClientFactory(client),
       NullLogger<AVAIntegrationModelerApiClient>.Instance);
 
     var newScenario = new Contracts.DTO.ScenarioDTO
@@ -220,6 +222,7 @@ public class AVAIntegrationModelerApiClientTest : IClassFixture<AVAIntegrationMo
 
     IAVAIntegrationModelerApiClient apiClient = new AVAIntegrationModelerApiClient(
       client,
+      new TestHttpClientFactory(client),
       NullLogger<AVAIntegrationModelerApiClient>.Instance);
 
     var newScenario = new Contracts.DTO.ScenarioDTO

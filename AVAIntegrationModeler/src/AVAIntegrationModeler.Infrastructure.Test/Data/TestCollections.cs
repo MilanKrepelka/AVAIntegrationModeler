@@ -73,4 +73,14 @@ public class DeploymentTestCollection : ICollectionFixture<EfSqlClientTestFixtur
   // Slouží pouze pro registraci collection fixture.
 }
 
+/// <summary>
+/// Test collection pro DataModelDeleteAllTests - izolovaná databáze.
+/// </summary>
+[CollectionDefinition("DataModelDeleteAllTestCollection")]
+public class DataModelDeleteAllTestCollection : ICollectionFixture<EfSqlClientTestFixture>
+{
+  // Tato třída se nikdy neinstancuje.
+  // Slouží pouze pro registraci collection fixture.
+}
+
 

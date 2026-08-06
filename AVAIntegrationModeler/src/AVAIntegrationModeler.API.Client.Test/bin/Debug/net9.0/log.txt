@@ -1750,3 +1750,505 @@
 2026-07-30 18:51:38.111 +02:00 [INF] Executed endpoint 'HTTP: GET /DataModels/{Datasource}/{DataModelId:guid}'
 2026-07-30 18:51:38.112 +02:00 [INF] The response could not be cached for this request.
 2026-07-30 18:51:38.112 +02:00 [INF] Request finished HTTP/1.1 GET http://0.0.0.0:5005/datamodels/Database/c4b4768d-89c2-4006-8508-857655daec82 - 200 null application/json; charset=utf-8 2.0023ms
+2026-08-05 09:14:51.921 +02:00 [INF] Registered 40 endpoints in 150 milliseconds.
+2026-08-05 09:14:52.551 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-08-05 09:14:52.577 +02:00 [INF] Request starting HTTP/1.1 GET http://0.0.0.0:5005/scenarios?datasource=Database - null null
+2026-08-05 09:14:52.599 +02:00 [INF] No cached response available for this request.
+2026-08-05 09:14:52.601 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-08-05 09:14:52.603 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-08-05 09:14:52.621 +02:00 [INF] Handling ListScenariosQuery
+2026-08-05 09:14:52.621 +02:00 [INF] Property Datasource : "Database"
+2026-08-05 09:14:52.622 +02:00 [INF] Property Skip : null
+2026-08-05 09:14:52.622 +02:00 [INF] Property Take : null
+2026-08-05 09:14:52.753 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 130 ms
+2026-08-05 09:14:52.755 +02:00 [INF] Handling ListScenariosQuery2
+2026-08-05 09:14:52.755 +02:00 [INF] Property Datasource : "Database"
+2026-08-05 09:14:52.755 +02:00 [INF] Property Skip : null
+2026-08-05 09:14:52.756 +02:00 [INF] Property Take : null
+2026-08-05 09:14:52.756 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-08-05 09:14:52.768 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-08-05 09:14:52.768 +02:00 [INF] The response could not be cached for this request.
+2026-08-05 09:14:52.770 +02:00 [INF] Request finished HTTP/1.1 GET http://0.0.0.0:5005/scenarios?datasource=Database - 200 null application/json; charset=utf-8 193.491ms
+2026-08-05 09:14:52.776 +02:00 [INF] Request starting HTTP/1.1 GET http://0.0.0.0:5005/scenarios?datasource=AVAPlace - null null
+2026-08-05 09:14:52.777 +02:00 [INF] No cached response available for this request.
+2026-08-05 09:14:52.777 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-08-05 09:14:52.777 +02:00 [INF] Handling ListScenariosQuery
+2026-08-05 09:14:52.777 +02:00 [INF] Property Datasource : "AVAPlace"
+2026-08-05 09:14:52.777 +02:00 [INF] Property Skip : null
+2026-08-05 09:14:52.777 +02:00 [INF] Property Take : null
+2026-08-05 09:14:52.940 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 162 ms
+2026-08-05 09:14:52.940 +02:00 [INF] Handling ListScenariosQuery2
+2026-08-05 09:14:52.941 +02:00 [INF] Property Datasource : "AVAPlace"
+2026-08-05 09:14:52.941 +02:00 [INF] Property Skip : null
+2026-08-05 09:14:52.941 +02:00 [INF] Property Take : null
+2026-08-05 09:14:52.941 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-08-05 09:14:52.942 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-08-05 09:14:52.942 +02:00 [INF] The response could not be cached for this request.
+2026-08-05 09:14:52.943 +02:00 [INF] Request finished HTTP/1.1 GET http://0.0.0.0:5005/scenarios?datasource=AVAPlace - 200 null application/json; charset=utf-8 166.7076ms
+2026-08-05 09:14:52.949 +02:00 [INF] Request starting HTTP/1.1 GET http://0.0.0.0:5005/scenarios?datasource=AVAPlace - null null
+2026-08-05 09:14:52.950 +02:00 [INF] No cached response available for this request.
+2026-08-05 09:14:52.950 +02:00 [INF] Executing endpoint 'HTTP: GET /Scenarios'
+2026-08-05 09:14:52.950 +02:00 [INF] Handling ListScenariosQuery
+2026-08-05 09:14:52.950 +02:00 [INF] Property Datasource : "AVAPlace"
+2026-08-05 09:14:52.950 +02:00 [INF] Property Skip : null
+2026-08-05 09:14:52.950 +02:00 [INF] Property Take : null
+2026-08-05 09:14:52.953 +02:00 [INF] Handled ListScenariosQuery with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 2 ms
+2026-08-05 09:14:52.953 +02:00 [INF] Handling ListScenariosQuery2
+2026-08-05 09:14:52.953 +02:00 [INF] Property Datasource : "AVAPlace"
+2026-08-05 09:14:52.953 +02:00 [INF] Property Skip : null
+2026-08-05 09:14:52.953 +02:00 [INF] Property Take : null
+2026-08-05 09:14:52.953 +02:00 [INF] Handled ListScenariosQuery2 with Ardalis.Result.Result`1[System.Collections.Generic.IEnumerable`1[AVAIntegrationModeler.Contracts.DTO.ScenarioDTO]] in 0 ms
+2026-08-05 09:14:52.953 +02:00 [INF] Executed endpoint 'HTTP: GET /Scenarios'
+2026-08-05 09:14:52.953 +02:00 [INF] The response could not be cached for this request.
+2026-08-05 09:14:52.953 +02:00 [INF] Request finished HTTP/1.1 GET http://0.0.0.0:5005/scenarios?datasource=AVAPlace - 200 null application/json; charset=utf-8 3.676ms
+2026-08-05 09:14:52.957 +02:00 [INF] Request starting HTTP/1.1 GET http://0.0.0.0:5005/scenarios/AVAPlace/43be46b4-fbcc-40d9-8b1f-3d17d5b42fe8 - null null
+2026-08-05 09:14:52.957 +02:00 [INF] No cached response available for this request.
+2026-08-05 09:14:52.957 +02:00 [INF] Executing endpoint '405 HTTP Method Not Supported'
+2026-08-05 09:14:52.957 +02:00 [INF] Executed endpoint '405 HTTP Method Not Supported'
+2026-08-05 09:14:52.957 +02:00 [INF] The response could not be cached for this request.
+2026-08-05 09:14:52.957 +02:00 [INF] Request finished HTTP/1.1 GET http://0.0.0.0:5005/scenarios/AVAPlace/43be46b4-fbcc-40d9-8b1f-3d17d5b42fe8 - 405 null null 0.2864ms
+2026-08-05 09:14:52.975 +02:00 [INF] Request starting HTTP/1.1 GET http://0.0.0.0:5005/scenarios/Database/scenario3Code - null null
+2026-08-05 09:14:52.975 +02:00 [INF] No cached response available for this request.
+2026-08-05 09:14:52.975 +02:00 [INF] Executing endpoint '405 HTTP Method Not Supported'
+2026-08-05 09:14:52.975 +02:00 [INF] Executed endpoint '405 HTTP Method Not Supported'
+2026-08-05 09:14:52.975 +02:00 [INF] The response could not be cached for this request.
+2026-08-05 09:14:52.975 +02:00 [INF] Request finished HTTP/1.1 GET http://0.0.0.0:5005/scenarios/Database/scenario3Code - 405 null null 0.836ms
+2026-08-06 11:32:58.080 +02:00 [INF] Registered 41 endpoints in 2 955 milliseconds.
+2026-08-06 11:32:59.309 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-08-06 11:32:59.346 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/areas - application/json; charset=utf-8 117
+2026-08-06 11:32:59.378 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-08-06 11:32:59.379 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-08-06 11:32:59.414 +02:00 [INF] Handling CreateAreaCommand
+2026-08-06 11:32:59.415 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.415 +02:00 [INF] Property Area : {"Id":"86812cd7-5cdc-477f-8722-90d1e00348ef","Code":"AR-254D5F9C","Name":"Testovací oblast","$type":"AreaDTO"}
+2026-08-06 11:32:59.507 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 91 ms
+2026-08-06 11:32:59.523 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-08-06 11:32:59.526 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/areas - 201 null application/json; charset=utf-8 180.1974ms
+2026-08-06 11:32:59.533 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 236
+2026-08-06 11:32:59.534 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:32:59.545 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:32:59.545 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.545 +02:00 [INF] Property DataModel : {"Id":"d98077ee-3e46-43f7-b80d-dfe7280e1fd8","Code":"EXP-REC-522F3879","Name":"Model-8115FFAD","Description":"","Notes":"","IsAggregateRoot":false,"AreaId":"86812cd7-5cdc-477f-8722-90d1e00348ef","Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:32:59.647 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 101 ms
+2026-08-06 11:32:59.648 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:32:59.648 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 114.6748ms
+2026-08-06 11:32:59.651 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - application/json; charset=utf-8 160
+2026-08-06 11:32:59.651 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:32:59.656 +02:00 [INF] Handling CreateDataModelRecordCommand
+2026-08-06 11:32:59.656 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.657 +02:00 [INF] Property Record : {"Id":"52660375-5a04-44e8-9f3f-555531247b28","ModelId":"d98077ee-3e46-43f7-b80d-dfe7280e1fd8","ExternalId":"EXT-C5972B62","Fields":[],"$type":"DataModelRecordDTO"}
+2026-08-06 11:32:59.665 +02:00 [INF] Handled CreateDataModelRecordCommand with Ardalis.Result.Result`1[System.Guid] in 7 ms
+2026-08-06 11:32:59.665 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:32:59.665 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - 201 null application/json; charset=utf-8 14.1392ms
+2026-08-06 11:32:59.666 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - application/json; charset=utf-8 160
+2026-08-06 11:32:59.666 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:32:59.667 +02:00 [INF] Handling CreateDataModelRecordCommand
+2026-08-06 11:32:59.667 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.667 +02:00 [INF] Property Record : {"Id":"65904dca-4ff9-457b-8870-cd323a6713f5","ModelId":"d98077ee-3e46-43f7-b80d-dfe7280e1fd8","ExternalId":"EXT-93624EAD","Fields":[],"$type":"DataModelRecordDTO"}
+2026-08-06 11:32:59.672 +02:00 [INF] Handled CreateDataModelRecordCommand with Ardalis.Result.Result`1[System.Guid] in 4 ms
+2026-08-06 11:32:59.672 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:32:59.672 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - 201 null application/json; charset=utf-8 5.7171ms
+2026-08-06 11:32:59.675 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords/export - application/json; charset=utf-8 108
+2026-08-06 11:32:59.675 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModelRecords/export'
+2026-08-06 11:32:59.680 +02:00 [INF] Handling ExportDataModelRecordsQuery
+2026-08-06 11:32:59.680 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.680 +02:00 [INF] Property RecordIds : ["52660375-5a04-44e8-9f3f-555531247b28","65904dca-4ff9-457b-8870-cd323a6713f5"]
+2026-08-06 11:32:59.729 +02:00 [INF] Handled ExportDataModelRecordsQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Collections.Generic.List`1[AVAIntegrationModeler.Contracts.DTO.DataModelRecordDTO]]] in 48 ms
+2026-08-06 11:32:59.737 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModelRecords/export'
+2026-08-06 11:32:59.737 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords/export - 200 371 application/zip 62.6328ms
+2026-08-06 11:32:59.756 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 202
+2026-08-06 11:32:59.757 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:32:59.757 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:32:59.757 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.757 +02:00 [INF] Property DataModel : {"Id":"be332430-feb5-4e5e-b5f2-59b1deb043f6","Code":"EXP-REC-C0C90D78","Name":"Model-A0445AE8","Description":"","Notes":"","IsAggregateRoot":false,"AreaId":null,"Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:32:59.762 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 4 ms
+2026-08-06 11:32:59.762 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:32:59.762 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 5.7032ms
+2026-08-06 11:32:59.764 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - application/json; charset=utf-8 160
+2026-08-06 11:32:59.764 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:32:59.765 +02:00 [INF] Handling CreateDataModelRecordCommand
+2026-08-06 11:32:59.765 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.765 +02:00 [INF] Property Record : {"Id":"ecd6a48d-2b20-4a2f-9a20-a60b41992704","ModelId":"be332430-feb5-4e5e-b5f2-59b1deb043f6","ExternalId":"EXT-62E894A8","Fields":[],"$type":"DataModelRecordDTO"}
+2026-08-06 11:32:59.768 +02:00 [INF] Handled CreateDataModelRecordCommand with Ardalis.Result.Result`1[System.Guid] in 3 ms
+2026-08-06 11:32:59.768 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:32:59.768 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - 201 null application/json; charset=utf-8 4.1758ms
+2026-08-06 11:32:59.770 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords/export - application/json; charset=utf-8 69
+2026-08-06 11:32:59.770 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModelRecords/export'
+2026-08-06 11:32:59.770 +02:00 [INF] Handling ExportDataModelRecordsQuery
+2026-08-06 11:32:59.770 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.770 +02:00 [INF] Property RecordIds : ["ecd6a48d-2b20-4a2f-9a20-a60b41992704"]
+2026-08-06 11:32:59.773 +02:00 [INF] Handled ExportDataModelRecordsQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Collections.Generic.List`1[AVAIntegrationModeler.Contracts.DTO.DataModelRecordDTO]]] in 2 ms
+2026-08-06 11:32:59.773 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModelRecords/export'
+2026-08-06 11:32:59.773 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords/export - 200 327 application/zip 3.9499ms
+2026-08-06 11:32:59.776 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/areas - application/json; charset=utf-8 117
+2026-08-06 11:32:59.776 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-08-06 11:32:59.776 +02:00 [INF] Handling CreateAreaCommand
+2026-08-06 11:32:59.777 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.777 +02:00 [INF] Property Area : {"Id":"ac5ade1a-9ab4-4356-810d-72fddff979a0","Code":"AR-14034C02","Name":"Testovací oblast","$type":"AreaDTO"}
+2026-08-06 11:32:59.779 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 2 ms
+2026-08-06 11:32:59.779 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-08-06 11:32:59.779 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/areas - 201 null application/json; charset=utf-8 2.9551ms
+2026-08-06 11:32:59.781 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 236
+2026-08-06 11:32:59.781 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:32:59.782 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:32:59.782 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.782 +02:00 [INF] Property DataModel : {"Id":"e8cc6efe-07f1-41a6-91e6-0e2da5ea0e52","Code":"EXP-REC-5106153E","Name":"Model-72307045","Description":"","Notes":"","IsAggregateRoot":false,"AreaId":"ac5ade1a-9ab4-4356-810d-72fddff979a0","Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:32:59.785 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 2 ms
+2026-08-06 11:32:59.785 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:32:59.785 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 3.9713ms
+2026-08-06 11:32:59.786 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - application/json; charset=utf-8 160
+2026-08-06 11:32:59.786 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:32:59.786 +02:00 [INF] Handling CreateDataModelRecordCommand
+2026-08-06 11:32:59.786 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.786 +02:00 [INF] Property Record : {"Id":"85184be9-7d5f-4947-8fbe-32424fc3e265","ModelId":"e8cc6efe-07f1-41a6-91e6-0e2da5ea0e52","ExternalId":"EXT-A580E72A","Fields":[],"$type":"DataModelRecordDTO"}
+2026-08-06 11:32:59.788 +02:00 [INF] Handled CreateDataModelRecordCommand with Ardalis.Result.Result`1[System.Guid] in 1 ms
+2026-08-06 11:32:59.788 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:32:59.789 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - 201 null application/json; charset=utf-8 2.3299ms
+2026-08-06 11:32:59.789 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords/export - application/json; charset=utf-8 69
+2026-08-06 11:32:59.789 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModelRecords/export'
+2026-08-06 11:32:59.790 +02:00 [INF] Handling ExportDataModelRecordsQuery
+2026-08-06 11:32:59.790 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.790 +02:00 [INF] Property RecordIds : ["85184be9-7d5f-4947-8fbe-32424fc3e265"]
+2026-08-06 11:32:59.794 +02:00 [INF] Handled ExportDataModelRecordsQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Collections.Generic.List`1[AVAIntegrationModeler.Contracts.DTO.DataModelRecordDTO]]] in 3 ms
+2026-08-06 11:32:59.794 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModelRecords/export'
+2026-08-06 11:32:59.794 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords/export - 200 327 application/zip 4.8432ms
+2026-08-06 11:32:59.797 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 202
+2026-08-06 11:32:59.797 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:32:59.798 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:32:59.798 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.798 +02:00 [INF] Property DataModel : {"Id":"817974d6-0aa2-426e-951a-180dfd0d6db9","Code":"EXP-REC-D1990C08","Name":"Model-2F848C02","Description":"","Notes":"","IsAggregateRoot":false,"AreaId":null,"Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:32:59.800 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 2 ms
+2026-08-06 11:32:59.800 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:32:59.800 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 2.7301ms
+2026-08-06 11:32:59.802 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 202
+2026-08-06 11:32:59.802 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:32:59.802 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:32:59.802 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.802 +02:00 [INF] Property DataModel : {"Id":"4fec3120-8fdc-4358-aba8-d180f4ce82ca","Code":"EXP-REC-8444D131","Name":"Model-7053FE15","Description":"","Notes":"","IsAggregateRoot":false,"AreaId":null,"Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:32:59.804 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 1 ms
+2026-08-06 11:32:59.804 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:32:59.804 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 2.068ms
+2026-08-06 11:32:59.805 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - application/json; charset=utf-8 160
+2026-08-06 11:32:59.805 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:32:59.806 +02:00 [INF] Handling CreateDataModelRecordCommand
+2026-08-06 11:32:59.806 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.806 +02:00 [INF] Property Record : {"Id":"3c7a6607-7388-41b6-bcfe-4009cef22068","ModelId":"817974d6-0aa2-426e-951a-180dfd0d6db9","ExternalId":"EXT-3CCA8434","Fields":[],"$type":"DataModelRecordDTO"}
+2026-08-06 11:32:59.807 +02:00 [INF] Handled CreateDataModelRecordCommand with Ardalis.Result.Result`1[System.Guid] in 1 ms
+2026-08-06 11:32:59.807 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:32:59.807 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - 201 null application/json; charset=utf-8 1.544ms
+2026-08-06 11:32:59.808 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - application/json; charset=utf-8 160
+2026-08-06 11:32:59.808 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:32:59.808 +02:00 [INF] Handling CreateDataModelRecordCommand
+2026-08-06 11:32:59.808 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.808 +02:00 [INF] Property Record : {"Id":"ded691bb-b9fd-4fc3-b36d-69174e6f4c60","ModelId":"4fec3120-8fdc-4358-aba8-d180f4ce82ca","ExternalId":"EXT-845A047F","Fields":[],"$type":"DataModelRecordDTO"}
+2026-08-06 11:32:59.809 +02:00 [INF] Handled CreateDataModelRecordCommand with Ardalis.Result.Result`1[System.Guid] in 1 ms
+2026-08-06 11:32:59.809 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:32:59.809 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - 201 null application/json; charset=utf-8 1.4161ms
+2026-08-06 11:32:59.810 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords/export - application/json; charset=utf-8 108
+2026-08-06 11:32:59.810 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModelRecords/export'
+2026-08-06 11:32:59.810 +02:00 [INF] Handling ExportDataModelRecordsQuery
+2026-08-06 11:32:59.810 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:32:59.810 +02:00 [INF] Property RecordIds : ["3c7a6607-7388-41b6-bcfe-4009cef22068","ded691bb-b9fd-4fc3-b36d-69174e6f4c60"]
+2026-08-06 11:32:59.813 +02:00 [INF] Handled ExportDataModelRecordsQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Collections.Generic.List`1[AVAIntegrationModeler.Contracts.DTO.DataModelRecordDTO]]] in 2 ms
+2026-08-06 11:32:59.813 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModelRecords/export'
+2026-08-06 11:32:59.813 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords/export - 200 636 application/zip 2.9703ms
+2026-08-06 11:42:45.955 +02:00 [INF] Registered 41 endpoints in 152 milliseconds.
+2026-08-06 11:42:46.587 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-08-06 11:42:46.620 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 198
+2026-08-06 11:42:46.645 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-08-06 11:42:46.646 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:42:46.686 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:42:46.686 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:42:46.687 +02:00 [INF] Property DataModel : {"Id":"8970a02c-e810-4328-870c-51b11ccd99a6","Code":"EXP-E721A809","Name":"Model-9D22F44C","Description":"","Notes":"","IsAggregateRoot":false,"AreaId":null,"Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:42:46.849 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 160 ms
+2026-08-06 11:42:46.866 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:42:46.868 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 248.5452ms
+2026-08-06 11:42:46.874 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels/export - application/json; charset=utf-8 68
+2026-08-06 11:42:46.875 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels/export'
+2026-08-06 11:42:46.881 +02:00 [INF] Handling ExportDataModelsQuery
+2026-08-06 11:42:46.881 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:42:46.881 +02:00 [INF] Property ModelIds : ["8970a02c-e810-4328-870c-51b11ccd99a6"]
+2026-08-06 11:42:46.955 +02:00 [INF] Handled ExportDataModelsQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Object]] in 74 ms
+2026-08-06 11:42:46.967 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels/export'
+2026-08-06 11:42:46.967 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels/export - 200 370 application/zip 93.3427ms
+2026-08-06 11:42:46.975 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/areas - application/json; charset=utf-8 117
+2026-08-06 11:42:46.976 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-08-06 11:42:46.979 +02:00 [INF] Handling CreateAreaCommand
+2026-08-06 11:42:46.979 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:42:46.979 +02:00 [INF] Property Area : {"Id":"85d1cad5-25c8-4f89-bd69-f04ec8f3e228","Code":"AR-A8FA0A2C","Name":"Testovací oblast","$type":"AreaDTO"}
+2026-08-06 11:42:46.987 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 8 ms
+2026-08-06 11:42:46.987 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-08-06 11:42:46.988 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/areas - 201 null application/json; charset=utf-8 12.1224ms
+2026-08-06 11:42:46.990 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 232
+2026-08-06 11:42:46.990 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:42:46.990 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:42:46.990 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:42:46.991 +02:00 [INF] Property DataModel : {"Id":"df224283-6f9e-43e9-aaaf-34c4704c9ddc","Code":"EXP-3240EED8","Name":"Model-7ADEE554","Description":"","Notes":"","IsAggregateRoot":false,"AreaId":"85d1cad5-25c8-4f89-bd69-f04ec8f3e228","Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:42:47.005 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 14 ms
+2026-08-06 11:42:47.006 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:42:47.006 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 15.8069ms
+2026-08-06 11:42:47.007 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels/export - application/json; charset=utf-8 68
+2026-08-06 11:42:47.007 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels/export'
+2026-08-06 11:42:47.008 +02:00 [INF] Handling ExportDataModelsQuery
+2026-08-06 11:42:47.008 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:42:47.008 +02:00 [INF] Property ModelIds : ["df224283-6f9e-43e9-aaaf-34c4704c9ddc"]
+2026-08-06 11:42:47.011 +02:00 [INF] Handled ExportDataModelsQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Object]] in 3 ms
+2026-08-06 11:42:47.012 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels/export'
+2026-08-06 11:42:47.012 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels/export - 200 369 application/zip 5.1173ms
+2026-08-06 11:44:08.338 +02:00 [INF] Registered 41 endpoints in 149 milliseconds.
+2026-08-06 11:44:08.953 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-08-06 11:44:08.986 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 198
+2026-08-06 11:44:09.010 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-08-06 11:44:09.011 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:44:09.050 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:44:09.051 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:44:09.052 +02:00 [INF] Property DataModel : {"Id":"98ddb830-5e72-465d-9178-f1844b7b68f5","Code":"EXP-5FA028C6","Name":"Model-B8528516","Description":"","Notes":"","IsAggregateRoot":false,"AreaId":null,"Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:44:09.205 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 152 ms
+2026-08-06 11:44:09.222 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:44:09.224 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 238.5394ms
+2026-08-06 11:44:09.230 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels/export - application/json; charset=utf-8 68
+2026-08-06 11:44:09.230 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels/export'
+2026-08-06 11:44:09.236 +02:00 [INF] Handling ExportDataModelsQuery
+2026-08-06 11:44:09.236 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:44:09.236 +02:00 [INF] Property ModelIds : ["98ddb830-5e72-465d-9178-f1844b7b68f5"]
+2026-08-06 11:44:09.310 +02:00 [INF] Handled ExportDataModelsQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Object]] in 73 ms
+2026-08-06 11:44:09.322 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels/export'
+2026-08-06 11:44:09.322 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels/export - 200 370 application/zip 92.1278ms
+2026-08-06 11:44:09.330 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/areas - application/json; charset=utf-8 117
+2026-08-06 11:44:09.330 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-08-06 11:44:09.333 +02:00 [INF] Handling CreateAreaCommand
+2026-08-06 11:44:09.333 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:44:09.333 +02:00 [INF] Property Area : {"Id":"fe8197f0-6783-4f5b-b734-3bbbbd1d0697","Code":"AR-33CC5A37","Name":"Testovací oblast","$type":"AreaDTO"}
+2026-08-06 11:44:09.341 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 7 ms
+2026-08-06 11:44:09.341 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-08-06 11:44:09.341 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/areas - 201 null application/json; charset=utf-8 11.2591ms
+2026-08-06 11:44:09.343 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 232
+2026-08-06 11:44:09.343 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:44:09.344 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:44:09.344 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:44:09.344 +02:00 [INF] Property DataModel : {"Id":"4e36dd7b-823b-476c-9fa8-a6120322de66","Code":"EXP-0370B263","Name":"Model-89066A4E","Description":"","Notes":"","IsAggregateRoot":false,"AreaId":"fe8197f0-6783-4f5b-b734-3bbbbd1d0697","Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:44:09.351 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 6 ms
+2026-08-06 11:44:09.351 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:44:09.351 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 7.7488ms
+2026-08-06 11:44:09.354 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - application/json; charset=utf-8 160
+2026-08-06 11:44:09.354 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:44:09.356 +02:00 [INF] Handling CreateDataModelRecordCommand
+2026-08-06 11:44:09.356 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:44:09.356 +02:00 [INF] Property Record : {"Id":"934dbcc3-70ab-4bda-87fe-d0bbc4f320c1","ModelId":"4e36dd7b-823b-476c-9fa8-a6120322de66","ExternalId":"EXT-A2692881","Fields":[],"$type":"DataModelRecordDTO"}
+2026-08-06 11:44:09.376 +02:00 [INF] Handled CreateDataModelRecordCommand with Ardalis.Result.Result`1[System.Guid] in 20 ms
+2026-08-06 11:44:09.377 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:44:09.377 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - 201 null application/json; charset=utf-8 23.2466ms
+2026-08-06 11:44:09.380 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - application/json; charset=utf-8 160
+2026-08-06 11:44:09.380 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:44:09.380 +02:00 [INF] Handling CreateDataModelRecordCommand
+2026-08-06 11:44:09.380 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:44:09.380 +02:00 [INF] Property Record : {"Id":"128afa5a-b85b-4612-9d91-86587cc04680","ModelId":"4e36dd7b-823b-476c-9fa8-a6120322de66","ExternalId":"EXT-3CF92319","Fields":[],"$type":"DataModelRecordDTO"}
+2026-08-06 11:44:09.382 +02:00 [INF] Handled CreateDataModelRecordCommand with Ardalis.Result.Result`1[System.Guid] in 1 ms
+2026-08-06 11:44:09.382 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:44:09.382 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - 201 null application/json; charset=utf-8 2.3611ms
+2026-08-06 11:44:09.383 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels/export - application/json; charset=utf-8 68
+2026-08-06 11:44:09.383 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels/export'
+2026-08-06 11:44:09.383 +02:00 [INF] Handling ExportDataModelsQuery
+2026-08-06 11:44:09.383 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:44:09.383 +02:00 [INF] Property ModelIds : ["4e36dd7b-823b-476c-9fa8-a6120322de66"]
+2026-08-06 11:44:09.388 +02:00 [INF] Handled ExportDataModelsQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Object]] in 4 ms
+2026-08-06 11:44:09.389 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels/export'
+2026-08-06 11:44:09.389 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels/export - 200 720 application/zip 6.7987ms
+2026-08-06 11:44:09.395 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 198
+2026-08-06 11:44:09.395 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:44:09.396 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:44:09.396 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:44:09.396 +02:00 [INF] Property DataModel : {"Id":"c0665743-2579-4acb-b9a7-52fc0aba0b4e","Code":"EXP-5EFD1FDE","Name":"Model-B8FA7C60","Description":"","Notes":"","IsAggregateRoot":false,"AreaId":null,"Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:44:09.399 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 3 ms
+2026-08-06 11:44:09.399 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:44:09.400 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 4.2342ms
+2026-08-06 11:44:09.401 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels/export - application/json; charset=utf-8 68
+2026-08-06 11:44:09.401 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels/export'
+2026-08-06 11:44:09.401 +02:00 [INF] Handling ExportDataModelsQuery
+2026-08-06 11:44:09.401 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:44:09.401 +02:00 [INF] Property ModelIds : ["c0665743-2579-4acb-b9a7-52fc0aba0b4e"]
+2026-08-06 11:44:09.405 +02:00 [INF] Handled ExportDataModelsQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Object]] in 3 ms
+2026-08-06 11:44:09.405 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels/export'
+2026-08-06 11:44:09.405 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels/export - 200 371 application/zip 4.3678ms
+2026-08-06 11:44:09.407 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/areas - application/json; charset=utf-8 117
+2026-08-06 11:44:09.407 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-08-06 11:44:09.407 +02:00 [INF] Handling CreateAreaCommand
+2026-08-06 11:44:09.407 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:44:09.407 +02:00 [INF] Property Area : {"Id":"220f5abf-4744-4c13-b9f2-0ee0364adc34","Code":"AR-E17529DB","Name":"Testovací oblast","$type":"AreaDTO"}
+2026-08-06 11:44:09.409 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 1 ms
+2026-08-06 11:44:09.409 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-08-06 11:44:09.409 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/areas - 201 null application/json; charset=utf-8 2.3952ms
+2026-08-06 11:44:09.411 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 232
+2026-08-06 11:44:09.411 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:44:09.412 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:44:09.412 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:44:09.412 +02:00 [INF] Property DataModel : {"Id":"012bcf3b-f2ac-4d9c-af72-ba43a96cfa05","Code":"EXP-399CB02A","Name":"Model-969C8F60","Description":"","Notes":"","IsAggregateRoot":false,"AreaId":"220f5abf-4744-4c13-b9f2-0ee0364adc34","Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:44:09.413 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 1 ms
+2026-08-06 11:44:09.413 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:44:09.413 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 2.1398ms
+2026-08-06 11:44:09.414 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels/export - application/json; charset=utf-8 68
+2026-08-06 11:44:09.414 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels/export'
+2026-08-06 11:44:09.414 +02:00 [INF] Handling ExportDataModelsQuery
+2026-08-06 11:44:09.414 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:44:09.414 +02:00 [INF] Property ModelIds : ["012bcf3b-f2ac-4d9c-af72-ba43a96cfa05"]
+2026-08-06 11:44:09.417 +02:00 [INF] Handled ExportDataModelsQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Object]] in 2 ms
+2026-08-06 11:44:09.417 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels/export'
+2026-08-06 11:44:09.417 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels/export - 200 371 application/zip 3.2683ms
+2026-08-06 11:52:05.591 +02:00 [INF] Registered 41 endpoints in 155 milliseconds.
+2026-08-06 11:52:06.252 +02:00 [INF] Now listening on: http://0.0.0.0:5005
+2026-08-06 11:52:06.283 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/areas - application/json; charset=utf-8 117
+2026-08-06 11:52:06.309 +02:00 [WRN] Failed to determine the https port for redirect.
+2026-08-06 11:52:06.310 +02:00 [INF] Executing endpoint 'HTTP: POST /Areas'
+2026-08-06 11:52:06.343 +02:00 [INF] Handling CreateAreaCommand
+2026-08-06 11:52:06.344 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:52:06.345 +02:00 [INF] Property Area : {"Id":"22401d40-a495-4ce9-bbf9-f92d3dbf06d7","Code":"AR-253063F5","Name":"Testovací oblast","$type":"AreaDTO"}
+2026-08-06 11:52:06.440 +02:00 [INF] Handled CreateAreaCommand with Ardalis.Result.Result`1[System.Guid] in 93 ms
+2026-08-06 11:52:06.455 +02:00 [INF] Executed endpoint 'HTTP: POST /Areas'
+2026-08-06 11:52:06.457 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/areas - 201 null application/json; charset=utf-8 174.8644ms
+2026-08-06 11:52:06.465 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 288
+2026-08-06 11:52:06.465 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:52:06.475 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:52:06.475 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:52:06.475 +02:00 [INF] Property DataModel : {"Id":"1525002e-2114-4ca9-98a0-70f012c64c25","Code":"DEP-EXP-F1632F7A","Name":"Model-408EE7D4","Description":"DataModel vytvořený pro účely exportního testu.","Notes":"","IsAggregateRoot":false,"AreaId":"22401d40-a495-4ce9-bbf9-f92d3dbf06d7","Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:52:06.577 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 101 ms
+2026-08-06 11:52:06.577 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:52:06.578 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 113.227ms
+2026-08-06 11:52:06.581 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/deployments - application/json; charset=utf-8 201
+2026-08-06 11:52:06.581 +02:00 [INF] Executing endpoint 'HTTP: POST /Deployments'
+2026-08-06 11:52:06.584 +02:00 [INF] Handling CreateDeploymentCommand
+2026-08-06 11:52:06.584 +02:00 [INF] Property Deployment : {"Id":"73b7cbfd-39f4-4dd3-be95-e869d1e52a43","Code":"DEP-DF56D8C7","Name":"Testovací nasazení","Ticket":null,"Description":null,"DataModelIds":["1525002e-2114-4ca9-98a0-70f012c64c25"],"$type":"DeploymentDTO"}
+2026-08-06 11:52:06.604 +02:00 [INF] Handled CreateDeploymentCommand with Ardalis.Result.Result`1[System.Guid] in 19 ms
+2026-08-06 11:52:06.604 +02:00 [INF] Executed endpoint 'HTTP: POST /Deployments'
+2026-08-06 11:52:06.604 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/deployments - 201 null application/json; charset=utf-8 23.4576ms
+2026-08-06 11:52:06.606 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/deployments/DEP-DF56D8C7/export - application/json; charset=utf-8 2
+2026-08-06 11:52:06.607 +02:00 [INF] Executing endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.611 +02:00 [INF] Handling ExportDeploymentQuery
+2026-08-06 11:52:06.611 +02:00 [INF] Property DeploymentCode : DEP-DF56D8C7
+2026-08-06 11:52:06.676 +02:00 [INF] Handled ExportDeploymentQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Object]] in 64 ms
+2026-08-06 11:52:06.687 +02:00 [INF] Executed endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.687 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/deployments/DEP-DF56D8C7/export - 200 423 application/zip 81.1117ms
+2026-08-06 11:52:06.694 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 254
+2026-08-06 11:52:06.694 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:52:06.695 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:52:06.695 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:52:06.695 +02:00 [INF] Property DataModel : {"Id":"d83354f3-7c0a-4e87-b63f-145ee57d252f","Code":"DEP-EXP-6A31C585","Name":"Model-AA57F231","Description":"DataModel vytvořený pro účely exportního testu.","Notes":"","IsAggregateRoot":false,"AreaId":null,"Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:52:06.703 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 7 ms
+2026-08-06 11:52:06.703 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:52:06.703 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 8.8421ms
+2026-08-06 11:52:06.705 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/deployments - application/json; charset=utf-8 201
+2026-08-06 11:52:06.705 +02:00 [INF] Executing endpoint 'HTTP: POST /Deployments'
+2026-08-06 11:52:06.705 +02:00 [INF] Handling CreateDeploymentCommand
+2026-08-06 11:52:06.705 +02:00 [INF] Property Deployment : {"Id":"ad4c4357-da06-470b-bdd0-65fe399c0a34","Code":"DEP-255FC8CD","Name":"Testovací nasazení","Ticket":null,"Description":null,"DataModelIds":["d83354f3-7c0a-4e87-b63f-145ee57d252f"],"$type":"DeploymentDTO"}
+2026-08-06 11:52:06.707 +02:00 [INF] Handled CreateDeploymentCommand with Ardalis.Result.Result`1[System.Guid] in 1 ms
+2026-08-06 11:52:06.707 +02:00 [INF] Executed endpoint 'HTTP: POST /Deployments'
+2026-08-06 11:52:06.707 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/deployments - 201 null application/json; charset=utf-8 2.6389ms
+2026-08-06 11:52:06.708 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/deployments/DEP-255FC8CD/export - application/json; charset=utf-8 2
+2026-08-06 11:52:06.708 +02:00 [INF] Executing endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.709 +02:00 [INF] Handling ExportDeploymentQuery
+2026-08-06 11:52:06.709 +02:00 [INF] Property DeploymentCode : DEP-255FC8CD
+2026-08-06 11:52:06.713 +02:00 [INF] Handled ExportDeploymentQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Object]] in 3 ms
+2026-08-06 11:52:06.713 +02:00 [INF] Executed endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.713 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/deployments/DEP-255FC8CD/export - 200 425 application/zip 4.749ms
+2026-08-06 11:52:06.716 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 254
+2026-08-06 11:52:06.716 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:52:06.717 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:52:06.717 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:52:06.717 +02:00 [INF] Property DataModel : {"Id":"3768deb3-0141-4a6d-a69c-6a2836023fd1","Code":"DEP-EXP-6837E891","Name":"Model-450F9771","Description":"DataModel vytvořený pro účely exportního testu.","Notes":"","IsAggregateRoot":false,"AreaId":null,"Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:52:06.720 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 3 ms
+2026-08-06 11:52:06.720 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:52:06.721 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 4.5861ms
+2026-08-06 11:52:06.724 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - application/json; charset=utf-8 160
+2026-08-06 11:52:06.724 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:52:06.726 +02:00 [INF] Handling CreateDataModelRecordCommand
+2026-08-06 11:52:06.726 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:52:06.726 +02:00 [INF] Property Record : {"Id":"b2425314-cb2d-4b77-88a5-24de10eaeb22","ModelId":"3768deb3-0141-4a6d-a69c-6a2836023fd1","ExternalId":"EXT-653218FF","Fields":[],"$type":"DataModelRecordDTO"}
+2026-08-06 11:52:06.734 +02:00 [INF] Handled CreateDataModelRecordCommand with Ardalis.Result.Result`1[System.Guid] in 7 ms
+2026-08-06 11:52:06.735 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModelRecords'
+2026-08-06 11:52:06.735 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodelrecords - 201 null application/json; charset=utf-8 11.1347ms
+2026-08-06 11:52:06.736 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/deployments - application/json; charset=utf-8 201
+2026-08-06 11:52:06.736 +02:00 [INF] Executing endpoint 'HTTP: POST /Deployments'
+2026-08-06 11:52:06.737 +02:00 [INF] Handling CreateDeploymentCommand
+2026-08-06 11:52:06.737 +02:00 [INF] Property Deployment : {"Id":"d3600560-cf7d-4852-848b-177a89a6f893","Code":"DEP-71883EA4","Name":"Testovací nasazení","Ticket":null,"Description":null,"DataModelIds":["3768deb3-0141-4a6d-a69c-6a2836023fd1"],"$type":"DeploymentDTO"}
+2026-08-06 11:52:06.740 +02:00 [INF] Handled CreateDeploymentCommand with Ardalis.Result.Result`1[System.Guid] in 2 ms
+2026-08-06 11:52:06.740 +02:00 [INF] Executed endpoint 'HTTP: POST /Deployments'
+2026-08-06 11:52:06.740 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/deployments - 201 null application/json; charset=utf-8 3.9839ms
+2026-08-06 11:52:06.740 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/deployments/DEP-71883EA4/export - application/json; charset=utf-8 2
+2026-08-06 11:52:06.740 +02:00 [INF] Executing endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.741 +02:00 [INF] Handling ExportDeploymentQuery
+2026-08-06 11:52:06.741 +02:00 [INF] Property DeploymentCode : DEP-71883EA4
+2026-08-06 11:52:06.746 +02:00 [INF] Handled ExportDeploymentQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Object]] in 5 ms
+2026-08-06 11:52:06.748 +02:00 [INF] Executed endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.748 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/deployments/DEP-71883EA4/export - 200 727 application/zip 7.5523ms
+2026-08-06 11:52:06.754 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 281
+2026-08-06 11:52:06.754 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:52:06.754 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:52:06.754 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:52:06.754 +02:00 [INF] Property DataModel : {"Id":"447566cc-f108-4d15-b102-1b51531d923a","Code":"DEP-EXP-C00FBD42","Name":"Testovací DataModel pro export nasazení","Description":"DataModel vytvořený pro účely exportního testu.","Notes":"","IsAggregateRoot":false,"AreaId":null,"Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:52:06.756 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 2 ms
+2026-08-06 11:52:06.757 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:52:06.757 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 2.9464ms
+2026-08-06 11:52:06.759 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/deployments - application/json; charset=utf-8 201
+2026-08-06 11:52:06.759 +02:00 [INF] Executing endpoint 'HTTP: POST /Deployments'
+2026-08-06 11:52:06.759 +02:00 [INF] Handling CreateDeploymentCommand
+2026-08-06 11:52:06.759 +02:00 [INF] Property Deployment : {"Id":"d39670bc-2be7-41be-8679-f4d81a5e1ab0","Code":"DEP-5033FCC0","Name":"Testovací nasazení","Ticket":null,"Description":null,"DataModelIds":["447566cc-f108-4d15-b102-1b51531d923a"],"$type":"DeploymentDTO"}
+2026-08-06 11:52:06.761 +02:00 [INF] Handled CreateDeploymentCommand with Ardalis.Result.Result`1[System.Guid] in 1 ms
+2026-08-06 11:52:06.761 +02:00 [INF] Executed endpoint 'HTTP: POST /Deployments'
+2026-08-06 11:52:06.761 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/deployments - 201 null application/json; charset=utf-8 2.2258ms
+2026-08-06 11:52:06.761 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/deployments/DEP-5033FCC0/export - application/json; charset=utf-8 2
+2026-08-06 11:52:06.761 +02:00 [INF] Executing endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.761 +02:00 [INF] Handling ExportDeploymentQuery
+2026-08-06 11:52:06.761 +02:00 [INF] Property DeploymentCode : DEP-5033FCC0
+2026-08-06 11:52:06.765 +02:00 [INF] Handled ExportDeploymentQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Object]] in 3 ms
+2026-08-06 11:52:06.765 +02:00 [INF] Executed endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.765 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/deployments/DEP-5033FCC0/export - 200 490 application/zip 3.7262ms
+2026-08-06 11:52:06.767 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 281
+2026-08-06 11:52:06.767 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:52:06.768 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:52:06.768 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:52:06.768 +02:00 [INF] Property DataModel : {"Id":"fdf105bc-5e29-4811-81c6-1f0af95bc042","Code":"DEP-EXP-419D5374","Name":"Testovací DataModel pro export nasazení","Description":"DataModel vytvořený pro účely exportního testu.","Notes":"","IsAggregateRoot":false,"AreaId":null,"Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:52:06.769 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 1 ms
+2026-08-06 11:52:06.769 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:52:06.770 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 2.1653ms
+2026-08-06 11:52:06.771 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/deployments - application/json; charset=utf-8 201
+2026-08-06 11:52:06.771 +02:00 [INF] Executing endpoint 'HTTP: POST /Deployments'
+2026-08-06 11:52:06.771 +02:00 [INF] Handling CreateDeploymentCommand
+2026-08-06 11:52:06.771 +02:00 [INF] Property Deployment : {"Id":"5fe1d451-d0ee-412e-8016-c071a4f64555","Code":"DEP-BBE4A10E","Name":"Testovací nasazení","Ticket":null,"Description":null,"DataModelIds":["fdf105bc-5e29-4811-81c6-1f0af95bc042"],"$type":"DeploymentDTO"}
+2026-08-06 11:52:06.773 +02:00 [INF] Handled CreateDeploymentCommand with Ardalis.Result.Result`1[System.Guid] in 1 ms
+2026-08-06 11:52:06.773 +02:00 [INF] Executed endpoint 'HTTP: POST /Deployments'
+2026-08-06 11:52:06.773 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/deployments - 201 null application/json; charset=utf-8 1.9644ms
+2026-08-06 11:52:06.773 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/deployments/DEP-BBE4A10E/export - application/json; charset=utf-8 2
+2026-08-06 11:52:06.773 +02:00 [INF] Executing endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.773 +02:00 [INF] Handling ExportDeploymentQuery
+2026-08-06 11:52:06.773 +02:00 [INF] Property DeploymentCode : DEP-BBE4A10E
+2026-08-06 11:52:06.777 +02:00 [INF] Handled ExportDeploymentQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Object]] in 3 ms
+2026-08-06 11:52:06.777 +02:00 [INF] Executed endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.777 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/deployments/DEP-BBE4A10E/export - 200 489 application/zip 3.7479ms
+2026-08-06 11:52:06.780 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/datamodels - application/json; charset=utf-8 281
+2026-08-06 11:52:06.780 +02:00 [INF] Executing endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:52:06.780 +02:00 [INF] Handling CreateDataModelCommand
+2026-08-06 11:52:06.780 +02:00 [INF] Property Datasource : "Database"
+2026-08-06 11:52:06.780 +02:00 [INF] Property DataModel : {"Id":"e035463f-b738-43ba-961e-c88803fcda1d","Code":"DEP-EXP-CCE439B9","Name":"Testovací DataModel pro export nasazení","Description":"DataModel vytvořený pro účely exportního testu.","Notes":"","IsAggregateRoot":false,"AreaId":null,"Fields":[],"$type":"DataModelDTO"}
+2026-08-06 11:52:06.782 +02:00 [INF] Handled CreateDataModelCommand with Ardalis.Result.Result`1[System.Guid] in 1 ms
+2026-08-06 11:52:06.782 +02:00 [INF] Executed endpoint 'HTTP: POST /DataModels'
+2026-08-06 11:52:06.782 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/datamodels - 201 null application/json; charset=utf-8 2.3972ms
+2026-08-06 11:52:06.783 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/deployments - application/json; charset=utf-8 201
+2026-08-06 11:52:06.783 +02:00 [INF] Executing endpoint 'HTTP: POST /Deployments'
+2026-08-06 11:52:06.784 +02:00 [INF] Handling CreateDeploymentCommand
+2026-08-06 11:52:06.784 +02:00 [INF] Property Deployment : {"Id":"45c940d2-495f-4e01-af9b-43eec2668cc9","Code":"DEP-B8B01DB8","Name":"Testovací nasazení","Ticket":null,"Description":null,"DataModelIds":["e035463f-b738-43ba-961e-c88803fcda1d"],"$type":"DeploymentDTO"}
+2026-08-06 11:52:06.785 +02:00 [INF] Handled CreateDeploymentCommand with Ardalis.Result.Result`1[System.Guid] in 1 ms
+2026-08-06 11:52:06.786 +02:00 [INF] Executed endpoint 'HTTP: POST /Deployments'
+2026-08-06 11:52:06.786 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/deployments - 201 null application/json; charset=utf-8 2.1921ms
+2026-08-06 11:52:06.786 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/deployments/DEP-B8B01DB8/export - application/json; charset=utf-8 2
+2026-08-06 11:52:06.786 +02:00 [INF] Executing endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.786 +02:00 [INF] Handling ExportDeploymentQuery
+2026-08-06 11:52:06.786 +02:00 [INF] Property DeploymentCode : DEP-B8B01DB8
+2026-08-06 11:52:06.790 +02:00 [INF] Handled ExportDeploymentQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Object]] in 3 ms
+2026-08-06 11:52:06.790 +02:00 [INF] Executed endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.790 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/deployments/DEP-B8B01DB8/export - 200 490 application/zip 4.0132ms
+2026-08-06 11:52:06.792 +02:00 [INF] Request starting HTTP/1.1 POST http://0.0.0.0:5005/deployments/NEEXISTUJE-414a15ac-a456-4dce-9085-f251a24cb405/export - application/json; charset=utf-8 2
+2026-08-06 11:52:06.792 +02:00 [INF] Executing endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.792 +02:00 [INF] Handling ExportDeploymentQuery
+2026-08-06 11:52:06.792 +02:00 [INF] Property DeploymentCode : NEEXISTUJE-414a15ac-a456-4dce-9085-f251a24cb405
+2026-08-06 11:52:06.793 +02:00 [INF] Handled ExportDeploymentQuery with Ardalis.Result.Result`1[AVAIntegrationModeler.UseCases.Export.ExportResult`1[System.Object]] in 0 ms
+2026-08-06 11:52:06.793 +02:00 [INF] Executed endpoint 'HTTP: POST /Deployments/{DeploymentCode}/export'
+2026-08-06 11:52:06.793 +02:00 [INF] Request finished HTTP/1.1 POST http://0.0.0.0:5005/deployments/NEEXISTUJE-414a15ac-a456-4dce-9085-f251a24cb405/export - 404 null null 1.6437ms

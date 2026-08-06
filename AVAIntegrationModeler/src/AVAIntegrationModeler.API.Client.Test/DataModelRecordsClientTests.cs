@@ -24,7 +24,7 @@ public class DataModelRecordsClientTests : IClassFixture<AVAIntegrationModelerAP
     {
       BaseAddress = new Uri("http://0.0.0.0:5005")
     });
-    return new AVAIntegrationModelerApiClient(http, NullLogger<AVAIntegrationModelerApiClient>.Instance);
+    return new AVAIntegrationModelerApiClient(http, new TestHttpClientFactory(http), NullLogger<AVAIntegrationModelerApiClient>.Instance);
   }
 
   private async Task<Guid> CreateDataModelAsync(IAVAIntegrationModelerApiClient client, string? code = null)

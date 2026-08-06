@@ -92,6 +92,24 @@ public partial class DataModels : ComponentBase, IDisposable
     }
   }
 
+  private async Task DeleteAllDataModelsAsync(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+  {
+    var confirmed = await JS.InvokeAsync<bool>("confirm",
+      "Opravdu chcete smazat VŠECHNY datové modely z databáze? Smazány budou i všechny jejich záznamy (DataModelRecord). Tuto akci nelze vrátit zpět.");
+    if (!confirmed) return;
+
+    var result = await _apiClient.DeleteAllDataModels(CancellationToken.None);
+    if (result.IsSuccess)
+    {
+      await LoadItemsAsync();
+      await ShowNotification($"Smazáno {result.Value.DeletedModelsCount} modelů a {result.Value.DeletedRecordsCount} záznamů.");
+    }
+    else
+    {
+      await ShowNotification($"Chyba při mazání všech modelů: {string.Join(", ", result.Errors)}", false);
+    }
+  }
+
   private async Task ExportAsync()
   {
     if (Grid is null) return;

@@ -86,6 +86,13 @@ public interface IAVAIntegrationModelerApiClient
   Task<Result> DeleteDataModel(Datasource datasource, Guid dataModelId, CancellationToken cancellationToken);
   Task<byte[]> ExportDataModels(Datasource datasource, List<Guid> modelIds, CancellationToken cancellationToken);
 
+  /// <summary>
+  /// Smaže všechny datové modely z lokální databáze včetně jejich záznamů (DataModelRecord).
+  /// </summary>
+  /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+  /// <returns>Souhrn počtu smazaných modelů a záznamů.</returns>
+  Task<Result<DeleteAllDataModelsResponse>> DeleteAllDataModels(CancellationToken cancellationToken);
+
   Task<DataModelRecordListResponse> GetDataModelRecords(Datasource datasource, Guid? modelId, CancellationToken cancellationToken);
   Task<DataModelRecordDTO> GetDataModelRecord(Datasource datasource, Guid recordId, CancellationToken cancellationToken);
   Task<Result<Guid>> CreateDataModelRecord(Datasource datasource, DataModelRecordDTO record, CancellationToken cancellationToken);
@@ -101,6 +108,15 @@ public interface IAVAIntegrationModelerApiClient
   /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
   /// <returns>Identifikátor importovaného modelu v lokální databázi.</returns>
   Task<Result<Guid>> ImportDataModelFromAvaPlace(Guid avaPlaceModelId, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Importuje všechny datové modely z AVAPlace (Source == AVAPlace) do lokální databáze,
+  /// včetně jejich DataModelRecordů. Operace je idempotentní — lze ji bezpečně opakovaně spustit.
+  /// Pokračuje i při chybě jednotlivého modelu (continue-on-error), chyby jsou vráceny v odpovědi.
+  /// </summary>
+  /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+  /// <returns>Souhrn výsledků importu jednotlivých modelů.</returns>
+  Task<Result<ImportAllDataModelsFromAvaPlaceResponse>> ImportAllDataModelsFromAvaPlace(CancellationToken cancellationToken);
 
   /// <summary>
   /// Vrátí seznam oblastí ze zadaného datového zdroje.

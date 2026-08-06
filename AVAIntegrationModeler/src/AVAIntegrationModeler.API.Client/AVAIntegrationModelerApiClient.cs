@@ -19,18 +19,33 @@ namespace AVAIntegrationModeler.API.Client;
 public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
 {
   /// <summary>
+  /// Název pojmenovaného HttpClienta s delším timeoutem, používaného pro hromadný import
+  /// datových modelů z AVAPlace (viz <see cref="ImportAllDataModelsFromAvaPlace"/>).
+  /// </summary>
+  public const string BulkImportHttpClientName = "AVAIntegrationModelerApiClient.BulkImport";
+
+  /// <summary>
   /// Http client
   /// </summary>
   private readonly HttpClient _httpClient;
-  
+
+  /// <summary>
+  /// Továrna pro vytváření pojmenovaných HttpClientů (viz <see cref="BulkImportHttpClientName"/>).
+  /// </summary>
+  private readonly IHttpClientFactory _httpClientFactory;
+
   /// <summary>
   /// Logger
   /// </summary>
   private readonly ILogger<AVAIntegrationModelerApiClient> _logger;
 
-  public AVAIntegrationModelerApiClient(HttpClient httpClient, ILogger<AVAIntegrationModelerApiClient> logger)
+  public AVAIntegrationModelerApiClient(
+    HttpClient httpClient,
+    IHttpClientFactory httpClientFactory,
+    ILogger<AVAIntegrationModelerApiClient> logger)
   {
     _httpClient = httpClient ?? throw new ArgumentNullException(nameof(httpClient));
+    _httpClientFactory = httpClientFactory ?? throw new ArgumentNullException(nameof(httpClientFactory));
     _logger = logger ?? throw new ArgumentNullException(nameof(logger));
   }
 
@@ -430,6 +445,24 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
   }
 
   /// <inheritdoc/>
+  public async Task<Result<DeleteAllDataModelsResponse>> DeleteAllDataModels(CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(DeleteAllDataModels)} starting.");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .DeleteAsync("datamodels/all")
+      .WithCancellationToken(cancellationToken)
+      .AsResult<DeleteAllDataModelsResponse>();
+
+    if (result.IsSuccess)
+      _logger.LogInformation($"{nameof(DeleteAllDataModels)} completed. deletedModels={result.Value.DeletedModelsCount}, deletedRecords={result.Value.DeletedRecordsCount}");
+    else
+      _logger.LogWarning($"{nameof(DeleteAllDataModels)} failed. status={result.Status}");
+
+    return result;
+  }
+
+  /// <inheritdoc/>
   public async Task<DataModelRecordListResponse> GetDataModelRecords(Datasource datasource, Guid? modelId, CancellationToken cancellationToken)
   {
     _logger.LogDebug($"{nameof(GetDataModelRecords)} starting. datasource={datasource}, modelId={modelId}");
@@ -524,6 +557,28 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
       _logger.LogInformation($"{nameof(ImportDataModelFromAvaPlace)} completed. avaPlaceModelId={avaPlaceModelId}, localModelId={result.Value}");
     else
       _logger.LogWarning($"{nameof(ImportDataModelFromAvaPlace)} failed. avaPlaceModelId={avaPlaceModelId}, status={result.Status}");
+
+    return result;
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result<ImportAllDataModelsFromAvaPlaceResponse>> ImportAllDataModelsFromAvaPlace(CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(ImportAllDataModelsFromAvaPlace)} starting.");
+    // Vlastní HttpClient s delším timeoutem — import velkého počtu modelů z AVAPlace
+    // může trvat výrazně déle než běžný timeout ostatních volání API.
+    var bulkImportHttpClient = _httpClientFactory.CreateClient(BulkImportHttpClientName);
+    var fluent = new FluentClient(bulkImportHttpClient);
+    var result = await fluent
+      .PostAsync(ImportAllDataModelsFromAvaPlaceRequest.Route)
+      .WithBody(new { })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<ImportAllDataModelsFromAvaPlaceResponse>();
+
+    if (result.IsSuccess)
+      _logger.LogInformation($"{nameof(ImportAllDataModelsFromAvaPlace)} completed. success={result.Value.SuccessCount}, failed={result.Value.FailedCount}");
+    else
+      _logger.LogWarning($"{nameof(ImportAllDataModelsFromAvaPlace)} failed. status={result.Status}");
 
     return result;
   }

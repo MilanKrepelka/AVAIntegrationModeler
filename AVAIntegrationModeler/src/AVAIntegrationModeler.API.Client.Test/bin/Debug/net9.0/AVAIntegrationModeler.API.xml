@@ -221,6 +221,26 @@
             See: https://fast-endpoints.com/docs/validation
             </summary>
         </member>
+        <member name="T:AVAIntegrationModeler.API.DataModels.DeleteAll">
+            <summary>
+            Endpoint pro smazání všech datových modelů z lokální databáze včetně jejich záznamů.
+            </summary>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.DataModels.DeleteAll.#ctor(MediatR.IMediator)">
+            <summary>
+            Endpoint pro smazání všech datových modelů z lokální databáze včetně jejich záznamů.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.DataModels.ImportAllFromAVAPlace">
+            <summary>
+            Endpoint pro hromadný import všech datových modelů z AVAPlace do lokální databáze.
+            </summary>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.DataModels.ImportAllFromAVAPlace.#ctor(MediatR.IMediator)">
+            <summary>
+            Endpoint pro hromadný import všech datových modelů z AVAPlace do lokální databáze.
+            </summary>
+        </member>
         <member name="T:AVAIntegrationModeler.API.DataModels.List">
             <summary>
             List all DataModels
@@ -236,6 +256,106 @@
             <remarks>
             List all DataModels.
             </remarks>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Deployments.CreateDeploymentRequest">
+            <summary>
+            Požadavek na vytvoření nasazení.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Deployments.CreateDeploymentEndpoint">
+            <summary>
+            Vytvoří nové nasazení.
+            </summary>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Deployments.CreateDeploymentEndpoint.#ctor(MediatR.IMediator)">
+            <summary>
+            Vytvoří nové nasazení.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Deployments.DeleteDeploymentEndpoint">
+            <summary>
+            Smaže nasazení.
+            </summary>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Deployments.DeleteDeploymentEndpoint.#ctor(MediatR.IMediator)">
+            <summary>
+            Smaže nasazení.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Deployments.DeleteDeploymentRequest">
+            <summary>
+            Požadavek na smazání nasazení.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Deployments.ExportDeploymentEndpoint">
+            <summary>
+            Exportuje DataModely nasazení včetně jejich záznamů jako ZIP archív.
+            </summary>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Deployments.ExportDeploymentEndpoint.#ctor(MediatR.IMediator)">
+            <summary>
+            Exportuje DataModely nasazení včetně jejich záznamů jako ZIP archív.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Deployments.ExportDeploymentRequest">
+            <summary>
+            Požadavek na export nasazení — DataModely a záznamy jako ZIP archív.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Deployments.GetDeploymentByCodeEndpoint">
+            <summary>
+            Vrátí nasazení podle kódu.
+            </summary>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Deployments.GetDeploymentByCodeEndpoint.#ctor(MediatR.IMediator)">
+            <summary>
+            Vrátí nasazení podle kódu.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Deployments.GetDeploymentByCodeRequest">
+            <summary>
+            Požadavek na získání nasazení podle kódu.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Deployments.GetDeploymentByIdEndpoint">
+            <summary>
+            Vrátí nasazení podle identifikátoru.
+            </summary>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Deployments.GetDeploymentByIdEndpoint.#ctor(MediatR.IMediator)">
+            <summary>
+            Vrátí nasazení podle identifikátoru.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Deployments.GetDeploymentByIdRequest">
+            <summary>
+            Požadavek na získání nasazení podle identifikátoru.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Deployments.ListDeploymentsEndpoint">
+            <summary>
+            Vrátí seznam nasazení.
+            </summary>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Deployments.ListDeploymentsEndpoint.#ctor(MediatR.IMediator)">
+            <summary>
+            Vrátí seznam nasazení.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Deployments.UpdateDeploymentEndpoint">
+            <summary>
+            Aktualizuje existující nasazení.
+            </summary>
+        </member>
+        <member name="M:AVAIntegrationModeler.API.Deployments.UpdateDeploymentEndpoint.#ctor(MediatR.IMediator)">
+            <summary>
+            Aktualizuje existující nasazení.
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Deployments.UpdateDeploymentRequest">
+            <summary>
+            Požadavek na aktualizaci nasazení.
+            </summary>
         </member>
         <member name="T:AVAIntegrationModeler.API.Features.List">
             <summary>
@@ -429,6 +549,17 @@
         <member name="T:AVAIntegrationModeler.API.Scenarios.UpdateScenarioValidator">
             <summary>
             See: https://fast-endpoints.com/docs/validation
+            </summary>
+        </member>
+        <member name="T:AVAIntegrationModeler.API.Serialization.ExportJsonOptions">
+            <summary>
+            Sdílené možnosti JSON serializéru pro všechny export endpointy.
+            Zajišťuje konzistentní výstup: odsazený JSON a enumy jako textové názvy místo čísel.
+            </summary>
+        </member>
+        <member name="F:AVAIntegrationModeler.API.Serialization.ExportJsonOptions.Instance">
+            <summary>
+            Sdílená instance serializačních možností — používat ve všech exportních endpointech.
             </summary>
         </member>
     </members>

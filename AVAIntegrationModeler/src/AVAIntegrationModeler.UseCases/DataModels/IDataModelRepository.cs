@@ -9,4 +9,10 @@ public interface IDataModelRepository : IRepository<DataModel>
     IList<DataModelField> fieldsToDelete,
     IList<DataModelField> fieldsToAdd,
     CancellationToken ct = default);
+
+  /// <summary>
+  /// Smaže všechny datové modely včetně jejich polí a referencí na entity typy.
+  /// </summary>
+  /// <returns>Počet smazaných datových modelů.</returns>
+  Task<int> DeleteAllAsync(CancellationToken ct = default);
 }
