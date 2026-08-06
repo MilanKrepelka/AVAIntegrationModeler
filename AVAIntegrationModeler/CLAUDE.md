@@ -306,3 +306,31 @@ private static readonly JsonSerializerOptions _jsonOptions = new() { WriteIndent
 ```
 
 Soubor: `src/AVAIntegrationModeler.API/Serialization/ExportJsonOptions.cs`
+
+## Adresářová struktura a názvy souborů v ZIP exportech
+
+Exportní endpointy `DataModels/export`, `DataModelRecords/export` a `Deployments/{code}/export` ukládají obsah ZIP archívu podle jednotné konvence:
+
+| Obsah | Cesta v ZIP |
+|---|---|
+| Definice DataModelu | `datamodels/{Area.Code}/dm-{Model.Name}.json` |
+| Záznamy (DataModelRecord) daného DataModelu | `dataobjects/{Area.Code}/qd-{Model.Name}.json` |
+
+- `{Area.Code}` je kód oblasti, do které DataModel patří (`DataModelDTO.AreaId` → `AreaDTO.Code`). Pokud model nemá oblast přiřazenou, použije se adresář `bez-oblasti`.
+- Soubor se záznamy obsahuje **JSON pole všech záznamů** daného modelu (nikoli jeden soubor na záznam) — víc záznamů stejného modelu se seskupí do jednoho pole ve stejném souboru.
+- Soubor se záznamy vzniká **pouze pokud má model alespoň jeden záznam** — model bez záznamů žádný `dataobjects/...` soubor v ZIPu nemá.
+- **`DataModels/export`** a **`Deployments/{code}/export`** exportují pro každý model oba soubory (definici i záznamy, pokud existují) — export DataModelu tedy vždy zahrnuje i jeho DataModelRecordy.
+- **`DataModelRecords/export`** exportuje pouze soubory se záznamy (bez definice) — vybrané záznamy se seskupí podle modelu, ke kterému patří.
+
+### Implementační poznámka
+
+Handlery (`ExportDataModelsHandler`, `ExportDeploymentHandler`) vracejí `ExportResult<object>`, protože jeden ZIP obsahuje entries dvou různých typů dat (`DataModelDTO` pro definici, `List<DataModelRecordDTO>` pro záznamy). API endpoint podle runtime typu `entry.Data` rozhoduje, jak entry serializovat:
+
+```csharp
+var payload = entry.Data is DataModelDTO model
+  ? DataModelMapper.MapToDefinition(model)
+  : entry.Data;
+await JsonSerializer.SerializeAsync(entryStream, payload, ExportJsonOptions.Instance, ct);
+```
+
+Serializace přes `object payload` je záměrná — `JsonSerializer.SerializeAsync<object>` serializuje podle skutečného runtime typu hodnoty, ne podle deklarovaného typu `object`.

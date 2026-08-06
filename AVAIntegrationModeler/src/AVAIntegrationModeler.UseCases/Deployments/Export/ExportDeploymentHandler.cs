@@ -8,20 +8,21 @@ using AVAIntegrationModeler.UseCases.Export;
 namespace AVAIntegrationModeler.UseCases.Deployments.Export;
 
 /// <summary>
-/// Handler pro <see cref="ExportDeploymentQuery"/>. Exportuje DataModely nasazení včetně jejich záznamů,
-/// kde je každý DataModel uložen na cestě <c>datamodels/{Area.Code}/dm-{Model.Name}.json</c>.
+/// Handler pro <see cref="ExportDeploymentQuery"/>. Exportuje DataModely nasazení jako ZIP archív.
+/// Pro každý DataModel vznikne definiční soubor na cestě <c>datamodels/{Area.Code}/dm-{Model.Name}.json</c>
+/// a pokud má model záznamy, i soubor s jejich seznamem na cestě <c>dataobjects/{Area.Code}/qd-{Model.Name}.json</c>.
 /// </summary>
 public class ExportDeploymentHandler(
   IDeploymentsQueryService _deployments,
   IDataModelQueryService _models,
   IDataModelRecordQueryService _records,
   IAreasQueryService _areas)
-  : IQueryHandler<ExportDeploymentQuery, Result<ExportResult<DeploymentDataModelExportEntryDTO>>>
+  : IQueryHandler<ExportDeploymentQuery, Result<ExportResult<object>>>
 {
   private const string BezOblasti = "bez-oblasti";
   private static readonly char[] _invalidChars = Path.GetInvalidFileNameChars();
 
-  public async Task<Result<ExportResult<DeploymentDataModelExportEntryDTO>>> Handle(
+  public async Task<Result<ExportResult<object>>> Handle(
     ExportDeploymentQuery request, CancellationToken ct)
   {
     DeploymentDTO deployment;
@@ -31,7 +32,7 @@ public class ExportDeploymentHandler(
     }
     catch (NotFoundException)
     {
-      return Result<ExportResult<DeploymentDataModelExportEntryDTO>>.NotFound();
+      return Result<ExportResult<object>>.NotFound();
     }
 
     var allModels = await _models.ListAsync(Datasource.Database);
@@ -42,31 +43,37 @@ public class ExportDeploymentHandler(
     var areas = await _areas.ListAsync(Datasource.Database);
     var areaCodesById = areas.ToDictionary(a => a.Id, a => a.Code);
 
-    var entries = new List<ExportEntry<DeploymentDataModelExportEntryDTO>>(deploymentModels.Count);
+    var entries = new List<ExportEntry<object>>();
     foreach (var model in deploymentModels)
     {
-      var modelRecords = await _records.ListAsync(Datasource.Database, model.Id, cancellationToken: ct);
-      entries.Add(new ExportEntry<DeploymentDataModelExportEntryDTO>(
-        BuildFileName(model, areaCodesById),
-        new DeploymentDataModelExportEntryDTO(model, modelRecords)));
+      entries.Add(new ExportEntry<object>(BuildDefinitionFileName(model, areaCodesById), model));
+
+      var modelRecords = (await _records.ListAsync(Datasource.Database, model.Id, cancellationToken: ct)).ToList();
+      if (modelRecords.Count > 0)
+        entries.Add(new ExportEntry<object>(BuildRecordsFileName(model, areaCodesById), modelRecords));
     }
 
     var zipName = $"deployment-{SafeName(deployment.Code, deployment.Id)}-export.zip";
-    return Result.Success(new ExportResult<DeploymentDataModelExportEntryDTO>(zipName, entries));
+    return Result.Success(new ExportResult<object>(zipName, entries));
   }
 
   /// <summary>
-  /// Sestaví cestu k souboru v ZIP archívu ve formátu <c>datamodels/{Area.Code}/dm-{Model.Name}.json</c>.
+  /// Sestaví cestu k definičnímu souboru v ZIP archívu ve formátu <c>datamodels/{Area.Code}/dm-{Model.Name}.json</c>.
   /// Pokud DataModel nemá přiřazenou oblast, použije se adresář <c>bez-oblasti</c>.
   /// </summary>
-  private static string BuildFileName(DataModelDTO model, IReadOnlyDictionary<Guid, string> areaCodesById)
-  {
-    var areaCode = model.AreaId is Guid areaId && areaCodesById.TryGetValue(areaId, out var code)
-      ? code
-      : BezOblasti;
+  private static string BuildDefinitionFileName(DataModelDTO model, IReadOnlyDictionary<Guid, string> areaCodesById)
+    => $"datamodels/{SafeName(AreaCode(model, areaCodesById), Guid.Empty)}/dm-{SafeName(model.Name, model.Id)}.json";
 
-    return $"datamodels/{SafeName(areaCode, Guid.Empty)}/dm-{SafeName(model.Name, model.Id)}.json";
-  }
+  /// <summary>
+  /// Sestaví cestu k souboru se záznamy DataModelu v ZIP archívu ve formátu
+  /// <c>dataobjects/{Area.Code}/qd-{Model.Name}.json</c>.
+  /// Pokud DataModel nemá přiřazenou oblast, použije se adresář <c>bez-oblasti</c>.
+  /// </summary>
+  private static string BuildRecordsFileName(DataModelDTO model, IReadOnlyDictionary<Guid, string> areaCodesById)
+    => $"dataobjects/{SafeName(AreaCode(model, areaCodesById), Guid.Empty)}/qd-{SafeName(model.Name, model.Id)}.json";
+
+  private static string AreaCode(DataModelDTO model, IReadOnlyDictionary<Guid, string> areaCodesById)
+    => model.AreaId is Guid areaId && areaCodesById.TryGetValue(areaId, out var code) ? code : BezOblasti;
 
   private static string SafeName(string? raw, Guid fallback)
   {

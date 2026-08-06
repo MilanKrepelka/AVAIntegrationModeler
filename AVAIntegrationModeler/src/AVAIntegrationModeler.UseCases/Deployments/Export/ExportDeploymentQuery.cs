@@ -1,4 +1,3 @@
-using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.UseCases.Export;
 
 namespace AVAIntegrationModeler.UseCases.Deployments.Export;
@@ -7,4 +6,4 @@ namespace AVAIntegrationModeler.UseCases.Deployments.Export;
 /// Dotaz pro export DataModelů a jejich záznamů pro dané nasazení.
 /// </summary>
 public record ExportDeploymentQuery(string DeploymentCode)
-  : IQuery<Result<ExportResult<DeploymentDataModelExportEntryDTO>>>;
+  : IQuery<Result<ExportResult<object>>>;

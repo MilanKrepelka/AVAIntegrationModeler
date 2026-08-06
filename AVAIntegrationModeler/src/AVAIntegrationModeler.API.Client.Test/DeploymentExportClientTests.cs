@@ -105,10 +105,10 @@ public class DeploymentExportClientTests : IClassFixture<AVAIntegrationModelerAP
   }
 
   /// <summary>
-  /// JSON soubor v ZIP musí obsahovat klíče <c>Definition</c> a <c>Records</c>.
+  /// Bez záznamů musí ZIP entry obsahovat pouze definici modelu (klíč <c>Code</c>), nikoli záznamy.
   /// </summary>
   [Fact]
-  public async Task ExportDeployment_ZipEntry_ContainsDefinitionAndRecords()
+  public async Task ExportDeployment_ZipEntry_ContainsModelDefinition()
   {
     var client = CreateClient();
     var modelId = await CreateDataModelAsync(client);
@@ -121,18 +121,22 @@ public class DeploymentExportClientTests : IClassFixture<AVAIntegrationModelerAP
     var entry = zip.Entries[0];
     using var entryStream = entry.Open();
     var doc = await JsonDocument.ParseAsync(entryStream);
-    Assert.True(doc.RootElement.TryGetProperty("Definition", out _), "Chybí klíč 'Definition'.");
-    Assert.True(doc.RootElement.TryGetProperty("Records", out _), "Chybí klíč 'Records'.");
+    Assert.True(doc.RootElement.TryGetProperty("Code", out _), "Chybí klíč 'Code' definice modelu.");
   }
 
   /// <summary>
-  /// Záznamy přiřazené k DataModelu musí být zahrnuty v exportu.
+  /// Záznamy přiřazené k DataModelu musí být zahrnuty v exportu jako samostatný soubor
+  /// na cestě dataobjects/{Area.Code}/qd-{Model.Name}.json.
   /// </summary>
   [Fact]
-  public async Task ExportDeployment_WithDataModelAndRecord_RecordsAreIncluded()
+  public async Task ExportDeployment_WithDataModelAndRecord_RecordsAreIncludedAsSeparateEntry()
   {
     var client = CreateClient();
-    var modelId = await CreateDataModelAsync(client);
+    var modelName = $"Model-{Guid.NewGuid().ToString()[..8].ToUpper()}";
+    var dto = NewDataModel() with { Name = modelName };
+    var createResult = await client.CreateDataModel(Datasource.Database, dto, CancellationToken.None);
+    Assert.True(createResult.IsSuccess);
+    var modelId = createResult.Value;
 
     var record = new DataModelRecordDTO
     {
@@ -150,12 +154,14 @@ public class DeploymentExportClientTests : IClassFixture<AVAIntegrationModelerAP
 
     using var ms = new MemoryStream(bytes);
     using var zip = new ZipArchive(ms, ZipArchiveMode.Read);
-    var entry = zip.Entries[0];
-    using var entryStream = entry.Open();
+
+    Assert.Equal(2, zip.Entries.Count);
+    var recordsPath = $"dataobjects/bez-oblasti/qd-{modelName}.json";
+    var recordsEntry = Assert.Single(zip.Entries, e => e.FullName == recordsPath);
+    using var entryStream = recordsEntry.Open();
     var doc = await JsonDocument.ParseAsync(entryStream);
-    var records = doc.RootElement.GetProperty("Records");
-    Assert.Equal(JsonValueKind.Array, records.ValueKind);
-    Assert.True(records.GetArrayLength() >= 1, "Records pole neobsahuje žádné záznamy.");
+    Assert.Equal(JsonValueKind.Array, doc.RootElement.ValueKind);
+    Assert.True(doc.RootElement.GetArrayLength() >= 1, "Records pole neobsahuje žádné záznamy.");
   }
 
   /// <summary>
