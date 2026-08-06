@@ -72,7 +72,7 @@ Balíčky `ASOL.*` pocházejí z privátního Azure Artifacts feedu nakonfigurov
 - **Feature** — integrační feature složená z vložených sub-featur a datových modelů
 - **DataModel / DataModelField** — definice datového schématu
 - **IntegrationsMap / IntegrationMapItem** — mapování integračních scénářů na oblasti
-- **Area** — organizační seskupení
+- **Area** — organizační seskupení. Lze smazat (`DELETE /Areas/{Datasource}/{AreaCode}`) — `DataModel.AreaId` a `IntegrationsMap.AreaId` jsou nullable FK s `OnDelete(DeleteBehavior.SetNull)`, takže smazání oblasti odkazy vynuluje (nesmaže odkazující entity). `DeleteAreaHandler` po smazání invaliduje cache jak `IAreasQueryService`, tak `IDataModelQueryService` (jinak by DataModel cache držela zastaralé `AreaId`).
 
 ### Enum Datasource
 

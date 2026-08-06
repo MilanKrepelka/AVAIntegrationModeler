@@ -1,4 +1,5 @@
-﻿using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
+﻿using AVAIntegrationModeler.Domain.AreaAggregate;
+using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
 using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.Integration.Test.Data.SqlLite.Fixtures;
 using Microsoft.EntityFrameworkCore;
@@ -13,11 +14,24 @@ namespace AVAIntegrationModeler.Infrastructure.Test.Data;
 public class IntegrationMapTests : BaseDbTests
 {
   private readonly EfRepository<IntegrationsMap> _repository;
+  private readonly EfRepository<Area> _areaRepository;
 
   public IntegrationMapTests(ITestOutputHelper testOutputHelper, EfSqlClientTestFixture fixture)
     : base(testOutputHelper, fixture)
   {
     _repository = GetRepository<IntegrationsMap>();
+    _areaRepository = GetRepository<Area>();
+  }
+
+  /// <summary>
+  /// Vytvoří a uloží reálnou Area — AreaId u IntegrationsMap je FK, takže musí odkazovat
+  /// na existující záznam.
+  /// </summary>
+  private async Task<Guid> SeedAreaAsync()
+  {
+    var area = new Area(Guid.NewGuid(), $"AREA_{Guid.NewGuid():N}");
+    await _areaRepository.AddAsync(area, CancellationToken.None);
+    return area.Id;
   }
 
   #region Add Tests
@@ -26,7 +40,7 @@ public class IntegrationMapTests : BaseDbTests
   public async Task AddAsync_SimpleIntegrationMap_ShouldPersistCorrectly()
   {
     // Arrange
-    var areaId = Guid.NewGuid();
+    var areaId = await SeedAreaAsync();
     var mapId = Guid.NewGuid();
     var integrationMap = new IntegrationsMap(mapId, areaId);
 
@@ -48,7 +62,7 @@ public class IntegrationMapTests : BaseDbTests
   public async Task AddAsync_IntegrationMapWithItems_ShouldPersistCorrectly()
   {
     // Arrange
-    var areaId = Guid.NewGuid();
+    var areaId = await SeedAreaAsync();
     var mapId = Guid.NewGuid();
     var scenarioId1 = Guid.NewGuid();
     var scenarioId2 = Guid.NewGuid();
@@ -75,7 +89,7 @@ public class IntegrationMapTests : BaseDbTests
   public async Task AddAsync_IntegrationMapWithItemsAndKeys_ShouldPersistCorrectly()
   {
     // Arrange
-    var areaId = Guid.NewGuid();
+    var areaId = await SeedAreaAsync();
     var mapId = Guid.NewGuid();
     var scenarioId = Guid.NewGuid();
 
@@ -112,7 +126,7 @@ public class IntegrationMapTests : BaseDbTests
   public async Task UpdateAsync_AddNewItem_ShouldPersistChanges()
   {
     // Arrange
-    var areaId = Guid.NewGuid();
+    var areaId = await SeedAreaAsync();
     var mapId = Guid.NewGuid();
     var scenarioId1 = Guid.NewGuid();
 
@@ -145,7 +159,7 @@ public class IntegrationMapTests : BaseDbTests
   public async Task UpdateAsync_RemoveItem_ShouldPersistChanges()
   {
     // Arrange
-    var areaId = Guid.NewGuid();
+    var areaId = await SeedAreaAsync();
     var mapId = Guid.NewGuid();
     var scenarioId1 = Guid.NewGuid();
     var scenarioId2 = Guid.NewGuid();
@@ -180,7 +194,7 @@ public class IntegrationMapTests : BaseDbTests
   public async Task UpdateAsync_AddKeyToItem_ShouldPersistChanges()
   {
     // Arrange
-    var areaId = Guid.NewGuid();
+    var areaId = await SeedAreaAsync();
     var mapId = Guid.NewGuid();
     var scenarioId = Guid.NewGuid();
 

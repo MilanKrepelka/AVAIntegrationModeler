@@ -53,6 +53,7 @@ public abstract class BaseDbTests : TestBed<EfSqlClientTestFixture>
     DbContext.Scenarios.RemoveRange(DbContext.Scenarios);
     DbContext.Features.RemoveRange(DbContext.Features);
     DbContext.DataModels.RemoveRange(DbContext.DataModels);
+    DbContext.IntegrationMaps.RemoveRange(DbContext.IntegrationMaps);
     DbContext.Areas.RemoveRange(DbContext.Areas);
     DbContext.Contributors.RemoveRange(DbContext.Contributors);
     DbContext.Deployments.RemoveRange(DbContext.Deployments);
