@@ -64,4 +64,20 @@ public partial class Areas : ComponentBase
   {
     NavigationManager.NavigateTo("/areaedit");
   }
+
+  private async Task DeleteAreaAsync(AreaListViewModel area)
+  {
+    var confirmed = await JS.InvokeAsync<bool>("confirm", $"Opravdu smazat oblast '{area.Code}'?");
+    if (!confirmed) return;
+
+    var result = await ApiClient.DeleteArea(Datasource.Database, area.Code, CancellationToken.None);
+    await ShowNotification(
+      result.IsSuccess
+        ? $"Oblast '{area.Code}' byla smazána."
+        : $"Oblast se nepodařilo smazat: {string.Join(", ", result.Errors)}",
+      result.IsSuccess);
+
+    if (result.IsSuccess)
+      await LoadItemsAsync();
+  }
 }
