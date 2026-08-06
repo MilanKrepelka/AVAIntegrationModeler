@@ -18,6 +18,7 @@ public partial class DataModelRecords : ComponentBase
   [Parameter] public string? Ds { get; set; }
 
   private SfGrid<DataModelRecordListViewModel>? Grid;
+  private static readonly FilterSettings _containsFilter = new() { Operator = Syncfusion.Blazor.Operator.Contains };
 
   public bool IsLoading { get; set; } = true;
   public Datasource Datasource { get; set; } = Datasource.Database;

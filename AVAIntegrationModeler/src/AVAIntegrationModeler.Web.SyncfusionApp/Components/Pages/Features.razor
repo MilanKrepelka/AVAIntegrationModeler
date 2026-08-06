@@ -18,6 +18,7 @@
         AllowSorting="true"
         AllowResizing="true"
         AllowSelection="true"
+        AllowGrouping="true"
         Toolbar="@(new List<string>() { "Search"})">
 
         <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
@@ -28,11 +29,11 @@
         <GridEvents OnToolbarClick="ToolbarClick" TValue="FeatureListViewModel"></GridEvents>
         <GridColumns>
             <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
-            <GridColumn Field=@nameof(FeatureListViewModel.Code) HeaderText="K�d" Width="120"></GridColumn>
-            <GridColumn Field="Name.EnglishValue" HeaderText="N�zev" Width="200"></GridColumn>
-            <GridColumn Field="Description.EnglishValue" HeaderText="Popis" Width="250"></GridColumn>
-            <GridColumn Field=@nameof(FeatureListViewModel.IncludedFeaturesText) HeaderText="Zahrnut� Features" Width="200"></GridColumn>
-            <GridColumn Field=@nameof(FeatureListViewModel.IncludedModelsText) HeaderText="Zahrnut� Modely" Width="200"></GridColumn>
+            <GridColumn Field=@nameof(FeatureListViewModel.Code) HeaderText="K�d" Width="120" FilterSettings="@_containsFilter"></GridColumn>
+            <GridColumn Field="Name.EnglishValue" HeaderText="N�zev" Width="200" FilterSettings="@_containsFilter"></GridColumn>
+            <GridColumn Field="Description.EnglishValue" HeaderText="Popis" Width="250" FilterSettings="@_containsFilter"></GridColumn>
+            <GridColumn Field=@nameof(FeatureListViewModel.IncludedFeaturesText) HeaderText="Zahrnut� Features" Width="200" FilterSettings="@_containsFilter"></GridColumn>
+            <GridColumn Field=@nameof(FeatureListViewModel.IncludedModelsText) HeaderText="Zahrnut� Modely" Width="200" FilterSettings="@_containsFilter"></GridColumn>
             <GridColumn Field=@nameof(FeatureListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="250" Visible="false"></GridColumn>
         </GridColumns>
         
@@ -121,6 +122,7 @@
 @code
 {
     SfGrid<FeatureListViewModel>? Grid;
+    private static readonly FilterSettings _containsFilter = new() { Operator = Syncfusion.Blazor.Operator.Contains };
 
     public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {

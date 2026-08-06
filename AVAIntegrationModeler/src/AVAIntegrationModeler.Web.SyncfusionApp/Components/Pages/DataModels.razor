@@ -31,11 +31,13 @@
             AllowSorting="true"
             AllowResizing="true"
             AllowSelection="true"
+            AllowGrouping="true"
             Toolbar="@(new List<string>() { "Search" })">
 
         <Syncfusion.Blazor.Navigations.SfToolbar>
             <Syncfusion.Blazor.Navigations.ToolbarItems>
                 <Syncfusion.Blazor.Navigations.ToolbarItem Text="Přidat datový model" PrefixIcon="e-icons e-add" Id="AddNewDataModel" OnClick="AddNewDataModel"></Syncfusion.Blazor.Navigations.ToolbarItem>
+                <Syncfusion.Blazor.Navigations.ToolbarItem Text="Smazat všechny modely" PrefixIcon="e-icons e-delete" Id="DeleteAllDataModels" OnClick="DeleteAllDataModelsAsync"></Syncfusion.Blazor.Navigations.ToolbarItem>
             </Syncfusion.Blazor.Navigations.ToolbarItems>
         </Syncfusion.Blazor.Navigations.SfToolbar>
 
@@ -49,10 +51,10 @@
         <GridEvents OnToolbarClick="ToolbarClick" TValue="DataModelListViewModel"></GridEvents>
         <GridColumns>
             <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
-            <GridColumn Field=@nameof(DataModelListViewModel.AreaName) HeaderText="Oblast" Width="150"></GridColumn>
-            <GridColumn Field=@nameof(DataModelListViewModel.Code) HeaderText="Kód" Width="120"></GridColumn>
-            <GridColumn Field=@nameof(DataModelListViewModel.Name) HeaderText="Název" Width="200"></GridColumn>
-            <GridColumn Field=@nameof(DataModelListViewModel.Description) HeaderText="Popis" Width="250"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.AreaName) HeaderText="Oblast" Width="150" FilterSettings="@_containsFilter"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.Code) HeaderText="Kód" Width="120" FilterSettings="@_containsFilter"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.Name) HeaderText="Název" Width="200" FilterSettings="@_containsFilter"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.Description) HeaderText="Popis" Width="250" FilterSettings="@_containsFilter"></GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.IsAggregateRootText) HeaderText="Aggregate Root" Width="100">
                 <Template>
                     @{
@@ -68,7 +70,7 @@
                     }
                 </Template>
             </GridColumn>
-            <GridColumn Field=@nameof(DataModelListViewModel.FieldsText) HeaderText="Pole" Width="200"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.FieldsText) HeaderText="Pole" Width="200" FilterSettings="@_containsFilter"></GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="true">
                 <Template>
                     @{
@@ -269,6 +271,7 @@
     SfGrid<DataModelListViewModel>? Grid;
     string? _notification;
     bool _notificationSuccess = true;
+    private static readonly FilterSettings _containsFilter = new() { Operator = Syncfusion.Blazor.Operator.Contains };
 
     public void ToolbarClick(Syncfusion.Blazor.Navigations.ClickEventArgs args)
     {

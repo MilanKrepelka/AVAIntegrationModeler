@@ -62,6 +62,7 @@
                 AllowFiltering="true"
                 AllowSorting="true"
                 AllowResizing="true"
+                AllowGrouping="true"
                 Toolbar="@(new List<string>() { "Search" })">
 
             <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
@@ -71,9 +72,9 @@
 
             <GridColumns>
                 <GridColumn Type="Syncfusion.Blazor.Grids.ColumnType.CheckBox" Width="50"></GridColumn>
-                <GridColumn Field=@nameof(DataModelRecordListViewModel.ModelName) HeaderText="Model" Width="200"></GridColumn>
-                <GridColumn Field=@nameof(DataModelRecordListViewModel.ExternalId) HeaderText="External ID" Width="300"></GridColumn>
-                <GridColumn Field=@nameof(DataModelRecordListViewModel.FieldsSummary) HeaderText="Hodnoty polí" Width="400"></GridColumn>
+                <GridColumn Field=@nameof(DataModelRecordListViewModel.ModelName) HeaderText="Model" Width="200" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field=@nameof(DataModelRecordListViewModel.ExternalId) HeaderText="External ID" Width="300" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field=@nameof(DataModelRecordListViewModel.FieldsSummary) HeaderText="Hodnoty polí" Width="400" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn Field=@nameof(DataModelRecordListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="100" Visible="false"></GridColumn>
                 <GridColumn HeaderText="Akce" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Visible="@(Datasource == Datasource.Database)">
                     <Template>

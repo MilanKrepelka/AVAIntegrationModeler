@@ -20,7 +20,9 @@
             AllowFiltering="true"
             AllowSorting="true"
             AllowResizing="true"
-            AllowSelection="true">
+            AllowSelection="true"
+            AllowGrouping="true"
+            Toolbar="@(new List<string>() { "Search" })">
 
             <Syncfusion.Blazor.Navigations.SfToolbar>
                 <Syncfusion.Blazor.Navigations.ToolbarItems>
@@ -40,11 +42,11 @@
             </GridSelectionSettings>
             <GridColumns>
                 <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
-                <GridColumn Field=@nameof(ScenarioListViewModel.Code) HeaderText="Kód" Width="120"></GridColumn>
-                <GridColumn Field="Name.EnglishValue" HeaderText="Název" Width="200"></GridColumn>
-                <GridColumn Field="Description.EnglishValue" HeaderText="Popis" Width="250" Visible="false"></GridColumn>
-                <GridColumn Field="InputFeature.Code" HeaderText="Vstupní feature" Width="150"></GridColumn>
-                <GridColumn Field="OutputFeature.Code" HeaderText="Výstupní feature" Width="150"></GridColumn>
+                <GridColumn Field=@nameof(ScenarioListViewModel.Code) HeaderText="Kód" Width="120" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field="Name.EnglishValue" HeaderText="Název" Width="200" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field="Description.EnglishValue" HeaderText="Popis" Width="250" Visible="false" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field="InputFeature.Code" HeaderText="Vstupní feature" Width="150" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field="OutputFeature.Code" HeaderText="Výstupní feature" Width="150" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn Field=@nameof(ScenarioListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="true">
                     <Template>
                         @{
@@ -177,6 +179,7 @@
     SfGrid<ScenarioListViewModel>? Grid;
     string? _notification;
     bool _notificationSuccess = true;
+    private static readonly FilterSettings _containsFilter = new() { Operator = Syncfusion.Blazor.Operator.Contains };
 
     [Inject] private IJSRuntime JS { get; set; } = default!;
 
