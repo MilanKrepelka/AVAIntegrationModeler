@@ -26,18 +26,27 @@ public class DeploymentExportClientTests : IClassFixture<AVAIntegrationModelerAP
     {
       BaseAddress = new Uri("http://0.0.0.0:5005")
     });
-    return new AVAIntegrationModelerApiClient(http, NullLogger<AVAIntegrationModelerApiClient>.Instance);
+    return new AVAIntegrationModelerApiClient(http, new TestHttpClientFactory(http), NullLogger<AVAIntegrationModelerApiClient>.Instance);
   }
 
-  private static DataModelDTO NewDataModel(string? code = null) => new DataModelDTO
+  private static DataModelDTO NewDataModel(string? code = null, Guid? areaId = null) => new DataModelDTO
   {
     Id = Guid.NewGuid(),
     Code = code ?? $"DEP-EXP-{Guid.NewGuid().ToString()[..8].ToUpper()}",
     Name = "Testovací DataModel pro export nasazení",
     Description = "DataModel vytvořený pro účely exportního testu.",
     IsAggregateRoot = false,
+    AreaId = areaId,
     Fields = []
   };
+
+  private async Task<Guid> CreateAreaAsync(IAVAIntegrationModelerApiClient client, string code)
+  {
+    var area = new AreaDTO { Id = Guid.NewGuid(), Code = code, Name = "Testovací oblast" };
+    var result = await client.CreateArea(Datasource.Database, area, CancellationToken.None);
+    Assert.True(result.IsSuccess, $"Nepodařilo se vytvořit oblast: {string.Join(", ", result.Errors)}");
+    return area.Id;
+  }
 
   private static DeploymentDTO NewDeployment(string? code = null, List<Guid>? modelIds = null) => new DeploymentDTO
   {
@@ -47,9 +56,9 @@ public class DeploymentExportClientTests : IClassFixture<AVAIntegrationModelerAP
     DataModelIds = modelIds ?? []
   };
 
-  private async Task<Guid> CreateDataModelAsync(IAVAIntegrationModelerApiClient client, string? code = null)
+  private async Task<Guid> CreateDataModelAsync(IAVAIntegrationModelerApiClient client, string? code = null, Guid? areaId = null)
   {
-    var result = await client.CreateDataModel(Datasource.Database, NewDataModel(code), CancellationToken.None);
+    var result = await client.CreateDataModel(Datasource.Database, NewDataModel(code, areaId), CancellationToken.None);
     Assert.True(result.IsSuccess, $"Nepodařilo se vytvořit DataModel: {string.Join(", ", result.Errors)}");
     return result.Value;
   }
@@ -147,6 +156,50 @@ public class DeploymentExportClientTests : IClassFixture<AVAIntegrationModelerAP
     var records = doc.RootElement.GetProperty("Records");
     Assert.Equal(JsonValueKind.Array, records.ValueKind);
     Assert.True(records.GetArrayLength() >= 1, "Records pole neobsahuje žádné záznamy.");
+  }
+
+  /// <summary>
+  /// ZIP entry pro DataModel s oblastí musí být na cestě datamodels/{Area.Code}/dm-{Model.Name}.json.
+  /// </summary>
+  [Fact]
+  public async Task ExportDeployment_ModelWithArea_UsesAreaCodeAndModelNameInPath()
+  {
+    var client = CreateClient();
+    var areaCode = $"AR-{Guid.NewGuid().ToString()[..8].ToUpper()}";
+    var areaId = await CreateAreaAsync(client, areaCode);
+    var modelName = $"Model-{Guid.NewGuid().ToString()[..8].ToUpper()}";
+    var dto = NewDataModel() with { Name = modelName, AreaId = areaId };
+    var createResult = await client.CreateDataModel(Datasource.Database, dto, CancellationToken.None);
+    Assert.True(createResult.IsSuccess);
+    var code = await CreateDeploymentWithModelAsync(client, createResult.Value);
+
+    var bytes = await client.ExportDeployment(code, CancellationToken.None);
+
+    using var ms = new MemoryStream(bytes);
+    using var zip = new ZipArchive(ms, ZipArchiveMode.Read);
+    var expectedPath = $"datamodels/{areaCode}/dm-{modelName}.json";
+    Assert.Contains(zip.Entries, e => e.FullName == expectedPath);
+  }
+
+  /// <summary>
+  /// ZIP entry pro DataModel bez oblasti musí být pod adresářem "bez-oblasti".
+  /// </summary>
+  [Fact]
+  public async Task ExportDeployment_ModelWithoutArea_UsesFallbackDirectory()
+  {
+    var client = CreateClient();
+    var modelName = $"Model-{Guid.NewGuid().ToString()[..8].ToUpper()}";
+    var dto = NewDataModel() with { Name = modelName };
+    var createResult = await client.CreateDataModel(Datasource.Database, dto, CancellationToken.None);
+    Assert.True(createResult.IsSuccess);
+    var code = await CreateDeploymentWithModelAsync(client, createResult.Value);
+
+    var bytes = await client.ExportDeployment(code, CancellationToken.None);
+
+    using var ms = new MemoryStream(bytes);
+    using var zip = new ZipArchive(ms, ZipArchiveMode.Read);
+    var expectedPath = $"datamodels/bez-oblasti/dm-{modelName}.json";
+    Assert.Contains(zip.Entries, e => e.FullName == expectedPath);
   }
 
   /// <summary>
