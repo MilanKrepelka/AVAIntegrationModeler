@@ -25,10 +25,10 @@ public partial class DataModelFieldEditor : ComponentBase
   [Parameter] public List<DataModelSummaryDTO> AvailableModels { get; set; } = [];
 
   /// <summary>
-  /// Vyvolá se po přidání nového pole (ne po editaci existujícího) — typicky navázáno
-  /// na uložení rodičovského DataModelu, aby se nové pole hned persistovalo.
+  /// Vyvolá se po přidání nového pole nebo po smazání pole (ne po editaci existujícího) —
+  /// typicky navázáno na uložení rodičovského DataModelu, aby se změna hned persistovala.
   /// </summary>
-  [Parameter] public EventCallback OnFieldAdded { get; set; }
+  [Parameter] public EventCallback OnFieldsChanged { get; set; }
 
   private SfGrid<DataModelFieldEditModel>? FieldGrid;
   private List<DataModelFieldEditModel>? _previousFields;
@@ -105,6 +105,9 @@ public partial class DataModelFieldEditor : ComponentBase
     Fields.Remove(field);
     if (FieldGrid is not null)
       await FieldGrid.Refresh();
+
+    if (OnFieldsChanged.HasDelegate)
+      await OnFieldsChanged.InvokeAsync();
   }
 
   private async Task Confirm()
@@ -151,8 +154,8 @@ public partial class DataModelFieldEditor : ComponentBase
     if (FieldGrid is not null)
       await FieldGrid.Refresh();
 
-    if (wasNew && OnFieldAdded.HasDelegate)
-      await OnFieldAdded.InvokeAsync();
+    if (wasNew && OnFieldsChanged.HasDelegate)
+      await OnFieldsChanged.InvokeAsync();
   }
 
   private void Cancel()
