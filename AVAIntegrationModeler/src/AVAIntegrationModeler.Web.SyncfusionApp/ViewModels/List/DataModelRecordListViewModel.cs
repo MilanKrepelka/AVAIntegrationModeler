@@ -6,6 +6,7 @@ public class DataModelRecordListViewModel
 
   public Guid Id { get; set; }
   public Guid ModelId { get; set; }
+  public string ModelName { get; set; } = string.Empty;
   public string ExternalId { get; set; } = string.Empty;
   public List<DataModelRecordFieldListViewModel> Fields { get; set; } = new();
 

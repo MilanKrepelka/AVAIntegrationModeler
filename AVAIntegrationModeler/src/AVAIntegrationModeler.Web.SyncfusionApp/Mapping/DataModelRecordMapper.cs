@@ -5,12 +5,19 @@ namespace AVAIntegrationModeler.Web.SyncfusionApp.Mapping;
 
 public static class DataModelRecordMapper
 {
-  public static DataModelRecordListViewModel MapToViewModel(DataModelRecordDTO dto)
+  /// <summary>
+  /// Namapuje DTO záznamu na view model pro zobrazení v přehledu, včetně názvu DataModelu,
+  /// ke kterému záznam patří.
+  /// </summary>
+  public static DataModelRecordListViewModel MapToViewModel(DataModelRecordDTO dto, IEnumerable<DataModelDTO> dataModels)
   {
+    var model = dataModels.FirstOrDefault(m => m.Id == dto.ModelId);
+
     return new DataModelRecordListViewModel
     {
       Id = dto.Id,
       ModelId = dto.ModelId,
+      ModelName = model?.Name ?? string.Empty,
       ExternalId = dto.ExternalId,
       Fields = dto.Fields.Select(f => new DataModelRecordFieldListViewModel
       {

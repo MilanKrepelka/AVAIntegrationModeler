@@ -64,7 +64,7 @@ public partial class DataModelRecords : ComponentBase
 
     IsLoading = true;
     var response = await _apiClient.GetDataModelRecords(Datasource, SelectedModelId, CancellationToken.None);
-    RecordList = response.Records.Select(DataModelRecordMapper.MapToViewModel).ToList();
+    RecordList = response.Records.Select(r => DataModelRecordMapper.MapToViewModel(r, _dataModelList)).ToList();
     IsLoading = false;
   }
 
