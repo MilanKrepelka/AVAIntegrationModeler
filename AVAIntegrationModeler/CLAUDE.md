@@ -93,11 +93,33 @@ Endpointy sledují vzor FastEndpoints REPR. Každý endpoint je třída končíc
 Validace probíhá na dvou úrovních:
 1. **FastEndpoints validátory** na request typech (FluentValidation, v `API`)
 2. **Guard klauzule** (`Ardalis.GuardClauses`) uvnitř setterů doménových entit
-3. **Doménové validační služby** (`IDomainEntityValidationService`) pro pravidla přes více entit, registrované v `InfrastructureServiceExtensions`
+3. **Doménové validační služby** (`IDomainEntityValidationService<T>`) pro pravidla přes více entit, registrované v `InfrastructureServiceExtensions.AddDomainValidationServices`
 
 Výsledky proudí jako `Ardalis.Result<T>` — endpointy mapují `ResultStatus.Invalid` → 400, `ResultStatus.Conflict` → 409.
 
 `ResultError(string Code, string Message, string? Field)` je sealed record pro typované předávání chyb mezi vrstvami.
+
+#### Doménové validační služby (IDomainEntityValidationService<T>)
+
+Každý agregát s Create/Update commandy má vlastní implementaci `IDomainEntityValidationService<T>` v `src/AVAIntegrationModeler.Infrastructure/ValidationServices/`:
+
+| Agregát | Validátor | Pravidlo |
+|---|---|---|
+| `Area` | `AreaValidationService` | Unikátnost `Code` (Create i Update, mimo vlastní záznam) |
+| `DataModel` | `DataModelValidationService` | Unikátnost `Code` (Create i Update, mimo vlastní záznam) |
+| `Deployment` | `DeploymentValidationService` | Unikátnost `Code` (Create i Update, mimo vlastní záznam) |
+| `Scenario` | `ScenarioValidationService` | Unikátnost `Code` (Create i Update, mimo vlastní záznam) |
+| `Contributor` | `ContributorValidationService` | Žádné — pass-through (`Result.Success()`), Contributor nemá kód |
+| `DataModelRecord` | `DataModelRecordValidationService` | Žádné — pass-through, `ExternalId` dnes nemá vynucenou unikátnost |
+
+`Feature` a `IntegrationsMap` validátor nemají — v `UseCases` pro ně neexistuje Create/Update handler (jsou jen pro čtení).
+
+**Vzor implementace** (Area/DataModel/Deployment/Scenario): `ValidateForCreate` kontroluje unikátnost `Code` i `Id` (typicky přes `IRepository<T>` + existující `XByCodeSpec` specifikaci); `Validate` (pro Update) kontroluje unikátnost `Code` s vyloučením vlastního `Id` — díky tomu nelze přejmenováním vytvořit duplicitní kód. Handler po zavolání validátoru dělá:
+```csharp
+var validationResult = await xValidationService.Validate(datasource, entity, ct);
+if (!validationResult.IsSuccess)
+  return validationResult; // implicitní konverze Result → Result<T> zachová Status (Invalid/Conflict/...)
+```
 
 ### LocalizedValue
 

@@ -1,20 +1,19 @@
 using Ardalis.GuardClauses;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Domain;
 using AVAIntegrationModeler.Domain.DataModelAggregate;
-using AVAIntegrationModeler.Domain.DataModelAggregate.Specifications;
 
 namespace AVAIntegrationModeler.UseCases.DataModels.Create;
 
-public class CreateDataModelHandler(IRepository<DataModel> repository, IDataModelQueryService queryService)
+public class CreateDataModelHandler(
+  IRepository<DataModel> repository,
+  IDataModelQueryService queryService,
+  IDomainEntityValidationService<DataModel> dataModelValidationService)
   : ICommandHandler<CreateDataModelCommand, Result<Guid>>
 {
   public async Task<Result<Guid>> Handle(CreateDataModelCommand request, CancellationToken cancellationToken)
   {
     Guard.Against.Null(request.DataModel, nameof(request.DataModel));
-
-    var existing = await repository.FirstOrDefaultAsync(new DataModelByCodeSpec(request.DataModel.Code), cancellationToken);
-    if (existing is not null)
-      return Result<Guid>.Error($"DataModel s kódem '{request.DataModel.Code}' již existuje.");
 
     DataModel dataModel;
     try
@@ -37,6 +36,10 @@ public class CreateDataModelHandler(IRepository<DataModel> repository, IDataMode
     {
       return Result<Guid>.Invalid(new ValidationError(ex.ParamName ?? "DataModel", ex.Message));
     }
+
+    var validationResult = await dataModelValidationService.ValidateForCreate(request.Datasource, dataModel, cancellationToken);
+    if (!validationResult.IsSuccess)
+      return validationResult;
 
     var created = await repository.AddAsync(dataModel, cancellationToken);
     if (created is null) return Result<Guid>.Error("Nepodařilo se vytvořit datový model.");

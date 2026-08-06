@@ -1,5 +1,6 @@
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Domain;
 using AVAIntegrationModeler.Domain.DataModelRecordAggregate;
 using AVAIntegrationModeler.Domain.DataModelRecordAggregate.Specifications;
 
@@ -7,7 +8,8 @@ namespace AVAIntegrationModeler.UseCases.DataModelRecords.Update;
 
 public class UpdateDataModelRecordHandler(
   IDataModelRecordRepository repository,
-  IDataModelRecordQueryService queryService)
+  IDataModelRecordQueryService queryService,
+  IDomainEntityValidationService<DataModelRecord> recordValidationService)
   : ICommandHandler<UpdateDataModelRecordCommand, Result<Guid>>
 {
   public async Task<Result<Guid>> Handle(UpdateDataModelRecordCommand request, CancellationToken cancellationToken)
@@ -30,6 +32,10 @@ public class UpdateDataModelRecordHandler(
     {
       return Result<Guid>.Invalid(new ValidationError(ex.ParamName ?? "Record", ex.Message));
     }
+
+    var validationResult = await recordValidationService.Validate(request.Datasource, existing, cancellationToken);
+    if (!validationResult.IsSuccess)
+      return validationResult;
 
     var fieldsToDelete = existing.Fields.ToList();
     foreach (var key in fieldsToDelete.Select(f => f.Key))

@@ -1,8 +1,12 @@
-﻿using AVAIntegrationModeler.Domain.ContributorAggregate;
+﻿using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Domain;
+using AVAIntegrationModeler.Domain.ContributorAggregate;
 
 namespace AVAIntegrationModeler.UseCases.Contributors.Create;
 
-public class CreateContributorHandler(IRepository<Contributor> _repository)
+public class CreateContributorHandler(
+  IRepository<Contributor> _repository,
+  IDomainEntityValidationService<Contributor> _contributorValidationService)
   : ICommandHandler<CreateContributorCommand, Result<int>>
 {
   public async Task<Result<int>> Handle(CreateContributorCommand request,
@@ -13,6 +17,11 @@ public class CreateContributorHandler(IRepository<Contributor> _repository)
     {
       newContributor.SetPhoneNumber(request.PhoneNumber);
     }
+
+    var validationResult = await _contributorValidationService.ValidateForCreate(Datasource.Database, newContributor, cancellationToken);
+    if (!validationResult.IsSuccess)
+      return validationResult;
+
     var createdItem = await _repository.AddAsync(newContributor, cancellationToken);
 
     return createdItem.Id;

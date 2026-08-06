@@ -1,5 +1,6 @@
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Domain;
 using AVAIntegrationModeler.Domain.DeploymentAggregate;
 using AVAIntegrationModeler.Domain.DeploymentAggregate.Specifications;
 using AVAIntegrationModeler.UseCases.Deployments.Mapping;
@@ -11,7 +12,8 @@ namespace AVAIntegrationModeler.UseCases.Deployments.Update;
 /// </summary>
 public class UpdateDeploymentHandler(
   IDeploymentRepository repository,
-  IDeploymentsQueryService queryService
+  IDeploymentsQueryService queryService,
+  IDomainEntityValidationService<Deployment> deploymentValidationService
 ) : ICommandHandler<UpdateDeploymentCommand, Result<DeploymentDTO>>
 {
   public async Task<Result<DeploymentDTO>> Handle(UpdateDeploymentCommand request, CancellationToken cancellationToken)
@@ -36,6 +38,10 @@ public class UpdateDeploymentHandler(
         ErrorMessage = ex.Message
       });
     }
+
+    var validationResult = await deploymentValidationService.Validate(Datasource.Database, existing, cancellationToken);
+    if (!validationResult.IsSuccess)
+      return validationResult;
 
     var requestedIds = (request.Deployment.DataModelIds ?? []).ToHashSet();
     var existingIds = existing.DataModels.Select(dm => dm.DataModelId).ToHashSet();

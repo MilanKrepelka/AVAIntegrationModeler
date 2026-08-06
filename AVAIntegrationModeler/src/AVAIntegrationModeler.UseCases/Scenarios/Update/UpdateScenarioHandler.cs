@@ -1,5 +1,6 @@
 ﻿using Ardalis.GuardClauses;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Domain;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using AVAIntegrationModeler.UseCases.Scenarios.Update;
 
@@ -7,7 +8,8 @@ namespace AVAIntegrationModeler.UseCases.Scenarios.Update;
 
 public class UpdateScenarioHandler(
   IRepository<Scenario> _repository,
-  IScenariosQueryService _scenariosQueryService
+  IScenariosQueryService _scenariosQueryService,
+  IDomainEntityValidationService<Scenario> _scenarioValidationService
   )
   : ICommandHandler<UpdateScenarioCommand, Result<ScenarioDTO>>
 {
@@ -29,6 +31,10 @@ public class UpdateScenarioHandler(
 
     existingScenario.SetInputFeature(request?.Scenario.InputFeatureId);
     existingScenario.SetOutputFeature(request?.Scenario.OutputFeatureId);
+
+    var validationResult = await _scenarioValidationService.Validate(request!.datasource, existingScenario, cancellationToken);
+    if (!validationResult.IsSuccess)
+      return validationResult;
 
     await _repository.UpdateAsync(existingScenario, cancellationToken);
     _scenariosQueryService.InvalidateCache(request!.datasource);

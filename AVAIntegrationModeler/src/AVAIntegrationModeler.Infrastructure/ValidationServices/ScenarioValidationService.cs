@@ -21,8 +21,31 @@ public class ScenarioValidationService : IDomainEntityValidationService<Scenario
   }
 
   /// <inheritdoc/>
-  public Task<Result> Validate(Datasource datasource, Scenario domainEntity, CancellationToken ct)
-    => Task.FromResult(Result.Success());
+  public async Task<Result> Validate(Datasource datasource, Scenario domainEntity, CancellationToken ct)
+  {
+    var code = domainEntity.Code?.Trim() ?? string.Empty;
+    if (string.IsNullOrEmpty(code))
+      return Result.Success();
+
+    if (!await _listScenariosQueryService.ExistsByCodeAsync(datasource, code, ct))
+      return Result.Success();
+
+    try
+    {
+      var existing = await _listScenariosQueryService.GetScenario(datasource, code, ct);
+      if (existing.Id != domainEntity.Id)
+      {
+        return Result.Invalid(new ValidationError(nameof(Scenario.Code),
+          $"Kód scénáře '{code}' musí být unikátní v datasource {datasource}."));
+      }
+    }
+    catch (NotFoundException)
+    {
+      // Mezitím byl scénář se stejným kódem smazán — kolize již neplatí.
+    }
+
+    return Result.Success();
+  }
 
   /// <inheritdoc/>
   public async Task<Result> ValidateForCreate(Datasource datasource, Scenario domainEntity, CancellationToken ct)

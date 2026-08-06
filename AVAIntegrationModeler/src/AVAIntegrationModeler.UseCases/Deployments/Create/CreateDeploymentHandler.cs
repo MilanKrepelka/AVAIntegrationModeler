@@ -1,4 +1,5 @@
 using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Domain;
 using AVAIntegrationModeler.Domain.DeploymentAggregate;
 
 namespace AVAIntegrationModeler.UseCases.Deployments.Create;
@@ -8,7 +9,8 @@ namespace AVAIntegrationModeler.UseCases.Deployments.Create;
 /// </summary>
 public class CreateDeploymentHandler(
   IDeploymentRepository repository,
-  IDeploymentsQueryService queryService
+  IDeploymentsQueryService queryService,
+  IDomainEntityValidationService<Deployment> deploymentValidationService
 ) : ICommandHandler<CreateDeploymentCommand, Result<Guid>>
 {
   public async Task<Result<Guid>> Handle(CreateDeploymentCommand request, CancellationToken cancellationToken)
@@ -34,9 +36,9 @@ public class CreateDeploymentHandler(
       });
     }
 
-    var exists = await queryService.ExistsByCodeAsync(deployment.Code, cancellationToken);
-    if (exists)
-      return Result<Guid>.Conflict($"Nasazení s kódem '{deployment.Code}' již existuje.");
+    var validationResult = await deploymentValidationService.ValidateForCreate(Datasource.Database, deployment, cancellationToken);
+    if (!validationResult.IsSuccess)
+      return validationResult;
 
     Deployment? created;
     try
