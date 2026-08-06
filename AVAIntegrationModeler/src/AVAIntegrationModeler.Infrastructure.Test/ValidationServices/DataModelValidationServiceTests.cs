@@ -71,6 +71,18 @@ public class DataModelValidationServiceTests : IAsyncLifetime, IAsyncDisposable
   }
 
   [Fact]
+  public async Task ValidateForCreate_DuplicateCodeDifferentCase_ReturnsConflict()
+  {
+    await SeedModelAsync("CUSTOMER");
+    var duplicate = new DataModel(Guid.NewGuid(), "customer").SetName("Customer lowercase");
+
+    var result = await _sut.ValidateForCreate(Datasource.Database, duplicate, CancellationToken.None);
+
+    result.IsSuccess.ShouldBeFalse();
+    result.Status.ShouldBe(Ardalis.Result.ResultStatus.Conflict);
+  }
+
+  [Fact]
   public async Task ValidateForCreate_DuplicateId_ReturnsInvalid()
   {
     var existing = await SeedModelAsync("CUSTOMER");
@@ -108,5 +120,16 @@ public class DataModelValidationServiceTests : IAsyncLifetime, IAsyncDisposable
 
     result.IsSuccess.ShouldBeFalse();
     result.Status.ShouldBe(Ardalis.Result.ResultStatus.Conflict);
+  }
+
+  [Fact]
+  public async Task Validate_KeepingOwnCodeWithDifferentCase_ReturnsSuccess()
+  {
+    var existing = await SeedModelAsync("CUSTOMER");
+    existing.SetCode("customer");
+
+    var result = await _sut.Validate(Datasource.Database, existing, CancellationToken.None);
+
+    result.IsSuccess.ShouldBeTrue();
   }
 }

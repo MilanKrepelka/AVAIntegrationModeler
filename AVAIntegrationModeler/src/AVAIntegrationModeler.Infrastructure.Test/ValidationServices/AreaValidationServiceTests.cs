@@ -70,6 +70,18 @@ public class AreaValidationServiceTests : IAsyncLifetime, IAsyncDisposable
   }
 
   [Fact]
+  public async Task ValidateForCreate_DuplicateCodeDifferentCase_ReturnsConflict()
+  {
+    await SeedAreaAsync("SALES");
+    var duplicate = new Area(Guid.NewGuid(), "sales").SetName("Sales lowercase");
+
+    var result = await _sut.ValidateForCreate(Datasource.Database, duplicate, CancellationToken.None);
+
+    result.IsSuccess.ShouldBeFalse();
+    result.Status.ShouldBe(Ardalis.Result.ResultStatus.Conflict);
+  }
+
+  [Fact]
   public async Task ValidateForCreate_DuplicateId_ReturnsInvalid()
   {
     var existing = await SeedAreaAsync("SALES");
@@ -117,5 +129,29 @@ public class AreaValidationServiceTests : IAsyncLifetime, IAsyncDisposable
 
     result.IsSuccess.ShouldBeFalse();
     result.Status.ShouldBe(Ardalis.Result.ResultStatus.Conflict);
+  }
+
+  [Fact]
+  public async Task Validate_RenameToCodeUsedByAnotherArea_DifferentCase_ReturnsConflict()
+  {
+    await SeedAreaAsync("FINANCE");
+    var toRename = await SeedAreaAsync("SALES");
+    toRename.SetCode("finance");
+
+    var result = await _sut.Validate(Datasource.Database, toRename, CancellationToken.None);
+
+    result.IsSuccess.ShouldBeFalse();
+    result.Status.ShouldBe(Ardalis.Result.ResultStatus.Conflict);
+  }
+
+  [Fact]
+  public async Task Validate_KeepingOwnCodeWithDifferentCase_ReturnsSuccess()
+  {
+    var existing = await SeedAreaAsync("SALES");
+    existing.SetCode("sales");
+
+    var result = await _sut.Validate(Datasource.Database, existing, CancellationToken.None);
+
+    result.IsSuccess.ShouldBeTrue();
   }
 }

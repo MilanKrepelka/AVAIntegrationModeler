@@ -71,6 +71,18 @@ public class DeploymentValidationServiceTests : IAsyncLifetime, IAsyncDisposable
   }
 
   [Fact]
+  public async Task ValidateForCreate_DuplicateCodeDifferentCase_ReturnsConflict()
+  {
+    await SeedDeploymentAsync("DEP-1");
+    var duplicate = new Deployment(Guid.NewGuid(), "dep-1").SetName("Deployment 1 lowercase");
+
+    var result = await _sut.ValidateForCreate(Datasource.Database, duplicate, CancellationToken.None);
+
+    result.IsSuccess.ShouldBeFalse();
+    result.Status.ShouldBe(Ardalis.Result.ResultStatus.Conflict);
+  }
+
+  [Fact]
   public async Task ValidateForCreate_DuplicateId_ReturnsInvalid()
   {
     var existing = await SeedDeploymentAsync("DEP-1");
@@ -108,5 +120,16 @@ public class DeploymentValidationServiceTests : IAsyncLifetime, IAsyncDisposable
 
     result.IsSuccess.ShouldBeFalse();
     result.Status.ShouldBe(Ardalis.Result.ResultStatus.Conflict);
+  }
+
+  [Fact]
+  public async Task Validate_KeepingOwnCodeWithDifferentCase_ReturnsSuccess()
+  {
+    var existing = await SeedDeploymentAsync("DEP-1");
+    existing.SetCode("dep-1");
+
+    var result = await _sut.Validate(Datasource.Database, existing, CancellationToken.None);
+
+    result.IsSuccess.ShouldBeTrue();
   }
 }
