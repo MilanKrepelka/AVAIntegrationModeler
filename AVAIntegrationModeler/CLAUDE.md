@@ -343,6 +343,7 @@ Exportní endpointy `DataModels/export`, `DataModelRecords/export` a `Deployment
 - Soubor se záznamy vzniká **pouze pokud má model alespoň jeden záznam** — model bez záznamů žádný `dataobjects/...` soubor v ZIPu nemá.
 - **`DataModels/export`** a **`Deployments/{code}/export`** exportují pro každý model oba soubory (definici i záznamy, pokud existují) — export DataModelu tedy vždy zahrnuje i jeho DataModelRecordy.
 - **`DataModelRecords/export`** exportuje pouze soubory se záznamy (bez definice) — vybrané záznamy se seskupí podle modelu, ke kterému patří.
+- **`Fields` definičního DataModelu jsou v exportu vždy seřazena abecedně (case-insensitive) dle `Name`** — řazení zajišťuje přímo `ExportDataModelsHandler`/`ExportDeploymentHandler` (nezávisle na pořadí vráceném dotazovací službou), `DataModelMapper.MapToDefinition` pak stejné řazení zachovává i při mapování na ASOL kontrakt.
 
 ### Implementační poznámka
 

@@ -35,11 +35,12 @@ public class ExportDataModelsHandler(
     var entries = new List<ExportEntry<object>>();
     foreach (var model in models)
     {
-      entries.Add(new ExportEntry<object>(BuildDefinitionFileName(model, areaCodesById), model));
+      var sortedModel = model with { Fields = SortFieldsByName(model.Fields) };
+      entries.Add(new ExportEntry<object>(BuildDefinitionFileName(sortedModel, areaCodesById), sortedModel));
 
       var modelRecords = (await _records.ListAsync(Datasource.Database, model.Id, cancellationToken: ct)).ToList();
       if (modelRecords.Count > 0)
-        entries.Add(new ExportEntry<object>(BuildRecordsFileName(model, areaCodesById), modelRecords));
+        entries.Add(new ExportEntry<object>(BuildRecordsFileName(sortedModel, areaCodesById), modelRecords));
     }
 
     return Result.Success(new ExportResult<object>("datamodels-export.zip", entries));
@@ -62,6 +63,12 @@ public class ExportDataModelsHandler(
 
   private static string AreaCode(DataModelDTO model, IReadOnlyDictionary<Guid, string> areaCodesById)
     => model.AreaId is Guid areaId && areaCodesById.TryGetValue(areaId, out var code) ? code : BezOblasti;
+
+  /// <summary>
+  /// Vrátí pole datového modelu seřazená abecedně (case-insensitive) dle Name.
+  /// </summary>
+  private static List<DataModelFieldDTO> SortFieldsByName(List<DataModelFieldDTO> fields)
+    => fields.OrderBy(f => f.Name, StringComparer.OrdinalIgnoreCase).ToList();
 
   private static string SafeName(string? raw, Guid fallback)
   {

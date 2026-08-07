@@ -9,11 +9,13 @@ using Microsoft.Extensions.Logging.Abstractions;
 namespace AVAIntegrationModeler.API.Client.Test;
 
 /// <summary>
-/// Golden-file test exportu DataModelu "Organization" — vytvoří DataModel se sadou polí
-/// (včetně počítaného pole s Expression) a ověří, že definiční JSON v exportním ZIPu
-/// strukturálně odpovídá referenčnímu souboru <c>TestData/OrganizationExport.expected.json</c>.
-/// Pole "Id" je v referenčním souboru nahrazeno neutrální hodnotou, protože skutečné Id
-/// DataModelu je při každém běhu testu jiné (Guid.NewGuid()).
+/// Golden-file test exportu DataModelu "Organization" — vytvoří DataModel se stejnou sadou
+/// polí, jakou má reálný model "Organization" v <c>DataModelsFromAVA.json</c>
+/// (Addresses, BankAccounts, Code, Contacts, CountryCode, DateOfFoundation, DateOfTermination,
+/// IdentificationNumber, LegalForm, Name, TaxId, VatIn), a ověří, že definiční JSON v exportním
+/// ZIPu strukturálně odpovídá referenčnímu souboru <c>TestData/OrganizationExport.expected.json</c>.
+/// Pole "Id" a "Code" jsou v referenčním souboru nahrazena neutrální hodnotou, protože se
+/// při každém běhu testu liší (Guid.NewGuid()).
 /// </summary>
 public class OrganizationExportGoldenFileTests : IClassFixture<AVAIntegrationModelerAPIFactory>
 {
@@ -40,65 +42,84 @@ public class OrganizationExportGoldenFileTests : IClassFixture<AVAIntegrationMod
     Id = id,
     Code = code,
     Name = "Organization",
-    Description = "Organizace v rámci systému.",
+    Description = "public information about organization, its addresses, contacts and bank accounts",
     IsAggregateRoot = true,
     AreaId = null,
     Fields = new List<DataModelFieldDTO>
     {
       new DataModelFieldDTO
       {
-        Name = "Code",
-        Label = "Kód",
-        Description = "Unikátní kód organizace.",
-        FieldType = DataModelFieldType.Text,
-        IsNullable = false,
+        Name = "Addresses", Label = "Addresses", Description = "company addresses",
+        FieldType = DataModelFieldType.NestedEntity, IsCollection = true, IsNullable = true,
+        ReferencedEntityTypeIds = new List<Guid> { Guid.Parse("4b3e7a23-f83e-432c-8b03-2b8054169106") }
+      },
+      new DataModelFieldDTO
+      {
+        Name = "BankAccounts", Label = "BankAccounts", Description = "company bank accounts",
+        FieldType = DataModelFieldType.NestedEntity, IsCollection = true, IsNullable = true,
+        ReferencedEntityTypeIds = new List<Guid> { Guid.Parse("d77c9e98-c027-4c08-836d-132589babfbe") }
+      },
+      new DataModelFieldDTO
+      {
+        Name = "Code", Label = "Code",
+        Description = "company identifier combined from IdentificationNumber and CountryCode",
+        FieldType = DataModelFieldType.Text, IsPublishedForLookup = true, IsNullable = false,
         ReferencedEntityTypeIds = new List<Guid>()
       },
       new DataModelFieldDTO
       {
-        Name = "FullDisplayName",
-        Label = "Celý název pro zobrazení",
-        Description = "Počítané pole složené z kódu a názvu.",
-        FieldType = DataModelFieldType.Text,
-        IsNullable = true,
-        ReferencedEntityTypeIds = new List<Guid>(),
-        Expression = new DataModelFieldExpressionDTO { Value = "Code + ' - ' + Name", Order = 1 }
+        Name = "Contacts", Label = "Contacts", Description = "company contacts",
+        FieldType = DataModelFieldType.NestedEntity, IsCollection = true, IsNullable = true,
+        ReferencedEntityTypeIds = new List<Guid> { Guid.Parse("ef0acd96-3e88-4fc6-a331-4f0f2c571395") }
       },
       new DataModelFieldDTO
       {
-        Name = "IsActive",
-        Label = "Aktivní",
-        Description = "Příznak, zda je organizace aktivní.",
-        FieldType = DataModelFieldType.TwoOptions,
-        IsNullable = false,
+        Name = "CountryCode", Label = "CountryCode",
+        Description = "country code which issued national identification number (ISO 3166-1 alpha-2 format)",
+        FieldType = DataModelFieldType.Text, IsPublishedForLookup = true, IsNullable = false,
         ReferencedEntityTypeIds = new List<Guid>()
       },
       new DataModelFieldDTO
       {
-        Name = "Name",
-        Label = "Název",
-        Description = "Název organizace.",
-        FieldType = DataModelFieldType.Text,
-        IsLocalized = true,
-        IsNullable = false,
+        Name = "DateOfFoundation", Label = "DateOfFoundation", Description = "date of foundation",
+        FieldType = DataModelFieldType.Date, IsNullable = true,
         ReferencedEntityTypeIds = new List<Guid>()
       },
       new DataModelFieldDTO
       {
-        Name = "ParentOrganizationId",
-        Label = "Nadřazená organizace",
-        Description = "Odkaz na nadřazenou organizaci.",
-        FieldType = DataModelFieldType.LookupEntity,
-        IsNullable = true,
-        ReferencedEntityTypeIds = new List<Guid> { Guid.Parse("11111111-1111-1111-1111-111111111111") }
+        Name = "DateOfTermination", Label = "DateOfTermination", Description = "date of termination",
+        FieldType = DataModelFieldType.Date, IsNullable = true,
+        ReferencedEntityTypeIds = new List<Guid>()
       },
       new DataModelFieldDTO
       {
-        Name = "TaxId",
-        Label = "IČO",
-        Description = "Identifikační číslo organizace.",
-        FieldType = DataModelFieldType.Text,
-        IsNullable = true,
+        Name = "IdentificationNumber", Label = "IdentificationNumber",
+        Description = "national identification number of company issued by national authority (notes: IC in CZ)",
+        FieldType = DataModelFieldType.Text, IsPublishedForLookup = true, IsNullable = false,
+        ReferencedEntityTypeIds = new List<Guid>()
+      },
+      new DataModelFieldDTO
+      {
+        Name = "LegalForm", Label = "LegalForm", Description = "legal form of company",
+        FieldType = DataModelFieldType.LookupEntity, IsNullable = true,
+        ReferencedEntityTypeIds = new List<Guid> { Guid.Parse("6a763172-3b82-4074-8ee6-0bfa86f15e50") }
+      },
+      new DataModelFieldDTO
+      {
+        Name = "Name", Label = "Name", Description = "company name",
+        FieldType = DataModelFieldType.Text, IsPublishedForLookup = true, IsNullable = true,
+        ReferencedEntityTypeIds = new List<Guid>()
+      },
+      new DataModelFieldDTO
+      {
+        Name = "TaxId", Label = "TaxId", Description = "tax identifier (notes: DIC in CZ)",
+        FieldType = DataModelFieldType.Text, IsNullable = true,
+        ReferencedEntityTypeIds = new List<Guid>()
+      },
+      new DataModelFieldDTO
+      {
+        Name = "VatIn", Label = "VatIn", Description = "vat identification number (notes: IC DPH in SK)",
+        FieldType = DataModelFieldType.Text, IsNullable = true,
         ReferencedEntityTypeIds = new List<Guid>()
       }
     }
