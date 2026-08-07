@@ -67,6 +67,8 @@ public class UpdateDataModelHandler(
         if (fieldDto.FieldType is DataModelFieldType.LookupEntity or DataModelFieldType.NestedEntity)
           foreach (var refId in fieldDto.ReferencedEntityTypeIds)
             field.AddReferencedEntityType(refId);
+        if (fieldDto.Expression is not null)
+          field.SetExpression(fieldDto.Expression.Value, fieldDto.Expression.Order);
         existing.AddField(field);
         fieldsToAdd.Add(field);
       }

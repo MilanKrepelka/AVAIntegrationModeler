@@ -1,0 +1,89 @@
+{
+  "Id": "00000000-0000-0000-0000-000000000000",
+  "Code": "ORG-PLACEHOLDER",
+  "Name": "Organization",
+  "Description": "Organizace v rámci systému.",
+  "Notes": "",
+  "IsAggregateRoot": true,
+  "Fields": [
+    {
+      "Name": "Code",
+      "Label": "Kód",
+      "Description": "Unikátní kód organizace.",
+      "IsPublishedForLookup": false,
+      "IsCollection": false,
+      "IsLocalized": false,
+      "IsNullable": false,
+      "FieldType": "Text",
+      "ReferencedEntityTypeIds": [],
+      "Expression": null
+    },
+    {
+      "Name": "FullDisplayName",
+      "Label": "Celý název pro zobrazení",
+      "Description": "Počítané pole složené z kódu a názvu.",
+      "IsPublishedForLookup": false,
+      "IsCollection": false,
+      "IsLocalized": false,
+      "IsNullable": true,
+      "FieldType": "Text",
+      "ReferencedEntityTypeIds": [],
+      "Expression": {
+        "Value": "Code + ' - ' + Name",
+        "Order": 1
+      }
+    },
+    {
+      "Name": "IsActive",
+      "Label": "Aktivní",
+      "Description": "Příznak, zda je organizace aktivní.",
+      "IsPublishedForLookup": false,
+      "IsCollection": false,
+      "IsLocalized": false,
+      "IsNullable": false,
+      "FieldType": "TwoOptions",
+      "ReferencedEntityTypeIds": [],
+      "Expression": null
+    },
+    {
+      "Name": "Name",
+      "Label": "Název",
+      "Description": "Název organizace.",
+      "IsPublishedForLookup": false,
+      "IsCollection": false,
+      "IsLocalized": true,
+      "IsNullable": false,
+      "FieldType": "Text",
+      "ReferencedEntityTypeIds": [],
+      "Expression": null
+    },
+    {
+      "Name": "ParentOrganizationId",
+      "Label": "Nadřazená organizace",
+      "Description": "Odkaz na nadřazenou organizaci.",
+      "IsPublishedForLookup": false,
+      "IsCollection": false,
+      "IsLocalized": false,
+      "IsNullable": true,
+      "FieldType": "LookupEntity",
+      "ReferencedEntityTypeIds": [
+        "11111111-1111-1111-1111-111111111111"
+      ],
+      "Expression": null
+    },
+    {
+      "Name": "TaxId",
+      "Label": "IČO",
+      "Description": "Identifikační číslo organizace.",
+      "IsPublishedForLookup": false,
+      "IsCollection": false,
+      "IsLocalized": false,
+      "IsNullable": true,
+      "FieldType": "Text",
+      "ReferencedEntityTypeIds": [],
+      "Expression": null
+    }
+  ],
+  "UtcCreatedOn": "0001-01-01T00:00:00",
+  "UtcModifiedOn": "0001-01-01T00:00:00"
+}
