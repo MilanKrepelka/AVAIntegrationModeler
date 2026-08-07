@@ -30,7 +30,12 @@ public class DataModelFieldConfiguration : IEntityTypeConfiguration<DataModelFie
     builder.Property(e => e.FieldType)
       .IsRequired()
       .HasConversion<int>();
-    
+
+    builder.Property(e => e.ExpressionValue)
+      .HasMaxLength(4000);
+
+    builder.Property(e => e.ExpressionOrder);
+
     // 🔥 KLÍČOVÁ OPRAVA: Správná konfigurace pro EntityTypeReferences
     builder.HasMany<DataModelFieldEntityTypeReference>(e => e.EntityTypeReferences)
       .WithOne()

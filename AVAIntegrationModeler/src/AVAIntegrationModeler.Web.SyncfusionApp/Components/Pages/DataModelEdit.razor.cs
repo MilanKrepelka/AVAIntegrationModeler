@@ -106,7 +106,9 @@ public partial class DataModelEdit : ComponentBase, IDisposable
           IsCollection = f.IsCollection,
           IsLocalized = f.IsLocalized,
           IsNullable = f.IsNullable,
-          ReferencedEntityTypeIds = [.. f.ReferencedEntityTypeIds]
+          ReferencedEntityTypeIds = [.. f.ReferencedEntityTypeIds],
+          ExpressionValue = f.Expression?.Value ?? string.Empty,
+          ExpressionOrder = f.Expression?.Order
         }).ToList();
       }
       catch (OperationCanceledException) { }
@@ -155,7 +157,10 @@ public partial class DataModelEdit : ComponentBase, IDisposable
         IsCollection = f.IsCollection,
         IsLocalized = f.IsLocalized,
         IsNullable = f.IsNullable,
-        ReferencedEntityTypeIds = [.. f.ReferencedEntityTypeIds]
+        ReferencedEntityTypeIds = [.. f.ReferencedEntityTypeIds],
+        Expression = !string.IsNullOrWhiteSpace(f.ExpressionValue)
+          ? new DataModelFieldExpressionDTO { Value = f.ExpressionValue, Order = f.ExpressionOrder ?? 0 }
+          : null
       }).ToList()
     };
 

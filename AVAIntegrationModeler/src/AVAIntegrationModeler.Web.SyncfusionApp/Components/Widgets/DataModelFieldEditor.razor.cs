@@ -17,6 +17,8 @@ public class DataModelFieldEditModel
   public bool IsLocalized { get; set; }
   public bool IsNullable { get; set; }
   public List<Guid> ReferencedEntityTypeIds { get; set; } = [];
+  public string ExpressionValue { get; set; } = string.Empty;
+  public int? ExpressionOrder { get; set; }
 }
 
 public partial class DataModelFieldEditor : ComponentBase
@@ -93,7 +95,9 @@ public partial class DataModelFieldEditor : ComponentBase
       IsCollection = field.IsCollection,
       IsLocalized = field.IsLocalized,
       IsNullable = field.IsNullable,
-      ReferencedEntityTypeIds = [.. field.ReferencedEntityTypeIds]
+      ReferencedEntityTypeIds = [.. field.ReferencedEntityTypeIds],
+      ExpressionValue = field.ExpressionValue,
+      ExpressionOrder = field.ExpressionOrder
     };
     _isNew = false;
     _nameError = string.Empty;
@@ -143,6 +147,8 @@ public partial class DataModelFieldEditor : ComponentBase
         existing.IsLocalized = _editingField.IsLocalized;
         existing.IsNullable = _editingField.IsNullable;
         existing.ReferencedEntityTypeIds = _editingField.ReferencedEntityTypeIds;
+        existing.ExpressionValue = _editingField.ExpressionValue;
+        existing.ExpressionOrder = _editingField.ExpressionOrder;
       }
     }
 

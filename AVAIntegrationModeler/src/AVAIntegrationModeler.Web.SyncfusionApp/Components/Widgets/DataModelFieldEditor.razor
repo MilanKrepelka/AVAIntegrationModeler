@@ -86,6 +86,14 @@
                     <div class="col-12 col-md-6">
                         <SfCheckBox @bind-Checked="_editingField.IsPublishedForLookup" Label="Publikováno pro lookup" />
                     </div>
+                    <div class="col-12 col-md-8">
+                        <SfTextBox Placeholder="Výraz (počítané pole)" FloatLabelType="FloatLabelType.Always"
+                                   @bind-Value="_editingField.ExpressionValue" CssClass="w-100" />
+                    </div>
+                    <div class="col-12 col-md-4">
+                        <SfNumericTextBox TValue="int?" Placeholder="Pořadí výrazu" FloatLabelType="FloatLabelType.Always"
+                                          @bind-Value="_editingField.ExpressionOrder" CssClass="w-100" />
+                    </div>
                     @if (NeedsReferences && AvailableModels.Count > 0)
                     {
                         <div class="col-12">

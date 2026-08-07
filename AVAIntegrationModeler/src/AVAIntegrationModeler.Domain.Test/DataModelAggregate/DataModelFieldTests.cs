@@ -79,6 +79,45 @@ public class DataModelFieldTests
   }
 
   [Fact]
+  public void SetExpression_ShouldSetValueAndOrder()
+  {
+    // Arrange
+    var field = new DataModelField(Guid.NewGuid(), "Field", DataModelFieldType.Text);
+
+    // Act
+    field.SetExpression("A + B", 2);
+
+    // Assert
+    field.ExpressionValue.ShouldBe("A + B");
+    field.ExpressionOrder.ShouldBe(2);
+  }
+
+  [Fact]
+  public void SetExpression_WithEmptyValue_ShouldThrowException()
+  {
+    // Arrange
+    var field = new DataModelField(Guid.NewGuid(), "Field", DataModelFieldType.Text);
+
+    // Act & Assert
+    Should.Throw<ArgumentException>(() => field.SetExpression(string.Empty, 1));
+  }
+
+  [Fact]
+  public void ClearExpression_ShouldResetValueAndOrderToNull()
+  {
+    // Arrange
+    var field = new DataModelField(Guid.NewGuid(), "Field", DataModelFieldType.Text)
+      .SetExpression("A + B", 1);
+
+    // Act
+    field.ClearExpression();
+
+    // Assert
+    field.ExpressionValue.ShouldBeNull();
+    field.ExpressionOrder.ShouldBeNull();
+  }
+
+  [Fact]
   public void FluentAPI_ShouldChainMethodCalls()
   {
     // Arrange

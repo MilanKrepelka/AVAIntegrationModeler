@@ -1,4 +1,4 @@
-using ASOL.Core.Localization;
+﻿using ASOL.Core.Localization;
 
 namespace AVAIntegrationModeler.AVAPlace.Models;
 
