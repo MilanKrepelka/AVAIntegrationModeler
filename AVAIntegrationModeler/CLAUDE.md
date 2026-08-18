@@ -145,6 +145,14 @@ Query specifikace dědí z `Specification<T>` (`Ardalis.Specification`), např. 
 
 `IIntegrationDataProvider` (v `Contracts/AVAPlace/`) je primární kontrakt pro načítání dat z externí ASOL DataService. Implementován třídou `IntegrationDataProvider` v projektu `AVAPlace`. `CustomDataServiceClient` zajišťuje samotná HTTP volání. Multi-tenant kontext proudí přes `IntegrationDataProvider`.
 
+### Sjednocení identifikátorů s AVAPlace
+
+**Každá entita importovaná z AVAPlace musí mít v lokální databázi stejné `Id`, jaké má v AVAPlace.** Nikdy negenerovat `Guid.NewGuid()` pro Id importované entity — vždy použít Id z příchozího DTO.
+
+Výjimka: AVAPlace občas posílá `Guid.Empty`. V takovém případě `Guid.NewGuid()` je přijatelné (Guard clause `Guard.Against.Default` by jinak vyhodila výjimku). Stejně tak `Guid.Empty` v kolekcích referencí (např. `ReferencedEntityTypeIds`) je nutné filtrovat (`.Where(id => id != Guid.Empty)`).
+
+Pokud byl záznam dříve importován s chybným Id, import service provede rekonciliaci: smaže starý záznam a vytvoří nový se správným Id z AVAPlace.
+
 ### Testovací projekty
 
 Testy jsou rozloženy mezi kolocované projekty (v `src/`) a separátní projekty (v `tests/`):

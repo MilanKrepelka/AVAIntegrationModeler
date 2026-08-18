@@ -250,8 +250,12 @@
 
 @if (_notification != null)
 {
-    <div style="position:fixed;top:1.2rem;right:1.2rem;z-index:9999;@(_notificationSuccess?"background:#198754":"background:#dc3545");color:#fff;padding:.5rem 1.1rem;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.18);font-size:.875rem;">
-        @(_notificationSuccess ? "✓" : "✗") @_notification
+    <div style="position:fixed;top:1.2rem;right:1.2rem;z-index:9999;max-width:480px;@(_notificationSuccess?"background:#198754":"background:#dc3545");color:#fff;padding:.5rem 1.1rem;border-radius:4px;box-shadow:0 2px 8px rgba(0,0,0,.18);font-size:.875rem;display:flex;align-items:flex-start;gap:.6rem;">
+        <span>@(_notificationSuccess ? "✓" : "✗") @_notification</span>
+        @if (!_notificationSuccess)
+        {
+            <button @onclick="DismissNotification" style="background:none;border:none;color:#fff;cursor:pointer;font-size:1rem;line-height:1;padding:0;margin-left:auto;flex-shrink:0;" title="Zavřít">✕</button>
+        }
     </div>
 }
 
@@ -272,9 +276,17 @@
         _notificationSuccess = success;
         _notification = message;
         await InvokeAsync(StateHasChanged);
-        await Task.Delay(3000);
+        if (success)
+        {
+            await Task.Delay(3000);
+            _notification = null;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void DismissNotification()
+    {
         _notification = null;
-        await InvokeAsync(StateHasChanged);
     }
 
     private async Task CopyToClipboard(string text)

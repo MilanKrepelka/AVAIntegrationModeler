@@ -22,18 +22,22 @@ public class DataModelImportService(
 {
   public async Task<Result<Guid>> ImportModelAsync(DataModelDTO dto, CancellationToken ct = default)
   {
-    var existing = await dataModelRepository.FirstOrDefaultAsync(
-      new DataModelByCodeSpec(dto.Code), ct);
+    try
+    {
+      var existing = await dataModelRepository.FirstOrDefaultAsync(
+        new DataModelByCodeSpec(dto.Code), ct);
 
-    var localModelId = existing is null
-      ? await CreatePathAsync(dto, ct)
-      : await UpdatePathAsync(existing, dto, ct);
+      var localModelId = existing is null
+        ? await CreatePathAsync(dto, ct)
+        : await UpdatePathAsync(existing, dto, ct);
 
-    if (localModelId == Guid.Empty)
-      return Result<Guid>.Error($"Import datového modelu '{dto.Code}' selhal.");
-
-    await ImportRecordsAsync(dto.Id, localModelId, ct);
-    return Result<Guid>.Success(localModelId);
+      await ImportRecordsAsync(dto.Id, localModelId, ct);
+      return Result<Guid>.Success(localModelId);
+    }
+    catch (Exception ex) when (ex is not OperationCanceledException)
+    {
+      return Result<Guid>.Error($"Import datového modelu '{dto.Code}' selhal: {ex.GetBaseException().Message}");
+    }
   }
 
   private async Task<Guid> CreatePathAsync(DataModelDTO dto, CancellationToken ct)
@@ -41,7 +45,7 @@ public class DataModelImportService(
     DataModel dataModel;
     try
     {
-      dataModel = new DataModel(Guid.NewGuid(), dto.Code);
+      dataModel = new DataModel(dto.Id, dto.Code);
       dataModel
         .SetName(dto.Name)
         .SetDescription(dto.Description)
@@ -50,16 +54,17 @@ public class DataModelImportService(
       else                    dataModel.MarkAsNestedEntity();
       if (dto.AreaId.HasValue) dataModel.SetArea(dto.AreaId.Value);
     }
-    catch (ArgumentException)
+    catch (ArgumentException ex)
     {
-      return Guid.Empty;
+      throw new InvalidOperationException($"Neplatná vlastnost DataModelu: {ex.Message}", ex);
     }
 
     var created = await dataModelRepository.AddAsync(dataModel, ct);
-    if (created is null) return Guid.Empty;
+    if (created is null) throw new InvalidOperationException("AddAsync vrátil null.");
 
     var (fieldsToAdd, fieldError) = BuildDataModelFields(created, dto.Fields);
-    if (fieldError is not null) return Guid.Empty;
+    if (fieldError is not null)
+      throw new InvalidOperationException($"Chyba při stavbě polí: {fieldError}");
 
     if (fieldsToAdd.Count > 0)
       await dataModelRepository.SyncFieldsAndSaveAsync(created, new List<DataModelField>(), fieldsToAdd, ct);
@@ -69,6 +74,14 @@ public class DataModelImportService(
 
   private async Task<Guid> UpdatePathAsync(DataModel existing, DataModelDTO dto, CancellationToken ct)
   {
+    // Pokud se lokální Id liší od AVAPlace Id (záznam importovaný před opravou),
+    // smažeme starý model a vytvoříme nový se správným Id.
+    if (existing.Id != dto.Id)
+    {
+      await dataModelRepository.DeleteAsync(existing, ct);
+      return await CreatePathAsync(dto, ct);
+    }
+
     try
     {
       existing
@@ -80,9 +93,9 @@ public class DataModelImportService(
       else                    existing.MarkAsNestedEntity();
       if (dto.AreaId.HasValue) existing.SetArea(dto.AreaId.Value);
     }
-    catch (ArgumentException)
+    catch (ArgumentException ex)
     {
-      return Guid.Empty;
+      throw new InvalidOperationException($"Neplatná vlastnost DataModelu: {ex.Message}", ex);
     }
 
     var fieldsToDelete = existing.Fields.ToList();
@@ -90,7 +103,8 @@ public class DataModelImportService(
       existing.RemoveField(name);
 
     var (fieldsToAdd, fieldError) = BuildDataModelFields(existing, dto.Fields);
-    if (fieldError is not null) return Guid.Empty;
+    if (fieldError is not null)
+      throw new InvalidOperationException($"Chyba při stavbě polí: {fieldError}");
 
     await dataModelRepository.SyncFieldsAndSaveAsync(existing, fieldsToDelete, fieldsToAdd, ct);
     return existing.Id;
@@ -110,9 +124,12 @@ public class DataModelImportService(
         .FirstOrDefault(r => !string.IsNullOrEmpty(avaRecord.ExternalId)
                           && r.ExternalId == avaRecord.ExternalId);
 
-      if (localRecord is null)
+      if (localRecord is null || localRecord.Id != avaRecord.Id)
       {
-        var newRecord = new DataModelRecord(Guid.NewGuid(), localModelId);
+        if (localRecord is not null)
+          await recordRepository.DeleteAsync(localRecord, ct);
+
+        var newRecord = new DataModelRecord(avaRecord.Id, localModelId);
         newRecord.SetExternalId(avaRecord.ExternalId);
         var created = await recordRepository.AddAsync(newRecord, ct);
         if (created is not null)
@@ -141,7 +158,8 @@ public class DataModelImportService(
     {
       try
       {
-        var field = new DataModelField(Guid.NewGuid(), fieldDto.Name, fieldDto.FieldType);
+        var fieldId = fieldDto.Id != Guid.Empty ? fieldDto.Id : Guid.NewGuid();
+        var field = new DataModelField(fieldId, fieldDto.Name, fieldDto.FieldType);
         if (!string.IsNullOrEmpty(fieldDto.Label)) field.SetLabel(fieldDto.Label);
         field.SetDescription(fieldDto.Description);
         if (fieldDto.IsPublishedForLookup) field.MarkAsPublishedForLookup();
@@ -149,7 +167,7 @@ public class DataModelImportService(
         if (fieldDto.IsLocalized)          field.MarkAsLocalized();
         if (fieldDto.IsNullable)           field.MarkAsNullable();
         if (fieldDto.FieldType is DataModelFieldType.LookupEntity or DataModelFieldType.NestedEntity)
-          foreach (var refId in fieldDto.ReferencedEntityTypeIds)
+          foreach (var refId in fieldDto.ReferencedEntityTypeIds.Where(id => id != Guid.Empty))
             field.AddReferencedEntityType(refId);
         if (fieldDto.Expression is not null)
           field.SetExpression(fieldDto.Expression.Value, fieldDto.Expression.Order);

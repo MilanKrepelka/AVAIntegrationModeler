@@ -100,7 +100,7 @@ public class DataModelImportServiceTests
     // Arrange
     var (dataModelRepo, recordRepo, provider) = BuildMocks();
     var dto = BuildModelDTO("EXISTUJICI-KOD");
-    var existing = new DataModel(Guid.NewGuid(), "EXISTUJICI-KOD");
+    var existing = new DataModel(dto.Id, "EXISTUJICI-KOD"); // stejné Id jako dto → update path
 
     dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult<DataModel?>(existing));
@@ -148,6 +148,7 @@ public class DataModelImportServiceTests
     result.IsSuccess.ShouldBeTrue();
     capturedModel.ShouldNotBeNull();
     result.Value.ShouldBe(capturedModel!.Id);
+    capturedModel.Id.ShouldBe(dto.Id, "nový DataModel musí mít Id z AVAPlace, ne náhodné Guid");
   }
 
   [Fact]
@@ -209,6 +210,59 @@ public class DataModelImportServiceTests
       Arg.Any<CancellationToken>());
   }
 
+  [Fact]
+  public async Task ImportModelAsync_UspesneImportuje_KdyzReferencedEntityTypeIdJeGuidEmpty()
+  {
+    // AVAPlace občas vrací Guid.Empty v ReferencedEntityTypeIds pro entity, které ještě nemají ID.
+    // Import nesmí selhat — prázdné reference se přeskočí.
+    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var dto = BuildModelDTO();
+    dto.Fields.Add(new DataModelFieldDTO
+    {
+      Id = Guid.NewGuid(),
+      Name = "LookupField",
+      FieldType = DataModelFieldType.LookupEntity,
+      ReferencedEntityTypeIds = new List<Guid> { Guid.Empty, Guid.NewGuid() } // Guid.Empty musí být přeskočen
+    });
+
+    dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<DataModel?>(null));
+
+    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+
+    // Act
+    var result = await service.ImportModelAsync(dto, CancellationToken.None);
+
+    // Assert — import musí uspět i s Guid.Empty referencí
+    result.IsSuccess.ShouldBeTrue();
+  }
+
+  [Fact]
+  public async Task ImportModelAsync_UspesneImportuje_KdyzVsechnyReferencedEntityTypeIdJsouGuidEmpty()
+  {
+    // Pokud jsou VŠECHNY reference Guid.Empty, pole se importuje bez referencí (ne selháním).
+    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var dto = BuildModelDTO();
+    dto.Fields.Add(new DataModelFieldDTO
+    {
+      Id = Guid.NewGuid(),
+      Name = "NestedField",
+      FieldType = DataModelFieldType.NestedEntity,
+      ReferencedEntityTypeIds = new List<Guid> { Guid.Empty }
+    });
+
+    dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<DataModel?>(null));
+
+    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+
+    // Act
+    var result = await service.ImportModelAsync(dto, CancellationToken.None);
+
+    // Assert
+    result.IsSuccess.ShouldBeTrue();
+  }
+
   #endregion
 
   #region ImportModelAsync — záznamy datového modelu
@@ -265,7 +319,7 @@ public class DataModelImportServiceTests
     // Assert
     result.IsSuccess.ShouldBeTrue();
     await recordRepo.Received(1).AddAsync(
-      Arg.Is<DataModelRecord>(r => r.ExternalId == "EXT-NOVY"),
+      Arg.Is<DataModelRecord>(r => r.ExternalId == "EXT-NOVY" && r.Id == recordDto.Id),
       Arg.Any<CancellationToken>());
   }
 
@@ -275,11 +329,10 @@ public class DataModelImportServiceTests
     // Arrange
     var (dataModelRepo, recordRepo, provider) = BuildMocks();
     var dto = BuildModelDTO();
-    var existingModel = new DataModel(Guid.NewGuid(), dto.Code);
-    var existingRecord = new DataModelRecord(Guid.NewGuid(), existingModel.Id);
-    existingRecord.SetExternalId("EXT-EXISTUJICI");
-
+    var existingModel = new DataModel(dto.Id, dto.Code); // stejné Id jako dto → update path modelu
     var recordDto = BuildRecordDTO("EXT-EXISTUJICI");
+    var existingRecord = new DataModelRecord(recordDto.Id, existingModel.Id); // stejné Id jako recordDto → update path záznamu
+    existingRecord.SetExternalId("EXT-EXISTUJICI");
 
     dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult<DataModel?>(existingModel));
@@ -395,6 +448,131 @@ public class DataModelImportServiceTests
     // Assert
     result.IsSuccess.ShouldBeTrue();
     await recordRepo.Received(3).AddAsync(Arg.Any<DataModelRecord>(), Arg.Any<CancellationToken>());
+  }
+
+  #endregion
+
+  #region Rekonciliace Id — sjednocení AVAPlace Id s lokální databází
+
+  [Fact]
+  public async Task ImportModelAsync_PouzijeAvaPlaceIdPriVytvoreniNovehoDataModelu()
+  {
+    // Arrange
+    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var dto = BuildModelDTO();
+    DataModel? capturedModel = null;
+
+    dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<DataModel?>(null));
+
+    dataModelRepo.AddAsync(Arg.Any<DataModel>(), Arg.Any<CancellationToken>())
+      .Returns(ci =>
+      {
+        capturedModel = ci.Arg<DataModel>();
+        return Task.FromResult<DataModel>(capturedModel);
+      });
+
+    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+
+    // Act
+    await service.ImportModelAsync(dto, CancellationToken.None);
+
+    // Assert — Id nového modelu musí odpovídat AVAPlace Id, ne být náhodně vygenerované
+    capturedModel.ShouldNotBeNull();
+    capturedModel!.Id.ShouldBe(dto.Id);
+  }
+
+  [Fact]
+  public async Task ImportModelAsync_SmazaARekreujeDataModel_KdyzLocalIdNeshodujeS_AvaPlaceId()
+  {
+    // Arrange — model nalezen podle Code, ale má jiné Id než AVAPlace
+    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var dto = BuildModelDTO("KOD-REKONCILIACE");
+    var existingWithWrongId = new DataModel(Guid.NewGuid(), "KOD-REKONCILIACE"); // špatné Id (jiné než dto.Id)
+    DataModel? capturedCreated = null;
+
+    dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<DataModel?>(existingWithWrongId));
+
+    dataModelRepo.AddAsync(Arg.Any<DataModel>(), Arg.Any<CancellationToken>())
+      .Returns(ci =>
+      {
+        capturedCreated = ci.Arg<DataModel>();
+        return Task.FromResult<DataModel>(capturedCreated);
+      });
+
+    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+
+    // Act
+    var result = await service.ImportModelAsync(dto, CancellationToken.None);
+
+    // Assert — starý model smazán, nový vytvořen s dto.Id
+    result.IsSuccess.ShouldBeTrue();
+    await dataModelRepo.Received(1).DeleteAsync(existingWithWrongId, Arg.Any<CancellationToken>());
+    await dataModelRepo.Received(1).AddAsync(Arg.Any<DataModel>(), Arg.Any<CancellationToken>());
+    capturedCreated.ShouldNotBeNull();
+    capturedCreated!.Id.ShouldBe(dto.Id, "nový DataModel musí mít AVAPlace Id");
+  }
+
+  [Fact]
+  public async Task ImportModelAsync_PouzijeAvaPlaceIdPriVytvoreniNovehoZaznamu()
+  {
+    // Arrange
+    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var dto = BuildModelDTO();
+    var recordDto = BuildRecordDTO("EXT-ID-TEST");
+
+    dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<DataModel?>(null));
+
+    provider.GetDataModelRecordsAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<IEnumerable<DataModelRecordDTO>>(new[] { recordDto }));
+
+    recordRepo.ListAsync(Arg.Any<ISpecification<DataModelRecord>>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult(new List<DataModelRecord>()));
+
+    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+
+    // Act
+    await service.ImportModelAsync(dto, CancellationToken.None);
+
+    // Assert — Id nového záznamu musí odpovídat AVAPlace Id
+    await recordRepo.Received(1).AddAsync(
+      Arg.Is<DataModelRecord>(r => r.Id == recordDto.Id),
+      Arg.Any<CancellationToken>());
+  }
+
+  [Fact]
+  public async Task ImportModelAsync_SmazaARekreujeZaznam_KdyzLocalIdNeshodujeS_AvaPlaceId()
+  {
+    // Arrange — záznam nalezen podle ExternalId, ale má jiné Id než AVAPlace
+    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var dto = BuildModelDTO();
+    var recordDto = BuildRecordDTO("EXT-REKONCILIACE");
+    var existingModel = new DataModel(dto.Id, dto.Code);
+    var existingRecordWithWrongId = new DataModelRecord(Guid.NewGuid(), existingModel.Id); // špatné Id
+    existingRecordWithWrongId.SetExternalId("EXT-REKONCILIACE");
+
+    dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<DataModel?>(existingModel));
+
+    provider.GetDataModelRecordsAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<IEnumerable<DataModelRecordDTO>>(new[] { recordDto }));
+
+    recordRepo.ListAsync(Arg.Any<ISpecification<DataModelRecord>>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult(new List<DataModelRecord> { existingRecordWithWrongId }));
+
+    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+
+    // Act
+    var result = await service.ImportModelAsync(dto, CancellationToken.None);
+
+    // Assert — starý záznam smazán, nový vytvořen s AVAPlace Id
+    result.IsSuccess.ShouldBeTrue();
+    await recordRepo.Received(1).DeleteAsync(existingRecordWithWrongId, Arg.Any<CancellationToken>());
+    await recordRepo.Received(1).AddAsync(
+      Arg.Is<DataModelRecord>(r => r.Id == recordDto.Id),
+      Arg.Any<CancellationToken>());
   }
 
   #endregion
