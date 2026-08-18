@@ -1,0 +1,99 @@
+@page "/ai"
+@rendermode InteractiveServer
+@using AVAIntegrationModeler.Web.SyncfusionApp.AI
+@using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+
+<PageTitle>AI Asistent</PageTitle>
+
+<div style="max-width: 900px; margin: 0 auto; padding: 16px;">
+    <h3>AI Asistent — doménové modely</h3>
+
+    <div style="margin-bottom: 16px;">
+        <DataSourceSelector @bind-Selected="_datasourceString"
+                            OnChanged="OnDatasourceChangedAsync"
+                            LabelText="Zdroj dat:" />
+    </div>
+
+    @if (!_contextLoaded && _errorMessage is null)
+    {
+        <div class="alert alert-warning">Načítám kontext doménových modelů...</div>
+    }
+
+    @if (_errorMessage is not null)
+    {
+        <div class="alert alert-danger">@_errorMessage</div>
+    }
+
+    <div class="ai-chat-history" style="
+        border: 1px solid #dee2e6;
+        border-radius: 6px;
+        padding: 12px;
+        margin-bottom: 12px;
+        min-height: 200px;
+        max-height: 500px;
+        overflow-y: auto;
+        background: var(--bs-body-bg, #fff);">
+
+        @if (_history.Count == 0 && _contextLoaded)
+        {
+            <p style="color: #6c757d; text-align: center; margin-top: 60px;">
+                Kontext načten. Zeptejte se na doménové modely...
+            </p>
+        }
+
+        @foreach (var msg in _history)
+        {
+            <div style="
+                display: flex;
+                justify-content: @(msg.Role == "user" ? "flex-end" : "flex-start");
+                margin-bottom: 10px;">
+                <div style="
+                    max-width: 80%;
+                    padding: 10px 14px;
+                    border-radius: 12px;
+                    white-space: pre-wrap;
+                    word-wrap: break-word;
+                    background: @(msg.Role == "user" ? "#0d6efd" : "#e9ecef");
+                    color: @(msg.Role == "user" ? "#fff" : "#212529");">
+                    @msg.Content
+                </div>
+            </div>
+        }
+
+        @if (_isLoading)
+        {
+            <div style="display: flex; justify-content: flex-start; margin-bottom: 10px;">
+                <div style="padding: 10px 14px; border-radius: 12px; background: #e9ecef; color: #6c757d;">
+                    Přemýšlím...
+                </div>
+            </div>
+        }
+    </div>
+
+    <div style="display: flex; gap: 8px; align-items: flex-end;">
+        <div style="flex: 1;">
+            <SfTextArea @bind-Value="_input"
+                        Rows="3"
+                        Placeholder="Zeptejte se na doménové modely... (Ctrl+Enter pro odeslání)"
+                        Enabled="@(_contextLoaded && !_isLoading)"
+                        @onkeydown="HandleKeyDownAsync" />
+        </div>
+        <div style="display: flex; flex-direction: column; gap: 6px;">
+            <SfButton CssClass="e-primary"
+                      OnClick="SendAsync"
+                      Disabled="@(!_contextLoaded || _isLoading || string.IsNullOrWhiteSpace(_input))">
+                Odeslat
+            </SfButton>
+            <SfButton OnClick="ClearHistory"
+                      Disabled="@(_history.Count == 0)">
+                Vymazat
+            </SfButton>
+        </div>
+    </div>
+
+    <p style="color: #6c757d; font-size: 0.8rem; margin-top: 6px;">
+        Ctrl+Enter pro odeslání. Konverzace se ukládá pouze v paměti prohlížeče.
+    </p>
+</div>

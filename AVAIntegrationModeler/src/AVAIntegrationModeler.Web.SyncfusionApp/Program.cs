@@ -1,5 +1,6 @@
 ﻿using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Web.SyncfusionApp;
+using AVAIntegrationModeler.Web.SyncfusionApp.AI;
 using AVAIntegrationModeler.Web.SyncfusionApp.Components;
 using Syncfusion.Blazor;
 
@@ -10,6 +11,10 @@ builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 builder.Services.AddSyncfusionBlazor();
 builder.Services.AddAVAIntegrationModelerApiClient(builder.Configuration);
+
+builder.Services.Configure<AnthropicOptions>(builder.Configuration.GetSection("Anthropic"));
+builder.Services.AddScoped<DomainContextBuilder>();
+builder.Services.AddScoped<AnthropicChatService>();
 //builder.Services.AddWebAppHttpClientFactory(builder.Configuration);
 
 var app = builder.Build();

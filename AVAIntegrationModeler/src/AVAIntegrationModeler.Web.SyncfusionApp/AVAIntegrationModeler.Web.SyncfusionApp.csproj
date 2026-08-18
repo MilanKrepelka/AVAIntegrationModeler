@@ -6,6 +6,7 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 <ItemGroup>
+	  <PackageReference Include="Anthropic" />
 	  <PackageReference Include="Ardalis.GuardClauses" />
 	  <PackageReference Include="Syncfusion.Blazor.Grid" />
     <PackageReference Include="Syncfusion.Blazor.TreeGrid" />
