@@ -115,6 +115,13 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("TEXT");
 
+                    b.Property<int?>("ExpressionOrder")
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("ExpressionValue")
+                        .HasMaxLength(4000)
+                        .HasColumnType("TEXT");
+
                     b.Property<int>("FieldType")
                         .HasColumnType("INTEGER");
 
@@ -304,7 +311,7 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
-                    b.Property<Guid>("AreaId")
+                    b.Property<Guid?>("AreaId")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -538,6 +545,11 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
 
             modelBuilder.Entity("AVAIntegrationModeler.Domain.IntegrationMapAggregate.IntegrationsMap", b =>
                 {
+                    b.HasOne("AVAIntegrationModeler.Domain.AreaAggregate.Area", null)
+                        .WithMany()
+                        .HasForeignKey("AreaId")
+                        .OnDelete(DeleteBehavior.SetNull);
+
                     b.OwnsMany("AVAIntegrationModeler.Domain.IntegrationMapAggregate.IntegrationMapItem", "Items", b1 =>
                         {
                             b1.Property<Guid>("Id")

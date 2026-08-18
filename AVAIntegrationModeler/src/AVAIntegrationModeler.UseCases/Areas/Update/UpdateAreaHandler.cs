@@ -1,5 +1,6 @@
 using Ardalis.GuardClauses;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Domain;
 using AVAIntegrationModeler.Domain.AreaAggregate;
 
 namespace AVAIntegrationModeler.UseCases.Areas.Update;
@@ -9,7 +10,8 @@ namespace AVAIntegrationModeler.UseCases.Areas.Update;
 /// </summary>
 public class UpdateAreaHandler(
   IRepository<Area> repository,
-  IAreasQueryService areasQueryService
+  IAreasQueryService areasQueryService,
+  IDomainEntityValidationService<Area> areaValidationService
 ) : ICommandHandler<UpdateAreaCommand, Result<AreaDTO>>
 {
   public async Task<Result<AreaDTO>> Handle(UpdateAreaCommand request, CancellationToken cancellationToken)
@@ -34,6 +36,10 @@ public class UpdateAreaHandler(
         ErrorMessage = ex.Message
       });
     }
+
+    var validationResult = await areaValidationService.Validate(request.Datasource, existing, cancellationToken);
+    if (!validationResult.IsSuccess)
+      return validationResult;
 
     await repository.UpdateAsync(existing, cancellationToken);
     areasQueryService.InvalidateCache(request.Datasource);

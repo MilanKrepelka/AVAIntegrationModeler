@@ -17,12 +17,20 @@ public class DataModelFieldEditModel
   public bool IsLocalized { get; set; }
   public bool IsNullable { get; set; }
   public List<Guid> ReferencedEntityTypeIds { get; set; } = [];
+  public string ExpressionValue { get; set; } = string.Empty;
+  public int? ExpressionOrder { get; set; }
 }
 
 public partial class DataModelFieldEditor : ComponentBase
 {
   [Parameter] public List<DataModelFieldEditModel> Fields { get; set; } = [];
   [Parameter] public List<DataModelSummaryDTO> AvailableModels { get; set; } = [];
+
+  /// <summary>
+  /// Vyvolá se po přidání nového pole nebo po smazání pole (ne po editaci existujícího) —
+  /// typicky navázáno na uložení rodičovského DataModelu, aby se změna hned persistovala.
+  /// </summary>
+  [Parameter] public EventCallback OnFieldsChanged { get; set; }
 
   private SfGrid<DataModelFieldEditModel>? FieldGrid;
   private List<DataModelFieldEditModel>? _previousFields;
@@ -87,7 +95,9 @@ public partial class DataModelFieldEditor : ComponentBase
       IsCollection = field.IsCollection,
       IsLocalized = field.IsLocalized,
       IsNullable = field.IsNullable,
-      ReferencedEntityTypeIds = [.. field.ReferencedEntityTypeIds]
+      ReferencedEntityTypeIds = [.. field.ReferencedEntityTypeIds],
+      ExpressionValue = field.ExpressionValue,
+      ExpressionOrder = field.ExpressionOrder
     };
     _isNew = false;
     _nameError = string.Empty;
@@ -99,6 +109,9 @@ public partial class DataModelFieldEditor : ComponentBase
     Fields.Remove(field);
     if (FieldGrid is not null)
       await FieldGrid.Refresh();
+
+    if (OnFieldsChanged.HasDelegate)
+      await OnFieldsChanged.InvokeAsync();
   }
 
   private async Task Confirm()
@@ -134,14 +147,21 @@ public partial class DataModelFieldEditor : ComponentBase
         existing.IsLocalized = _editingField.IsLocalized;
         existing.IsNullable = _editingField.IsNullable;
         existing.ReferencedEntityTypeIds = _editingField.ReferencedEntityTypeIds;
+        existing.ExpressionValue = _editingField.ExpressionValue;
+        existing.ExpressionOrder = _editingField.ExpressionOrder;
       }
     }
+
+    var wasNew = _isNew;
 
     _isDialogOpen = false;
     _editingField = null;
 
     if (FieldGrid is not null)
       await FieldGrid.Refresh();
+
+    if (wasNew && OnFieldsChanged.HasDelegate)
+      await OnFieldsChanged.InvokeAsync();
   }
 
   private void Cancel()

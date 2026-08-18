@@ -151,6 +151,8 @@ public class DataModelImportService(
         if (fieldDto.FieldType is DataModelFieldType.LookupEntity or DataModelFieldType.NestedEntity)
           foreach (var refId in fieldDto.ReferencedEntityTypeIds)
             field.AddReferencedEntityType(refId);
+        if (fieldDto.Expression is not null)
+          field.SetExpression(fieldDto.Expression.Value, fieldDto.Expression.Order);
         model.AddField(field);
         fieldsToAdd.Add(field);
       }

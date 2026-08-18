@@ -96,7 +96,10 @@ public static class DataModelMapper
       IsLocalized = fieldDefinition.IsLocalized,
       IsNullable = fieldDefinition.IsNullable,
       FieldType = MapFieldType(fieldDefinition.FieldType),
-      ReferencedEntityTypeIds = fieldDefinition.ReferencedEntityTypeIds?.ToList() ?? new List<Guid>()
+      ReferencedEntityTypeIds = fieldDefinition.ReferencedEntityTypeIds?.ToList() ?? new List<Guid>(),
+      Expression = fieldDefinition.Expression is not null
+        ? new DataModelFieldExpressionDTO { Value = fieldDefinition.Expression.Value ?? string.Empty, Order = fieldDefinition.Expression.Order }
+        : null
     };
   }
 
@@ -119,7 +122,10 @@ public static class DataModelMapper
       IsLocalized = fieldDto.IsLocalized,
       IsNullable = fieldDto.IsNullable,
       FieldType = MapFieldTypeToAsol(fieldDto.FieldType),
-      ReferencedEntityTypeIds = fieldDto.ReferencedEntityTypeIds?.ToList() ?? new List<Guid>()
+      ReferencedEntityTypeIds = fieldDto.ReferencedEntityTypeIds?.ToList() ?? new List<Guid>(),
+      Expression = fieldDto.Expression is not null
+        ? new DataModelFieldExpressionDefinition { Value = fieldDto.Expression.Value, Order = fieldDto.Expression.Order }
+        : null
     };
   }
 

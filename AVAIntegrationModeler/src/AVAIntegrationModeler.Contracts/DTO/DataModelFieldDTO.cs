@@ -58,4 +58,9 @@ public record DataModelFieldDTO
   /// Identifikátory typů entit, na které toto pole odkazuje (pouze pro typy LookupEntity a NestedEntity).
   /// </summary>
   public List<Guid> ReferencedEntityTypeIds { get; init; } = new();
+
+  /// <summary>
+  /// Definice výrazu (expression) pro počítané pole. Null, pokud pole není počítané.
+  /// </summary>
+  public DataModelFieldExpressionDTO? Expression { get; init; }
 }

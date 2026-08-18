@@ -37,9 +37,10 @@ public class IntegrationsMap : EntityBase<Guid>, IAggregateRoot
   }
 
   /// <summary>
-  /// Identifikátor oblasti, ke které je mapa přiřazena.
+  /// Identifikátor oblasti, ke které je mapa přiřazena. Nullable — po smazání oblasti,
+  /// na kterou mapa odkazovala, se nastaví na null (FK OnDelete SetNull).
   /// </summary>
-  public Guid AreaId { get; private set; }
+  public Guid? AreaId { get; private set; }
 
   /// <summary>
   /// Veřejný read-only přístup k integračním položkám.

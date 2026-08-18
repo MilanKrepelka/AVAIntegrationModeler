@@ -1,11 +1,13 @@
 using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Domain;
 using AVAIntegrationModeler.Domain.DataModelRecordAggregate;
 
 namespace AVAIntegrationModeler.UseCases.DataModelRecords.Create;
 
 public class CreateDataModelRecordHandler(
   IRepository<DataModelRecord> repository,
-  IDataModelRecordQueryService queryService)
+  IDataModelRecordQueryService queryService,
+  IDomainEntityValidationService<DataModelRecord> recordValidationService)
   : ICommandHandler<CreateDataModelRecordCommand, Result<Guid>>
 {
   public async Task<Result<Guid>> Handle(CreateDataModelRecordCommand request, CancellationToken cancellationToken)
@@ -29,6 +31,10 @@ public class CreateDataModelRecordHandler(
     {
       return Result<Guid>.Error(ex.Message);
     }
+
+    var validationResult = await recordValidationService.ValidateForCreate(request.Datasource, record, cancellationToken);
+    if (!validationResult.IsSuccess)
+      return validationResult;
 
     var created = await repository.AddAsync(record, cancellationToken);
     if (created is null) return Result<Guid>.Error("Nepodařilo se vytvořit záznam.");

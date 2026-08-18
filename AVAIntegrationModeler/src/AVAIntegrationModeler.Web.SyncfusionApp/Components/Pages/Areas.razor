@@ -49,7 +49,7 @@
                         }
                     </Template>
                 </GridColumn>
-                <GridColumn HeaderText="Akce" Width="100" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+                <GridColumn HeaderText="Akce" Width="140" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
                     <Template>
                         @{
                             var model = (context as AreaListViewModel);
@@ -59,6 +59,12 @@
                                           IsPrimary="false"
                                           OnClick="@(() => EditArea(model!))"
                                           title="Editovat">
+                                </SfButton>
+                                <SfButton CssClass="e-small e-round e-outline action-button e-danger"
+                                          IconCss="e-icons e-delete"
+                                          IsPrimary="false"
+                                          OnClick="@(() => DeleteAreaAsync(model!))"
+                                          title="Smazat">
                                 </SfButton>
                             </div>
                         }

@@ -214,6 +214,61 @@ public class DataModelMapperTests
   }
 
   [Fact]
+  public void MapToDTO_WithExpression_MapsExpressionValueAndOrder()
+  {
+    // Arrange
+    var dataModelDefinition = new DataModelDefinition
+    {
+      Id = Guid.NewGuid(),
+      Code = "TestCode",
+      Name = "Test Model",
+      Fields = new List<DataModelFieldDefinition>
+      {
+        new DataModelFieldDefinition
+        {
+          Name = "ComputedField",
+          FieldType = ASOL.DataService.Domain.Model.DataModelFieldType.Text,
+          Expression = new DataModelFieldExpressionDefinition { Value = "A + B", Order = 2 }
+        }
+      }
+    };
+
+    // Act
+    var result = DataModelMapper.MapToDTO(dataModelDefinition);
+
+    // Assert
+    Assert.NotNull(result.Fields[0].Expression);
+    Assert.Equal("A + B", result.Fields[0].Expression!.Value);
+    Assert.Equal(2, result.Fields[0].Expression!.Order);
+  }
+
+  [Fact]
+  public void MapToDTO_WithoutExpression_ReturnsNullExpression()
+  {
+    // Arrange
+    var dataModelDefinition = new DataModelDefinition
+    {
+      Id = Guid.NewGuid(),
+      Code = "TestCode",
+      Name = "Test Model",
+      Fields = new List<DataModelFieldDefinition>
+      {
+        new DataModelFieldDefinition
+        {
+          Name = "PlainField",
+          FieldType = ASOL.DataService.Domain.Model.DataModelFieldType.Text
+        }
+      }
+    };
+
+    // Act
+    var result = DataModelMapper.MapToDTO(dataModelDefinition);
+
+    // Assert
+    Assert.Null(result.Fields[0].Expression);
+  }
+
+  [Fact]
   public void MapToDefinition_WithValidDataModelDTO_ReturnsMappedDefinition()
   {
     // Arrange
@@ -332,6 +387,64 @@ public class DataModelMapperTests
 
     // Assert
     Assert.Equal(expectedType, result.Fields.ElementAt(0).FieldType);
+  }
+
+  [Fact]
+  public void MapToDefinition_WithExpression_MapsExpressionValueAndOrder()
+  {
+    // Arrange
+    var dto = new DataModelDTO
+    {
+      Id = Guid.NewGuid(),
+      Code = "TestCode",
+      Name = "Test Model",
+      Fields = new List<DataModelFieldDTO>
+      {
+        new DataModelFieldDTO
+        {
+          Name = "ComputedField",
+          FieldType = DataModelFieldType.Text,
+          ReferencedEntityTypeIds = new List<Guid>(),
+          Expression = new DataModelFieldExpressionDTO { Value = "A + B", Order = 2 }
+        }
+      }
+    };
+
+    // Act
+    var result = DataModelMapper.MapToDefinition(dto);
+
+    // Assert
+    var field = result.Fields.ElementAt(0);
+    Assert.NotNull(field.Expression);
+    Assert.Equal("A + B", field.Expression!.Value);
+    Assert.Equal(2, field.Expression!.Order);
+  }
+
+  [Fact]
+  public void MapToDefinition_WithoutExpression_ReturnsNullExpression()
+  {
+    // Arrange
+    var dto = new DataModelDTO
+    {
+      Id = Guid.NewGuid(),
+      Code = "TestCode",
+      Name = "Test Model",
+      Fields = new List<DataModelFieldDTO>
+      {
+        new DataModelFieldDTO
+        {
+          Name = "PlainField",
+          FieldType = DataModelFieldType.Text,
+          ReferencedEntityTypeIds = new List<Guid>()
+        }
+      }
+    };
+
+    // Act
+    var result = DataModelMapper.MapToDefinition(dto);
+
+    // Assert
+    Assert.Null(result.Fields.ElementAt(0).Expression);
   }
 
   [Fact]

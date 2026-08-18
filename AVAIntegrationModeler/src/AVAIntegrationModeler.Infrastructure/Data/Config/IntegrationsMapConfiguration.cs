@@ -1,4 +1,5 @@
-﻿using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
+﻿using AVAIntegrationModeler.Domain.AreaAggregate;
+using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -16,7 +17,14 @@ public class IntegrationsMapConfiguration : IEntityTypeConfiguration<Integration
     builder.HasKey(m => m.Id);
 
     builder.Property(m => m.AreaId)
-      .IsRequired();
+      .IsRequired(false);
+
+    // Vztah k Area (optional foreign key) — po smazání Area se AreaId nastaví na null
+    builder.HasOne<Area>()
+      .WithMany()
+      .HasForeignKey(m => m.AreaId)
+      .OnDelete(DeleteBehavior.SetNull)
+      .IsRequired(false);
 
     builder.HasIndex(m => m.AreaId);
 

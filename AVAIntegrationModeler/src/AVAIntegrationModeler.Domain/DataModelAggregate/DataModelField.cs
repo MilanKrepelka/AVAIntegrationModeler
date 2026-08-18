@@ -67,6 +67,16 @@ public class DataModelField : EntityBase<Guid>
   public DataModelFieldType FieldType { get; private set; }
 
   /// <summary>
+  /// Text výrazu (expression) pro počítané pole. Null, pokud pole není počítané.
+  /// </summary>
+  public string? ExpressionValue { get; private set; }
+
+  /// <summary>
+  /// Pořadí vyhodnocení výrazu pole. Null, pokud pole není počítané.
+  /// </summary>
+  public int? ExpressionOrder { get; private set; }
+
+  /// <summary>
   /// Privátní kolekce odkazů na typy entit.
   /// </summary>
   private readonly List<DataModelFieldEntityTypeReference> _entityTypeReferences = new();
@@ -156,6 +166,28 @@ public class DataModelField : EntityBase<Guid>
   public DataModelField MarkAsNullable()
   {
     IsNullable = true;
+    return this;
+  }
+
+  /// <summary>
+  /// Nastaví výraz (expression) pole pro počítané hodnoty.
+  /// </summary>
+  /// <param name="value">Text výrazu.</param>
+  /// <param name="order">Pořadí vyhodnocení výrazu.</param>
+  public DataModelField SetExpression(string value, int order)
+  {
+    ExpressionValue = Guard.Against.NullOrEmpty(value, nameof(value));
+    ExpressionOrder = order;
+    return this;
+  }
+
+  /// <summary>
+  /// Zruší výraz (expression) pole — pole přestane být počítané.
+  /// </summary>
+  public DataModelField ClearExpression()
+  {
+    ExpressionValue = null;
+    ExpressionOrder = null;
     return this;
   }
 

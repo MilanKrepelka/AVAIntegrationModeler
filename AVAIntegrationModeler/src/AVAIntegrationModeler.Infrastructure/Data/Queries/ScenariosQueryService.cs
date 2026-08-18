@@ -130,7 +130,7 @@ public class ScenariosQueryService(
     }
     else
     {
-      var scenario = await databaseContext.Scenarios.FirstOrDefaultAsync(s => s.Code == scenarioCode, ct);
+      var scenario = await databaseContext.Scenarios.FirstOrDefaultAsync(s => s.Code.ToUpper() == scenarioCode.ToUpper(), ct);
 
       var inputFeature = scenario?.InputFeature != null
         ? await databaseContext.Features.FirstOrDefaultAsync(f => f.Id == scenario.InputFeature, ct)
@@ -202,7 +202,7 @@ public class ScenariosQueryService(
     }
     else
     {
-      return await databaseContext.Scenarios.AnyAsync(s => s.Code == scenarioCode, ct);
+      return await databaseContext.Scenarios.AnyAsync(s => s.Code.ToUpper() == scenarioCode.ToUpper(), ct);
     }
   }
 

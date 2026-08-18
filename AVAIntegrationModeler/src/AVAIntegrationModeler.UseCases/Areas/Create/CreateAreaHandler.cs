@@ -1,3 +1,4 @@
+using AVAIntegrationModeler.Domain;
 using AVAIntegrationModeler.Domain.AreaAggregate;
 using AVAIntegrationModeler.UseCases.Areas.Mapping;
 
@@ -8,7 +9,8 @@ namespace AVAIntegrationModeler.UseCases.Areas.Create;
 /// </summary>
 public class CreateAreaHandler(
   IRepository<Area> areaRepository,
-  IAreasQueryService areasQueryService
+  IAreasQueryService areasQueryService,
+  IDomainEntityValidationService<Area> areaValidationService
 ) : ICommandHandler<CreateAreaCommand, Result<Guid>>
 {
   public async Task<Result<Guid>> Handle(CreateAreaCommand request, CancellationToken cancellationToken)
@@ -36,9 +38,9 @@ public class CreateAreaHandler(
       });
     }
 
-    var existsByCode = await areasQueryService.ExistsByCodeAsync(request.Datasource, area.Code, cancellationToken);
-    if (existsByCode)
-      return Result<Guid>.Conflict($"Oblast s kódem '{area.Code}' již existuje.");
+    var validationResult = await areaValidationService.ValidateForCreate(request.Datasource, area, cancellationToken);
+    if (!validationResult.IsSuccess)
+      return validationResult;
 
     Area? created;
     try

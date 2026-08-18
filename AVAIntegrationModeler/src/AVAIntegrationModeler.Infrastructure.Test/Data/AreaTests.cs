@@ -1,4 +1,6 @@
 ﻿using AVAIntegrationModeler.Domain.AreaAggregate;
+using AVAIntegrationModeler.Domain.DataModelAggregate;
+using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
 using AVAIntegrationModeler.Infrastructure.Data;
 using AVAIntegrationModeler.Integration.Test.Data.SqlLite.Fixtures;
 using Microsoft.EntityFrameworkCore;
@@ -121,6 +123,51 @@ public class AreaTests : BaseDbTests
     var deletedArea = (await _repository.ListAsync(CancellationToken.None))
       .FirstOrDefault(a => a.Id == areaId);
     deletedArea.ShouldBeNull();
+  }
+
+  [Fact]
+  public async Task DeleteArea_ShouldSetNullOnReferencingDataModel()
+  {
+    // Arrange
+    var area = new Area(Guid.NewGuid(), "AREA_WITH_MODEL");
+    area.SetName("Area with model");
+    await _repository.AddAsync(area, CancellationToken.None);
+
+    var dataModelRepository = GetRepository<DataModel>();
+    var dataModel = new DataModel(Guid.NewGuid(), "MODEL_WITH_AREA");
+    dataModel.SetName("Model with area").SetArea(area.Id);
+    await dataModelRepository.AddAsync(dataModel, CancellationToken.None);
+
+    // Act
+    await _repository.DeleteAsync(area, CancellationToken.None);
+    DbContext.ChangeTracker.Clear();
+
+    // Assert
+    var reloadedModel = await dataModelRepository.GetByIdAsync(dataModel.Id, CancellationToken.None);
+    reloadedModel.ShouldNotBeNull();
+    reloadedModel.AreaId.ShouldBeNull();
+  }
+
+  [Fact]
+  public async Task DeleteArea_ShouldSetNullOnReferencingIntegrationsMap()
+  {
+    // Arrange
+    var area = new Area(Guid.NewGuid(), "AREA_WITH_MAP");
+    area.SetName("Area with map");
+    await _repository.AddAsync(area, CancellationToken.None);
+
+    var mapRepository = GetIntegrationMapRepository();
+    var map = new IntegrationsMap(Guid.NewGuid(), area.Id);
+    await mapRepository.AddAsync(map, CancellationToken.None);
+
+    // Act
+    await _repository.DeleteAsync(area, CancellationToken.None);
+    DbContext.ChangeTracker.Clear();
+
+    // Assert
+    var reloadedMap = await mapRepository.GetByIdAsync(map.Id, CancellationToken.None);
+    reloadedMap.ShouldNotBeNull();
+    reloadedMap.AreaId.ShouldBeNull();
   }
 
   [Fact]

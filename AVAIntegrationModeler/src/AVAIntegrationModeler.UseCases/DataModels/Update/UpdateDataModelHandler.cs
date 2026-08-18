@@ -1,13 +1,17 @@
 using Ardalis.GuardClauses;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Domain;
 using AVAIntegrationModeler.Domain.DataModelAggregate;
 using AVAIntegrationModeler.Domain.DataModelAggregate.Specifications;
 using AVAIntegrationModeler.UseCases.DataModels.Mapping;
 
 namespace AVAIntegrationModeler.UseCases.DataModels.Update;
 
-public class UpdateDataModelHandler(IDataModelRepository repository, IDataModelQueryService queryService)
+public class UpdateDataModelHandler(
+  IDataModelRepository repository,
+  IDataModelQueryService queryService,
+  IDomainEntityValidationService<DataModel> dataModelValidationService)
   : ICommandHandler<UpdateDataModelCommand, Result<DataModelDTO>>
 {
   public async Task<Result<DataModelDTO>> Handle(UpdateDataModelCommand request, CancellationToken cancellationToken)
@@ -38,6 +42,10 @@ public class UpdateDataModelHandler(IDataModelRepository repository, IDataModelQ
       return Result<DataModelDTO>.Invalid(new ValidationError(ex.ParamName ?? "DataModel", ex.Message));
     }
 
+    var validationResult = await dataModelValidationService.Validate(request.Datasource, existing, cancellationToken);
+    if (!validationResult.IsSuccess)
+      return validationResult;
+
     var fieldsToDelete = existing.Fields.ToList();
 
     foreach (var name in fieldsToDelete.Select(f => f.Name))
@@ -59,6 +67,8 @@ public class UpdateDataModelHandler(IDataModelRepository repository, IDataModelQ
         if (fieldDto.FieldType is DataModelFieldType.LookupEntity or DataModelFieldType.NestedEntity)
           foreach (var refId in fieldDto.ReferencedEntityTypeIds)
             field.AddReferencedEntityType(refId);
+        if (fieldDto.Expression is not null)
+          field.SetExpression(fieldDto.Expression.Value, fieldDto.Expression.Order);
         existing.AddField(field);
         fieldsToAdd.Add(field);
       }

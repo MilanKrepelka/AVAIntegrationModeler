@@ -73,7 +73,12 @@ public static class InfrastructureServiceExtensions
     this IServiceCollection services,
     ILogger logger)
   {
-    services.AddScoped<IDomainEntityValidationService<Scenario>, ValidationServices.ScenarioValidationService>();
+    services.AddScoped<IDomainEntityValidationService<Scenario>, ValidationServices.ScenarioValidationService>()
+            .AddScoped<IDomainEntityValidationService<Domain.AreaAggregate.Area>, ValidationServices.AreaValidationService>()
+            .AddScoped<IDomainEntityValidationService<Domain.DataModelAggregate.DataModel>, ValidationServices.DataModelValidationService>()
+            .AddScoped<IDomainEntityValidationService<Domain.DeploymentAggregate.Deployment>, ValidationServices.DeploymentValidationService>()
+            .AddScoped<IDomainEntityValidationService<Domain.ContributorAggregate.Contributor>, ValidationServices.ContributorValidationService>()
+            .AddScoped<IDomainEntityValidationService<Domain.DataModelRecordAggregate.DataModelRecord>, ValidationServices.DataModelRecordValidationService>();
     logger.LogInformation("DomainValidationServices services registered");
     return services;
   }

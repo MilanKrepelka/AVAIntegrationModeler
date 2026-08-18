@@ -30,9 +30,12 @@ public static class DataModelFieldMapper
       IsLocalized = field.IsLocalized,
       IsNullable = field.IsNullable,
       FieldType = field.FieldType,
-      ReferencedEntityTypeIds = field.ReferencedEntityTypeIds.ToList()
+      ReferencedEntityTypeIds = field.ReferencedEntityTypeIds.ToList(),
+      Expression = field.ExpressionValue is not null
+        ? new DataModelFieldExpressionDTO { Value = field.ExpressionValue, Order = field.ExpressionOrder ?? 0 }
+        : null
     };
-    
+
     return result;
   }
 
@@ -70,7 +73,10 @@ public static class DataModelFieldMapper
     {
       field.AddReferencedEntityType(entityTypeId);
     }
-    
+
+    if (dto.Expression is not null)
+      field.SetExpression(dto.Expression.Value, dto.Expression.Order);
+
     return field;
   }
 }

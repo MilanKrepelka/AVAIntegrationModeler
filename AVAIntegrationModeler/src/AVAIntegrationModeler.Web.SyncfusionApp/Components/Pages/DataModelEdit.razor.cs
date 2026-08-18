@@ -55,6 +55,12 @@ public partial class DataModelEdit : ComponentBase, IDisposable
 
   private DataModelEditModel _edit = new();
 
+  /// <summary>
+  /// Nastaví se na true po prvním úspěšném Create — další automatické uložení
+  /// (např. po přidání dalšího pole) tak už jde přes Update, ne přes duplicitní Create.
+  /// </summary>
+  private bool _hasBeenCreated;
+
   protected override void OnInitialized() => _cts = new CancellationTokenSource();
 
   protected override async Task OnParametersSetAsync()
@@ -100,7 +106,9 @@ public partial class DataModelEdit : ComponentBase, IDisposable
           IsCollection = f.IsCollection,
           IsLocalized = f.IsLocalized,
           IsNullable = f.IsNullable,
-          ReferencedEntityTypeIds = [.. f.ReferencedEntityTypeIds]
+          ReferencedEntityTypeIds = [.. f.ReferencedEntityTypeIds],
+          ExpressionValue = f.Expression?.Value ?? string.Empty,
+          ExpressionOrder = f.Expression?.Order
         }).ToList();
       }
       catch (OperationCanceledException) { }
@@ -149,17 +157,22 @@ public partial class DataModelEdit : ComponentBase, IDisposable
         IsCollection = f.IsCollection,
         IsLocalized = f.IsLocalized,
         IsNullable = f.IsNullable,
-        ReferencedEntityTypeIds = [.. f.ReferencedEntityTypeIds]
+        ReferencedEntityTypeIds = [.. f.ReferencedEntityTypeIds],
+        Expression = !string.IsNullOrWhiteSpace(f.ExpressionValue)
+          ? new DataModelFieldExpressionDTO { Value = f.ExpressionValue, Order = f.ExpressionOrder ?? 0 }
+          : null
       }).ToList()
     };
 
     try
     {
-      if (IsNew)
+      if (IsNew && !_hasBeenCreated)
       {
         var result = await _apiClient.CreateDataModel(_datasource, dto, _cts?.Token ?? CancellationToken.None);
         if (_disposed) return;
         _saveSuccess = result.IsSuccess;
+        if (result.IsSuccess)
+          _hasBeenCreated = true;
         _saveMessage = result.IsSuccess
           ? $"Datový model {dto.Code} byl vytvořen."
           : result.IsInvalid()
