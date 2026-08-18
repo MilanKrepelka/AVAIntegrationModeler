@@ -83,7 +83,12 @@ public class AppDbContext : DbContext
   {
     if (!optionsBuilder.IsConfigured)
     {
-      optionsBuilder.UseSqlite("Data Source=app.db");
+      // Enable WAL mode for better crash resilience and concurrent access
+      var connectionString = "Data Source=app.db;Mode=ReadWriteCreate;Cache=Shared";
+      optionsBuilder.UseSqlite(connectionString, options => 
+      {
+        options.CommandTimeout(30);
+      });
     }
   }
 
