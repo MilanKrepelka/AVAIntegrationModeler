@@ -111,3 +111,5 @@
 /.vs/CopilotSnapshots
 /AVAIntegrationModeler/src/AVAIntegrationModeler.API.Client.Test/bin
 /AVAIntegrationModeler/src/AVAIntegrationModeler.API.Client.Test/bin/Debug/net9.0/AVAIntegrationModeler.API.Client.dll
+/AVAIntegrationModeler/src/AVAIntegrationModeler.API/app.db
+/AVAIntegrationModeler/src/AVAIntegrationModeler.API.Client.Test/bin/Debug/net9.0/refs/Microsoft.AspNetCore.Antiforgery.dll
