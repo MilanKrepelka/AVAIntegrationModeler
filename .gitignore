@@ -108,6 +108,8 @@
 /AVAIntegrationModeler/src/AVAIntegrationModeler.API.Client.Test/obj
 /AVAIntegrationModeler/src/AVAIntegrationModeler.Localization/bin/Debug/net9.0
 /AVAIntegrationModeler/src/AVAIntegrationModeler.Localization/obj
+/AVAIntegrationModeler/src/AVAIntegrationModeler.UseCases/bin/
+/AVAIntegrationModeler/src/AVAIntegrationModeler.UseCases/obj/
 /.vs/CopilotSnapshots
 /AVAIntegrationModeler/src/AVAIntegrationModeler.API.Client.Test/bin
 /AVAIntegrationModeler/src/AVAIntegrationModeler.API.Client.Test/bin/Debug/net9.0/AVAIntegrationModeler.API.Client.dll
