@@ -1,3 +1,4 @@
+using System.Text.Json;
 using Anthropic;
 using Anthropic.Models.Messages;
 using Microsoft.Extensions.Options;
@@ -47,17 +48,37 @@ public class AnthropicChatService
 
         messages.Add(new MessageParam { Role = Role.User, Content = userMessage });
 
-        var response = await _client.Messages.Create(new MessageCreateParams
+        try
         {
-            Model = _model,
-            MaxTokens = 4096,
-            System = systemPrompt,
-            Messages = messages
-        }, cancellationToken: ct);
+            var response = await _client.Messages.Create(new MessageCreateParams
+            {
+                Model = _model,
+                MaxTokens = 4096,
+                System = systemPrompt,
+                Messages = messages
+            }, cancellationToken: ct);
 
-        return response.Content
-            .Select(b => b.Value)
-            .OfType<TextBlock>()
-            .FirstOrDefault()?.Text ?? string.Empty;
+            return response.Content
+                .Select(b => b.Value)
+                .OfType<TextBlock>()
+                .FirstOrDefault()?.Text ?? string.Empty;
+        }
+        catch (Exception ex) when (!ct.IsCancellationRequested)
+        {
+            throw new InvalidOperationException(ExtractApiErrorMessage(ex.Message), ex);
+        }
+    }
+
+    private static string ExtractApiErrorMessage(string raw)
+    {
+        try
+        {
+            using var doc = JsonDocument.Parse(raw);
+            if (doc.RootElement.TryGetProperty("error", out var error) &&
+                error.TryGetProperty("message", out var msg))
+                return msg.GetString() ?? raw;
+        }
+        catch (JsonException) { }
+        return raw;
     }
 }
