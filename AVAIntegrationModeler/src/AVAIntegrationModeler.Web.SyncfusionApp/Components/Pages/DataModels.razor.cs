@@ -17,6 +17,7 @@ public partial class DataModels : ComponentBase, IDisposable
   public List<DataModelListViewModel> DataModelList { get; set; } = new();
 
   private CancellationTokenSource _cts = new();
+  private string? _areasError;
 
   protected async Task LoadItemsAsync()
   {
@@ -26,6 +27,7 @@ public partial class DataModels : ComponentBase, IDisposable
     _cts = new CancellationTokenSource();
     var token = _cts.Token;
 
+    _areasError = null;
     try
     {
       IsLoading = true;
@@ -40,7 +42,10 @@ public partial class DataModels : ComponentBase, IDisposable
         var areasResponse = await _apiClient.GetAreas(Datasource.Database, token);
         areas = areasResponse?.Areas ?? [];
       }
-      catch { }
+      catch (Exception areasEx)
+      {
+        _areasError = $"Nelze načíst oblasti: {areasEx.Message}";
+      }
 
       foreach (var dataModel in dataModelListResponse.DataModels)
       {
@@ -70,6 +75,12 @@ public partial class DataModels : ComponentBase, IDisposable
   {
     await base.OnInitializedAsync();
     await LoadItemsAsync();
+  }
+
+  private async Task ReloadAsync(Syncfusion.Blazor.Navigations.ClickEventArgs args)
+  {
+    await LoadItemsAsync();
+    if (Grid != null) await Grid.Refresh();
   }
 
   private void AddNewDataModel(Syncfusion.Blazor.Navigations.ClickEventArgs args)

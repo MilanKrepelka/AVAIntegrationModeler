@@ -1,6 +1,8 @@
+using Ardalis.Specification;
 using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Domain.AreaAggregate;
 using AVAIntegrationModeler.Domain.DataModelAggregate;
 using AVAIntegrationModeler.Domain.DataModelAggregate.Specifications;
 using AVAIntegrationModeler.Domain.DataModelRecordAggregate;
@@ -13,13 +15,16 @@ namespace AVAIntegrationModeler.UseCases.DataModels.Import;
 /// Implementace <see cref="IDataModelImportService"/> — upsert datového modelu podle Code
 /// a jeho DataModelRecordů podle ExternalId. Sdílená mezi importem jednoho modelu
 /// (<see cref="ImportDataModelHandler"/>) a hromadným importem (<see cref="ImportAllDataModelsHandler"/>).
+/// Oblast (Area) se odvozuje ze statického mapování <see cref="DataModelAreaMapping"/> — AVAPlace tuto informaci neposkytuje.
 /// </summary>
 public class DataModelImportService(
   IDataModelRepository dataModelRepository,
   IDataModelRecordRepository recordRepository,
-  IIntegrationDataProvider integrationDataProvider)
+  IIntegrationDataProvider integrationDataProvider,
+  IRepository<Area> areaRepository)
   : IDataModelImportService
 {
+  private Dictionary<string, Guid>? _areaCodeToId;
   public async Task<Result<Guid>> ImportModelAsync(DataModelDTO dto, CancellationToken ct = default)
   {
     try
@@ -52,7 +57,8 @@ public class DataModelImportService(
         .SetNotes(dto.Notes);
       if (dto.IsAggregateRoot) dataModel.MarkAsAggregateRoot();
       else                    dataModel.MarkAsNestedEntity();
-      if (dto.AreaId.HasValue) dataModel.SetArea(dto.AreaId.Value);
+      var resolvedAreaId = await ResolveAreaIdAsync(dto.Code, ct);
+      if (resolvedAreaId.HasValue) dataModel.SetArea(resolvedAreaId.Value);
     }
     catch (ArgumentException ex)
     {
@@ -91,7 +97,8 @@ public class DataModelImportService(
         .SetNotes(dto.Notes);
       if (dto.IsAggregateRoot) existing.MarkAsAggregateRoot();
       else                    existing.MarkAsNestedEntity();
-      if (dto.AreaId.HasValue) existing.SetArea(dto.AreaId.Value);
+      var resolvedAreaId = await ResolveAreaIdAsync(dto.Code, ct);
+      if (resolvedAreaId.HasValue) existing.SetArea(resolvedAreaId.Value);
     }
     catch (ArgumentException ex)
     {
@@ -197,5 +204,39 @@ public class DataModelImportService(
       fieldsToAdd.Add(field);
     }
     return fieldsToAdd;
+  }
+
+  /// <summary>
+  /// Načte slovník AreaCode → AreaId z databáze. Výsledek je cachován po dobu životnosti služby
+  /// (scoped), takže hromadný import provede dotaz na oblasti pouze jednou.
+  /// </summary>
+  private async Task<Dictionary<string, Guid>> GetAreaLookupAsync(CancellationToken ct)
+  {
+    if (_areaCodeToId is null)
+    {
+      var areas = await areaRepository.ListAsync(ct);
+      _areaCodeToId = areas.ToDictionary(a => a.Code, a => a.Id, StringComparer.OrdinalIgnoreCase);
+    }
+    return _areaCodeToId;
+  }
+
+  /// <summary>
+  /// Vrátí Id oblasti pro daný název DataModelu ze statického mapování.
+  /// Pokud oblast v lokální DB ještě neexistuje, vytvoří ji (Code = Name = kód z mapování).
+  /// Vrací <see langword="null"/>, pokud název není v mapování.
+  /// </summary>
+  private async Task<Guid?> ResolveAreaIdAsync(string dataModelName, CancellationToken ct)
+  {
+    if (!DataModelAreaMapping.TryGetAreaCode(dataModelName, out var areaCode))
+      return null;
+    var lookup = await GetAreaLookupAsync(ct);
+    if (lookup.TryGetValue(areaCode, out var existingId))
+      return existingId;
+
+    var newArea = new Area(Guid.NewGuid(), areaCode);
+    newArea.SetName(areaCode);
+    await areaRepository.AddAsync(newArea, ct);
+    lookup[areaCode] = newArea.Id;
+    return newArea.Id;
   }
 }

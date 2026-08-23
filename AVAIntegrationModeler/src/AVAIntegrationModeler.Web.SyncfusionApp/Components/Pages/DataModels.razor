@@ -22,6 +22,10 @@
     {
         <div class="loading-indicator">Načítám data...</div>
     }
+    @if (_areasError is not null)
+    {
+        <div class="alert alert-warning" style="margin-bottom:8px">⚠️ @_areasError</div>
+    }
     <SfGrid ID="Grid"
             DataSource="@DataModelList"
             @ref="Grid"
@@ -37,6 +41,7 @@
         <Syncfusion.Blazor.Navigations.SfToolbar>
             <Syncfusion.Blazor.Navigations.ToolbarItems>
                 <Syncfusion.Blazor.Navigations.ToolbarItem Text="Přidat datový model" PrefixIcon="e-icons e-add" Id="AddNewDataModel" OnClick="AddNewDataModel"></Syncfusion.Blazor.Navigations.ToolbarItem>
+                <Syncfusion.Blazor.Navigations.ToolbarItem Text="Obnovit" PrefixIcon="e-icons e-refresh" Id="Reload" OnClick="ReloadAsync"></Syncfusion.Blazor.Navigations.ToolbarItem>
                 <Syncfusion.Blazor.Navigations.ToolbarItem Text="Smazat všechny modely" PrefixIcon="e-icons e-delete" Id="DeleteAllDataModels" OnClick="DeleteAllDataModelsAsync"></Syncfusion.Blazor.Navigations.ToolbarItem>
             </Syncfusion.Blazor.Navigations.ToolbarItems>
         </Syncfusion.Blazor.Navigations.SfToolbar>
