@@ -9,6 +9,7 @@
 <ItemGroup>
 	  <PackageReference Include="Anthropic" />
 	  <PackageReference Include="Ardalis.GuardClauses" />
+	  <PackageReference Include="Syncfusion.Blazor.Cards" />
 	  <PackageReference Include="Syncfusion.Blazor.Grid" />
     <PackageReference Include="Syncfusion.Blazor.TreeGrid" />
     <PackageReference Include="Syncfusion.Blazor.Diagram" />

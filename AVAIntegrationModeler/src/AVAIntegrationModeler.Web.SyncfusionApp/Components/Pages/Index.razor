@@ -1,182 +1,84 @@
 @page "/"
+@rendermode InteractiveServer
+@using Syncfusion.Blazor.Navigations
+@using Syncfusion.Blazor.Cards
+@using AVAIntegrationModeler.Web.SyncfusionApp.Services
+@using AVAIntegrationModeler.Contracts.DTO
+@using AVAIntegrationModeler.API.Client
+@inject IntegrationHintService HintService
+@inject IAVAIntegrationModelerApiClient ApiClient
 
 <PageTitle>AVA Integration Modeler</PageTitle>
 
 <span class="pageheader">AVA Integration Modeler</span>
-<br />
-<p class="pagecontent">Vítejte v aplikaci AVA Integration Modeler. Použijte navigaci vlevo pro práci s Feature, DataModely, Scénáři, Oblastmi a Nasazeními.</p>
 
-<div class="controlregion">
-    <NavLink class="nav-link" href="controls">
-        Přehled UI Controlů &#8250;
-    </NavLink>
+<h4 class="section-title">Poslední nasazení</h4>
+
+@if (_isLoadingDeployments)
+{
+    <p class="loading-text">Načítám nasazení…</p>
+}
+else if (_recentDeployments.Count == 0)
+{
+    <p class="loading-text">Žádná nasazení nebyla nalezena.</p>
+}
+else
+{
+    <div class="deployments-row">
+        @foreach (var d in _recentDeployments)
+        {
+            <SfCard CssClass="deployment-card">
+                <CardHeader Title="@d.Code" SubTitle="@d.Name" />
+                <CardContent>
+                    @if (!string.IsNullOrWhiteSpace(d.Ticket))
+                    {
+                        <div class="dep-row"><span class="dep-label">Ticket</span><span>@d.Ticket</span></div>
+                    }
+                    @if (!string.IsNullOrWhiteSpace(d.Description))
+                    {
+                        <div class="dep-row dep-desc">@d.Description</div>
+                    }
+                    <div class="dep-row"><span class="dep-label">Datové modely</span><span>@d.DataModelIds.Count</span></div>
+                </CardContent>
+                <CardFooter>
+                    <a href="/deploymentedit/@d.Code" class="dep-edit-link" title="Upravit nasazení @d.Code">
+                        <span class="e-icons e-edit"></span> Upravit
+                    </a>
+                </CardFooter>
+            </SfCard>
+        }
+    </div>
+}
+
+<p class="pagecontent">Pravidla integrační architektury — tip dne</p>
+
+<div class="hint-carousel-wrapper">
+    <SfCarousel Width="100%" AnimationEffect="CarouselAnimationEffect.Slide" ButtonsVisibility="CarouselButtonVisibility.Visible" ShowIndicators="true" CssClass="hint-carousel" Interval="10000">
+        @foreach (var hint in HintService.GetHints())
+        {
+            <CarouselItem>
+                <div class="hint-slide">
+                    <h5 class="hint-number">Hint @hint.Number / @HintService.GetHints().Count</h5>
+                    <h4 class="hint-title">@hint.Title</h4>
+                    <ul>
+                        @foreach (var point in hint.Points)
+                        {
+                            <li>@point</li>
+                        }
+                    </ul>
+                </div>
+            </CarouselItem>
+        }
+    </SfCarousel>
 </div>
 
-<div class="dscontent">
-
-    <h4 class="sectionheader">Inspirace</h4>
-    <ul>
-        <li>
-            <strong>CDM</strong>
-            <ul>
-                <li><a href="https://github.com/microsoft/CDM" target="_blank" rel="noopener">https://github.com/microsoft/CDM</a></li>
-                <li><a href="https://github.com/microsoft/CDM/blob/master/docs/CDMPoster_a3.pdf" target="_blank" rel="noopener">https://github.com/microsoft/CDM/blob/master/docs/CDMPoster_a3.pdf</a></li>
-                <li><a href="https://microsoft.github.io/CDM/SchemaViz.html?initialManifest=standards.manifest.cdm.json&simpleChrome=true" target="_blank" rel="noopener">https://microsoft.github.io/CDM/SchemaViz.html</a></li>
-            </ul>
-        </li>
-        <li>
-            <strong>Microsoft PowerApps</strong>
-            <ul>
-                <li><a href="https://powerapps.microsoft.com/cs-cz/" target="_blank" rel="noopener">https://powerapps.microsoft.com/cs-cz/</a></li>
-            </ul>
-        </li>
-    </ul>
-
-    <h4 class="sectionheader">Základní principy</h4>
-    <ul>
-        <li>distribuovaný systém je vystavěn na BASE principu (nikoliv ACID principu), z toho vyplývá např. princip "eventual consistenci" a technická omezení vyplývající s CAP teorému</li>
-        <li>single master / single writer = pouze jeden datasource publikuje a aktualizuje data konkrétního modelu, ostatní datasources ho pouze konzumují</li>
-        <li>vazba je vždy jednosměrná (DDD: customer/supplier), vzhledem k principu "BASE" nejde o identické vazby, jaké znáte z "ACID" relačního světa, doporučeno je záznamy zprava dohledávat pomocí "lookupu" (viz MS PowerApps), v případě nutnosti lze nadefinovat "obousměrnou" vazbu pomocí dvou jednosměrných vazeb, ale bude to pro vás konzistenční "vopruz" (viz např. stary model PersonPhoto)</li>
-    </ul>
-
-    <h4 class="sectionheader">Hinty</h4>
-    <ol>
-        <li>
-            <strong>Organizace vlastní vs cizí a mandantnost</strong>
-            <ul>
-                <li>kdyz jeste mandantost neexistovala, stare modely mely vzdy vazbu na organizaci, ktera bud predstavovala organizaci vlastni nebo cizi</li>
-                <li>nyní nahrazujeme organizaci vlastní pomocí mandantnosti záznamu, napr. OrganizationUnit nebo EmployeeDetail (btw. vox populi: integracni vyvojari se bouri, ze nechteji synchronizovat organizaci vlastni, kdyz to neni potreba)</li>
-                <li>vazba na organizaci nyni slouzi vyhradne pro organizace cizi (viz napr. kontaktni osoby)</li>
-                <li>pozn.: v případě, že bude potřeba v nějakém modelu získat více údajů z organizace vlastní, je naprosto legitimní do modelu také přidat vazbu na model Organization (samozrejme bez rozliseni, zda jde o organizaci cizi nebo vlastni, jinak by to vyzadovalo samostatny model pro organizace vlastni)</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Separace interních firemních agend od těch veřejných</strong>
-            <ul>
-                <li>jako problem se ukazaly byt modely, ktere soucasne slouzily pro interni i verejne agendy, tj. napr. PersonRelation, ktery slouzil jako asociacni tabulka mezi organizaci a osobou, ale take jako Employment (pracovni pomer zamestnance), problemem bylo zejmena propojovani techto modelu do vetsich integracnich celku (tzv. virtuálních/business domén) a dodrzeni zakladniho principu "single master"</li>
-                <li>nyní interni firemni modely a verejne modely dusledne oddelujeme, viz napr. Person vs EmployeeDetail, a dtto: PersonRelation (kteremu zustal vyznam klasifikovane vazby mezi osobou a organizaci) vs Employment (pracovni pomer zamestnance)</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Megamodel vs malý model</strong>
-            <ul>
-                <li>jako problem se ukazaly byt stare "mega" modely, ktere v jednom modelu poskytovaly miliardu udaju, ve chvili kdy bylo potreba plnit tento mega-model z vice datovych zdroju (aplikaci) nastal obrovsky problem s konzistenci a porusovanim "single master" principu (viz. např. stary model HcmEmployeeDetail)</li>
-                <li>zakladnim principem je udržet jednotlivé datasource (tj. roury) od sebe oddělené a nezávislé (viz separation, isolation and single responsibility concepts)</li>
-                <li>nyni vytvarime malé modely, které jsou navázané na sebe (viz princip rybích šupin) (viz napr. EmployeeDetail, Employment, EmployeePayroll a EmployeeShift), takove modely jsou mnohem flexibilnejsi, ale pravda vyzadujou o neco slozitejsi queryovani dat (coz ale lze implementacne podporit, viz budouci INCLUDE queryovaci feature)</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Využívání ValueObjectů pro seskupování stejných atributů v různých doménách (viz typ entity: NestedEntity), např. Address</strong>
-            <ul>
-                <li>velmi sikovna praktika seskupovani atributu, ktere spolu souvisi, do neceho jako "struct" objektu, bohuzel ji zatim prilis nevyuzivame</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Dělení modelu vs dědičnost modelu, viz např. Person vs EmployeeDetail</strong>
-            <ul>
-                <li>stare modely se dusledne delily o svuj obsah, napr. stary Person obsahoval osobni udaje a stary EmployeeDetail se odkazoval na nej (pomoci vazby 0:1, protoze kazdy zamestnanec je osoba, ale ne kazda osoba je zamestnanec), ale vzhledem k vyznamnym komplikacim pri integraci (jde zejmena o dedicnost vazeb, coz je velmi osemetna vec) jsme tento pristup prehodnotili a rozhodli se rozkopirovat chybejici obsah tam, kam patri</li>
-                <li>duplicita udaju neni problem, protoze virtualni model neni primarnim zdrojem pravdy, jde pouze o nacachovany udaj a vstupni transformace zajisti, aby se tytez udaje dostaly vsude tam, kam patri</li>
-                <li>jednoznacne nyni preferujeme oddeleni modelu misto dedicnosti, viz. napr. Person, Candidate, EmployeeDetail modely se vyznamne prekryvaji svym obsahem, ale kazdy model slouzi k jinemu ucelu, tj. dáváme přednost duplicitě dat před disjunkcí dat a dodržujeme "single master" princip</li>
-                <li>Notes: btw. s tím souvisí i fakt, že CSV importy jsou vyřešeny blbě, protože nesmí vstupovat do virtuální domény napřímo, protože pak za ten import vlastně nikdo (tj. žádná aplikace) nenese odpovědnost, CSV importy bude potřeba předelat tak, aby vždy vstupovaly přes primární doménu (opět se zde hraje o "single master principle") a teprve odtamtud aby se publikovaly do virtuálních modelů, aby mohla být data konzumována dalšími aplikacemi</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Časová platnost záznamů</strong>
-            <ul>
-                <li>nyní je trvalá, tj. vypublikovaný záznam existuje ve virtuálním modelu tak dlouho, dokud ho primární zdroj pravdy u sebe nevymaže a nevypublikuje</li>
-                <li>latest (dle modifiedOn) vs FIFO - nyní míříme na integraci přes latest, odpovídá to principu trvalé platnosti záznamů, obecný princip: při integraci je potřeba snadno zpracovávat čerstvé a čerstvě změněné záznamy, např. 100 let staré záznamy nesmí při přenosu dat zaclánět)</li>
-                <li>platnost záznamu kalendářní (validFrom a validTo) není nyní v DS systematicky řešena, je to komplexita, kterou lze řešit v případě potřeby na úrovni konkrétního modelu</li>
-                <li>platnost záznamů fiskální (tj. fiskální rok) není nyní v DS systematicky řešena, bylo dohodnuto, že je to komplexita, která by prozatím měla zůstat chovaná uvnitř ERP</li>
-                <li>platnost záznamů ve mzdovém období není nyní v DS systematicky řešena, bylo dohodnuto, že je to komplexita, která by prozatím měla zůstat chovaná uvnitř ERP, viz napr. integrace zamestnancu a pracovnich pomeru vs mzdove uzaverky =&gt; nyni jde o ryze interni zalezitost ERP, obecný princip: potřebujeme aby data při integraci tekla kontinuálně a nikoliv agregovaně a netvořily se výkonnostní peaky, agregaci si zajišťuje samotná aplikace (někdo agreguje po dnech, týdnech nebo měsících, aplikace se v tom nutně nemusí zcela shodnout a integrační modely kontinuálnímu toku nesmí bránit)</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Číselníky master vs slave aplikací, jak správně synchronizovat číselníky</strong>
-            <ul>
-                <li>jde o virtuální číselníky plněné číselníkovým masterem (jako kód se použije FK masteru, ale dáváme přednost přirozenému klíči před umělým klíčem)</li>
-                <li>směr MM (např. ERP -&gt; Advanto), tj. číselník synchronizuju ve stejném směru jako dato</li>
-                <li>směr MS (např. ERP -&gt; JobSignum), tj. číselník synchronizuju v opačném směru než dato</li>
-                <li>směr SM a SS, tj. synchronizace číselníků do ERP, je to možný scénář, ale nyní není příliš preferovaný, ERP chápeme jako MASTER stranu pro většinu dat, včetně číselníků, ale do budoucna to má pro ERP ohromný potencál zejména u dat pořizovaných z veřejně dostupných zdrojů (ARES, FINSTAT, RÚIAN apod.)</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Virtuální číselníky a nativní číselníky / enumy, jak správně synchronizovat enumy</strong>
-            <ul>
-                <li>používáme diskriminační klíče (vazba na virtuální číselník)</li>
-                <li>umíme definovat napevno seedované virtuální číselníky, aplikace si pak musí transformovat svoje enumy a číselníky při publikování a konzumování dat</li>
-                <li>co dělat v případě, kdy ERP má A,B,C, Advanto má D,E a Recru F,G,H,I, no a virtuální číselník má např. X,Y,Z =&gt; nutno se domluvit na kompromisu a dohodu promítnout do unifikovaných dat</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vazby mezi nezávislými zdroji</strong>
-            <ul>
-                <li>neřešíme, každý zdroj publikuje svoje data a konzumuje cizí data</li>
-                <li>ale může konzumovat i svoje data např. v případě, aby provedl kompletní synchronizaci svých dat po rozpadu konzistence dat mezi doménami</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Vazby vs klíče</strong>
-            <ul>
-                <li>DS nyní pracuje s plnohodnotnými vazbami mezi záznamy, což znamená určitou komplexnost navíc, na druhou stranu to poskytuje možnost zajistit a kontrolovat konzistenci virtuálních dat</li>
-                <li>při integraci někdy postačuje pracovat pouze s klíčem, nikoliv s celou vazbou, toto DS momentálně neumí a vždy při navazování vztahů pracuje z ExternalId (viz bod 9) a při queryování dat s virtuálním klíčem (GUID)</li>
-                <li>nedávno jsme přidali podporu pro načítání dat na základě AK (alternate key), uvidíme jak se to osvědčí, v takové případě je v datovém modelu pouze stringové políčko, které reprezentuje nějaký klíč (tj. nejde o vazbu ve smyslu DS)</li>
-            </ul>
-        </li>
-        <li>
-            <strong>DS nyní neumí netypové vazby</strong>
-            <ul>
-                <li>platí dohoda, že netypové vazby (tj. vazby na více modelů) zatím nechceme používat</li>
-                <li>netypovou vazbu nahrazujeme sadou property typu Lookup pro jednotlivé datové modely</li>
-                <li>podpora netypových vazeb (ale pouze typu Lookup) někdy v budoucnu není vyloučená (ale bacha, nelze to vnímat jako podporu dědičnosti)</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Kauzalita při publikování dat</strong>
-            <ul>
-                <li>v některých případech nelze data korektně synchronizovat, protože obsahují vazby v opačném směru závislostí</li>
-                <li>pro tento případ poskytuje DS mechanismus řízení ORPHANů (defaultně je vytváření a používání orphanů zakázáno, ale lze to povolit per vazba)</li>
-                <li>NOTE: aktuálně je tento mechanismus rozbitý!</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Transformace RAW formátů - před vstupem a po výstupu</strong>
-            <ul>
-                <li>zatím neřešíme, je to v kompetenci připojených datových zdrojů a jejich aplikací</li>
-                <li>pokud bychom to v budoucnu řešili, půjde výhradně o podporu bezstavových transformací</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Synchronizace PULL vs PUSH</strong>
-            <ul>
-                <li>tj. request collaboration vs event collaboration, DS umí oboje</li>
-                <li>jaká je dohoda při integracích? =&gt; typicky synchronizace počátečního stavu, obnovení konzistence po rozpadu synchronizace, validace při konzumaci a ignorování nevalidních změn</li>
-                <li>a s tím související konzistence/nekonzistence dat, např. model A-&gt;B, změní se A, ale změna se odmítne z validačních důvodů, změní se B, ale narazí se na to, že předtím neprošlo A =&gt; rozhodně bacha na tyto úskalí zejména při PUSH synchronizacích (tj. přes události), doporučuju si nehrát na kauzálního boha, události budou nastávat ve víceméně nekontrolovatelném pořadí</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Jak postupovat, když nějaká prointegrovaná aplikace změní svou logiku?</strong>
-            <ul>
-                <li>je to povolené? a je vůbec povolené něco v (partnerských i ERP) aplikacních měnit?</li>
-                <li>jaký postup se přesně dohodl se stávajícími externími partnery, půjde o jejich peníze a nebudou malé, mám zkušenost, že bez smlouvy se pak partneři dost cukaj a chtěj kompenzace</li>
-                <li>nabízí se verzování modelů (což není nic jiného než vytvoření jiných modelů a rozšířit integrace aplikací o nové modely)</li>
-                <li>verzování modelů pak také narazí u vazeb na jiné modely, ale systémem záplat asi lze postupovat, klíčové je mít modely navržené rozumně, hojně využívat malé modely a value objecty, aby destrukce nebyla z pohledu integrace fatální</li>
-            </ul>
-        </li>
-        <li>
-            <strong>Okamžité vs odložené zpracování dat v consumeru</strong>
-            <ul>
-                <li>zkušenost z TPA integrace, že mzdovky nechtěly, aby se změny propisovaly přímo do databáze, ale chtěly tyto změny ručně kontrolovat a potvrzovat, narazili jste na to uz nekde jinde?</li>
-                <li>jde vlastne o EventSourcing techniku pri konzumaci dat</li>
-            </ul>
-        </li>
-    </ol>
-
-</div>
 
 <style>
-    .controlregion {
-        margin-top: 30px;
-        margin-bottom: 30px;
+    .pageheader {
+        font-family: sans-serif !important;
+        font-size: 24px !important;
+        color: #333333;
+        font-weight: bold !important;
     }
 
     .pagecontent {
@@ -186,37 +88,144 @@
         letter-spacing: 0.34px;
         line-height: 24px;
         margin-top: 10px;
+        margin-bottom: 20px;
     }
 
-    .pageheader {
-        font-family: sans-serif !important;
-        font-size: 24px !important;
-        color: #333333 ;
-        font-weight: bold !important;
+    .hint-carousel-wrapper {
+        max-width: 900px;
+        margin-bottom: 36px;
     }
 
-    .dscontent {
+    .hint-carousel .e-carousel-items .e-carousel-item {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-start;
+    }
+
+    .hint-slide {
         font-family: sans-serif !important;
         font-size: 15px;
         color: #333333;
         line-height: 22px;
-        max-width: 1100px;
+        padding: 32px 48px;
+        width: 100%;
+        box-sizing: border-box;
+        overflow-y: auto;
+        height: 100%;
     }
 
-    .dscontent .sectionheader {
+    .hint-number {
         font-family: sans-serif !important;
-        font-size: 19px !important;
-        color: #333333 !important;
-        margin-top: 30px;
-        margin-bottom: 10px;
+        font-size: 12px;
+        color: #888;
+        font-weight: normal;
+        margin: 0 0 6px 0;
+        text-transform: uppercase;
+        letter-spacing: 0.8px;
     }
 
-    .dscontent ul,
-    .dscontent ol {
-        margin-bottom: 10px;
+    .hint-title {
+        font-family: sans-serif !important;
+        font-size: 18px;
+        font-weight: bold;
+        color: #1a1a2e;
+        margin: 0 0 16px 0;
     }
 
-    .dscontent li {
-        margin-bottom: 6px;
+    .hint-slide ul {
+        padding-left: 20px;
+        margin: 0;
+    }
+
+    .hint-slide li {
+        margin-bottom: 8px;
+    }
+
+    .section-title {
+        font-family: sans-serif !important;
+        font-size: 18px;
+        font-weight: bold;
+        color: #333333;
+        margin: 0 0 16px 0;
+    }
+
+    .loading-text {
+        font-family: sans-serif !important;
+        font-size: 14px;
+        color: #888;
+    }
+
+    .deployments-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        max-width: 1100px;
+        margin-bottom: 24px;
+    }
+
+    .deployment-card {
+        flex: 1 1 200px;
+        min-width: 180px;
+        max-width: 260px;
+        font-family: sans-serif !important;
+        font-size: 14px;
+    }
+
+    .dep-row {
+        display: flex;
+        gap: 8px;
+        margin-bottom: 4px;
+        font-size: 13px;
+        color: #444;
+    }
+
+    .dep-label {
+        color: #888;
+        min-width: 80px;
+        flex-shrink: 0;
+    }
+
+    .dep-desc {
+        color: #555;
+        font-size: 12px;
+        line-height: 18px;
+        display: block;
+        margin-top: 4px;
+    }
+
+    .dep-edit-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 13px;
+        color: #0d6efd;
+        text-decoration: none;
+    }
+
+    .dep-edit-link:hover {
+        color: #0a58ca;
+        text-decoration: underline;
     }
 </style>
+
+@code {
+    private List<DeploymentDTO> _recentDeployments = [];
+    private bool _isLoadingDeployments = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var response = await ApiClient.GetRecentDeployments(5, CancellationToken.None);
+            _recentDeployments = response.Deployments;
+        }
+        catch
+        {
+            _recentDeployments = [];
+        }
+        finally
+        {
+            _isLoadingDeployments = false;
+        }
+    }
+}

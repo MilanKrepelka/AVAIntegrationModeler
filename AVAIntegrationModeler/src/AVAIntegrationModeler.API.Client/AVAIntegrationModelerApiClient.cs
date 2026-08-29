@@ -675,6 +675,19 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
   }
 
   /// <inheritdoc/>
+  public async Task<DeploymentListResponse> GetRecentDeployments(int count = 5, CancellationToken cancellationToken = default)
+  {
+    _logger.LogDebug($"{nameof(GetRecentDeployments)} starting. count={count}");
+    var fluent = new FluentClient(_httpClient);
+    var response = await fluent
+      .GetAsync("deployments/recent")
+      .WithArguments(new { count })
+      .WithCancellationToken(cancellationToken)
+      .As<DeploymentListResponse>();
+    return response ?? new DeploymentListResponse();
+  }
+
+  /// <inheritdoc/>
   public async Task<DeploymentDTO> GetDeployment(Guid id, CancellationToken cancellationToken)
   {
     _logger.LogDebug($"{nameof(GetDeployment)} starting. id={id}");

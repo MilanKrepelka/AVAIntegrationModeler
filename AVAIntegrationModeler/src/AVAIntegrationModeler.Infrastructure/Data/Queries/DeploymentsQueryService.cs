@@ -59,6 +59,13 @@ public class DeploymentsQueryService(
   }
 
   /// <inheritdoc />
+  public async Task<IEnumerable<DeploymentDTO>> ListRecentAsync(int count, CancellationToken cancellationToken = default)
+  {
+    var all = await ListAsync();
+    return all.TakeLast(count);
+  }
+
+  /// <inheritdoc />
   public async Task<bool> ExistsByCodeAsync(string code, CancellationToken cancellationToken)
     => await databaseContext.Deployments.AnyAsync(d => d.Code == code, cancellationToken);
 

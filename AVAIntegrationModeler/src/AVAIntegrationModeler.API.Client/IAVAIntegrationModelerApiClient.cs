@@ -154,6 +154,11 @@ public interface IAVAIntegrationModelerApiClient
   Task<DeploymentListResponse> GetDeployments(CancellationToken cancellationToken);
 
   /// <summary>
+  /// Vrátí seznam posledních <paramref name="count"/> nasazení.
+  /// </summary>
+  Task<DeploymentListResponse> GetRecentDeployments(int count = 5, CancellationToken cancellationToken = default);
+
+  /// <summary>
   /// Vrátí nasazení podle identifikátoru.
   /// </summary>
   Task<DeploymentDTO> GetDeployment(Guid id, CancellationToken cancellationToken);
