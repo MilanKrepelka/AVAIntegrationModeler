@@ -16,7 +16,6 @@ public class Area : EntityBase<Guid>, IAggregateRoot
   {
     Id = id;
     SetCode(code);
-    SetName(code); // Default name to code if not provided
   }
   public Area(Guid id, string code, string name)
   {

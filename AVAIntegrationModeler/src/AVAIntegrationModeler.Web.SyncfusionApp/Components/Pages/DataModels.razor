@@ -114,7 +114,13 @@
                                       OnClick="@(() => ShowModelMap(model!))"
                                       title="Map">
                             </SfButton>
-<SfButton CssClass="e-small e-round e-outline action-button e-danger"
+                            <SfButton CssClass="e-small e-round e-outline action-button"
+                                      IconCss="e-icons e-changes"
+                                      IsPrimary="false"
+                                      OnClick="@(() => ShowChanges(model!))"
+                                      title="Porovnat se zdrojem AVAPlace">
+                            </SfButton>
+                            <SfButton CssClass="e-small e-round e-outline action-button e-danger"
                                       IconCss="e-icons e-delete"
                                       IsPrimary="false"
                                       OnClick="@(() => DeleteDataModelAsync(model!))"
@@ -313,6 +319,9 @@
     
     private void EditDataModel(DataModelListViewModel model)
         => NavigationManager.NavigateTo($"/datamodeledit/{Datasource}/{model.Id}");
+
+    private void ShowChanges(DataModelListViewModel model)
+        => NavigationManager.NavigateTo($"/datamodelchanges/{model.Id}");
 
     private async Task OpenDocumentation(DataModelListViewModel model)
     {

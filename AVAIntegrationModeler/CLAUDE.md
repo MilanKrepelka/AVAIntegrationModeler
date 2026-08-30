@@ -319,6 +319,42 @@ Stránky injektují `IAVAIntegrationModelerApiClient` (z projektu `API.Client`) 
 - Všech kód musí mít dokumentaci v češtině(XML doc) a být pokrytý testy.
 - Všechny nové funkce musí být implementovány v souladu s Clean Architecture A DDD principy.
 
+## Automatické psaní testů pro Compare/Changes funkce
+
+Kdykoli implementuješ nový UseCase handler nebo logiku porovnání (compare, changes, diff), **musíš automaticky** — bez explicitní žádosti — napsat unit testy jako součást implementace. Platí to zejména pro:
+
+- statické třídy s porovnávací logikou (vzor `DataModelComparer`) — testovat přímým voláním metod
+- `IQueryHandler` implementace porovnávacích dotazů (`CompareXxxHandler`, `GetXxxChangesSummaryHandler`)
+
+### Kde psát testy
+
+Testy patří do `src/AVAIntegrationModeler.UseCases.Test/` ve složce odpovídající namespace (např. `DataModels/Compare/`).
+
+### Přístup k `internal` třídám
+
+Porovnávací třídy jsou typicky `internal`. Pro jejich přímé testování přidej do `.csproj` projektu UseCases:
+
+```xml
+<ItemGroup>
+  <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+    <_Parameter1>AVAIntegrationModeler.UseCases.Test</_Parameter1>
+  </AssemblyAttribute>
+</ItemGroup>
+```
+
+Toto je již přidáno v `src/AVAIntegrationModeler.UseCases/AVAIntegrationModeler.UseCases.csproj`.
+
+### Co testovat
+
+| Třída | Co pokrýt |
+|---|---|
+| `DataModelComparer.BuildComparison` | Same, Different, OnlyInDatabase, OnlyInAvaPlace; Code/Name fallback |
+| `DataModelComparer.CompareModelProperties` | Shoda, rozdíly; že Notes a AreaId nejsou porovnávány |
+| `DataModelComparer.CompareFields` | Párování dle Name (case-insensitive), deduplicace Guid.Empty, řazení |
+| `DataModelComparer.CompareFieldProperties` | Rozdíly v FieldType, ReferencedEntityTypeIds (order-independent) |
+| `CompareDataModelHandler` | NotFound, OnlyInDatabase, OnlyInAvaPlace, Different; že se dotazují oba zdroje |
+| `GetDeploymentChangesSummaryHandler` | Prázdný seznam, agregace počtů, filtrování Guid.Empty, řazení Models dle Code |
+
 ## JSON serializace — exporty
 
 Všechny exportní endpointy v projektu `API` **musí** používat sdílenou instanci `ExportJsonOptions.Instance` z `AVAIntegrationModeler.API.Serialization.ExportJsonOptions` — nikdy nevytvářet lokální `JsonSerializerOptions` v exportních endpointech.

@@ -185,6 +185,41 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
     NavigationManager.NavigateTo("/deployments");
   }
 
+  private Contracts.DataModels.DeploymentChangesSummaryDTO? _changesSummary;
+  private bool _loadingSummary;
+  private string? _summaryError;
+
+  /// <summary>
+  /// Načte souhrnné porovnání DataModelů nasazení.
+  /// </summary>
+  private async Task LoadChangesSummaryAsync()
+  {
+    if (string.IsNullOrEmpty(deploymentCode)) return;
+    _loadingSummary = true;
+    _changesSummary = null;
+    _summaryError = null;
+    await InvokeAsync(StateHasChanged);
+    try
+    {
+      _changesSummary = await ApiClient.GetDeploymentChangesSummary(
+        _edit.Code, _edit.Name, _edit.DataModelIds, _cts?.Token ?? CancellationToken.None);
+      if (_changesSummary is null)
+        _summaryError = "Nepodařilo se načíst přehled změn.";
+    }
+    catch (Exception ex)
+    {
+      _summaryError = $"Chyba: {ex.Message}";
+    }
+    finally
+    {
+      _loadingSummary = false;
+      await InvokeAsync(StateHasChanged);
+    }
+  }
+
+  private void NavigateToModelChanges(Guid modelId)
+    => NavigationManager.NavigateTo($"/datamodelchanges/{modelId}");
+
   public void Dispose()
   {
     if (!_disposed)

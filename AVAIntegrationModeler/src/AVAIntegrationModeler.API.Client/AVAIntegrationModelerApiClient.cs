@@ -1,9 +1,12 @@
 ﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading;
 using System.Threading.Tasks;
 using Ardalis.Result;
 using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Contracts.Dashboard;
+using AVAIntegrationModeler.Contracts.DataModels;
 using AVAIntegrationModeler.Contracts.Deployments;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Contracts.Scenarios;
@@ -763,5 +766,66 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
       cancellationToken);
     response.EnsureSuccessStatusCode();
     return await response.Content.ReadAsByteArrayAsync(cancellationToken);
+  }
+
+  /// <inheritdoc/>
+  public async Task<DataModelComparisonDTO?> GetDataModelChanges(Guid dataModelId, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(GetDataModelChanges)} starting. dataModelId={dataModelId}");
+    var fluent = new FluentClient(_httpClient);
+    try
+    {
+      var response = await fluent
+        .GetAsync($"datamodels/{dataModelId}/changes")
+        .WithCancellationToken(cancellationToken)
+        .As<GetDataModelChangesResponse>();
+      return response?.Comparison;
+    }
+    catch (HttpRequestException ex) when (ex.StatusCode == HttpStatusCode.NotFound)
+    {
+      _logger.LogInformation($"{nameof(GetDataModelChanges)}: model {dataModelId} nebyl nalezen.");
+      return null;
+    }
+    catch (Exception ex) when (
+      ex.GetType().Name == "ApiException" &&
+      (ex.Message.Contains("404") || ex.Message.Contains("NotFound") || ex.Message.Contains("Not Found")))
+    {
+      _logger.LogInformation($"{nameof(GetDataModelChanges)}: model {dataModelId} nebyl nalezen.");
+      return null;
+    }
+  }
+
+  /// <inheritdoc/>
+  public async Task<Contracts.DataModels.DeploymentChangesSummaryDTO?> GetDeploymentChangesSummary(
+    string deploymentCode, string deploymentName, List<Guid> dataModelIds, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(GetDeploymentChangesSummary)} starting. deploymentCode={deploymentCode}, modelCount={dataModelIds?.Count}");
+    var fluent = new FluentClient(_httpClient);
+    var response = await fluent
+      .PostAsync("datamodels/deployment/changes/summary")
+      .WithBody(new
+      {
+        DeploymentCode = deploymentCode,
+        DeploymentName = deploymentName,
+        DataModelIds = dataModelIds ?? new List<Guid>()
+      })
+      .WithCancellationToken(cancellationToken)
+      .As<Contracts.DataModels.GetDeploymentChangesSummaryResponse>();
+    return response?.Summary;
+  }
+
+  /// <inheritdoc/>
+  public async Task<GetDashboardSummaryResponse> GetDashboardSummary(CancellationToken cancellationToken = default)
+  {
+    _logger.LogDebug($"{nameof(GetDashboardSummary)} starting.");
+    var fluent = new FluentClient(_httpClient);
+    var response = await fluent
+      .GetAsync("dashboard/summary")
+      .WithCancellationToken(cancellationToken)
+      .As<GetDashboardSummaryResponse>();
+    return response ?? new GetDashboardSummaryResponse
+    {
+      Summary = new DashboardSummaryDTO(0, 0, 0)
+    };
   }
 }

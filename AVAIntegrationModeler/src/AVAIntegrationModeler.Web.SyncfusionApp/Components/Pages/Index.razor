@@ -4,13 +4,44 @@
 @using Syncfusion.Blazor.Cards
 @using AVAIntegrationModeler.Web.SyncfusionApp.Services
 @using AVAIntegrationModeler.Contracts.DTO
+@using AVAIntegrationModeler.Contracts.Dashboard
 @using AVAIntegrationModeler.API.Client
+@using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.Dashboard
 @inject IntegrationHintService HintService
 @inject IAVAIntegrationModelerApiClient ApiClient
 
 <PageTitle>AVA Integration Modeler</PageTitle>
 
 <span class="pageheader">AVA Integration Modeler</span>
+
+<p class="pagecontent">
+<h4 class="section-title">Souhrn</h4>
+
+@if (_summary is not null)
+{
+    <div class="summary-row">
+        <SfCard CssClass="summary-card">
+            <CardHeader Title="Datové modely (DB)" />
+            <CardContent>
+                <span class="summary-count">@_summary.DataModelsDatabase</span>
+            </CardContent>
+        </SfCard>
+        <SfCard CssClass="summary-card">
+            <CardHeader Title="Datové modely (AVAPlace)" />
+            <CardContent>
+                <span class="summary-count">@_summary.DataModelsAvaPlace</span>
+            </CardContent>
+        </SfCard>
+        <SfCard CssClass="summary-card">
+            <CardHeader Title="Nasazení" />
+            <CardContent>
+                <span class="summary-count">@_summary.DeploymentCount</span>
+            </CardContent>
+        </SfCard>
+    </div>
+}
+</p>
+<div class="pagecontent">
 
 <h4 class="section-title">Poslední nasazení</h4>
 
@@ -49,6 +80,7 @@ else
         }
     </div>
 }
+</div>
 
 <p class="pagecontent">Pravidla integrační architektury — tip dne</p>
 
@@ -206,13 +238,45 @@ else
         color: #0a58ca;
         text-decoration: underline;
     }
+
+    .summary-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        max-width: 800px;
+        margin-bottom: 28px;
+    }
+
+    .summary-card {
+        flex: 1 1 160px;
+        min-width: 140px;
+        max-width: 240px;
+        font-family: sans-serif !important;
+        text-align: center;
+    }
+
+    .summary-count {
+        font-size: 36px;
+        font-weight: bold;
+        color: #1a1a2e;
+        display: block;
+        padding: 8px 0 4px;
+    }
 </style>
 
 @code {
     private List<DeploymentDTO> _recentDeployments = [];
     private bool _isLoadingDeployments = true;
+    private DashboardSummaryViewModel? _summary;
 
     protected override async Task OnInitializedAsync()
+    {
+        var deploymentsTask = LoadDeployments();
+        var summaryTask = LoadSummary();
+        await Task.WhenAll(deploymentsTask, summaryTask);
+    }
+
+    private async Task LoadDeployments()
     {
         try
         {
@@ -226,6 +290,27 @@ else
         finally
         {
             _isLoadingDeployments = false;
+        }
+    }
+
+    private async Task LoadSummary()
+    {
+        try
+        {
+            var response = await ApiClient.GetDashboardSummary(CancellationToken.None);
+            if (response.Summary is not null)
+            {
+                _summary = new DashboardSummaryViewModel
+                {
+                    DataModelsDatabase = response.Summary.DataModelsDatabase,
+                    DataModelsAvaPlace = response.Summary.DataModelsAvaPlace,
+                    DeploymentCount = response.Summary.DeploymentCount
+                };
+            }
+        }
+        catch
+        {
+            // summary zůstane null — sekce se nezobrazí
         }
     }
 }

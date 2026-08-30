@@ -57,7 +57,7 @@ public class DataModelImportService(
         .SetNotes(dto.Notes);
       if (dto.IsAggregateRoot) dataModel.MarkAsAggregateRoot();
       else                    dataModel.MarkAsNestedEntity();
-      var resolvedAreaId = await ResolveAreaIdAsync(dto.Code, ct);
+      var resolvedAreaId = await ResolveAreaIdAsync(dto.Name, ct);
       if (resolvedAreaId.HasValue) dataModel.SetArea(resolvedAreaId.Value);
     }
     catch (ArgumentException ex)
@@ -97,7 +97,7 @@ public class DataModelImportService(
         .SetNotes(dto.Notes);
       if (dto.IsAggregateRoot) existing.MarkAsAggregateRoot();
       else                    existing.MarkAsNestedEntity();
-      var resolvedAreaId = await ResolveAreaIdAsync(dto.Code, ct);
+      var resolvedAreaId = await ResolveAreaIdAsync(dto.Name, ct);
       if (resolvedAreaId.HasValue) existing.SetArea(resolvedAreaId.Value);
     }
     catch (ArgumentException ex)
