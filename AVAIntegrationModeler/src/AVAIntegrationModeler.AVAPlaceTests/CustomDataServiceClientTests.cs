@@ -341,6 +341,132 @@ public class CustomDataServiceClientTests
   }
 
   // ---------------------------------------------------------------------------
+  // ImportUnifiedDataAsync
+  // ---------------------------------------------------------------------------
+
+  /// <summary>
+  /// Prázdný kód modelu musí způsobit <see cref="ArgumentNullException"/> před HTTP voláním.
+  /// </summary>
+  [Fact]
+  public async Task ImportUnifiedDataAsync_EmptyModelCode_ThrowsArgumentNullException()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.OK));
+    using var content = new MemoryStream(Encoding.UTF8.GetBytes("[]"));
+
+    await Should.ThrowAsync<ArgumentNullException>(() =>
+      client.ImportUnifiedDataAsync(string.Empty, "v1", allowUpdate: true, allowChangeExternalId: true, content, CancellationToken.None));
+  }
+
+  /// <summary>
+  /// Prázdná verze musí způsobit <see cref="ArgumentNullException"/> před HTTP voláním.
+  /// </summary>
+  [Fact]
+  public async Task ImportUnifiedDataAsync_EmptyTargetVersion_ThrowsArgumentNullException()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.OK));
+    using var content = new MemoryStream(Encoding.UTF8.GetBytes("[]"));
+
+    await Should.ThrowAsync<ArgumentNullException>(() =>
+      client.ImportUnifiedDataAsync("RegionLabourOffice", string.Empty, allowUpdate: true, allowChangeExternalId: true, content, CancellationToken.None));
+  }
+
+  /// <summary>
+  /// Null stream musí způsobit <see cref="ArgumentNullException"/> před HTTP voláním.
+  /// </summary>
+  [Fact]
+  public async Task ImportUnifiedDataAsync_NullStream_ThrowsArgumentNullException()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.OK));
+
+    await Should.ThrowAsync<ArgumentNullException>(() =>
+      client.ImportUnifiedDataAsync("RegionLabourOffice", "v1", allowUpdate: true, allowChangeExternalId: false, null!, CancellationToken.None));
+  }
+
+  /// <summary>
+  /// HTTP 200 — import proběhl úspěšně, žádná výjimka.
+  /// </summary>
+  [Fact]
+  public async Task ImportUnifiedDataAsync_Success_DoesNotThrow()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.OK));
+    using var content = new MemoryStream(Encoding.UTF8.GetBytes("[{}]"));
+
+    await Should.NotThrowAsync(() =>
+      client.ImportUnifiedDataAsync("RegionLabourOffice", "v-2026-1", allowUpdate: true, allowChangeExternalId: true, content, CancellationToken.None));
+  }
+
+  /// <summary>
+  /// HTTP 500 musí způsobit výjimku (přes <c>EnsureSuccessStatusCode</c>).
+  /// </summary>
+  [Fact]
+  public async Task ImportUnifiedDataAsync_ServerError_Throws()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+    using var content = new MemoryStream(Encoding.UTF8.GetBytes("[]"));
+
+    await Should.ThrowAsync<HttpRequestException>(() =>
+      client.ImportUnifiedDataAsync("RegionLabourOffice", "v1", allowUpdate: false, allowChangeExternalId: false, content, CancellationToken.None));
+  }
+
+  /// <summary>
+  /// URL musí obsahovat kód modelu v cestě, segmet <c>importunifieddata</c>
+  /// a query parametry <c>targetVersion</c>, <c>allowupdate</c>, <c>allowChangeExternalId</c>.
+  /// Request musí použít metodu POST.
+  /// </summary>
+  [Fact]
+  public async Task ImportUnifiedDataAsync_BuildsCorrectUrl()
+  {
+    var handler = new FakeHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.OK));
+    var client = CreateClient(handler);
+    using var content = new MemoryStream(Encoding.UTF8.GetBytes("[]"));
+
+    await client.ImportUnifiedDataAsync("RegionLabourOffice", "ver-42", allowUpdate: true, allowChangeExternalId: true, content, CancellationToken.None);
+
+    handler.LastRequest.ShouldNotBeNull();
+    handler.LastRequest!.Method.ShouldBe(HttpMethod.Post);
+    var uri = handler.LastRequest.RequestUri!.ToString();
+    uri.ShouldContain("importunifieddata");
+    uri.ShouldContain("RegionLabourOffice");
+    uri.ShouldContain("targetVersion=ver-42");
+    uri.ShouldContain("allowupdate=True");
+    uri.ShouldContain("allowChangeExternalId=True");
+  }
+
+  /// <summary>
+  /// Kód modelu se speciálními znaky musí být v URL zakódován.
+  /// </summary>
+  [Fact]
+  public async Task ImportUnifiedDataAsync_SpecialCharsInModelCode_UrlEncodesCode()
+  {
+    var handler = new FakeHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.OK));
+    var client = CreateClient(handler);
+    using var content = new MemoryStream(Encoding.UTF8.GetBytes("[]"));
+
+    await client.ImportUnifiedDataAsync("Region/Labour Office", "v1", allowUpdate: false, allowChangeExternalId: false, content, CancellationToken.None);
+
+    var uri = handler.LastRequest?.RequestUri?.ToString();
+    uri.ShouldNotBeNull();
+    uri.ShouldContain("Region%2FLabour");
+  }
+
+  /// <summary>
+  /// Body requestu musí mít Content-Type <c>application/json</c>.
+  /// </summary>
+  [Fact]
+  public async Task ImportUnifiedDataAsync_SetsJsonContentType()
+  {
+    var handler = new FakeHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.OK));
+    var client = CreateClient(handler);
+    using var content = new MemoryStream(Encoding.UTF8.GetBytes("[{}]"));
+
+    await client.ImportUnifiedDataAsync("RegionLabourOffice", "v1", allowUpdate: true, allowChangeExternalId: false, content, CancellationToken.None);
+
+    handler.LastRequest.ShouldNotBeNull();
+    handler.LastRequest!.Content.ShouldNotBeNull();
+    handler.LastRequest.Content!.Headers.ContentType?.MediaType.ShouldBe("application/json");
+  }
+
+  // ---------------------------------------------------------------------------
   // Pomocné třídy
   // ---------------------------------------------------------------------------
 

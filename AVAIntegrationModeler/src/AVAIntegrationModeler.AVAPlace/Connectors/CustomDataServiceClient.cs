@@ -192,5 +192,36 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
       response.EnsureSuccessStatusCode();
     }
   }
+
+  /// <inheritdoc/>
+  public async Task ImportUnifiedDataAsync(string modelCode, string targetVersion, bool allowUpdate, bool allowChangeExternalId, Stream jsonContent, CancellationToken ct = default)
+  {
+    if (string.IsNullOrEmpty(modelCode)) throw new ArgumentNullException(nameof(modelCode));
+    if (string.IsNullOrEmpty(targetVersion)) throw new ArgumentNullException(nameof(targetVersion));
+    if (jsonContent is null) throw new ArgumentNullException(nameof(jsonContent));
+    ct.ThrowIfCancellationRequested();
+
+    var resource = $"{ApiVersionPrefix}/process/importunifieddata/{Uri.EscapeDataString(modelCode)}";
+    Logger.LogDebug($"Importing unified data to {CombineUri(resource)}, targetVersion={targetVersion}, allowUpdate={allowUpdate}, allowChangeExternalId={allowChangeExternalId}");
+
+    var body = new StreamContent(jsonContent);
+    body.Headers.ContentType = new MediaTypeHeaderValue("application/json") { CharSet = "utf-8" };
+
+    var request = (await AddAuthentication(Client.PostAsync(resource), ct))
+        .WithArgument("targetVersion", targetVersion)
+        .WithArgument("allowupdate", allowUpdate)
+        .WithArgument("allowChangeExternalId", allowChangeExternalId)
+        .WithBody(body)
+        .WithOptions(ignoreHttpErrors: true)
+        .WithCancellationToken(ct);
+
+    var response = await request.AsMessage();
+    if (!response.IsSuccessStatusCode)
+    {
+      var responseBody = await response.Content.ReadAsStringAsync(ct);
+      Logger.LogError($"ImportUnifiedData selhalo: {(int)response.StatusCode} {response.StatusCode} — {responseBody}");
+      response.EnsureSuccessStatusCode();
+    }
+  }
 }
 

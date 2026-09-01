@@ -64,4 +64,16 @@ public interface ICustomDataServiceClient : IDataServiceClient
   /// <param name="jsonContent">Stream s obsahem JSON souboru definice modelu</param>
   /// <param name="ct">Token pro zrušení operace</param>
   Task ImportDataModelAsync(string targetVersion, bool allowUpdate, Stream jsonContent, CancellationToken ct = default);
+
+  /// <summary>
+  /// Importuje unifikovaná data (záznamy) do DataService pro zadaný model a verzi metadat.
+  /// Odpovídá funkci _Import-DataFromFile z PowerShell skriptu update-unifieddata.ps1 — POST na /api/v1/process/importunifieddata/{modelCode}.
+  /// </summary>
+  /// <param name="modelCode">Kód datového modelu (segment URL cesty, např. "RegionLabourOffice")</param>
+  /// <param name="targetVersion">Kód cílové verze metadat (získaný z <see cref="CreateMetadataVersionAsync"/>)</param>
+  /// <param name="allowUpdate">Povolí přepsání existujících záznamů</param>
+  /// <param name="allowChangeExternalId">Povolí změnu ExternalId existujících záznamů</param>
+  /// <param name="jsonContent">Stream s obsahem JSON souboru se záznamy</param>
+  /// <param name="ct">Token pro zrušení operace</param>
+  Task ImportUnifiedDataAsync(string modelCode, string targetVersion, bool allowUpdate, bool allowChangeExternalId, Stream jsonContent, CancellationToken ct = default);
 }

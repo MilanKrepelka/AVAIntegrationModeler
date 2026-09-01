@@ -88,6 +88,37 @@ public class CustomDataServiceClientLiveTests : TestBed<AVAPlaceDemoFixture>
   }
 
   /// <summary>
+  /// Importuje unifikovaná data ze souboru <c>qd-OrganizationUnitType.json</c> do DataService na demo prostředí.
+  /// Tok: <c>CreateMetadataVersionAsync</c> → <c>ImportUnifiedDataAsync</c> s <c>allowUpdate=true</c>, <c>allowChangeExternalId=true</c>.
+  /// Test selže, pokud import vyvolá výjimku nebo server vrátí chybový status.
+  /// </summary>
+  [Fact]
+  public async Task ImportUnifiedDataAsync_OrganizationUnitType_ImportsSuccessfully()
+  {
+    var filePath = Path.Combine(AppContext.BaseDirectory, "Data", "UnifiedData", "qd-OrganizationUnitType.json");
+    File.Exists(filePath).ShouldBeTrue($"Testovací soubor nenalezen: {filePath}");
+
+    var json = await File.ReadAllTextAsync(filePath, TestContext.Current.CancellationToken);
+    var jsonBytes = System.Text.Encoding.UTF8.GetBytes(json);
+
+    var serviceProvider = _fixture.GetServiceProvider(_testOutputHelper);
+    var options = serviceProvider.GetRequiredService<IOptions<AVAPlaceOptions>>();
+    var tenantId = options.Value.TenantId;
+
+    await ServiceRuntimeTenantContext.ExecuteInContextAsync<ICustomDataServiceClient, object?>(
+      serviceProvider, tenantId, async client =>
+      {
+        var versionCode = await client.CreateMetadataVersionAsync(CancellationToken.None);
+        versionCode.ShouldNotBeNullOrWhiteSpace();
+
+        using var stream = new MemoryStream(jsonBytes);
+        await client.ImportUnifiedDataAsync("OrganizationUnitType", versionCode, allowUpdate: true, allowChangeExternalId: true, stream, CancellationToken.None);
+
+        return null;
+      });
+  }
+
+  /// <summary>
   /// Importuje soubor <c>dm-OrganizationUnit.json</c> do DataService na demo prostředí.
   /// Tok: <c>CreateMetadataVersionAsync</c> → <c>ImportDataModelAsync</c> s <c>allowUpdate=true</c>.
   /// Test selže, pokud import vyvolá výjimku nebo server vrátí chybový status.
