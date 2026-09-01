@@ -31,7 +31,7 @@
     <None Update="appsettings.demo.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <None Update="Data\Models\**\*">
+    <None Update="Data\Models\dm-OrganizationUnit.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>

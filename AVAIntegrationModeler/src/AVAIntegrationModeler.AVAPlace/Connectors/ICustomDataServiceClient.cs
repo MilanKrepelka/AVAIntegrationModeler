@@ -41,10 +41,27 @@ public interface ICustomDataServiceClient : IDataServiceClient
   Task<bool> SwitchEnabledDataSourceAsync(string dataSourceId, bool enabled, CancellationToken ct = default);
 
   /// <summary>
-  /// Vrátí unifikovaná data pro daný model. 
+  /// Vrátí unifikovaná data pro daný model.
   /// </summary>
   /// <param name="ModelId">Identifikátor modelu</param>
   /// <param name="ct">Token pro zrušení operace</param>
   /// <returns>Seznam unifikovaných datových objektů</returns>
   Task<IList<Models.DataModelRecord>> GetUnifiedDataAsync(Guid ModelId, CancellationToken ct = default);
+
+  /// <summary>
+  /// Vytvoří novou verzi metadat v DataService a vrátí její kód.
+  /// </summary>
+  /// <param name="ct">Token pro zrušení operace</param>
+  /// <returns>Kód nově vytvořené verze metadat</returns>
+  Task<string> CreateMetadataVersionAsync(CancellationToken ct = default);
+
+  /// <summary>
+  /// Importuje definici datového modelu (JSON) do DataService pro zadanou verzi metadat.
+  /// Odpovídá funkci _Import-DataFromFile z PowerShell skriptu — POST na /api/v1/process/importdatamodel.
+  /// </summary>
+  /// <param name="targetVersion">Kód cílové verze metadat (získaný z <see cref="CreateMetadataVersionAsync"/>)</param>
+  /// <param name="allowUpdate">Povolí přepsání existující definice modelu</param>
+  /// <param name="jsonContent">Stream s obsahem JSON souboru definice modelu</param>
+  /// <param name="ct">Token pro zrušení operace</param>
+  Task ImportDataModelAsync(string targetVersion, bool allowUpdate, Stream jsonContent, CancellationToken ct = default);
 }

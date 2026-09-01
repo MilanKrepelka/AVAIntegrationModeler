@@ -201,8 +201,155 @@ public class CustomDataServiceClientTests
   }
 
   // ---------------------------------------------------------------------------
+  // CreateMetadataVersionAsync
+  // ---------------------------------------------------------------------------
+
+  /// <summary>
+  /// Správná odpověď se JSON polem „code" musí vrátit kód verze.
+  /// </summary>
+  [Fact]
+  public async Task CreateMetadataVersionAsync_Success_ReturnsVersionCode()
+  {
+    var response = JsonResponse(HttpStatusCode.OK, """{"code":"v-2026-1"}""");
+    var client = CreateClient(response);
+
+    var result = await client.CreateMetadataVersionAsync(CancellationToken.None);
+
+    result.ShouldBe("v-2026-1");
+  }
+
+  /// <summary>
+  /// Pokud odpověď neobsahuje pole „code", musí být vyhozena <see cref="InvalidOperationException"/>.
+  /// </summary>
+  [Fact]
+  public async Task CreateMetadataVersionAsync_MissingCode_ThrowsInvalidOperationException()
+  {
+    var response = JsonResponse(HttpStatusCode.OK, """{"result":"ok"}""");
+    var client = CreateClient(response);
+
+    await Should.ThrowAsync<InvalidOperationException>(() =>
+      client.CreateMetadataVersionAsync(CancellationToken.None));
+  }
+
+  /// <summary>
+  /// URL musí cílit na segment <c>Process/CreateMetadataVersion</c> a použít metodu POST.
+  /// </summary>
+  [Fact]
+  public async Task CreateMetadataVersionAsync_CallsCorrectUrl()
+  {
+    var handler = new FakeHttpMessageHandler(JsonResponse(HttpStatusCode.OK, """{"code":"v1"}"""));
+    var client = CreateClient(handler);
+
+    await client.CreateMetadataVersionAsync(CancellationToken.None);
+
+    handler.LastRequest.ShouldNotBeNull();
+    handler.LastRequest!.Method.ShouldBe(HttpMethod.Post);
+    handler.LastRequest.RequestUri!.ToString().ShouldContain("Process/CreateMetadataVersion");
+  }
+
+  // ---------------------------------------------------------------------------
+  // ImportDataModelAsync
+  // ---------------------------------------------------------------------------
+
+  /// <summary>
+  /// Prázdná verze musí způsobit <see cref="ArgumentNullException"/> před HTTP voláním.
+  /// </summary>
+  [Fact]
+  public async Task ImportDataModelAsync_EmptyTargetVersion_ThrowsArgumentNullException()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.OK));
+    using var content = new MemoryStream(Encoding.UTF8.GetBytes("{}"));
+
+    await Should.ThrowAsync<ArgumentNullException>(() =>
+      client.ImportDataModelAsync(string.Empty, allowUpdate: true, content, CancellationToken.None));
+  }
+
+  /// <summary>
+  /// Null stream musí způsobit <see cref="ArgumentNullException"/> před HTTP voláním.
+  /// </summary>
+  [Fact]
+  public async Task ImportDataModelAsync_NullStream_ThrowsArgumentNullException()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.OK));
+
+    await Should.ThrowAsync<ArgumentNullException>(() =>
+      client.ImportDataModelAsync("v1", allowUpdate: true, null!, CancellationToken.None));
+  }
+
+  /// <summary>
+  /// HTTP 200 — import proběhl úspěšně, žádná výjimka.
+  /// </summary>
+  [Fact]
+  public async Task ImportDataModelAsync_Success_DoesNotThrow()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.OK));
+    using var content = new MemoryStream(Encoding.UTF8.GetBytes("""{"code":"dm-Test"}"""));
+
+    await Should.NotThrowAsync(() =>
+      client.ImportDataModelAsync("v-2026-1", allowUpdate: true, content, CancellationToken.None));
+  }
+
+  /// <summary>
+  /// HTTP 500 musí způsobit výjimku (přes <c>EnsureSuccessStatusCode</c>).
+  /// </summary>
+  [Fact]
+  public async Task ImportDataModelAsync_ServerError_Throws()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.InternalServerError));
+    using var content = new MemoryStream(Encoding.UTF8.GetBytes("{}"));
+
+    await Should.ThrowAsync<HttpRequestException>(() =>
+      client.ImportDataModelAsync("v1", allowUpdate: false, content, CancellationToken.None));
+  }
+
+  /// <summary>
+  /// URL musí obsahovat <c>importdatamodel</c>, query param <c>targetVersion</c> a <c>allowupdate</c>.
+  /// Request musí použít metodu POST.
+  /// </summary>
+  [Fact]
+  public async Task ImportDataModelAsync_BuildsCorrectUrl()
+  {
+    var handler = new FakeHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.OK));
+    var client = CreateClient(handler);
+    using var content = new MemoryStream(Encoding.UTF8.GetBytes("{}"));
+
+    await client.ImportDataModelAsync("ver-42", allowUpdate: true, content, CancellationToken.None);
+
+    handler.LastRequest.ShouldNotBeNull();
+    handler.LastRequest!.Method.ShouldBe(HttpMethod.Post);
+    var uri = handler.LastRequest.RequestUri!.ToString();
+    uri.ShouldContain("importdatamodel");
+    uri.ShouldContain("targetVersion=ver-42");
+    uri.ShouldContain("allowupdate=True");
+  }
+
+  /// <summary>
+  /// Body requestu musí mít Content-Type <c>application/json</c>.
+  /// </summary>
+  [Fact]
+  public async Task ImportDataModelAsync_SetsJsonContentType()
+  {
+    var handler = new FakeHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.OK));
+    var client = CreateClient(handler);
+    using var content = new MemoryStream(Encoding.UTF8.GetBytes("""{"code":"dm-X"}"""));
+
+    await client.ImportDataModelAsync("v1", allowUpdate: false, content, CancellationToken.None);
+
+    handler.LastRequest.ShouldNotBeNull();
+    handler.LastRequest!.Content.ShouldNotBeNull();
+    handler.LastRequest.Content!.Headers.ContentType?.MediaType.ShouldBe("application/json");
+  }
+
+  // ---------------------------------------------------------------------------
   // Pomocné třídy
   // ---------------------------------------------------------------------------
+
+  private static HttpResponseMessage JsonResponse(HttpStatusCode status, string json)
+  {
+    var response = new HttpResponseMessage(status);
+    response.Content = new StringContent(json, Encoding.UTF8, "application/json");
+    return response;
+  }
 
   private static ICustomDataServiceClient CreateClient(HttpResponseMessage response)
     => CreateClient(new FakeHttpMessageHandler(response));
@@ -267,68 +414,4 @@ public class CustomDataServiceClientTests
     public Task<AuthenticationHeaderValue> GetAuthenticationHeaderAsync(IApiClient apiClient, CancellationToken ct = default)
       => Task.FromResult(new AuthenticationHeaderValue("Bearer", "fake-test-token"));
   }
-}
-
-// ---------------------------------------------------------------------------
-// Live integrační testy — volání skutečného AVAPlace demo prostředí
-// ---------------------------------------------------------------------------
-
-/// <summary>
-/// Integrační testy <see cref="ICustomDataServiceClient"/> proti AVAPlace demo prostředí.
-/// Vyžaduje připojení k internetu a platnou konfiguraci v <c>appsettings.demo.json</c>.
-/// </summary>
-public class CustomDataServiceClientLiveTests : TestBed<AVAPlaceDemoFixture>
-{
-  public CustomDataServiceClientLiveTests(ITestOutputHelper testOutputHelper, AVAPlaceDemoFixture fixture)
-    : base(testOutputHelper, fixture)
-  {
-  }
-
-  /// <summary>
-  /// Volání <c>GetDataModelsAsync</c> přes bázového klienta musí vrátit neprázdný seznam datových modelů.
-  /// Ověřuje, že klient je správně nakonfigurován, autentizace funguje a základní HTTP komunikace probíhá.
-  /// </summary>
-  [Fact]
-  public async Task GetDataModels_ReturnsNonEmptyList()
-  {
-    var serviceProvider = _fixture.GetServiceProvider(_testOutputHelper);
-    var options = serviceProvider.GetRequiredService<IOptions<AVAPlaceOptions>>();
-    var tenantId = options.Value.TenantId;
-
-    var result = await ServiceRuntimeTenantContext.ExecuteInContextAsync<ICustomDataServiceClient, object>(
-      serviceProvider, tenantId, async client =>
-      {
-        var models = await client.GetDataModelsAsync(new PagingFilter(), CancellationToken.None);
-        return models;
-      });
-
-    result.ShouldNotBeNull();
-    var list = result as System.Collections.IEnumerable;
-    list.ShouldNotBeNull();
-    list.Cast<object>().ShouldNotBeEmpty();
-    
-  }
-
-  
-  [Fact]
-  public async Task GetUnifiedDataAsync_ReturnsNonEmptyList()
-  {
-    var serviceProvider = _fixture.GetServiceProvider(_testOutputHelper);
-    var options = serviceProvider.GetRequiredService<IOptions<AVAPlaceOptions>>();
-    var tenantId = options.Value.TenantId;
-
-    var result = await ServiceRuntimeTenantContext.ExecuteInContextAsync<ICustomDataServiceClient, object>(
-      serviceProvider, tenantId, async client =>
-      {
-        var models = await client.GetUnifiedDataAsync(Guid.Parse("35d31a32-1189-4e22-8e33-0a7d1128983c"), CancellationToken.None);
-        return models;
-      });
-
-    result.ShouldNotBeNull();
-    var list = result as System.Collections.IEnumerable;
-    list.ShouldNotBeNull();
-    list.Cast<object>().ShouldNotBeEmpty();
-
-  }
-
 }

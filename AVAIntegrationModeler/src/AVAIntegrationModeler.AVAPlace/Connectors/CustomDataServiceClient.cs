@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
@@ -143,6 +145,52 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
 
     var result = await response.As<DataCollection<Models.DataModelRecord>>();
     return result?.Items ?? new List<Models.DataModelRecord>();
+  }
+
+  /// <inheritdoc/>
+  public async Task<string> CreateMetadataVersionAsync(CancellationToken ct = default)
+  {
+    var resource = $"{ApiVersionPrefix}/Process/CreateMetadataVersion";
+    Logger.LogDebug($"Creating metadata version on {CombineUri(resource)}");
+
+    var request = (await AddAuthentication(Client.PostAsync(resource), ct))
+        .WithCancellationToken(ct);
+
+    var result = await request.As<JObject>();
+    var code = result?["code"]?.ToString();
+    if (string.IsNullOrEmpty(code))
+      throw new InvalidOperationException("DataService nevrátil kód nově vytvořené verze metadat.");
+
+    return code;
+  }
+
+  /// <inheritdoc/>
+  public async Task ImportDataModelAsync(string targetVersion, bool allowUpdate, Stream jsonContent, CancellationToken ct = default)
+  {
+    if (string.IsNullOrEmpty(targetVersion)) throw new ArgumentNullException(nameof(targetVersion));
+    if (jsonContent is null) throw new ArgumentNullException(nameof(jsonContent));
+    ct.ThrowIfCancellationRequested();
+
+    var resource = $"{ApiVersionPrefix}/process/importdatamodel";
+    Logger.LogDebug($"Importing data model to {CombineUri(resource)}, targetVersion={targetVersion}, allowUpdate={allowUpdate}");
+
+    var body = new StreamContent(jsonContent);
+    body.Headers.ContentType = new MediaTypeHeaderValue("application/json") { CharSet = "utf-8" };
+
+    var request = (await AddAuthentication(Client.PostAsync(resource), ct))
+        .WithArgument("targetVersion", targetVersion)
+        .WithArgument("allowupdate", allowUpdate)
+        .WithBody(body)
+        .WithOptions(ignoreHttpErrors: true)
+        .WithCancellationToken(ct);
+
+    var response = await request.AsMessage();
+    if (!response.IsSuccessStatusCode)
+    {
+      var responseBody = await response.Content.ReadAsStringAsync(ct);
+      Logger.LogError($"ImportDataModel selhalo: {(int)response.StatusCode} {response.StatusCode} — {responseBody}");
+      response.EnsureSuccessStatusCode();
+    }
   }
 }
 

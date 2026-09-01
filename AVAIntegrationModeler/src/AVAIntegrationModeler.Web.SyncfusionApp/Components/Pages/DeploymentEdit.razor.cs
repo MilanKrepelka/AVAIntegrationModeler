@@ -44,6 +44,10 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
 
     public List<Guid> DataModelIds { get; set; } = new();
 
+    public DateTime? LastSaveDateTime { get; set; }
+
+    public DateTime? LastDeploymentDateTime { get; set; }
+
     public static DeploymentEditModel New()
     {
       var id = Guid.NewGuid();
@@ -93,7 +97,9 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
             Name = dto.Name,
             Ticket = dto.Ticket,
             Description = dto.Description,
-            DataModelIds = dto.DataModelIds.ToList()
+            DataModelIds = dto.DataModelIds.ToList(),
+            LastSaveDateTime = dto.LastSaveDateTime,
+            LastDeploymentDateTime = dto.LastDeploymentDateTime
           };
         }
       }

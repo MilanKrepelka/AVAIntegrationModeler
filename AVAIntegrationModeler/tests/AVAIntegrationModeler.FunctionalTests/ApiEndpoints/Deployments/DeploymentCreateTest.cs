@@ -35,6 +35,32 @@ public class DeploymentCreateTest(CustomWebApplicationFactory<Program> factory) 
   }
 
   [Fact]
+  public async Task CreateDeployment_SetsLastSaveDateTime()
+  {
+    var before = DateTime.UtcNow.AddSeconds(-1);
+
+    var req = new CreateDeploymentRequest
+    {
+      Deployment = new DeploymentDTO
+      {
+        Id = Guid.NewGuid(),
+        Code = "TEST_CREATE_DATES",
+        Name = "Test Create Dates",
+        DataModelIds = new List<Guid>()
+      }
+    };
+
+    await _client.PostAsJsonAsync("/Deployments", req);
+
+    var list = await _client.GetAndDeserializeAsync<DeploymentListResponse>("/Deployments");
+    var created = list.Deployments.FirstOrDefault(d => d.Code == "TEST_CREATE_DATES");
+    created.ShouldNotBeNull();
+    created!.LastSaveDateTime.ShouldNotBeNull();
+    created.LastSaveDateTime!.Value.ShouldBeGreaterThan(before);
+    created.LastDeploymentDateTime.ShouldBeNull();
+  }
+
+  [Fact]
   public async Task CreateDeployment_DuplikatniKod_Vrati409()
   {
     var req = new CreateDeploymentRequest

@@ -33,6 +33,7 @@
                 <GridColumn Field=@nameof(DeploymentListViewModel.Code) HeaderText="Kód" Width="150" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn Field=@nameof(DeploymentListViewModel.Name) HeaderText="Název" Width="300" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn Field=@nameof(DeploymentListViewModel.DataModelCount) HeaderText="Datové modely" Width="150"></GridColumn>
+                <GridColumn Field=@nameof(DeploymentListViewModel.LastDeploymentDateTime) HeaderText="Poslední nasazení" Width="180" Type="ColumnType.DateTime" Format="dd.MM.yyyy HH:mm"></GridColumn>
                 <GridColumn Field=@nameof(DeploymentListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="true">
                     <Template>
                         @{

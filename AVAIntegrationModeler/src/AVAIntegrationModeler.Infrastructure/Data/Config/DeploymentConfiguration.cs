@@ -30,6 +30,12 @@ public class DeploymentConfiguration : IEntityTypeConfiguration<Deployment>
       .IsRequired(false)
       .HasMaxLength(2000);
 
+    builder.Property(e => e.LastSaveDateTime)
+      .IsRequired(false);
+
+    builder.Property(e => e.LastDeploymentDateTime)
+      .IsRequired(false);
+
     builder.HasIndex(e => e.Code).IsUnique();
 
     builder.HasMany(e => e.DataModels)

@@ -67,6 +67,28 @@
             </div>
         </div>
 
+        @if (IsEditMode)
+        {
+            <div class="row" style="margin-top:16px">
+                <div class="col-12 col-md-6">
+                    <SfTextBox CssClass="w-100"
+                               Placeholder="Poslední uložení"
+                               FloatLabelType="FloatLabelType.Always"
+                               Value="@(_edit.LastSaveDateTime.HasValue ? _edit.LastSaveDateTime.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss") : "")"
+                               Readonly="true">
+                    </SfTextBox>
+                </div>
+                <div class="col-12 col-md-6">
+                    <SfTextBox CssClass="w-100"
+                               Placeholder="Poslední nasazení"
+                               FloatLabelType="FloatLabelType.Always"
+                               Value="@(_edit.LastDeploymentDateTime.HasValue ? _edit.LastDeploymentDateTime.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss") : "")"
+                               Readonly="true">
+                    </SfTextBox>
+                </div>
+            </div>
+        }
+
         <div class="row" style="margin-top:24px">
             <div class="col-12">
                 <h5>Datové modely v nasazení</h5>
