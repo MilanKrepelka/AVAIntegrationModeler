@@ -191,6 +191,11 @@ public interface IAVAIntegrationModelerApiClient
   Task<byte[]> ExportDeployment(string deploymentCode, CancellationToken cancellationToken);
 
   /// <summary>
+  /// Nahraje DataModely a záznamy nasazení do AVAPlace přes CreateMetadataVersion + ImportDataModel + ImportUnifiedData.
+  /// </summary>
+  Task<Result<UploadDeploymentToAvaPlaceResult>> UploadDeploymentToAvaPlace(string deploymentCode, CancellationToken cancellationToken);
+
+  /// <summary>
   /// Vrátí hluboké porovnání datového modelu (včetně polí) mezi lokální databází a AVAPlace.
   /// </summary>
   /// <param name="dataModelId">Identifikátor datového modelu.</param>

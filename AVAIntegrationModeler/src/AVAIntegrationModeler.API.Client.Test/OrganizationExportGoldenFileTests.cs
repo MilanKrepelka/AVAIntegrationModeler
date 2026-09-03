@@ -159,8 +159,8 @@ public class OrganizationExportGoldenFileTests : IClassFixture<AVAIntegrationMod
       actual = await JsonNode.ParseAsync(entryStream);
     }
     Assert.NotNull(actual);
-    actual!["Id"] = PlaceholderId.ToString();
-    actual["Code"] = "ORG-PLACEHOLDER";
+    actual!["id"] = PlaceholderId.ToString();
+    actual["code"] = "ORG-PLACEHOLDER";
 
     var expectedPath = Path.Combine(AppContext.BaseDirectory, "TestData", "OrganizationExport.expected.json");
     var expectedJson = await File.ReadAllTextAsync(expectedPath);

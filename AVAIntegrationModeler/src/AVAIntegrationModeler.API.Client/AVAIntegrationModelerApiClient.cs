@@ -769,6 +769,27 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
   }
 
   /// <inheritdoc/>
+  public async Task<Result<UploadDeploymentToAvaPlaceResult>> UploadDeploymentToAvaPlace(
+    string deploymentCode, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(UploadDeploymentToAvaPlace)} starting. deploymentCode={deploymentCode}");
+    var response = await _httpClient.PostAsJsonAsync(
+      $"deployments/{Uri.EscapeDataString(deploymentCode)}/upload-to-avaplace",
+      new { },
+      cancellationToken);
+
+    if (!response.IsSuccessStatusCode)
+    {
+      var body = await response.Content.ReadAsStringAsync(cancellationToken);
+      return Result.Error($"Nahrání do AVAPlace selhalo: {(int)response.StatusCode} {response.ReasonPhrase} — {body}");
+    }
+
+    var json = await response.Content.ReadAsStringAsync(cancellationToken);
+    var result = JsonConvert.DeserializeObject<UploadDeploymentToAvaPlaceResult>(json);
+    return result is not null ? result : Result.Error("Server nevrátil platnou odpověď.");
+  }
+
+  /// <inheritdoc/>
   public async Task<DataModelComparisonDTO?> GetDataModelChanges(Guid dataModelId, CancellationToken cancellationToken)
   {
     _logger.LogDebug($"{nameof(GetDataModelChanges)} starting. dataModelId={dataModelId}");

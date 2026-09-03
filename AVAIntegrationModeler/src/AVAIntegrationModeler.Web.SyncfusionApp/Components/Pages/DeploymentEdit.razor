@@ -139,7 +139,11 @@
                                     DataSource="@_selectableDataModels"
                                     @bind-Value="_selectedDataModelId"
                                     Placeholder="Vyberte datový model"
-                                    CssClass="w-100">
+                                    AllowFiltering="true"
+                                    FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
+                                    IgnoreAccent="true"
+                                    FilterBarPlaceholder="Hledat model..."
+                                    CssClass="w-50">
                         <DropDownListFieldSettings Text="Code" Value="Id"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <SfButton CssClass="e-primary" Type="Button" OnClick="AddDataModel">Přidat</SfButton>
@@ -265,6 +269,24 @@
                     }
                 </div>
             </div>
+        }
+
+        @if (IsEditMode)
+        {
+            <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap">
+                <SfButton CssClass="e-outline" Type="Button" OnClick="ExportAsync">
+                    Export datových modelů
+                </SfButton>
+                <SfButton CssClass="e-success e-outline" Type="Button" OnClick="UploadToAvaPlaceAsync" Disabled="@_avaPlaceLoading">
+                    @(_avaPlaceLoading ? "Nahrávám..." : "Nahrát do AVAPlace")
+                </SfButton>
+            </div>
+            @if (_avaPlaceMessage is not null)
+            {
+                <div class="alert @(_avaPlaceSuccess ? "alert-success" : "alert-danger")" style="margin-top:8px; font-size:.875rem">
+                    @_avaPlaceMessage
+                </div>
+            }
         }
 
         <div style="margin-top:16px; display:flex; gap:8px">

@@ -43,7 +43,7 @@ public class ExportDataModelRecordsHandler(
       .GroupBy(r => r.ModelId)
       .Select(g => new ExportEntry<List<DataModelRecordDTO>>(
         BuildFileName(g.Key, modelsById, areaCodesById),
-        g.ToList()));
+        g.Select(r => r with { Fields = r.Fields.OrderBy(f => f.Key, StringComparer.OrdinalIgnoreCase).ToList() }).ToList()));
 
     return Result.Success(new ExportResult<List<DataModelRecordDTO>>("records-export.zip", entries));
   }
@@ -62,9 +62,9 @@ public class ExportDataModelRecordsHandler(
     var areaCode = model?.AreaId is Guid areaId && areaCodesById.TryGetValue(areaId, out var code)
       ? code
       : BezOblasti;
-    var modelName = model?.Name ?? modelId.ToString();
+    var modelCode = model?.Code ?? modelId.ToString();
 
-    return $"dataobjects/{SafeName(areaCode, Guid.Empty)}/qd-{SafeName(modelName, modelId)}.json";
+    return $"dataobjects/{SafeName(areaCode, Guid.Empty)}/qd-{SafeName(modelCode, modelId)}.json";
   }
 
   private static string SafeName(string? raw, Guid fallback)

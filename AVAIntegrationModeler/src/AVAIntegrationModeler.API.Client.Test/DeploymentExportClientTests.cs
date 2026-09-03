@@ -1,4 +1,4 @@
-using System.IO.Compression;
+﻿using System.IO.Compression;
 using System.Text.Json;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
@@ -121,7 +121,7 @@ public class DeploymentExportClientTests : IClassFixture<AVAIntegrationModelerAP
     var entry = zip.Entries[0];
     using var entryStream = entry.Open();
     var doc = await JsonDocument.ParseAsync(entryStream);
-    Assert.True(doc.RootElement.TryGetProperty("Code", out _), "Chybí klíč 'Code' definice modelu.");
+    Assert.True(doc.RootElement.TryGetProperty("code", out _), "Chybí klíč 'code' definice modelu.");
   }
 
   /// <summary>
