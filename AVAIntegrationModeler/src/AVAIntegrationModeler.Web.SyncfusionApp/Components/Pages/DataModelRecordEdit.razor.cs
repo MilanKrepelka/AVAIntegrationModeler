@@ -11,6 +11,7 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
 {
   private bool _disposed = false;
   private CancellationTokenSource? _cts;
+  private readonly Guid _newRecordId = Guid.NewGuid();
 
   [Inject] private IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
   [Inject] private NavigationManager NavigationManager { get; set; } = default!;
@@ -75,7 +76,11 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
         }
       }
 
-      if (!IsCreate)
+      if (IsCreate)
+      {
+        GenerateExternalId();
+      }
+      else
       {
         _existingRecord = await _apiClient.GetDataModelRecord(_datasource, recordId, ct);
         if (_existingRecord is not null)
@@ -122,7 +127,7 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
 
     var record = new DataModelRecordDTO
     {
-      Id = IsCreate ? Guid.NewGuid() : recordId,
+      Id = IsCreate ? _newRecordId : recordId,
       ModelId = modelId,
       ExternalId = _edit.ExternalId,
       Fields = fields
@@ -158,6 +163,26 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
       _saveMessage = "Došlo k neočekávané chybě.";
       Console.WriteLine($"SaveAsync error: {ex.Message}");
     }
+  }
+
+  private void GenerateExternalId()
+  {
+    var codeValue = _fieldValues.TryGetValue("Code", out var fv) ? fv.StringValue : null;
+    var parts = new List<string>();
+    if (!string.IsNullOrWhiteSpace(codeValue))
+      parts.Add(codeValue);
+    if (!string.IsNullOrWhiteSpace(_dataModel?.Code))
+      parts.Add(_dataModel.Code);
+    parts.Add(Guid.Empty.ToString());
+    _edit.ExternalId = string.Join(".", parts);
+  }
+
+  private void HandleFieldValueChanged(string fieldName, string value)
+  {
+    if (_fieldValues.TryGetValue(fieldName, out var fv))
+      fv.StringValue = value;
+    if (fieldName == "Code" && IsCreate)
+      GenerateExternalId();
   }
 
   private void GoBack()
