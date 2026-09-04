@@ -9,8 +9,8 @@ namespace AVAIntegrationModeler.UseCases.Deployments.Export;
 
 /// <summary>
 /// Handler pro <see cref="ExportDeploymentQuery"/>. Exportuje DataModely nasazení jako ZIP archív.
-/// Pro každý DataModel vznikne definiční soubor na cestě <c>datamodels/{Area.Code}/dm-{Model.Code}.json</c>
-/// a pokud má model záznamy, i soubor s jejich seznamem na cestě <c>dataobjects/{Area.Code}/qd-{Model.Code}.json</c>.
+/// Pro každý DataModel vznikne definiční soubor na cestě <c>datamodels/{Area.Code}/dm-{Model.Name}.json</c>
+/// a pokud má model záznamy, i soubor s jejich seznamem na cestě <c>dataobjects/{Area.Code}/qd-{Model.Name}.json</c>.
 /// </summary>
 public class ExportDeploymentHandler(
   IDeploymentsQueryService _deployments,
@@ -65,15 +65,15 @@ public class ExportDeploymentHandler(
   /// Pokud DataModel nemá přiřazenou oblast, použije se adresář <c>bez-oblasti</c>.
   /// </summary>
   private static string BuildDefinitionFileName(DataModelDTO model, IReadOnlyDictionary<Guid, string> areaCodesById)
-    => $"datamodels/{SafeName(AreaCode(model, areaCodesById), Guid.Empty)}/dm-{SafeName(model.Code, model.Id)}.json";
+    => $"datamodels/{SafeName(AreaCode(model, areaCodesById), Guid.Empty)}/dm-{SafeName(model.Name, model.Id)}.json";
 
   /// <summary>
   /// Sestaví cestu k souboru se záznamy DataModelu v ZIP archívu ve formátu
-  /// <c>dataobjects/{Area.Code}/qd-{Model.Code}.json</c>.
+  /// <c>dataobjects/{Area.Code}/qd-{Model.Name}.json</c>.
   /// Pokud DataModel nemá přiřazenou oblast, použije se adresář <c>bez-oblasti</c>.
   /// </summary>
   private static string BuildRecordsFileName(DataModelDTO model, IReadOnlyDictionary<Guid, string> areaCodesById)
-    => $"dataobjects/{SafeName(AreaCode(model, areaCodesById), Guid.Empty)}/qd-{SafeName(model.Code, model.Id)}.json";
+    => $"dataobjects/{SafeName(AreaCode(model, areaCodesById), Guid.Empty)}/qd-{SafeName(model.Name, model.Id)}.json";
 
   private static string AreaCode(DataModelDTO model, IReadOnlyDictionary<Guid, string> areaCodesById)
     => model.AreaId is Guid areaId && areaCodesById.TryGetValue(areaId, out var code) ? code : BezOblasti;

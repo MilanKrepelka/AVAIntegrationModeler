@@ -17,8 +17,7 @@
       "fieldType": "NestedEntity",
       "referencedEntityTypeIds": [
         "4b3e7a23-f83e-432c-8b03-2b8054169106"
-      ],
-      "expression": null
+      ]
     },
     {
       "name": "BankAccounts",
@@ -31,8 +30,7 @@
       "fieldType": "NestedEntity",
       "referencedEntityTypeIds": [
         "d77c9e98-c027-4c08-836d-132589babfbe"
-      ],
-      "expression": null
+      ]
     },
     {
       "name": "Code",
@@ -42,9 +40,7 @@
       "isCollection": false,
       "isLocalized": false,
       "isNullable": false,
-      "fieldType": "Text",
-      "referencedEntityTypeIds": [],
-      "expression": null
+      "fieldType": "Text"
     },
     {
       "name": "Contacts",
@@ -57,8 +53,7 @@
       "fieldType": "NestedEntity",
       "referencedEntityTypeIds": [
         "ef0acd96-3e88-4fc6-a331-4f0f2c571395"
-      ],
-      "expression": null
+      ]
     },
     {
       "name": "CountryCode",
@@ -68,9 +63,7 @@
       "isCollection": false,
       "isLocalized": false,
       "isNullable": false,
-      "fieldType": "Text",
-      "referencedEntityTypeIds": [],
-      "expression": null
+      "fieldType": "Text"
     },
     {
       "name": "DateOfFoundation",
@@ -80,9 +73,7 @@
       "isCollection": false,
       "isLocalized": false,
       "isNullable": true,
-      "fieldType": "Date",
-      "referencedEntityTypeIds": [],
-      "expression": null
+      "fieldType": "Date"
     },
     {
       "name": "DateOfTermination",
@@ -92,9 +83,7 @@
       "isCollection": false,
       "isLocalized": false,
       "isNullable": true,
-      "fieldType": "Date",
-      "referencedEntityTypeIds": [],
-      "expression": null
+      "fieldType": "Date"
     },
     {
       "name": "IdentificationNumber",
@@ -104,9 +93,7 @@
       "isCollection": false,
       "isLocalized": false,
       "isNullable": false,
-      "fieldType": "Text",
-      "referencedEntityTypeIds": [],
-      "expression": null
+      "fieldType": "Text"
     },
     {
       "name": "LegalForm",
@@ -119,8 +106,7 @@
       "fieldType": "LookupEntity",
       "referencedEntityTypeIds": [
         "6a763172-3b82-4074-8ee6-0bfa86f15e50"
-      ],
-      "expression": null
+      ]
     },
     {
       "name": "Name",
@@ -130,9 +116,7 @@
       "isCollection": false,
       "isLocalized": false,
       "isNullable": true,
-      "fieldType": "Text",
-      "referencedEntityTypeIds": [],
-      "expression": null
+      "fieldType": "Text"
     },
     {
       "name": "TaxId",
@@ -142,9 +126,7 @@
       "isCollection": false,
       "isLocalized": false,
       "isNullable": true,
-      "fieldType": "Text",
-      "referencedEntityTypeIds": [],
-      "expression": null
+      "fieldType": "Text"
     },
     {
       "name": "VatIn",
@@ -154,9 +136,7 @@
       "isCollection": false,
       "isLocalized": false,
       "isNullable": true,
-      "fieldType": "Text",
-      "referencedEntityTypeIds": [],
-      "expression": null
+      "fieldType": "Text"
     }
   ],
   "utcCreatedOn": "0001-01-01T00:00:00",

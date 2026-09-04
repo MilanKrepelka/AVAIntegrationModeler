@@ -1,7 +1,8 @@
-namespace AVAIntegrationModeler.Contracts.DTO;
+﻿namespace AVAIntegrationModeler.Contracts.DTO;
 
 public record DataModelRecordDTO
 {
+  [System.Text.Json.Serialization.JsonPropertyName("recordId")]
   public Guid Id { get; init; }
 
   public Guid ModelId { get; init; }

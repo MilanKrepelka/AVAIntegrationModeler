@@ -2,6 +2,7 @@ using System.IO.Compression;
 using System.Text.Json;
 using AVAIntegrationModeler.API.Serialization;
 using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.UseCases.DataModelRecords.Export;
 
 namespace AVAIntegrationModeler.API.DataModelRecords;
@@ -39,7 +40,7 @@ public class Export(IMediator _mediator) : Endpoint<ExportDataModelRecordsReques
       {
         var zipEntry = archive.CreateEntry(entry.FileName, CompressionLevel.Optimal);
         await using var entryStream = zipEntry.Open();
-        await JsonSerializer.SerializeAsync(entryStream, entry.Data, ExportJsonOptions.Instance, ct);
+        await JsonSerializer.SerializeAsync(entryStream, DataModelRecordExportMapper.MapToExport(entry.Data), ExportJsonOptions.Instance, ct);
       }
     }
 

@@ -62,9 +62,9 @@ public class ExportDataModelRecordsHandler(
     var areaCode = model?.AreaId is Guid areaId && areaCodesById.TryGetValue(areaId, out var code)
       ? code
       : BezOblasti;
-    var modelCode = model?.Code ?? modelId.ToString();
+    var modelName = model?.Name ?? modelId.ToString();
 
-    return $"dataobjects/{SafeName(areaCode, Guid.Empty)}/qd-{SafeName(modelCode, modelId)}.json";
+    return $"dataobjects/{SafeName(areaCode, Guid.Empty)}/qd-{SafeName(modelName, modelId)}.json";
   }
 
   private static string SafeName(string? raw, Guid fallback)
