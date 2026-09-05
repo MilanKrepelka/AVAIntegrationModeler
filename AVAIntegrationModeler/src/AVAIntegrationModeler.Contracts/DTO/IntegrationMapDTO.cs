@@ -39,6 +39,11 @@ public class IntegrationMapDTO
     /// Datum poslední aktualizace.
     /// </summary>
     public DateTime? UpdatedAt { get; set; }
+
+    /// <summary>
+    /// Datum a čas posledního uložení integrační mapy do databáze (UTC).
+    /// </summary>
+    public DateTime? LastSavedAt { get; set; }
 }
 
 /// <summary>

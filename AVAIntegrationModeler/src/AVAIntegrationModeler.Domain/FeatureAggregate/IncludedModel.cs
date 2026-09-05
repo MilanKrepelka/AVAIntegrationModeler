@@ -9,7 +9,7 @@ namespace AVAIntegrationModeler.Domain.FeatureAggregate;
 /// <summary>
 /// Model AVA virtuálního modelu
 /// </summary>
-public class IncludedModel : EntityBase<Guid>
+public class IncludedModel : DomainEntityBase<Guid>
 {
   /// <summary>
   /// Základní konstruktor

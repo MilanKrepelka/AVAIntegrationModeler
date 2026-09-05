@@ -20,7 +20,9 @@ public static class DataModelRecordMapper
         StringValue = f.StringValue,
         CzechValue = f.CzechValue,
         EnglishValue = f.EnglishValue
-      }).ToList()
+      }).ToList(),
+      CreatedAt = entity.CreatedAt,
+      LastSavedAt = entity.LastSavedAt
     };
   }
 

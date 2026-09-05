@@ -3,7 +3,7 @@ namespace AVAIntegrationModeler.Domain.DeploymentAggregate;
 /// <summary>
 /// Aggregate root pro nasazení — seskupuje datové modely, které jsou součástí jednoho nasazení.
 /// </summary>
-public class Deployment : EntityBase<Guid>, IAggregateRoot
+public class Deployment : DomainEntityBase<Guid>, IAggregateRoot
 {
   /// <summary>
   /// Privátní konstruktor pro EF Core.

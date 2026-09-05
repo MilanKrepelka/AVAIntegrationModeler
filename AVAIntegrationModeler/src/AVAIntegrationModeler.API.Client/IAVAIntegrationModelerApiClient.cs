@@ -149,6 +149,11 @@ public interface IAVAIntegrationModelerApiClient
   Task<Result> DeleteArea(Datasource datasource, string areaCode, CancellationToken cancellationToken);
 
   /// <summary>
+  /// Uloží JSON diagramu mapy pro danou oblast a nastaví datum posledního uložení mapy.
+  /// </summary>
+  Task<Result> SaveAreaMap(Guid areaId, string diagramJson, CancellationToken cancellationToken);
+
+  /// <summary>
   /// Vrátí seznam nasazení.
   /// </summary>
   Task<DeploymentListResponse> GetDeployments(CancellationToken cancellationToken);

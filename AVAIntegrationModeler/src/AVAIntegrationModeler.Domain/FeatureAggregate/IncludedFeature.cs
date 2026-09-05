@@ -11,7 +11,7 @@ namespace AVAIntegrationModeler.Domain.FeatureAggregate;
 /// </summary>
 /// <remarks>Třída slouží jako zástupce nebo označení pro feature, které jsou součástí většího systému. Sama o sobě neobsahuje žádnou funkcionalitu,
 /// ale může být použita k identifikaci nebo kategorizaci zahrnutých features v aplikaci.</remarks>
-public class IncludedFeature : EntityBase<Guid>
+public class IncludedFeature : DomainEntityBase<Guid>
 {
   /// <summary>
   /// Základní konstruktor.

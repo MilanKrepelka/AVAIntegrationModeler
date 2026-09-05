@@ -1,6 +1,6 @@
 namespace AVAIntegrationModeler.Domain.DataModelRecordAggregate;
 
-public class DataModelRecord : EntityBase<Guid>, IAggregateRoot
+public class DataModelRecord : DomainEntityBase<Guid>, IAggregateRoot
 {
   private DataModelRecord() { }
 

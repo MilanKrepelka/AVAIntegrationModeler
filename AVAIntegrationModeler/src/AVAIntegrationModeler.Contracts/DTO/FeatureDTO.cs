@@ -53,6 +53,14 @@ public record FeatureDTO
   /// </summary>
   public List<IncludedDataModelDTO> IncludedModels { get; init; } = new();
 
-  
+  /// <summary>
+  /// Datum a čas vytvoření feature v databázi (UTC).
+  /// </summary>
+  public DateTime? CreatedAt { get; init; }
+
+  /// <summary>
+  /// Datum a čas posledního uložení feature do databáze (UTC).
+  /// </summary>
+  public DateTime? LastSavedAt { get; init; }
 }
 

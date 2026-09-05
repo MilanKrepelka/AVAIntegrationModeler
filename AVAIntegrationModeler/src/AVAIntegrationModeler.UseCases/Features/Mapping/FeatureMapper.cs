@@ -54,7 +54,9 @@ public static class FeatureMapper
       {
           DataModel = models.FirstOrDefault(item=>item.Id == inc.ModelId)?? DataModelSummaryDTO.Empty,
           ReadOnly = inc.ReadOnly
-      }).ToList() ?? new List<IncludedDataModelDTO>()
+      }).ToList() ?? new List<IncludedDataModelDTO>(),
+      CreatedAt = feature.CreatedAt,
+      LastSavedAt = feature.LastSavedAt
     };
     return result;
   }

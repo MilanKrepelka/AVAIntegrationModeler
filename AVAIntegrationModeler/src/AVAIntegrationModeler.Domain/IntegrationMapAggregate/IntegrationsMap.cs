@@ -10,7 +10,7 @@ namespace AVAIntegrationModeler.Domain.IntegrationMapAggregate;
 /// <summary>
 /// Agregátní kořen pro integrační mapu - mapuje integrační scénáře k oblasti.
 /// </summary>
-public class IntegrationsMap : EntityBase<Guid>, IAggregateRoot
+public class IntegrationsMap : DomainEntityBase<Guid>, IAggregateRoot
 {
   /// <summary>
   /// Privátní kolekce integračních položek.

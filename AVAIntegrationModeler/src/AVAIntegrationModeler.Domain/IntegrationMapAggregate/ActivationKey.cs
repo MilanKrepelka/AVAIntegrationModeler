@@ -14,7 +14,7 @@ namespace AVAIntegrationModeler.Domain.IntegrationMapAggregate;
 /// Aktivační klíč určuje, za jakých podmínek (klíčů) se má daný integrační scénář spustit.
 /// Například klíč může být "ORDER_CREATED", "CUSTOMER_UPDATED" apod.
 /// </remarks>
-public class ActivationKey : EntityBase<Guid>
+public class ActivationKey : DomainEntityBase<Guid>
 {
   /// <summary>
   /// Konstruktor pro vytvoření nového aktivačního klíče.

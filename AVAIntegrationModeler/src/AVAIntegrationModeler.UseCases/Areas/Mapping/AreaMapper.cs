@@ -22,7 +22,11 @@ public static class AreaMapper
     {
       Id = area.Id,
       Code = area.Code,
-      Name = area.Name
+      Name = area.Name,
+      CreatedAt = area.CreatedAt,
+      LastSavedAt = area.LastSavedAt,
+      LastMapSave = area.LastMapSave,
+      MapDiagramJson = area.MapDiagramJson
     };
     
     return result;

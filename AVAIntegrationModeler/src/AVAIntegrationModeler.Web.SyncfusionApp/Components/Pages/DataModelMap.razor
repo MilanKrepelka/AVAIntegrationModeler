@@ -1,13 +1,12 @@
 ﻿@page "/datamodelmap/{modelId:guid}"
 @rendermode InteractiveServer
-@using System.Text.Json
+@using AVAIntegrationModeler.API.Client
 @using AVAIntegrationModeler.Contracts
 @using AVAIntegrationModeler.Contracts.DTO
 @using AVAIntegrationModeler.Infrastructure
 @using Syncfusion.Blazor.Diagram
 @using System.Collections.ObjectModel
-@using System.Text.Json.Serialization
-@inject IJSRuntime JS
+@inject IAVAIntegrationModelerApiClient ApiClient
 @inject NavigationManager NavigationManager
 
 <PageTitle>Data Model Map</PageTitle>
@@ -65,42 +64,8 @@ else
             connectorCount = 0;
             nestedEntityIds.Clear();
 
-            using var http = new HttpClient();
-            var url = $"http://localhost:57679/DataModels?datasource={Datasource.AVAPlace}";
-            var res = await http.GetAsync(url);
-            res.EnsureSuccessStatusCode();
-            var json = await res.Content.ReadAsStringAsync();
-
-            var options = new JsonSerializerOptions
-            {
-                Converters = { new JsonStringEnumConverter() },
-                PropertyNameCaseInsensitive = true
-            };
-
-            List<DataModelDTO>? dtos = null;
-            var dataModelListResponse = JsonSerializer.Deserialize<DataModelListResponse>(json, options);
-            dtos ??= dataModelListResponse?.DataModels;
-
-            if (dtos == null)
-            {
-                using var doc = JsonDocument.Parse(json);
-                if (doc.RootElement.ValueKind == JsonValueKind.Object)
-                {
-                    var arrayProp = doc.RootElement.EnumerateObject()
-                        .FirstOrDefault(p => p.Value.ValueKind == JsonValueKind.Array);
-                    if (arrayProp.Value.ValueKind == JsonValueKind.Array)
-                    {
-                        var arrJson = arrayProp.Value.GetRawText();
-                        try { dtos = JsonSerializer.Deserialize<List<DataModelDTO>>(arrJson, options); } catch { }
-                    }
-                }
-                else if (doc.RootElement.ValueKind == JsonValueKind.Array)
-                {
-                    dtos = JsonSerializer.Deserialize<List<DataModelDTO>>(doc.RootElement.GetRawText(), options);
-                }
-            }
-
-            dtos ??= new List<DataModelDTO>();
+            var response = await ApiClient.GetDataModels(Datasource.Database, CancellationToken.None);
+            var dtos = response?.DataModels ?? new List<DataModelDTO>();
 
             // Collect IDs that are referenced as NestedEntity (to render them lighter)
             foreach (var dto in dtos)

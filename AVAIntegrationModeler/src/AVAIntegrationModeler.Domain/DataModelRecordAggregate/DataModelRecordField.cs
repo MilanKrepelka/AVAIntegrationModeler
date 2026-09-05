@@ -1,6 +1,6 @@
 namespace AVAIntegrationModeler.Domain.DataModelRecordAggregate;
 
-public class DataModelRecordField : EntityBase<Guid>
+public class DataModelRecordField : DomainEntityBase<Guid>
 {
   private DataModelRecordField() { }
 

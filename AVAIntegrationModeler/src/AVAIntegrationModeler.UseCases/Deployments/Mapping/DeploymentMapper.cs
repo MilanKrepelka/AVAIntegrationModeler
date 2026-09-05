@@ -22,7 +22,9 @@ public static class DeploymentMapper
       Name = deployment.Name,
       Ticket = deployment.Ticket,
       Description = deployment.Description,
-      DataModelIds = deployment.DataModels.Select(m => m.DataModelId).ToList()
+      DataModelIds = deployment.DataModels.Select(m => m.DataModelId).ToList(),
+      CreatedAt = deployment.CreatedAt,
+      LastSavedAt = deployment.LastSavedAt
     };
   }
 

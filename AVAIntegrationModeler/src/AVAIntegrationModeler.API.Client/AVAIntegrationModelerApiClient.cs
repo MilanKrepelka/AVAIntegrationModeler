@@ -663,6 +663,19 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
   }
 
   /// <inheritdoc/>
+  public async Task<Result> SaveAreaMap(Guid areaId, string diagramJson, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(SaveAreaMap)} starting. areaId={areaId}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PutAsync($"areas/{areaId}/map")
+      .WithBody(new { AreaId = areaId, DiagramJson = diagramJson })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<object>();
+    return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));
+  }
+
+  /// <inheritdoc/>
   public async Task<DeploymentListResponse> GetDeployments(CancellationToken cancellationToken)
   {
     _logger.LogDebug($"{nameof(GetDeployments)} starting.");

@@ -1,6 +1,6 @@
 ﻿namespace AVAIntegrationModeler.Domain.ContributorAggregate;
 
-public class Contributor : EntityBase, IAggregateRoot
+public class Contributor : DomainEntityBase, IAggregateRoot
 {
   public Contributor(string name)
   {

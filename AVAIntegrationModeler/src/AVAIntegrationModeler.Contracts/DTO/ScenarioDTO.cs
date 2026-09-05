@@ -50,6 +50,16 @@ public record ScenarioDTO
   /// Souhrnné informace o výstupní feature (volitelně plně vyplněno pokud klient požádá o include).
   /// </summary>
   public FeatureSummaryDTO? OutputFeatureSummary { get; set; }
+
+  /// <summary>
+  /// Datum a čas vytvoření scénáře v databázi (UTC).
+  /// </summary>
+  public DateTime? CreatedAt { get; init; }
+
+  /// <summary>
+  /// Datum a čas posledního uložení scénáře do databáze (UTC).
+  /// </summary>
+  public DateTime? LastSavedAt { get; init; }
 }
 
 

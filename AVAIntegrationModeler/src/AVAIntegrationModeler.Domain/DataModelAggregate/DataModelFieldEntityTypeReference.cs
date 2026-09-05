@@ -6,7 +6,7 @@ namespace AVAIntegrationModeler.Domain.DataModelAggregate;
 /// Reprezentuje odkaz na typ entity z DataModelField (pro LookupEntity/NestedEntity).
 /// Jedná se o join/mapping tabulku mezi DataModelField a odkazovanými typy entit.
 /// </summary>
-public class DataModelFieldEntityTypeReference : EntityBase<Guid>
+public class DataModelFieldEntityTypeReference : DomainEntityBase<Guid>
 {
   // Privátní konstruktor pro EF Core
   private DataModelFieldEntityTypeReference() { }
