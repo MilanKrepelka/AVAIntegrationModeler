@@ -298,6 +298,7 @@ else
             ID = id,
             Width = 180,
             Height = 60,
+            Constraints = NodeConstraints.Default | NodeConstraints.ReadOnly,
             Style = new ShapeStyle { Fill = fillColor, StrokeColor = "White" },
             Shape = new FlowShape { Type = NodeShapes.Flow, Shape = NodeFlowShapes.Process },
             Annotations = new DiagramObjectCollection<ShapeAnnotation>

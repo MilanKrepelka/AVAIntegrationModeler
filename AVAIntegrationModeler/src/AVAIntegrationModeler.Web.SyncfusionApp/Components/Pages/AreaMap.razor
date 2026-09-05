@@ -1,0 +1,137 @@
+@page "/areamap/{areaId:guid}"
+@rendermode InteractiveServer
+@using AVAIntegrationModeler.API.Client
+@using AVAIntegrationModeler.Contracts
+@using AVAIntegrationModeler.Contracts.DTO
+@using Syncfusion.Blazor.Diagram
+@inject IAVAIntegrationModelerApiClient ApiClient
+@inject NavigationManager NavigationManager
+
+<PageTitle>Mapa oblasti</PageTitle>
+
+<h3>Mapa oblasti</h3>
+
+@if (IsLoading)
+{
+    <p>Načítám data…</p>
+}
+else if (_area is null)
+{
+    <p>Oblast nenalezena.</p>
+}
+else if (nodes == null || nodes.Count == 0)
+{
+    <p>Žádné uzly k zobrazení.</p>
+}
+else
+{
+    <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick">
+        <Layout Type="LayoutType.RadialTree" HorizontalSpacing="100" VerticalSpacing="100" FixedNode="@areaId.ToString()">
+        </Layout>
+    </SfDiagramComponent>
+}
+
+@code {
+    [Parameter] public Guid areaId { get; set; }
+
+    SfDiagramComponent? diagram;
+    int connectorCount = 0;
+    DiagramObjectCollection<Node> nodes = new();
+    DiagramObjectCollection<Connector> connectors = new();
+
+    AreaDTO? _area;
+    bool IsLoading { get; set; } = true;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await LoadAsync();
+    }
+
+    private async Task LoadAsync()
+    {
+        try
+        {
+            IsLoading = true;
+            nodes.Clear();
+            connectors.Clear();
+            connectorCount = 0;
+
+            var areasResponse = await ApiClient.GetAreas(Datasource.Database, CancellationToken.None);
+            _area = areasResponse?.Areas?.FirstOrDefault(a => a.Id == areaId);
+            if (_area is null) return;
+
+            var modelsResponse = await ApiClient.GetDataModels(Datasource.Database, CancellationToken.None);
+            var areaModels = modelsResponse?.DataModels?
+                .Where(m => m.AreaId == areaId)
+                .ToList() ?? new List<DataModelDTO>();
+
+            var areaNodeId = areaId.ToString();
+            var areaLabel = string.IsNullOrWhiteSpace(_area.Name) ? _area.Code : _area.Name;
+            nodes.Add(CreateNode(areaNodeId, areaLabel, isRoot: true));
+
+            foreach (var model in areaModels)
+            {
+                var nodeId = model.Id.ToString();
+                var label = string.IsNullOrWhiteSpace(model.Name) ? model.Code : model.Name;
+                nodes.Add(CreateNode(nodeId, label, isRoot: false));
+                connectors.Add(CreateConnector(areaNodeId, nodeId));
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Chyba při načítání mapy oblasti: {ex.Message}");
+            nodes.Clear();
+            connectors.Clear();
+        }
+        finally
+        {
+            IsLoading = false;
+            StateHasChanged();
+        }
+    }
+
+    private Node CreateNode(string id, string label, bool isRoot)
+    {
+        var fillColor = isRoot ? "var(--accent, #FF7043)" : "var(--primary-500, #357BD2)";
+        var textColor = isRoot ? "black" : "white";
+
+        return new Node
+        {
+            ID = id,
+            Width = 160,
+            Height = 55,
+            Constraints = NodeConstraints.Default | NodeConstraints.ReadOnly,
+            Style = new ShapeStyle { Fill = fillColor, StrokeColor = "White" },
+            Shape = new FlowShape { Type = NodeShapes.Flow, Shape = NodeFlowShapes.Process },
+            Annotations = new DiagramObjectCollection<ShapeAnnotation>
+            {
+                new ShapeAnnotation
+                {
+                    Content = label,
+                    Style = new TextStyle { Color = textColor, Fill = "transparent" }
+                }
+            }
+        };
+    }
+
+    private Connector CreateConnector(string sourceId, string targetId)
+    {
+        return new Connector
+        {
+            ID = $"connector{++connectorCount}",
+            SourceID = sourceId,
+            TargetID = targetId
+        };
+    }
+
+    private void OnNodeClick(ClickEventArgs args)
+    {
+        if (args.Count != 2) return;
+        if (args.ActualObject is Node node && node.ID != areaId.ToString())
+        {
+            if (Guid.TryParse(node.ID, out var modelId))
+                NavigationManager.NavigateTo($"/datamodelmap/{modelId}");
+        }
+    }
+}
