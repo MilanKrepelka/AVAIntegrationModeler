@@ -4,6 +4,7 @@
 @using AVAIntegrationModeler.Contracts
 @using AVAIntegrationModeler.Contracts.DTO
 @using AVAIntegrationModeler.Infrastructure
+@using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
 @using Syncfusion.Blazor.Diagram
 @using System.Collections.ObjectModel
 @inject IAVAIntegrationModelerApiClient ApiClient
@@ -12,6 +13,10 @@
 <PageTitle>Data Model Map</PageTitle>
 
 <h3>Data Model Map</h3>
+
+<div style="margin-bottom:8px">
+    <DataSourceSelector @bind-Selected="_datasourceStr" OnChanged="OnDatasourceChanged" />
+</div>
 
 @if (IsLoading)
 {
@@ -25,13 +30,16 @@ else
 {
     <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="700px" Nodes="@nodes">
         <Layout Type="LayoutType.RadialTree" HorizontalSpacing="30" VerticalSpacing="30">
-            
+
         </Layout>
     </SfDiagramComponent>
 }
 
 @code {
     [Parameter] public Guid modelId { get; set; }
+
+    private string _datasourceStr = nameof(Datasource.AVAPlace);
+    private Datasource _datasource = Datasource.AVAPlace;
 
     // Diagram state
     SfDiagramComponent? diagram;
@@ -54,17 +62,23 @@ else
         await LoadModelsAndRenderTreeAsync();
     }
 
+    private async Task OnDatasourceChanged(Datasource ds)
+    {
+        _datasource = ds;
+        await LoadModelsAndRenderTreeAsync();
+    }
+
     private async Task LoadModelsAndRenderTreeAsync()
     {
         try
         {
             IsLoading = true;
-            nodes.Clear();
-            connectors.Clear();
+            var newNodes = new DiagramObjectCollection<Node>();
+            var newConnectors = new DiagramObjectCollection<Connector>();
             connectorCount = 0;
-            nestedEntityIds.Clear();
+            nestedEntityIds = new HashSet<Guid>(GuidComparer.Instance);
 
-            var response = await ApiClient.GetDataModels(Datasource.Database, CancellationToken.None);
+            var response = await ApiClient.GetDataModels(_datasource, CancellationToken.None);
             var dtos = response?.DataModels ?? new List<DataModelDTO>();
 
             // Collect IDs that are referenced as NestedEntity (to render them lighter)
@@ -117,17 +131,15 @@ else
 
             bool NodeExists(string id)
             {
-                foreach (var n in nodes)
-                {
+                foreach (var n in newNodes)
                     if (string.Equals(n.ID, id, StringComparison.OrdinalIgnoreCase)) return true;
-                }
                 return false;
             }
 
             void CreateNodeIfNotExists(string id, string label)
             {
                 if (NodeExists(id)) return;
-                CreateNode(id, label);
+                CreateNode(id, label, newNodes);
             }
 
             void CreateConnectorIfNotExists(string sourceId, string targetId, string? label = null)
@@ -135,16 +147,14 @@ else
                 var key = $"{sourceId}->{targetId}";
                 if (createdConnectorPairs.Contains(key)) return;
                 createdConnectorPairs.Add(key);
-                CreateConnector(sourceId, targetId, label);
+                CreateConnector(sourceId, targetId, label, newConnectors);
             }
 
             void RenderNode(DataModelTree node)
             {
-                if (renderedIds.Contains(node.Id)) return; // ochrana proti cyklům/a duplicitám
+                if (renderedIds.Contains(node.Id)) return;
                 renderedIds.Add(node.Id);
-
                 CreateNodeIfNotExists(node.Id.ToString(), node.Name ?? node.Id.ToString());
-
                 foreach (var child in node.Children)
                 {
                     CreateConnectorIfNotExists(node.Id.ToString(), child.Id.ToString());
@@ -154,17 +164,20 @@ else
 
             foreach (var root in forestToRender)
                 RenderNode(root);
+
+            nodes = newNodes;
+            connectors = newConnectors;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Chyba při načítání modelů: {ex.Message}");
-            nodes.Clear();
-            connectors.Clear();
+            nodes = new();
+            connectors = new();
         }
         finally
         {
             IsLoading = false;
-            StateHasChanged();
+            await InvokeAsync(StateHasChanged);
         }
     }
 
@@ -222,7 +235,7 @@ else
         return null;
     }
 
-    private void CreateConnector(string sourceId, string targetId, string? label = null, OrthogonalSegment? segment1 = null, OrthogonalSegment? segment2 = null)
+    private void CreateConnector(string sourceId, string targetId, string? label, DiagramObjectCollection<Connector> target)
     {
         var diagramConnector = new Connector
         {
@@ -237,23 +250,19 @@ else
             diagramConnector.Annotations = new DiagramObjectCollection<PathAnnotation> { annotation };
         }
 
-        connectors.Add(diagramConnector);
+        target.Add(diagramConnector);
     }
 
-    private void CreateNode(string id, string label)
+    private void CreateNode(string id, string label, DiagramObjectCollection<Node> target)
     {
         var parsed = Guid.TryParse(id, out var gid) ? gid : Guid.Empty;
         var isRoot = parsed != Guid.Empty && !string.IsNullOrEmpty(radialRoot) && string.Equals(id, radialRoot, StringComparison.OrdinalIgnoreCase);
         var isNested = parsed != Guid.Empty && nestedEntityIds.Contains(parsed);
 
-        // choose fill color:
-        // - root: highlighted accent
-        // - nested entity: slightly lighter (--primary-300)
-        // - default: primary 500
         var fillColor = isRoot
             ? "var(--accent, #FF7043)"
             : isNested
-                ? "var(--primary-300, #93c5fd)"   // light variant fallback
+                ? "var(--primary-300, #93c5fd)"
                 : "var(--primary-500, #357BD2)";
 
         var textColor = isRoot ? "black" : (isNested ? "#0b1826" : "white");
@@ -275,7 +284,7 @@ else
                 }
             }
         };
-        nodes.Add(diagramNode);
+        target.Add(diagramNode);
     }
 
     // small comparer for HashSet<Guid> initialization above
