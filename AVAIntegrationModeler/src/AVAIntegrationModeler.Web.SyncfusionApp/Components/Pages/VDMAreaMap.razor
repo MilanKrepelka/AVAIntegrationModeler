@@ -90,11 +90,8 @@ else
         try
         {
             IsLoading = true;
-            await InvokeAsync(StateHasChanged);
             _regenerated = false;
             _savedPositions = new();
-            nodes.Clear();
-            connectors.Clear();
             connectorCount = 0;
 
             var response = await ApiClient.GetAreas(Datasource.Database, CancellationToken.None);
@@ -116,20 +113,26 @@ else
                 }
             }
 
-            nodes.Add(CreateNode(VdmNodeId, "VDM", isRoot: true));
+            // Nové instance — Blazor předá nové reference jako parametry SfDiagramComponent,
+            // čímž zajistí reinicializaci diagramu a opětovné aplikování Layout
+            var newNodes = new DiagramObjectCollection<Node>();
+            var newConnectors = new DiagramObjectCollection<Connector>();
+            newNodes.Add(CreateNode(VdmNodeId, "VDM", isRoot: true));
             foreach (var area in areas)
             {
                 var nodeId = area.Id.ToString();
                 var label = string.IsNullOrWhiteSpace(area.Name) ? area.Code : area.Name;
-                nodes.Add(CreateNode(nodeId, label, isRoot: false));
-                connectors.Add(CreateConnector(VdmNodeId, nodeId));
+                newNodes.Add(CreateNode(nodeId, label, isRoot: false));
+                newConnectors.Add(CreateConnector(VdmNodeId, nodeId));
             }
+            nodes = newNodes;
+            connectors = newConnectors;
         }
         catch (Exception ex)
         {
             Console.WriteLine($"Chyba při načítání oblastí: {ex.Message}");
-            nodes.Clear();
-            connectors.Clear();
+            nodes = new();
+            connectors = new();
             _savedPositions = new();
         }
         finally

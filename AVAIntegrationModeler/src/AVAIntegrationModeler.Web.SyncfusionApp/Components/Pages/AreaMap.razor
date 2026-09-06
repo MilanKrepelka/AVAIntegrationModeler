@@ -87,11 +87,8 @@ else
         try
         {
             IsLoading = true;
-            await InvokeAsync(StateHasChanged);
             _regenerated = false;
             _savedPositions = new();
-            nodes.Clear();
-            connectors.Clear();
             connectorCount = 0;
 
             _area = await ApiClient.GetArea(Datasource.Database, areaId, CancellationToken.None);
@@ -121,8 +118,8 @@ else
         catch (Exception ex)
         {
             Console.WriteLine($"Chyba při načítání mapy oblasti: {ex.Message}");
-            nodes.Clear();
-            connectors.Clear();
+            nodes = new();
+            connectors = new();
             _savedPositions = new();
         }
         finally
@@ -167,15 +164,21 @@ else
     {
         var areaNodeId = areaId.ToString();
         var areaLabel = string.IsNullOrWhiteSpace(_area!.Name) ? _area.Code : _area.Name;
-        nodes.Add(CreateNode(areaNodeId, areaLabel, isRoot: true));
+
+        var newNodes = new DiagramObjectCollection<Node>();
+        var newConnectors = new DiagramObjectCollection<Connector>();
+        newNodes.Add(CreateNode(areaNodeId, areaLabel, isRoot: true));
 
         foreach (var model in _areaModels)
         {
             var nodeId = model.Id.ToString();
             var label = string.IsNullOrWhiteSpace(model.Name) ? model.Code : model.Name;
-            nodes.Add(CreateNode(nodeId, label, isRoot: false));
-            connectors.Add(CreateConnector(areaNodeId, nodeId));
+            newNodes.Add(CreateNode(nodeId, label, isRoot: false));
+            newConnectors.Add(CreateConnector(areaNodeId, nodeId));
         }
+
+        nodes = newNodes;
+        connectors = newConnectors;
     }
 
     private async Task RegenerateAsync()
