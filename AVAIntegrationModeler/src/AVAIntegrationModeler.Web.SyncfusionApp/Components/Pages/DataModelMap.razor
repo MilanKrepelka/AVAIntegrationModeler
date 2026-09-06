@@ -269,7 +269,12 @@ else
 
         try
         {
-            var json = diagram.SaveDiagram();
+            // Merge current diagram's visible positions into in-memory cache
+            foreach (var kv in ParseNodePositions(diagram.SaveDiagram()))
+                _savedPositions[kv.Key] = kv.Value;
+
+            // Always save ALL nodes from the full tree regardless of current level
+            var json = BuildFullPositionsJson();
             var result = await ApiClient.SaveMapLayout(MapLayoutKey, json, CancellationToken.None);
             _saveSuccess = result.IsSuccess;
             _saveMessage = result.IsSuccess
@@ -277,12 +282,7 @@ else
                 : string.Join(", ", result.Errors);
 
             if (result.IsSuccess)
-            {
                 _lastMapSave = DateTime.UtcNow;
-                // Merge saved positions into in-memory cache so level switches use them
-                foreach (var kv in ParseNodePositions(json))
-                    _savedPositions[kv.Key] = kv.Value;
-            }
         }
         catch (Exception ex)
         {
@@ -327,6 +327,45 @@ else
         }
 
         Layout(root, 700, 380, 0, Math.PI * 2, 300);
+    }
+
+    /// <summary>Sestaví JSON se pozicemi všech uzlů celého stromu (bez omezení hloubky).</summary>
+    private string BuildFullPositionsJson()
+    {
+        var visited = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        using var ms = new System.IO.MemoryStream();
+        using var writer = new System.Text.Json.Utf8JsonWriter(ms);
+        writer.WriteStartObject();
+        writer.WriteStartArray("nodes");
+
+        void Traverse(DataModelTree node)
+        {
+            var id = node.Id.ToString();
+            if (!visited.Add(id)) return;
+
+            double x = 0, y = 0;
+            if (_savedPositions.TryGetValue(id, out var saved))
+                (x, y) = (saved.OffsetX, saved.OffsetY);
+            else if (_computedPositions.TryGetValue(id, out var comp))
+                (x, y) = comp;
+
+            writer.WriteStartObject();
+            writer.WriteString("id", id);
+            writer.WriteNumber("offsetX", x);
+            writer.WriteNumber("offsetY", y);
+            writer.WriteEndObject();
+
+            foreach (var child in node.Children)
+                Traverse(child);
+        }
+
+        foreach (var root in _forestToRender)
+            Traverse(root);
+
+        writer.WriteEndArray();
+        writer.WriteEndObject();
+        writer.Flush();
+        return System.Text.Encoding.UTF8.GetString(ms.ToArray());
     }
 
     /// <summary>Parsuje pozice uzlů ze Syncfusion SaveDiagram JSON.</summary>
