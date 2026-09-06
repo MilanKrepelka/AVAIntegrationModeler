@@ -29,6 +29,18 @@
                 Naposledy uloženo: @_lastMapSave.Value.ToLocalTime().ToString("g")
             </small>
         }
+
+        <div style="display:flex; align-items:center; gap:6px; margin-left:8px;">
+            <span class="text-muted" style="font-size:.9em;">Úrovně:</span>
+            @foreach (var lvl in new[] { 1, 2, 3, 4 })
+            {
+                var captured = lvl;
+                <button class="btn btn-sm @(_maxDepth == captured ? "btn-primary" : "btn-outline-secondary")"
+                        @onclick="() => OnLevelChanged(captured)">
+                    @captured
+                </button>
+            }
+        </div>
     </div>
 
     @if (_saveMessage is not null)
@@ -79,6 +91,10 @@ else
     // RadialTree root id (string for markup)
     string radialRoot = string.Empty;
 
+    // Cached data for re-rendering on level change
+    List<DataModelTree> _forestToRender = new();
+    int _maxDepth = 2;
+
     // Save/load state
     Dictionary<string, (double OffsetX, double OffsetY)> _savedPositions = new();
     DateTime? _lastMapSave;
@@ -103,14 +119,19 @@ else
         await LoadModelsAndRenderTreeAsync();
     }
 
+    private async Task OnLevelChanged(int level)
+    {
+        _maxDepth = level;
+        BuildNodesAndConnectors();
+        await InvokeAsync(StateHasChanged);
+    }
+
     private async Task LoadModelsAndRenderTreeAsync()
     {
         try
         {
             IsLoading = true;
             _loadError = null;
-            var newNodes = new DiagramObjectCollection<Node>();
-            var newConnectors = new DiagramObjectCollection<Connector>();
             connectorCount = 0;
             nestedEntityIds = new HashSet<Guid>(GuidComparer.Instance);
 
@@ -151,62 +172,21 @@ else
                     forest.Add(tree);
             }
 
-            // Zvolit podstrom k vykreslení
-            List<DataModelTree> forestToRender;
+            // Zvolit podstrom k vykreslení a uložit do cache
             if (modelId != Guid.Empty)
             {
                 var found = FindNodeInForest(forest, modelId);
-                forestToRender = found != null ? new List<DataModelTree> { CloneSubtree(found) } : new List<DataModelTree>();
+                _forestToRender = found != null ? new List<DataModelTree> { CloneSubtree(found) } : new List<DataModelTree>();
             }
             else
             {
-                forestToRender = forest;
+                _forestToRender = forest;
             }
 
-            var chosenRootId = modelId != Guid.Empty ? modelId : (forestToRender.FirstOrDefault()?.Id ?? Guid.Empty);
+            var chosenRootId = modelId != Guid.Empty ? modelId : (_forestToRender.FirstOrDefault()?.Id ?? Guid.Empty);
             radialRoot = chosenRootId == Guid.Empty ? string.Empty : chosenRootId.ToString();
 
-            var renderedIds = new HashSet<Guid>();
-            var createdConnectorPairs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-
-            bool NodeExists(string id)
-            {
-                foreach (var n in newNodes)
-                    if (string.Equals(n.ID, id, StringComparison.OrdinalIgnoreCase)) return true;
-                return false;
-            }
-
-            void CreateNodeIfNotExists(string id, string label)
-            {
-                if (NodeExists(id)) return;
-                CreateNode(id, label, newNodes);
-            }
-
-            void CreateConnectorIfNotExists(string sourceId, string targetId)
-            {
-                var key = $"{sourceId}->{targetId}";
-                if (createdConnectorPairs.Contains(key)) return;
-                createdConnectorPairs.Add(key);
-                CreateConnector(sourceId, targetId, newConnectors);
-            }
-
-            void RenderNode(DataModelTree node)
-            {
-                if (renderedIds.Contains(node.Id)) return;
-                renderedIds.Add(node.Id);
-                CreateNodeIfNotExists(node.Id.ToString(), node.Name ?? node.Id.ToString());
-                foreach (var child in node.Children)
-                {
-                    CreateConnectorIfNotExists(node.Id.ToString(), child.Id.ToString());
-                    RenderNode(child);
-                }
-            }
-
-            foreach (var root in forestToRender)
-                RenderNode(root);
-
-            nodes = newNodes;
-            connectors = newConnectors;
+            BuildNodesAndConnectors();
         }
         catch (Exception ex)
         {
@@ -221,6 +201,57 @@ else
             IsLoading = false;
             await InvokeAsync(StateHasChanged);
         }
+    }
+
+    /// <summary>Sestaví uzly a spojnice z cachovaného forestu dle aktuální hodnoty _maxDepth.</summary>
+    private void BuildNodesAndConnectors()
+    {
+        var newNodes = new DiagramObjectCollection<Node>();
+        var newConnectors = new DiagramObjectCollection<Connector>();
+        connectorCount = 0;
+
+        var renderedIds = new HashSet<Guid>();
+        var createdConnectorPairs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+
+        bool NodeExists(string id)
+        {
+            foreach (var n in newNodes)
+                if (string.Equals(n.ID, id, StringComparison.OrdinalIgnoreCase)) return true;
+            return false;
+        }
+
+        void CreateNodeIfNotExists(string id, string label)
+        {
+            if (NodeExists(id)) return;
+            CreateNode(id, label, newNodes);
+        }
+
+        void CreateConnectorIfNotExists(string sourceId, string targetId)
+        {
+            var key = $"{sourceId}->{targetId}";
+            if (createdConnectorPairs.Contains(key)) return;
+            createdConnectorPairs.Add(key);
+            CreateConnector(sourceId, targetId, newConnectors);
+        }
+
+        void RenderNode(DataModelTree node, int depth)
+        {
+            if (renderedIds.Contains(node.Id)) return;
+            renderedIds.Add(node.Id);
+            CreateNodeIfNotExists(node.Id.ToString(), node.Name ?? node.Id.ToString());
+            if (depth >= _maxDepth) return;
+            foreach (var child in node.Children)
+            {
+                CreateConnectorIfNotExists(node.Id.ToString(), child.Id.ToString());
+                RenderNode(child, depth + 1);
+            }
+        }
+
+        foreach (var root in _forestToRender)
+            RenderNode(root, 0);
+
+        nodes = newNodes;
+        connectors = newConnectors;
     }
 
     private async Task SaveMapAsync()
