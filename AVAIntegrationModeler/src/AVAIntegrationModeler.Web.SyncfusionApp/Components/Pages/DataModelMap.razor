@@ -1,4 +1,4 @@
-﻿@page "/datamodelmap/{modelId:guid}"
+@page "/datamodelmap/{modelId:guid}"
 @rendermode InteractiveServer
 @using AVAIntegrationModeler.API.Client
 @using AVAIntegrationModeler.Contracts
@@ -7,6 +7,7 @@
 @using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
 @using Syncfusion.Blazor.Diagram
 @using System.Collections.ObjectModel
+@using System.Text.Json
 @inject IAVAIntegrationModelerApiClient ApiClient
 @inject NavigationManager NavigationManager
 
@@ -17,6 +18,31 @@
 <div style="margin-bottom:8px">
     <DataSourceSelector @bind-Selected="_datasourceStr" OnChanged="OnDatasourceChanged" />
 </div>
+
+@if (_datasource == Datasource.Database && !IsLoading)
+{
+    <div style="margin-bottom:8px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <button class="btn btn-primary" @onclick="SaveMapAsync" disabled="@_isSaving">
+            @(_isSaving ? "Ukládám…" : "Uložit mapu")
+        </button>
+        <button class="btn btn-outline-secondary" @onclick="RegenerateAsync" disabled="@_isSaving">
+            Regenerovat mapu
+        </button>
+        @if (_lastMapSave.HasValue)
+        {
+            <small class="text-muted">
+                Naposledy uloženo: @_lastMapSave.Value.ToLocalTime().ToString("g")
+            </small>
+        }
+    </div>
+
+    @if (_saveMessage is not null)
+    {
+        <div class="alert @(_saveSuccess ? "alert-success" : "alert-danger")" style="margin-bottom:8px">
+            @_saveMessage
+        </div>
+    }
+}
 
 @if (IsLoading)
 {
@@ -29,9 +55,11 @@ else if (nodes == null || nodes.Count == 0)
 else
 {
     <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="700px" Nodes="@nodes">
-        <Layout Type="LayoutType.RadialTree" HorizontalSpacing="30" VerticalSpacing="30">
-
-        </Layout>
+        @if (_savedPositions.Count == 0)
+        {
+            <Layout Type="LayoutType.RadialTree" HorizontalSpacing="30" VerticalSpacing="30">
+            </Layout>
+        }
     </SfDiagramComponent>
 }
 
@@ -41,11 +69,13 @@ else
     private string _datasourceStr = nameof(Datasource.AVAPlace);
     private Datasource _datasource = Datasource.AVAPlace;
 
+    private string MapLayoutKey => $"datamodelmap-{modelId}";
+
     // Diagram state
     SfDiagramComponent? diagram;
     int connectorCount = 0;
-    DiagramObjectCollection<Node> nodes = new DiagramObjectCollection<Node>();
-    DiagramObjectCollection<Connector> connectors = new DiagramObjectCollection<Connector>();
+    DiagramObjectCollection<Node> nodes = new();
+    DiagramObjectCollection<Connector> connectors = new();
 
     // Which models are referenced as NestedEntity -> render slightly lighter
     HashSet<Guid> nestedEntityIds = new HashSet<Guid>(GuidComparer.Instance);
@@ -53,7 +83,13 @@ else
     // RadialTree root id (string for markup)
     string radialRoot = string.Empty;
 
-    // Loading state
+    // Save/load state
+    Dictionary<string, (double OffsetX, double OffsetY)> _savedPositions = new();
+    DateTime? _lastMapSave;
+    bool _isSaving;
+    string? _saveMessage;
+    bool _saveSuccess;
+
     bool IsLoading { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
@@ -65,6 +101,14 @@ else
     private async Task OnDatasourceChanged(Datasource ds)
     {
         _datasource = ds;
+        _saveMessage = null;
+        await LoadModelsAndRenderTreeAsync();
+    }
+
+    private async Task RegenerateAsync()
+    {
+        _saveMessage = null;
+        _savedPositions = new();
         await LoadModelsAndRenderTreeAsync();
     }
 
@@ -78,14 +122,24 @@ else
             connectorCount = 0;
             nestedEntityIds = new HashSet<Guid>(GuidComparer.Instance);
 
+            // Načíst uloženou mapu z DB (jen pro datasource Database)
+            if (_datasource == Datasource.Database && _savedPositions.Count == 0)
+            {
+                var layout = await ApiClient.GetMapLayout(MapLayoutKey, CancellationToken.None);
+                if (layout?.DiagramJson is not null)
+                {
+                    _lastMapSave = layout.LastMapSave;
+                    _savedPositions = ParseNodePositions(layout.DiagramJson);
+                }
+            }
+
             var response = await ApiClient.GetDataModels(_datasource, CancellationToken.None);
             var dtos = response?.DataModels ?? new List<DataModelDTO>();
 
             // Collect IDs that are referenced as NestedEntity (to render them lighter)
             foreach (var dto in dtos)
             {
-                var fields = dto.Fields ?? Enumerable.Empty<DataModelFieldDTO>();
-                foreach (var field in fields)
+                foreach (var field in dto.Fields ?? Enumerable.Empty<DataModelFieldDTO>())
                 {
                     if (field.FieldType == DataModelFieldType.NestedEntity)
                     {
@@ -97,19 +151,16 @@ else
                 }
             }
 
-            // build forest of subtrees (each subtree contains only outgoing references from its root)
+            // Sestavit forest podstromů (outgoing references)
             var forest = new List<DataModelTree>();
             foreach (var dto in dtos)
             {
-                // BuildTree here returns a single DataModelTree (or null) for the starting root.
                 var tree = DataModelTree.BuildTree(dtos, dto.Id);
                 if (tree != null && !forest.Exists(f => f.Id == tree.Id))
-                {
                     forest.Add(tree);
-                }
             }
 
-            // choose forest to render (route param or whole forest)
+            // Zvolit podstrom k vykreslení
             List<DataModelTree> forestToRender;
             if (modelId != Guid.Empty)
             {
@@ -121,11 +172,9 @@ else
                 forestToRender = forest;
             }
 
-            // set Radial root: prefer route modelId, otherwise first root id
             var chosenRootId = modelId != Guid.Empty ? modelId : (forestToRender.FirstOrDefault()?.Id ?? Guid.Empty);
             radialRoot = chosenRootId == Guid.Empty ? string.Empty : chosenRootId.ToString();
 
-            // create nodes/connectors (no manual positioning)
             var renderedIds = new HashSet<Guid>();
             var createdConnectorPairs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
@@ -142,12 +191,12 @@ else
                 CreateNode(id, label, newNodes);
             }
 
-            void CreateConnectorIfNotExists(string sourceId, string targetId, string? label = null)
+            void CreateConnectorIfNotExists(string sourceId, string targetId)
             {
                 var key = $"{sourceId}->{targetId}";
                 if (createdConnectorPairs.Contains(key)) return;
                 createdConnectorPairs.Add(key);
-                CreateConnector(sourceId, targetId, label, newConnectors);
+                CreateConnector(sourceId, targetId, newConnectors);
             }
 
             void RenderNode(DataModelTree node)
@@ -173,12 +222,68 @@ else
             Console.WriteLine($"Chyba při načítání modelů: {ex.Message}");
             nodes = new();
             connectors = new();
+            _savedPositions = new();
         }
         finally
         {
             IsLoading = false;
             await InvokeAsync(StateHasChanged);
         }
+    }
+
+    private async Task SaveMapAsync()
+    {
+        if (diagram is null) return;
+        _isSaving = true;
+        _saveMessage = null;
+        await InvokeAsync(StateHasChanged);
+
+        try
+        {
+            var json = diagram.SaveDiagram();
+            var result = await ApiClient.SaveMapLayout(MapLayoutKey, json, CancellationToken.None);
+            _saveSuccess = result.IsSuccess;
+            _saveMessage = result.IsSuccess
+                ? "Mapa byla úspěšně uložena."
+                : string.Join(", ", result.Errors);
+
+            if (result.IsSuccess)
+                _lastMapSave = DateTime.UtcNow;
+        }
+        catch (Exception ex)
+        {
+            _saveSuccess = false;
+            _saveMessage = $"Chyba při ukládání mapy: {ex.Message}";
+        }
+        finally
+        {
+            _isSaving = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    /// <summary>Parsuje pozice uzlů ze Syncfusion SaveDiagram JSON.</summary>
+    private static Dictionary<string, (double, double)> ParseNodePositions(string json)
+    {
+        var result = new Dictionary<string, (double, double)>();
+        try
+        {
+            using var doc = JsonDocument.Parse(json);
+            if (!doc.RootElement.TryGetProperty("nodes", out var nodesEl)) return result;
+            foreach (var node in nodesEl.EnumerateArray())
+            {
+                if (node.TryGetProperty("id", out var idEl) &&
+                    node.TryGetProperty("offsetX", out var xEl) &&
+                    node.TryGetProperty("offsetY", out var yEl))
+                {
+                    var id = idEl.GetString();
+                    if (id is not null)
+                        result[id] = (xEl.GetDouble(), yEl.GetDouble());
+                }
+            }
+        }
+        catch { }
+        return result;
     }
 
     private DataModelTree CloneSubtree(DataModelTree node)
@@ -188,13 +293,7 @@ else
         {
             if (visited.Contains(n.Id)) return null!;
             visited.Add(n.Id);
-
-            var copy = new DataModelTree
-            {
-                Id = n.Id,
-                Name = n.Name,
-                Model = n.Model
-            };
+            var copy = new DataModelTree { Id = n.Id, Name = n.Name, Model = n.Model };
             foreach (var ch in n.Children)
             {
                 if (visited.Contains(ch.Id)) continue;
@@ -216,16 +315,13 @@ else
         return null;
     }
 
-    // wrapper volání, inicializuje visited set
     private DataModelTree? FindNode(DataModelTree node, Guid id)
         => FindNode(node, id, new HashSet<Guid>());
 
-    // rekurzivní variant pro bezpečné prohledávání i v cyklickém grafu
     private DataModelTree? FindNode(DataModelTree node, Guid id, HashSet<Guid> visited)
     {
         if (visited.Contains(node.Id)) return null;
         visited.Add(node.Id);
-
         if (node.Id == id) return node;
         foreach (var c in node.Children)
         {
@@ -235,36 +331,26 @@ else
         return null;
     }
 
-    private void CreateConnector(string sourceId, string targetId, string? label, DiagramObjectCollection<Connector> target)
+    private void CreateConnector(string sourceId, string targetId, DiagramObjectCollection<Connector> target)
     {
-        var diagramConnector = new Connector
+        target.Add(new Connector
         {
             ID = string.Format("connector{0}", ++connectorCount),
             SourceID = sourceId,
             TargetID = targetId
-        };
-
-        if (!string.IsNullOrEmpty(label))
-        {
-            var annotation = new PathAnnotation { Content = label, Style = new TextStyle { Fill = "white" } };
-            diagramConnector.Annotations = new DiagramObjectCollection<PathAnnotation> { annotation };
-        }
-
-        target.Add(diagramConnector);
+        });
     }
 
     private void CreateNode(string id, string label, DiagramObjectCollection<Node> target)
     {
         var parsed = Guid.TryParse(id, out var gid) ? gid : Guid.Empty;
-        var isRoot = parsed != Guid.Empty && !string.IsNullOrEmpty(radialRoot) && string.Equals(id, radialRoot, StringComparison.OrdinalIgnoreCase);
+        var isRoot = parsed != Guid.Empty && !string.IsNullOrEmpty(radialRoot)
+            && string.Equals(id, radialRoot, StringComparison.OrdinalIgnoreCase);
         var isNested = parsed != Guid.Empty && nestedEntityIds.Contains(parsed);
 
         var fillColor = isRoot
             ? "var(--accent, #FF7043)"
-            : isNested
-                ? "var(--primary-300, #93c5fd)"
-                : "var(--primary-500, #357BD2)";
-
+            : isNested ? "var(--primary-300, #93c5fd)" : "var(--primary-500, #357BD2)";
         var textColor = isRoot ? "black" : (isNested ? "#0b1826" : "white");
 
         var diagramNode = new Node
@@ -284,10 +370,16 @@ else
                 }
             }
         };
+
+        if (_savedPositions.TryGetValue(id, out var pos))
+        {
+            diagramNode.OffsetX = pos.OffsetX;
+            diagramNode.OffsetY = pos.OffsetY;
+        }
+
         target.Add(diagramNode);
     }
 
-    // small comparer for HashSet<Guid> initialization above
     private class GuidComparer : IEqualityComparer<Guid>
     {
         public static readonly GuidComparer Instance = new();
