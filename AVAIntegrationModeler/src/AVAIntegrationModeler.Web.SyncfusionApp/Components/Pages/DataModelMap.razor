@@ -65,7 +65,7 @@ else if (nodes == null || nodes.Count == 0)
 }
 else
 {
-    <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="700px" Nodes="@nodes">
+    <SfDiagramComponent @key="_maxDepth" @ref="diagram" Connectors="@connectors" Height="700px" Nodes="@nodes" Created="OnDiagramCreated">
     </SfDiagramComponent>
 }
 
@@ -115,6 +115,11 @@ else
         _saveMessage = null;
         _savedPositions = new();
         await LoadModelsAndRenderTreeAsync();
+    }
+
+    private void OnDiagramCreated()
+    {
+        diagram?.FitToPage(new FitOptions { Mode = FitMode.Both, Region = DiagramRegion.Content });
     }
 
     private async Task OnLevelChanged(int level)
@@ -301,7 +306,7 @@ else
             _computedPositions[key] = (x, y);
 
             var children = node.Children;
-            if (children.Count == 0 || radius < 55) return;
+            if (children.Count == 0 || radius < 5) return;
 
             double span = endAngle - startAngle;
             for (int i = 0; i < children.Count; i++)
@@ -316,7 +321,7 @@ else
             }
         }
 
-        Layout(root, 700, 380, 0, Math.PI * 2, 220);
+        Layout(root, 700, 380, 0, Math.PI * 2, 300);
     }
 
     /// <summary>Parsuje pozice uzlů ze Syncfusion SaveDiagram JSON.</summary>
