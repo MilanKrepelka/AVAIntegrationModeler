@@ -4,7 +4,6 @@
 @using AVAIntegrationModeler.Contracts
 @using AVAIntegrationModeler.Contracts.DTO
 @using AVAIntegrationModeler.Infrastructure
-@using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
 @using Syncfusion.Blazor.Diagram
 @using System.Collections.ObjectModel
 @using System.Text.Json
@@ -15,11 +14,7 @@
 
 <h3>Data Model Map</h3>
 
-<div style="margin-bottom:8px">
-    <DataSourceSelector @bind-Selected="_datasourceStr" OnChanged="OnDatasourceChanged" />
-</div>
-
-@if (_datasource == Datasource.Database && !IsLoading)
+@if (!IsLoading)
 {
     <div style="margin-bottom:8px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
         <button class="btn btn-primary" @onclick="SaveMapAsync" disabled="@_isSaving">
@@ -66,9 +61,6 @@ else
 @code {
     [Parameter] public Guid modelId { get; set; }
 
-    private string _datasourceStr = nameof(Datasource.AVAPlace);
-    private Datasource _datasource = Datasource.AVAPlace;
-
     private string MapLayoutKey => $"datamodelmap-{modelId}";
 
     // Diagram state
@@ -98,13 +90,6 @@ else
         await LoadModelsAndRenderTreeAsync();
     }
 
-    private async Task OnDatasourceChanged(Datasource ds)
-    {
-        _datasource = ds;
-        _saveMessage = null;
-        await LoadModelsAndRenderTreeAsync();
-    }
-
     private async Task RegenerateAsync()
     {
         _saveMessage = null;
@@ -122,8 +107,7 @@ else
             connectorCount = 0;
             nestedEntityIds = new HashSet<Guid>(GuidComparer.Instance);
 
-            // Načíst uloženou mapu z DB (jen pro datasource Database)
-            if (_datasource == Datasource.Database && _savedPositions.Count == 0)
+            if (_savedPositions.Count == 0)
             {
                 var layout = await ApiClient.GetMapLayout(MapLayoutKey, CancellationToken.None);
                 if (layout?.DiagramJson is not null)
@@ -133,7 +117,7 @@ else
                 }
             }
 
-            var response = await ApiClient.GetDataModels(_datasource, CancellationToken.None);
+            var response = await ApiClient.GetDataModels(Datasource.Database, CancellationToken.None);
             var dtos = response?.DataModels ?? new List<DataModelDTO>();
 
             // Collect IDs that are referenced as NestedEntity (to render them lighter)
