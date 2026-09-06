@@ -43,6 +43,10 @@
 {
     <p>Načítám modely…</p>
 }
+else if (_loadError is not null)
+{
+    <div class="alert alert-danger">Chyba při načítání: @_loadError</div>
+}
 else if (nodes == null || nodes.Count == 0)
 {
     <p>Žádné uzly k zobrazení.</p>
@@ -82,6 +86,8 @@ else
     string? _saveMessage;
     bool _saveSuccess;
 
+    string? _loadError;
+
     bool IsLoading { get; set; } = true;
 
     protected override async Task OnInitializedAsync()
@@ -102,6 +108,7 @@ else
         try
         {
             IsLoading = true;
+            _loadError = null;
             var newNodes = new DiagramObjectCollection<Node>();
             var newConnectors = new DiagramObjectCollection<Connector>();
             connectorCount = 0;
@@ -203,7 +210,8 @@ else
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Chyba při načítání modelů: {ex.Message}");
+            _loadError = ex.Message;
+            Console.WriteLine($"Chyba při načítání modelů: {ex}");
             nodes = new();
             connectors = new();
             _savedPositions = new();
