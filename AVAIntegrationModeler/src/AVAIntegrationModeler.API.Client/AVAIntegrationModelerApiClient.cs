@@ -777,7 +777,7 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
         .WithCancellationToken(cancellationToken)
         .As<MapLayoutDTO>();
     }
-    catch (ApiException)
+    catch (Exception)
     {
       return null;
     }
