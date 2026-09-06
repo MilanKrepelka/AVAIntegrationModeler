@@ -4,6 +4,7 @@
 @using AVAIntegrationModeler.Contracts
 @using AVAIntegrationModeler.Contracts.DTO
 @using Syncfusion.Blazor.Diagram
+@using System.Text.Json
 @inject IAVAIntegrationModelerApiClient ApiClient
 @inject NavigationManager NavigationManager
 
@@ -47,17 +48,13 @@ else
         </div>
     }
 
-    @if (!_loadFromDb && nodes.Count == 0)
-    {
-        <p>Žádné uzly k zobrazení.</p>
-    }
-    else
-    {
-        <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick">
+    <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick">
+        @if (_savedPositions.Count == 0)
+        {
             <Layout Type="LayoutType.RadialTree" HorizontalSpacing="100" VerticalSpacing="100" FixedNode="@areaId.ToString()">
             </Layout>
-        </SfDiagramComponent>
-    }
+        }
+    </SfDiagramComponent>
 }
 
 @code {
@@ -74,10 +71,10 @@ else
     bool _isSaving;
     string? _saveMessage;
     bool _saveSuccess;
-
-    // true = diagram bude načten z uloženého JSON přes LoadDiagramAsync v OnAfterRenderAsync
-    bool _loadFromDb;
     bool _regenerated;
+
+    /// <summary>Pozice uzlů načtené z uloženého diagramu: nodeId → (offsetX, offsetY).</summary>
+    Dictionary<string, (double OffsetX, double OffsetY)> _savedPositions = new();
 
     protected override async Task OnInitializedAsync()
     {
@@ -85,21 +82,13 @@ else
         await LoadAsync(forceRegenerate: false);
     }
 
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (firstRender && _loadFromDb && diagram != null && _area?.MapDiagramJson is not null)
-        {
-            await diagram.LoadDiagramAsync(_area.MapDiagramJson);
-        }
-    }
-
     private async Task LoadAsync(bool forceRegenerate)
     {
         try
         {
             IsLoading = true;
-            _loadFromDb = false;
             _regenerated = false;
+            _savedPositions = new();
             nodes.Clear();
             connectors.Clear();
             connectorCount = 0;
@@ -112,17 +101,18 @@ else
                 .Where(m => m.AreaId == areaId)
                 .ToList() ?? new List<DataModelDTO>();
 
-            if (!forceRegenerate && ShouldLoadFromDb())
+            if (!forceRegenerate && _area.MapDiagramJson is not null)
             {
-                // Načíst uloženou mapu — diagram se naplní v OnAfterRenderAsync
-                _loadFromDb = true;
-                return;
-            }
-
-            if (!forceRegenerate && _area.MapDiagramJson is not null && HasNewModels())
-            {
-                // Přibyly nové modely od posledního uložení
-                _regenerated = true;
+                if (!HasNewModels())
+                {
+                    // Obnovit pozice uzlů z uloženého diagramu
+                    _savedPositions = ParseNodePositions(_area.MapDiagramJson);
+                }
+                else
+                {
+                    // Nové modely přibyly od posledního uložení — regenerovat rozložení
+                    _regenerated = true;
+                }
             }
 
             BuildDiagram();
@@ -132,7 +122,7 @@ else
             Console.WriteLine($"Chyba při načítání mapy oblasti: {ex.Message}");
             nodes.Clear();
             connectors.Clear();
-            _loadFromDb = false;
+            _savedPositions = new();
         }
         finally
         {
@@ -141,15 +131,35 @@ else
         }
     }
 
-    /// <summary>Vrátí true, pokud má být mapa načtena z databáze (uložená existuje a žádný model nepřibyl).</summary>
-    private bool ShouldLoadFromDb() =>
-        _area?.MapDiagramJson is not null && !HasNewModels();
-
     /// <summary>Vrátí true, pokud nějaký model oblasti byl vytvořen po posledním uložení mapy.</summary>
     private bool HasNewModels()
     {
         if (_area?.LastMapSave is null) return false;
         return _areaModels.Any(m => m.CreatedAt.HasValue && m.CreatedAt.Value > _area.LastMapSave.Value);
+    }
+
+    /// <summary>Parsuje pozice uzlů ze Syncfusion SaveDiagram JSON.</summary>
+    private static Dictionary<string, (double, double)> ParseNodePositions(string json)
+    {
+        var result = new Dictionary<string, (double, double)>();
+        try
+        {
+            using var doc = JsonDocument.Parse(json);
+            if (!doc.RootElement.TryGetProperty("nodes", out var nodesEl)) return result;
+            foreach (var node in nodesEl.EnumerateArray())
+            {
+                if (node.TryGetProperty("id", out var idEl) &&
+                    node.TryGetProperty("offsetX", out var xEl) &&
+                    node.TryGetProperty("offsetY", out var yEl))
+                {
+                    var id = idEl.GetString();
+                    if (id is not null)
+                        result[id] = (xEl.GetDouble(), yEl.GetDouble());
+                }
+            }
+        }
+        catch { /* ignorovat chyby parsování — fallback na automatické rozložení */ }
+        return result;
     }
 
     private void BuildDiagram()
@@ -178,7 +188,7 @@ else
         var fillColor = isRoot ? "var(--accent, #FF7043)" : "var(--primary-500, #357BD2)";
         var textColor = isRoot ? "black" : "white";
 
-        return new Node
+        var node = new Node
         {
             ID = id,
             Width = 160,
@@ -195,6 +205,14 @@ else
                 }
             }
         };
+
+        if (_savedPositions.TryGetValue(id, out var pos))
+        {
+            node.OffsetX = pos.OffsetX;
+            node.OffsetY = pos.OffsetY;
+        }
+
+        return node;
     }
 
     private Connector CreateConnector(string sourceId, string targetId)
