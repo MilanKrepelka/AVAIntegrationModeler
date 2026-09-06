@@ -277,7 +277,12 @@ else
                 : string.Join(", ", result.Errors);
 
             if (result.IsSuccess)
+            {
                 _lastMapSave = DateTime.UtcNow;
+                // Merge saved positions into in-memory cache so level switches use them
+                foreach (var kv in ParseNodePositions(json))
+                    _savedPositions[kv.Key] = kv.Value;
+            }
         }
         catch (Exception ex)
         {
