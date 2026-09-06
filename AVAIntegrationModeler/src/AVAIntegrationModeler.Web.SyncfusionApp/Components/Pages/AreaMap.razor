@@ -87,6 +87,7 @@ else
         try
         {
             IsLoading = true;
+            await InvokeAsync(StateHasChanged);
             _regenerated = false;
             _savedPositions = new();
             nodes.Clear();
