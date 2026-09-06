@@ -66,11 +66,6 @@ else if (nodes == null || nodes.Count == 0)
 else
 {
     <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="700px" Nodes="@nodes">
-        @if (_savedPositions.Count == 0)
-        {
-            <Layout Type="LayoutType.RadialTree" HorizontalSpacing="30" VerticalSpacing="30">
-            </Layout>
-        }
     </SfDiagramComponent>
 }
 
@@ -94,6 +89,9 @@ else
     // Cached data for re-rendering on level change
     List<DataModelTree> _forestToRender = new();
     int _maxDepth = 2;
+
+    // Server-side computed radial positions (fallback when no saved positions)
+    Dictionary<string, (double X, double Y)> _computedPositions = new();
 
     // Save/load state
     Dictionary<string, (double OffsetX, double OffsetY)> _savedPositions = new();
@@ -185,6 +183,9 @@ else
 
             var chosenRootId = modelId != Guid.Empty ? modelId : (_forestToRender.FirstOrDefault()?.Id ?? Guid.Empty);
             radialRoot = chosenRootId == Guid.Empty ? string.Empty : chosenRootId.ToString();
+
+            if (_savedPositions.Count == 0)
+                ComputePositions();
 
             BuildNodesAndConnectors();
         }
@@ -283,6 +284,39 @@ else
             _isSaving = false;
             await InvokeAsync(StateHasChanged);
         }
+    }
+
+    /// <summary>Vypočítá radiální pozice pro všechny uzly ve forestu (bez závislosti na Syncfusion layoutu).</summary>
+    private void ComputePositions()
+    {
+        _computedPositions = new();
+        if (_forestToRender.Count == 0) return;
+
+        var root = _forestToRender[0];
+
+        void Layout(DataModelTree node, double x, double y, double startAngle, double endAngle, double radius)
+        {
+            var key = node.Id.ToString();
+            if (_computedPositions.ContainsKey(key)) return;
+            _computedPositions[key] = (x, y);
+
+            var children = node.Children;
+            if (children.Count == 0 || radius < 55) return;
+
+            double span = endAngle - startAngle;
+            for (int i = 0; i < children.Count; i++)
+            {
+                double angle = startAngle + span * (i + 0.5) / children.Count;
+                double cx = x + radius * Math.Cos(angle);
+                double cy = y + radius * Math.Sin(angle);
+                Layout(children[i], cx, cy,
+                    startAngle + span * i / children.Count,
+                    startAngle + span * (i + 1) / children.Count,
+                    radius * 0.55);
+            }
+        }
+
+        Layout(root, 700, 380, 0, Math.PI * 2, 220);
     }
 
     /// <summary>Parsuje pozice uzlů ze Syncfusion SaveDiagram JSON.</summary>
@@ -398,6 +432,11 @@ else
         {
             diagramNode.OffsetX = pos.OffsetX;
             diagramNode.OffsetY = pos.OffsetY;
+        }
+        else if (_computedPositions.TryGetValue(id, out var comp))
+        {
+            diagramNode.OffsetX = comp.X;
+            diagramNode.OffsetY = comp.Y;
         }
 
         target.Add(diagramNode);
