@@ -764,4 +764,35 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
     response.EnsureSuccessStatusCode();
     return await response.Content.ReadAsByteArrayAsync(cancellationToken);
   }
+
+  /// <inheritdoc/>
+  public async Task<MapLayoutDTO?> GetMapLayout(string key, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(GetMapLayout)} starting. key={key}");
+    try
+    {
+      var fluent = new FluentClient(_httpClient);
+      return await fluent
+        .GetAsync($"maplayouts/{Uri.EscapeDataString(key)}")
+        .WithCancellationToken(cancellationToken)
+        .As<MapLayoutDTO>();
+    }
+    catch (ApiException ex) when (ex.StatusCode == 404)
+    {
+      return null;
+    }
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result> SaveMapLayout(string key, string diagramJson, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(SaveMapLayout)} starting. key={key}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PutAsync($"maplayouts/{Uri.EscapeDataString(key)}")
+      .WithBody(new { Key = key, DiagramJson = diagramJson })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<object>();
+    return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));
+  }
 }

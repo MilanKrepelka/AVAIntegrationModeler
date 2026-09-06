@@ -6,6 +6,7 @@ using AVAIntegrationModeler.Domain.DataModelAggregate;
 using AVAIntegrationModeler.Domain.DeploymentAggregate;
 using AVAIntegrationModeler.Domain.FeatureAggregate;
 using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
+using AVAIntegrationModeler.Domain.MapLayoutAggregate;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using AVAIntegrationModeler.Infrastructure.Data.Config;
 using Microsoft.AspNetCore.Components;
@@ -36,6 +37,7 @@ public class AppDbContext : DbContext
   public DbSet<Scenario> Scenarios => Set<Scenario>();
   public DbSet<DataModel> DataModels => Set<DataModel>();
   public DbSet<Area> Areas => Set<Area>();
+  public DbSet<MapLayout> MapLayouts => Set<MapLayout>();
 
   public DbSet<DataModelField> DataModelFields => Set<DataModelField>(); // ✅
   public DbSet<DataModelFieldEntityTypeReference> DataModelFieldEntityTypeReferences => Set<DataModelFieldEntityTypeReference>(); // ✅ NOVÉ

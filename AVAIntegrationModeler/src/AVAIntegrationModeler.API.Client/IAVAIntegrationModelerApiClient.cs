@@ -187,4 +187,14 @@ public interface IAVAIntegrationModelerApiClient
   /// Exportuje DataModely nasazení včetně jejich záznamů jako ZIP archív.
   /// </summary>
   Task<byte[]> ExportDeployment(string deploymentCode, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Vrátí JSON diagramu pojmenované mapy nebo null, pokud neexistuje.
+  /// </summary>
+  Task<MapLayoutDTO?> GetMapLayout(string key, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Uloží JSON diagramu pojmenované mapy (upsert).
+  /// </summary>
+  Task<Result> SaveMapLayout(string key, string diagramJson, CancellationToken cancellationToken);
 }
