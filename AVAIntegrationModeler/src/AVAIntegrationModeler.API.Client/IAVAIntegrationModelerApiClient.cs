@@ -197,4 +197,9 @@ public interface IAVAIntegrationModelerApiClient
   /// Uloží JSON diagramu pojmenované mapy (upsert).
   /// </summary>
   Task<Result> SaveMapLayout(string key, string diagramJson, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Smaže uložený JSON diagramu pojmenované mapy.
+  /// </summary>
+  Task<Result> DeleteMapLayout(string key, CancellationToken cancellationToken);
 }

@@ -65,7 +65,7 @@ else if (nodes == null || nodes.Count == 0)
 }
 else
 {
-    <SfDiagramComponent @key="_maxDepth" @ref="diagram" Connectors="@connectors" Height="700px" Nodes="@nodes" Created="OnDiagramCreated">
+    <SfDiagramComponent @key="(_maxDepth, _regenerateCount)" @ref="diagram" Connectors="@connectors" Height="700px" Nodes="@nodes" Created="OnDiagramCreated">
     </SfDiagramComponent>
 }
 
@@ -94,6 +94,7 @@ else
     Dictionary<string, (double X, double Y)> _computedPositions = new();
 
     // Save/load state
+    int _regenerateCount = 0;
     Dictionary<string, (double OffsetX, double OffsetY)> _savedPositions = new();
     DateTime? _lastMapSave;
     bool _isSaving;
@@ -114,7 +115,10 @@ else
     {
         _saveMessage = null;
         _savedPositions = new();
-        await LoadModelsAndRenderTreeAsync();
+        _lastMapSave = null;
+        _regenerateCount++;
+        await ApiClient.DeleteMapLayout(MapLayoutKey, CancellationToken.None);
+        await LoadModelsAndRenderTreeAsync(skipLoadPositions: true);
     }
 
     private void OnDiagramCreated()
@@ -129,7 +133,7 @@ else
         await InvokeAsync(StateHasChanged);
     }
 
-    private async Task LoadModelsAndRenderTreeAsync()
+    private async Task LoadModelsAndRenderTreeAsync(bool skipLoadPositions = false)
     {
         try
         {
@@ -138,7 +142,7 @@ else
             connectorCount = 0;
             nestedEntityIds = new HashSet<Guid>(GuidComparer.Instance);
 
-            if (_savedPositions.Count == 0)
+            if (!skipLoadPositions && _savedPositions.Count == 0)
             {
                 var layout = await ApiClient.GetMapLayout(MapLayoutKey, CancellationToken.None);
                 if (layout?.DiagramJson is not null)
@@ -302,31 +306,56 @@ else
         _computedPositions = new();
         if (_forestToRender.Count == 0) return;
 
+        // Spočítáme počet listů v podstromu, aby byl úhel proporcionální
+        int CountLeaves(DataModelTree node, HashSet<Guid> seen)
+        {
+            if (!seen.Add(node.Id)) return 0;
+            if (node.Children.Count == 0) return 1;
+            int sum = 0;
+            foreach (var ch in node.Children) sum += CountLeaves(ch, seen);
+            return Math.Max(sum, 1);
+        }
+
         var root = _forestToRender[0];
 
-        void Layout(DataModelTree node, double x, double y, double startAngle, double endAngle, double radius)
+        void Layout(DataModelTree node, double x, double y, double startAngle, double endAngle, double radius, HashSet<string> placed)
         {
             var key = node.Id.ToString();
-            if (_computedPositions.ContainsKey(key)) return;
+            if (placed.Contains(key)) return;
+            placed.Add(key);
             _computedPositions[key] = (x, y);
 
             var children = node.Children;
-            if (children.Count == 0 || radius < 5) return;
+            if (children.Count == 0 || radius < 20) return;
 
             double span = endAngle - startAngle;
+            // Celkový počet listů pro proporcionální dělení úhlu
+            int totalLeaves = 0;
+            var leafCounts = new int[children.Count];
             for (int i = 0; i < children.Count; i++)
             {
-                double angle = startAngle + span * (i + 0.5) / children.Count;
+                leafCounts[i] = CountLeaves(children[i], new HashSet<Guid>());
+                totalLeaves += leafCounts[i];
+            }
+            if (totalLeaves == 0) totalLeaves = 1;
+
+            double angleOffset = startAngle;
+            for (int i = 0; i < children.Count; i++)
+            {
+                double childSpan = span * leafCounts[i] / totalLeaves;
+                double angle = angleOffset + childSpan * 0.5;
                 double cx = x + radius * Math.Cos(angle);
                 double cy = y + radius * Math.Sin(angle);
                 Layout(children[i], cx, cy,
-                    startAngle + span * i / children.Count,
-                    startAngle + span * (i + 1) / children.Count,
-                    radius * 0.55);
+                    angleOffset,
+                    angleOffset + childSpan,
+                    radius * 0.65,
+                    placed);
+                angleOffset += childSpan;
             }
         }
 
-        Layout(root, 700, 380, 0, Math.PI * 2, 300);
+        Layout(root, 800, 500, 0, Math.PI * 2, 500, new HashSet<string>(StringComparer.OrdinalIgnoreCase));
     }
 
     /// <summary>Sestaví JSON se pozicemi všech uzlů celého stromu (bez omezení hloubky).</summary>

@@ -795,4 +795,24 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
       .AsResult<object>();
     return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));
   }
+
+  /// <inheritdoc/>
+  public async Task<Result> DeleteMapLayout(string key, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(DeleteMapLayout)} starting. key={key}");
+    try
+    {
+      var fluent = new FluentClient(_httpClient);
+      var response = await fluent
+        .DeleteAsync($"maplayouts/{Uri.EscapeDataString(key)}")
+        .WithCancellationToken(cancellationToken)
+        .AsMessage();
+      return response.IsSuccessStatusCode ? Result.Success() : Result.Error($"HTTP {(int)response.StatusCode}");
+    }
+    catch (Exception ex)
+    {
+      _logger.LogError(ex, $"{nameof(DeleteMapLayout)} failed.");
+      return Result.Error(ex.Message);
+    }
+  }
 }
