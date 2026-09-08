@@ -9,6 +9,7 @@ using AVAIntegrationModeler.UseCases.Contributors.List;
 using AVAIntegrationModeler.UseCases.DataModelRecords;
 using AVAIntegrationModeler.UseCases.DataModels;
 using AVAIntegrationModeler.UseCases.DataModels.Import;
+using AVAIntegrationModeler.UseCases.Dashboard;
 using AVAIntegrationModeler.UseCases.Deployments;
 using AVAIntegrationModeler.UseCases.Features;
 using AVAIntegrationModeler.UseCases.IntegrationMaps;
@@ -34,6 +35,7 @@ public static class InfrastructureServiceExtensions
             .AddScoped<IIntegrationMapsQueryService, IntegrationMapsQueryService>()
             .AddScoped<IDeploymentRepository, DeploymentRepository>()
             .AddScoped<IDeploymentsQueryService, DeploymentsQueryService>()
+            .AddScoped<IDashboardQueryService, DashboardQueryService>()
             .AddScoped<IDeleteContributorService, DeleteContributorService>()
             .AddScoped<IDataModelImportService, DataModelImportService>();
 

@@ -67,7 +67,7 @@
                                        Placeholder="@field.Label"
                                        FloatLabelType="FloatLabelType.Always"
                                        Value="@fv.StringValue"
-                                       ValueChanged="@((string v) => fv.StringValue = v)">
+                                       ValueChanged="@((string v) => HandleFieldValueChanged(field.Name, v))">
                             </SfTextBox>
                         </div>
                     }

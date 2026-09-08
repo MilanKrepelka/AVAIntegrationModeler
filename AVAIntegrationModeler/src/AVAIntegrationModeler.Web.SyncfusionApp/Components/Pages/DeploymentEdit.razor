@@ -67,6 +67,28 @@
             </div>
         </div>
 
+        @if (IsEditMode)
+        {
+            <div class="row" style="margin-top:16px">
+                <div class="col-12 col-md-6">
+                    <SfTextBox CssClass="w-100"
+                               Placeholder="Poslední uložení"
+                               FloatLabelType="FloatLabelType.Always"
+                               Value="@(_edit.LastSaveDateTime.HasValue ? _edit.LastSaveDateTime.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss") : "")"
+                               Readonly="true">
+                    </SfTextBox>
+                </div>
+                <div class="col-12 col-md-6">
+                    <SfTextBox CssClass="w-100"
+                               Placeholder="Poslední nasazení"
+                               FloatLabelType="FloatLabelType.Always"
+                               Value="@(_edit.LastDeploymentDateTime.HasValue ? _edit.LastDeploymentDateTime.Value.ToLocalTime().ToString("dd.MM.yyyy HH:mm:ss") : "")"
+                               Readonly="true">
+                    </SfTextBox>
+                </div>
+            </div>
+        }
+
         <div class="row" style="margin-top:24px">
             <div class="col-12">
                 <h5>Datové modely v nasazení</h5>
@@ -92,7 +114,13 @@
                                 <tr>
                                     <td>@(dm?.Code ?? id.ToString())</td>
                                     <td>@(dm?.Name ?? "")</td>
-                                    <td>
+                                    <td style="white-space:nowrap">
+                                        <SfButton CssClass="e-small e-outline"
+                                                  IconCss="e-icons e-changes"
+                                                  Type="Button"
+                                                  title="Porovnat DB vs AVAPlace"
+                                                  OnClick="@(() => NavigationManager.NavigateTo($"/datamodelchanges/{id}"))">
+                                        </SfButton>
                                         <SfButton CssClass="e-small e-danger e-outline"
                                                   Type="Button"
                                                   OnClick="@(() => RemoveDataModel(id))">
@@ -111,7 +139,11 @@
                                     DataSource="@_selectableDataModels"
                                     @bind-Value="_selectedDataModelId"
                                     Placeholder="Vyberte datový model"
-                                    CssClass="w-100">
+                                    AllowFiltering="true"
+                                    FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
+                                    IgnoreAccent="true"
+                                    FilterBarPlaceholder="Hledat model..."
+                                    CssClass="w-50">
                         <DropDownListFieldSettings Text="Code" Value="Id"></DropDownListFieldSettings>
                     </SfDropDownList>
                     <SfButton CssClass="e-primary" Type="Button" OnClick="AddDataModel">Přidat</SfButton>
@@ -124,6 +156,137 @@
             <div class="alert @(_saveSuccess ? "alert-success" : "alert-danger")" style="margin-top:16px">
                 @_saveMessage
             </div>
+        }
+
+        @if (IsEditMode)
+        {
+            <div class="row" style="margin-top:24px">
+                <div class="col-12">
+                    <h5>Přehled změn — DB vs AVAPlace</h5>
+
+                    @if (!_loadingSummary && _changesSummary is null && _summaryError is null)
+                    {
+                        <SfButton CssClass="e-outline e-small" Type="Button" OnClick="LoadChangesSummaryAsync">
+                            Načíst přehled změn
+                        </SfButton>
+                    }
+
+                    @if (_loadingSummary)
+                    {
+                        <div class="text-muted" style="font-size:.875rem">Načítám...</div>
+                    }
+
+                    @if (_summaryError is not null)
+                    {
+                        <div class="alert alert-danger" style="padding:.4rem .8rem; font-size:.875rem">@_summaryError</div>
+                        <SfButton CssClass="e-outline e-small" Type="Button" OnClick="LoadChangesSummaryAsync">Zkusit znovu</SfButton>
+                    }
+
+                    @if (_changesSummary is { } s)
+                    {
+                        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-bottom:12px; font-size:.875rem">
+                            <span style="color:#198754; font-weight:600">✓ Shodné: @s.ModelsSame</span>
+                            <span style="color:#dc3545; font-weight:600">⚡ Liší se: @s.ModelsDifferent</span>
+                            @if (s.ModelsOnlyInDatabase > 0)
+                            {
+                                <span style="color:#0d6efd; font-weight:600">→ Pouze DB: @s.ModelsOnlyInDatabase</span>
+                            }
+                            @if (s.ModelsOnlyInAvaPlace > 0)
+                            {
+                                <span style="color:#6f42c1; font-weight:600">← Pouze AVAPlace: @s.ModelsOnlyInAvaPlace</span>
+                            }
+                            <SfButton CssClass="e-outline e-small" Type="Button" OnClick="LoadChangesSummaryAsync" style="margin-left:auto">
+                                Obnovit
+                            </SfButton>
+                        </div>
+
+                        <table class="table table-sm table-hover" style="font-size:.875rem">
+                            <thead class="table-light">
+                                <tr>
+                                    <th>Kód</th>
+                                    <th>Název</th>
+                                    <th>Stav</th>
+                                    <th title="Liší se / Pouze DB / Pouze AVAPlace">Pole Δ</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var item in s.Models)
+                                {
+                                    <tr>
+                                        <td>@item.Code</td>
+                                        <td>@item.Name</td>
+                                        <td>
+                                            @switch (item.Status)
+                                            {
+                                                case AVAIntegrationModeler.Contracts.DataModels.ComparisonStatus.Same:
+                                                    <span style="color:#198754">✓ Shodný</span>
+                                                    break;
+                                                case AVAIntegrationModeler.Contracts.DataModels.ComparisonStatus.Different:
+                                                    <span style="color:#dc3545">⚡ Liší se</span>
+                                                    break;
+                                                case AVAIntegrationModeler.Contracts.DataModels.ComparisonStatus.OnlyInDatabase:
+                                                    <span style="color:#0d6efd">→ Pouze DB</span>
+                                                    break;
+                                                case AVAIntegrationModeler.Contracts.DataModels.ComparisonStatus.OnlyInAvaPlace:
+                                                    <span style="color:#6f42c1">← Pouze AVAPlace</span>
+                                                    break;
+                                            }
+                                        </td>
+                                        <td>
+                                            @if (item.FieldsDifferent > 0 || item.FieldsOnlyInDatabase > 0 || item.FieldsOnlyInAvaPlace > 0)
+                                            {
+                                                @if (item.FieldsDifferent > 0)
+                                                {
+                                                    <span style="color:#dc3545; margin-right:4px">⚡@item.FieldsDifferent</span>
+                                                }
+                                                @if (item.FieldsOnlyInDatabase > 0)
+                                                {
+                                                    <span style="color:#0d6efd; margin-right:4px">+@item.FieldsOnlyInDatabase DB</span>
+                                                }
+                                                @if (item.FieldsOnlyInAvaPlace > 0)
+                                                {
+                                                    <span style="color:#6f42c1">+@item.FieldsOnlyInAvaPlace AVA</span>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                <span style="color:#6c757d">—</span>
+                                            }
+                                        </td>
+                                        <td>
+                                            <SfButton CssClass="e-small e-outline"
+                                                      IconCss="e-icons e-changes"
+                                                      Type="Button"
+                                                      title="Detail změn"
+                                                      OnClick="@(() => NavigateToModelChanges(item.DataModelId))">
+                                            </SfButton>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        }
+
+        @if (IsEditMode)
+        {
+            <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap">
+                <SfButton CssClass="e-outline" Type="Button" OnClick="ExportAsync">
+                    Export datových modelů
+                </SfButton>
+                <SfButton CssClass="e-success e-outline" Type="Button" OnClick="UploadToAvaPlaceAsync" Disabled="@_avaPlaceLoading">
+                    @(_avaPlaceLoading ? "Nahrávám..." : "Nahrát do AVAPlace")
+                </SfButton>
+            </div>
+            @if (_avaPlaceMessage is not null)
+            {
+                <div class="alert @(_avaPlaceSuccess ? "alert-success" : "alert-danger")" style="margin-top:8px; font-size:.875rem">
+                    @_avaPlaceMessage
+                </div>
+            }
         }
 
         <div style="margin-top:16px; display:flex; gap:8px">

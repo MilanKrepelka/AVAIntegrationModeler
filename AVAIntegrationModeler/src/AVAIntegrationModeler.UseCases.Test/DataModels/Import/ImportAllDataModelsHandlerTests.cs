@@ -2,6 +2,7 @@ using Ardalis.Result;
 using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.UseCases.Areas;
 using AVAIntegrationModeler.UseCases.DataModels;
 using AVAIntegrationModeler.UseCases.DataModels.Import;
 using NSubstitute;
@@ -31,26 +32,35 @@ public class ImportAllDataModelsHandlerTests
   private static (
     IIntegrationDataProvider IntegrationDataProvider,
     IDataModelImportService ImportService,
-    IDataModelQueryService QueryService) BuildMocks()
+    IDataModelQueryService QueryService,
+    IAreasQueryService AreasQueryService) BuildMocks()
   {
     return (
       Substitute.For<IIntegrationDataProvider>(),
       Substitute.For<IDataModelImportService>(),
-      Substitute.For<IDataModelQueryService>());
+      Substitute.For<IDataModelQueryService>(),
+      Substitute.For<IAreasQueryService>());
   }
+
+  private static ImportAllDataModelsHandler BuildHandler(
+    IIntegrationDataProvider provider,
+    IDataModelImportService importService,
+    IDataModelQueryService queryService,
+    IAreasQueryService areasQueryService) =>
+    new ImportAllDataModelsHandler(provider, importService, queryService, areasQueryService);
 
   [Fact]
   public async Task Handle_VraciSuccessProKazdyModel_KdyzVsechnyImportyUspesne()
   {
     // Arrange
-    var (provider, importService, queryService) = BuildMocks();
+    var (provider, importService, queryService, areasQueryService) = BuildMocks();
     var models = new[] { BuildModelDTO("A"), BuildModelDTO("B"), BuildModelDTO("C") };
     provider.GetDataModelsAsync(Arg.Any<CancellationToken>())
       .Returns(Task.FromResult<IEnumerable<DataModelDTO>>(models));
     importService.ImportModelAsync(Arg.Any<DataModelDTO>(), Arg.Any<CancellationToken>())
       .Returns(ci => Task.FromResult(Result<Guid>.Success(Guid.NewGuid())));
 
-    var handler = new ImportAllDataModelsHandler(provider, importService, queryService);
+    var handler = BuildHandler(provider, importService, queryService, areasQueryService);
 
     // Act
     var result = await handler.Handle(new ImportAllDataModelsCommand(), CancellationToken.None);
@@ -66,7 +76,7 @@ public class ImportAllDataModelsHandlerTests
   public async Task Handle_PokracujeIKdyzJedenModelSelze_ContinueOnError()
   {
     // Arrange
-    var (provider, importService, queryService) = BuildMocks();
+    var (provider, importService, queryService, areasQueryService) = BuildMocks();
     var modelA = BuildModelDTO("A");
     var modelB = BuildModelDTO("B");
     var modelC = BuildModelDTO("C");
@@ -80,7 +90,7 @@ public class ImportAllDataModelsHandlerTests
     importService.ImportModelAsync(modelC, Arg.Any<CancellationToken>())
       .Returns(Task.FromResult(Result<Guid>.Success(Guid.NewGuid())));
 
-    var handler = new ImportAllDataModelsHandler(provider, importService, queryService);
+    var handler = BuildHandler(provider, importService, queryService, areasQueryService);
 
     // Act
     var result = await handler.Handle(new ImportAllDataModelsCommand(), CancellationToken.None);
@@ -103,7 +113,7 @@ public class ImportAllDataModelsHandlerTests
   public async Task Handle_ZachytiNeockavanouVyjimkuZImportService_APokracujeSDalsimiModely()
   {
     // Arrange
-    var (provider, importService, queryService) = BuildMocks();
+    var (provider, importService, queryService, areasQueryService) = BuildMocks();
     var modelA = BuildModelDTO("A");
     var modelB = BuildModelDTO("B");
     provider.GetDataModelsAsync(Arg.Any<CancellationToken>())
@@ -114,7 +124,7 @@ public class ImportAllDataModelsHandlerTests
     importService.ImportModelAsync(modelB, Arg.Any<CancellationToken>())
       .Returns(Task.FromResult(Result<Guid>.Success(Guid.NewGuid())));
 
-    var handler = new ImportAllDataModelsHandler(provider, importService, queryService);
+    var handler = BuildHandler(provider, importService, queryService, areasQueryService);
 
     // Act
     var result = await handler.Handle(new ImportAllDataModelsCommand(), CancellationToken.None);
@@ -131,14 +141,14 @@ public class ImportAllDataModelsHandlerTests
   public async Task Handle_InvalidateCacheJenJednouPoDokonceniVsech()
   {
     // Arrange
-    var (provider, importService, queryService) = BuildMocks();
+    var (provider, importService, queryService, areasQueryService) = BuildMocks();
     var models = new[] { BuildModelDTO("A"), BuildModelDTO("B") };
     provider.GetDataModelsAsync(Arg.Any<CancellationToken>())
       .Returns(Task.FromResult<IEnumerable<DataModelDTO>>(models));
     importService.ImportModelAsync(Arg.Any<DataModelDTO>(), Arg.Any<CancellationToken>())
       .Returns(ci => Task.FromResult(Result<Guid>.Success(Guid.NewGuid())));
 
-    var handler = new ImportAllDataModelsHandler(provider, importService, queryService);
+    var handler = BuildHandler(provider, importService, queryService, areasQueryService);
 
     // Act
     await handler.Handle(new ImportAllDataModelsCommand(), CancellationToken.None);
@@ -151,14 +161,14 @@ public class ImportAllDataModelsHandlerTests
   public async Task Handle_NevolaInvalidateCache_KdyzVsechnyModelySelhaly()
   {
     // Arrange
-    var (provider, importService, queryService) = BuildMocks();
+    var (provider, importService, queryService, areasQueryService) = BuildMocks();
     var models = new[] { BuildModelDTO("A"), BuildModelDTO("B") };
     provider.GetDataModelsAsync(Arg.Any<CancellationToken>())
       .Returns(Task.FromResult<IEnumerable<DataModelDTO>>(models));
     importService.ImportModelAsync(Arg.Any<DataModelDTO>(), Arg.Any<CancellationToken>())
       .Returns(ci => Task.FromResult(Result<Guid>.Error("Selhalo.")));
 
-    var handler = new ImportAllDataModelsHandler(provider, importService, queryService);
+    var handler = BuildHandler(provider, importService, queryService, areasQueryService);
 
     // Act
     var result = await handler.Handle(new ImportAllDataModelsCommand(), CancellationToken.None);
@@ -172,11 +182,11 @@ public class ImportAllDataModelsHandlerTests
   public async Task Handle_VraciPrazdnyVysledek_KdyzAVAPlaceNemaZadneModely()
   {
     // Arrange
-    var (provider, importService, queryService) = BuildMocks();
+    var (provider, importService, queryService, areasQueryService) = BuildMocks();
     provider.GetDataModelsAsync(Arg.Any<CancellationToken>())
       .Returns(Task.FromResult(Enumerable.Empty<DataModelDTO>()));
 
-    var handler = new ImportAllDataModelsHandler(provider, importService, queryService);
+    var handler = BuildHandler(provider, importService, queryService, areasQueryService);
 
     // Act
     var result = await handler.Handle(new ImportAllDataModelsCommand(), CancellationToken.None);
@@ -193,11 +203,11 @@ public class ImportAllDataModelsHandlerTests
   public async Task Handle_VraciError_KdyzGetDataModelsAsyncSelze()
   {
     // Arrange
-    var (provider, importService, queryService) = BuildMocks();
+    var (provider, importService, queryService, areasQueryService) = BuildMocks();
     provider.GetDataModelsAsync(Arg.Any<CancellationToken>())
       .Returns(Task.FromException<IEnumerable<DataModelDTO>>(new InvalidOperationException("AVAPlace nedostupné.")));
 
-    var handler = new ImportAllDataModelsHandler(provider, importService, queryService);
+    var handler = BuildHandler(provider, importService, queryService, areasQueryService);
 
     // Act
     var result = await handler.Handle(new ImportAllDataModelsCommand(), CancellationToken.None);
@@ -206,5 +216,41 @@ public class ImportAllDataModelsHandlerTests
     result.IsSuccess.ShouldBeFalse();
     result.Status.ShouldBe(ResultStatus.Error);
     await importService.DidNotReceive().ImportModelAsync(Arg.Any<DataModelDTO>(), Arg.Any<CancellationToken>());
+  }
+
+  [Fact]
+  public async Task Handle_InvalidujeAreasCache_KdyzAlesponJedenImportUspel()
+  {
+    // Oblast se při importu může auto-vytvořit → AreasQueryService cache musí být invalidována,
+    // jinak DataModels přehled zobrazuje prázdné AreaName (stará cache bez nových oblastí).
+    var (provider, importService, queryService, areasQueryService) = BuildMocks();
+    var models = new[] { BuildModelDTO("X") };
+    provider.GetDataModelsAsync(Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<IEnumerable<DataModelDTO>>(models));
+    importService.ImportModelAsync(Arg.Any<DataModelDTO>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult(Result<Guid>.Success(Guid.NewGuid())));
+
+    var handler = BuildHandler(provider, importService, queryService, areasQueryService);
+
+    await handler.Handle(new ImportAllDataModelsCommand(), CancellationToken.None);
+
+    areasQueryService.Received(1).InvalidateCache(Datasource.Database);
+  }
+
+  [Fact]
+  public async Task Handle_NeinvalidujeAreasCache_KdyzVsechnyImportySelzely()
+  {
+    var (provider, importService, queryService, areasQueryService) = BuildMocks();
+    var models = new[] { BuildModelDTO("X") };
+    provider.GetDataModelsAsync(Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<IEnumerable<DataModelDTO>>(models));
+    importService.ImportModelAsync(Arg.Any<DataModelDTO>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult(Result<Guid>.Error("chyba")));
+
+    var handler = BuildHandler(provider, importService, queryService, areasQueryService);
+
+    await handler.Handle(new ImportAllDataModelsCommand(), CancellationToken.None);
+
+    areasQueryService.DidNotReceive().InvalidateCache(Arg.Any<Datasource>());
   }
 }

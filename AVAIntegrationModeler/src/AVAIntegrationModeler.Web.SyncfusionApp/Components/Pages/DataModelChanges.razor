@@ -1,0 +1,202 @@
+@page "/datamodelchanges/{Id:guid}"
+@rendermode InteractiveServer
+@using AVAIntegrationModeler.Contracts.DataModels
+@using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.DataModelChanges
+@using Syncfusion.Blazor.Buttons
+
+<PageTitle>Změny DataModelu</PageTitle>
+
+<style>
+    .changes-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
+    .badge-db { background: #0d6efd; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: .8rem; }
+    .badge-ava { background: #6f42c1; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: .8rem; }
+    .badge-missing { background: #6c757d; color: #fff; padding: 2px 8px; border-radius: 4px; font-size: .8rem; text-decoration: line-through; }
+    .status-same { color: #198754; font-weight: 600; }
+    .status-diff { color: #dc3545; font-weight: 600; }
+    .status-only-db { color: #0d6efd; font-weight: 600; }
+    .status-only-ava { color: #6f42c1; font-weight: 600; }
+    .diff-table { width: 100%; border-collapse: collapse; font-size: .875rem; margin-bottom: 16px; }
+    .diff-table th { background: #f8f9fa; font-weight: 600; padding: 6px 10px; border: 1px solid #dee2e6; }
+    .diff-table td { padding: 6px 10px; border: 1px solid #dee2e6; vertical-align: top; }
+    .diff-table tr.diff-row td { background: #fff3cd; }
+    .field-card { border: 1px solid #dee2e6; border-radius: 6px; margin-bottom: 10px; overflow: hidden; }
+    .field-card-header { display: flex; justify-content: space-between; align-items: center; padding: 8px 12px; font-weight: 600; background: #f8f9fa; }
+    .field-card-body { padding: 8px 12px; }
+    .field-only-db .field-card-header { background: #cfe2ff; }
+    .field-only-ava .field-card-header { background: #e8d5ff; }
+    .field-diff .field-card-header { background: #fff3cd; }
+    .field-same .field-card-header { background: #d1e7dd; }
+    .section-title { font-size: 1rem; font-weight: 700; margin: 20px 0 8px; border-bottom: 2px solid #dee2e6; padding-bottom: 4px; }
+</style>
+
+<div class="container-fluid" style="max-width:1100px; padding-top:16px">
+
+    @if (IsLoading)
+    {
+        <div class="loading-indicator">Načítám porovnání...</div>
+    }
+    else if (ErrorMessage is not null)
+    {
+        <div class="alert alert-danger">@ErrorMessage</div>
+        <SfButton CssClass="e-outline" OnClick="GoBack">← Zpět na seznam</SfButton>
+    }
+    else if (ViewModel.Comparison is { } cmp)
+    {
+        <div class="changes-header">
+            <h4 style="margin:0">@cmp.Code — @cmp.Name</h4>
+            @if (cmp.ExistsInDatabase)
+            {
+                <span class="badge-db">✓ Database</span>
+            }
+            else
+            {
+                <span class="badge-missing">✗ Database</span>
+            }
+            @if (cmp.ExistsInAvaPlace)
+            {
+                <span class="badge-ava">✓ AVAPlace</span>
+            }
+            else
+            {
+                <span class="badge-missing">✗ AVAPlace</span>
+            }
+            <span class="@GetModelStatusCss(cmp.ModelStatus)">@GetModelStatusText(cmp.ModelStatus)</span>
+        </div>
+
+        <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap">
+            <SfButton CssClass="e-outline e-small" IconCss="e-icons e-refresh" OnClick="ReloadAsync">Obnovit</SfButton>
+            <SfButton CssClass="e-outline e-small" OnClick="GoBack">← Zpět na seznam</SfButton>
+            <SfButton CssClass="e-outline e-small" OnClick="ToggleSameFields">
+                @(ViewModel.ShowSameFields ? "Skrýt shodná pole" : "Zobrazit shodná pole")
+            </SfButton>
+        </div>
+
+        @if (cmp.ExistsInDatabase && cmp.ExistsInAvaPlace)
+        {
+            <div class="section-title">Vlastnosti modelu</div>
+            @if (cmp.PropertyDiffs.Count == 0)
+            {
+                <p class="status-same">✓ Všechny vlastnosti modelu jsou shodné.</p>
+            }
+            else
+            {
+                <table class="diff-table">
+                    <thead>
+                        <tr>
+                            <th style="width:20%">Vlastnost</th>
+                            <th style="width:40%">Database</th>
+                            <th style="width:40%">AVAPlace</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var diff in cmp.PropertyDiffs)
+                        {
+                            <tr class="diff-row">
+                                <td><strong>@diff.PropertyName</strong></td>
+                                <td>@(diff.DatabaseValue ?? "—")</td>
+                                <td>@(diff.AvaPlaceValue ?? "—")</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+        }
+
+        <div class="section-title">
+            Pole datového modelu
+            (@cmp.FieldComparisons.Count celkem,
+             @cmp.FieldComparisons.Count(f => f.Status != ComparisonStatus.Same) liší se)
+        </div>
+
+        @if (!cmp.FieldComparisons.Any())
+        {
+            <p class="text-muted">Žádná pole.</p>
+        }
+        else
+        {
+            @foreach (var field in ViewModel.VisibleFields)
+            {
+                <div class="field-card @GetFieldCardCss(field.Status)">
+                    <div class="field-card-header">
+                        <span>@field.FieldName</span>
+                        <span class="@GetModelStatusCss(field.Status)" style="font-size:.8rem">
+                            @GetModelStatusText(field.Status)
+                        </span>
+                    </div>
+                    @if (field.Status == ComparisonStatus.Different && field.PropertyDiffs.Count > 0)
+                    {
+                        <div class="field-card-body">
+                            <table class="diff-table">
+                                <thead>
+                                    <tr>
+                                        <th style="width:22%">Vlastnost</th>
+                                        <th style="width:39%">Database</th>
+                                        <th style="width:39%">AVAPlace</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var diff in field.PropertyDiffs)
+                                    {
+                                        <tr class="diff-row">
+                                            <td><strong>@diff.PropertyName</strong></td>
+                                            <td>@(diff.DatabaseValue ?? "—")</td>
+                                            <td>@(diff.AvaPlaceValue ?? "—")</td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    }
+                    @if (field.Status == ComparisonStatus.OnlyInDatabase && field.DatabaseField is { } dbf)
+                    {
+                        <div class="field-card-body" style="font-size:.85rem; color:#555">
+                            Typ: @dbf.FieldType | Nullable: @dbf.IsNullable | Collection: @dbf.IsCollection | Localized: @dbf.IsLocalized
+                        </div>
+                    }
+                    @if (field.Status == ComparisonStatus.OnlyInAvaPlace && field.AvaPlaceField is { } avaf)
+                    {
+                        <div class="field-card-body" style="font-size:.85rem; color:#555">
+                            Typ: @avaf.FieldType | Nullable: @avaf.IsNullable | Collection: @avaf.IsCollection | Localized: @avaf.IsLocalized
+                        </div>
+                    }
+                </div>
+            }
+        }
+
+        @if (!ViewModel.ShowSameFields && cmp.FieldComparisons.Count(f => f.Status == ComparisonStatus.Same) > 0)
+        {
+            <p class="text-muted" style="margin-top:8px; font-size:.85rem">
+                @cmp.FieldComparisons.Count(f => f.Status == ComparisonStatus.Same) shodných polí je skrytých.
+                <button class="btn btn-link btn-sm p-0" @onclick="ToggleSameFields">Zobrazit</button>
+            </p>
+        }
+    }
+</div>
+
+@code {
+    private string GetModelStatusText(ComparisonStatus status) => status switch
+    {
+        ComparisonStatus.Same => "Shodné",
+        ComparisonStatus.Different => "Liší se",
+        ComparisonStatus.OnlyInDatabase => "Pouze v Database",
+        ComparisonStatus.OnlyInAvaPlace => "Pouze v AVAPlace",
+        _ => status.ToString()
+    };
+
+    private string GetModelStatusCss(ComparisonStatus status) => status switch
+    {
+        ComparisonStatus.Same => "status-same",
+        ComparisonStatus.Different => "status-diff",
+        ComparisonStatus.OnlyInDatabase => "status-only-db",
+        ComparisonStatus.OnlyInAvaPlace => "status-only-ava",
+        _ => ""
+    };
+
+    private string GetFieldCardCss(ComparisonStatus status) => status switch
+    {
+        ComparisonStatus.OnlyInDatabase => "field-only-db",
+        ComparisonStatus.OnlyInAvaPlace => "field-only-ava",
+        ComparisonStatus.Different => "field-diff",
+        _ => "field-same"
+    };
+}

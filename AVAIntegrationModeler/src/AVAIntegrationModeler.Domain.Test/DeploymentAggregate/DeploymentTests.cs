@@ -126,4 +126,75 @@ public class DeploymentTests
 
     dep.DataModels.Count.ShouldBe(3);
   }
+
+  [Fact]
+  public void SetLastSaveDateTime_NastaviHodnotu()
+  {
+    var dep = new Deployment(Guid.NewGuid(), "DEP-001");
+    var dt = new DateTime(2026, 8, 31, 12, 0, 0, DateTimeKind.Utc);
+
+    dep.SetLastSaveDateTime(dt);
+
+    dep.LastSaveDateTime.ShouldBe(dt);
+  }
+
+  [Fact]
+  public void SetLastSaveDateTime_NullVymaze()
+  {
+    var dep = new Deployment(Guid.NewGuid(), "DEP-001");
+    dep.SetLastSaveDateTime(DateTime.UtcNow);
+
+    dep.SetLastSaveDateTime(null);
+
+    dep.LastSaveDateTime.ShouldBeNull();
+  }
+
+  [Fact]
+  public void SetLastDeploymentDateTime_NastaviHodnotu()
+  {
+    var dep = new Deployment(Guid.NewGuid(), "DEP-001");
+    var dt = new DateTime(2026, 8, 31, 18, 30, 0, DateTimeKind.Utc);
+
+    dep.SetLastDeploymentDateTime(dt);
+
+    dep.LastDeploymentDateTime.ShouldBe(dt);
+  }
+
+  [Fact]
+  public void SetLastDeploymentDateTime_NullVymaze()
+  {
+    var dep = new Deployment(Guid.NewGuid(), "DEP-001");
+    dep.SetLastDeploymentDateTime(DateTime.UtcNow);
+
+    dep.SetLastDeploymentDateTime(null);
+
+    dep.LastDeploymentDateTime.ShouldBeNull();
+  }
+
+  [Fact]
+  public void NovaInstance_LastSaveDateTimeJeNull()
+  {
+    var dep = new Deployment(Guid.NewGuid(), "DEP-001");
+
+    dep.LastSaveDateTime.ShouldBeNull();
+    dep.LastDeploymentDateTime.ShouldBeNull();
+  }
+
+  [Fact]
+  public void SetLastSaveDateTime_ReturnujeInstanci()
+  {
+    var dep = new Deployment(Guid.NewGuid(), "DEP-001");
+    var result = dep.SetLastSaveDateTime(DateTime.UtcNow);
+
+    result.ShouldBeSameAs(dep);
+  }
+
+  [Fact]
+  public void SetLastDeploymentDateTime_ReturnujeInstanci()
+  {
+    var dep = new Deployment(Guid.NewGuid(), "DEP-001");
+    var result = dep.SetLastDeploymentDateTime(DateTime.UtcNow);
+
+    result.ShouldBeSameAs(dep);
+  }
 }

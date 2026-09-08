@@ -1,6 +1,7 @@
 using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.UseCases.Areas;
 
 namespace AVAIntegrationModeler.UseCases.DataModels.Import;
 
@@ -12,7 +13,8 @@ namespace AVAIntegrationModeler.UseCases.DataModels.Import;
 public class ImportAllDataModelsHandler(
   IIntegrationDataProvider integrationDataProvider,
   IDataModelImportService importService,
-  IDataModelQueryService queryService)
+  IDataModelQueryService queryService,
+  IAreasQueryService areasQueryService)
   : ICommandHandler<ImportAllDataModelsCommand, Result<ImportAllDataModelsFromAvaPlaceResponse>>
 {
   public async Task<Result<ImportAllDataModelsFromAvaPlaceResponse>> Handle(
@@ -57,7 +59,10 @@ public class ImportAllDataModelsHandler(
     }
 
     if (results.Any(r => r.Success))
+    {
       queryService.InvalidateCache(Datasource.Database);
+      areasQueryService.InvalidateCache(Datasource.Database);
+    }
 
     return Result<ImportAllDataModelsFromAvaPlaceResponse>.Success(new ImportAllDataModelsFromAvaPlaceResponse
     {

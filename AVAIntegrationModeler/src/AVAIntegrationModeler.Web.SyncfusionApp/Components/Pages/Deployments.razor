@@ -17,7 +17,6 @@
                 AllowSorting="true"
                 AllowResizing="true"
                 AllowSelection="true"
-                AllowGrouping="true"
                 Toolbar="@(new List<string>() { "Search" })">
 
             <Syncfusion.Blazor.Navigations.SfToolbar>
@@ -27,13 +26,14 @@
             </Syncfusion.Blazor.Navigations.SfToolbar>
 
             <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
+            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar" IgnoreAccent="true"></GridFilterSettings>
             <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
 
             <GridColumns>
                 <GridColumn Field=@nameof(DeploymentListViewModel.Code) HeaderText="Kód" Width="150" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn Field=@nameof(DeploymentListViewModel.Name) HeaderText="Název" Width="300" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn Field=@nameof(DeploymentListViewModel.DataModelCount) HeaderText="Datové modely" Width="150"></GridColumn>
+                <GridColumn Field=@nameof(DeploymentListViewModel.LastDeploymentDateTime) HeaderText="Poslední nasazení" Width="180" Type="ColumnType.DateTime" Format="dd.MM.yyyy HH:mm"></GridColumn>
                 <GridColumn Field=@nameof(DeploymentListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="true">
                     <Template>
                         @{

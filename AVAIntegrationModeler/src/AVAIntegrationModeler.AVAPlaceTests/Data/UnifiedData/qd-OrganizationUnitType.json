@@ -1,0 +1,200 @@
+[
+  {
+    "ModelId": "86203b07-1d6b-4831-aca4-db052a26c5fd",
+    "RecordId": "3bc503b0-467a-44cb-9c3b-6978971947a5",
+    "ExternalId": "Branch.OrganizationUnitType.00000000-0000-0000-0000-000000000000",
+    "Fields": [
+      {
+        "Key": "Code",
+        "Value": "Branch"
+      },
+      {
+        "Key": "Name",
+        "Value": {
+          "Values": [
+            {
+              "Locale": "en-US",
+              "Value": "Branch"
+            }
+          ]
+        }
+      },
+      {
+        "Key": "Description",
+        "Value": {
+          "Values": [
+            {
+              "Locale": "en-US",
+              "Value": "Represents a branch level organization unit."
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ModelId": "86203b07-1d6b-4831-aca4-db052a26c5fd",
+    "RecordId": "6a86d6de-ab32-49a5-a2fd-58fdc44118c5",
+    "ExternalId": "Department.OrganizationUnitType.00000000-0000-0000-0000-000000000000",
+    "Fields": [
+      {
+        "Key": "Code",
+        "Value": "Department"
+      },
+      {
+        "Key": "Name",
+        "Value": {
+          "Values": [
+            {
+              "Locale": "en-US",
+              "Value": "Department"
+            }
+          ]
+        }
+      },
+      {
+        "Key": "Description",
+        "Value": {
+          "Values": [
+            {
+              "Locale": "en-US",
+              "Value": "Represents a department level organization unit."
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ModelId": "86203b07-1d6b-4831-aca4-db052a26c5fd",
+    "RecordId": "12e7eade-556c-4151-8b05-047b4f6803c2",
+    "ExternalId": "Team.OrganizationUnitType.00000000-0000-0000-0000-000000000000",
+    "Fields": [
+      {
+        "Key": "Code",
+        "Value": "Team"
+      },
+      {
+        "Key": "Name",
+        "Value": {
+          "Values": [
+            {
+              "Locale": "en-US",
+              "Value": "Team"
+            }
+          ]
+        }
+      },
+      {
+        "Key": "Description",
+        "Value": {
+          "Values": [
+            {
+              "Locale": "en-US",
+              "Value": "Represents a team level organization unit."
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ModelId": "86203b07-1d6b-4831-aca4-db052a26c5fd",
+    "RecordId": "c69da6b0-ed58-4d66-90b0-1828faa60d56",
+    "ExternalId": "Service.OrganizationUnitType.00000000-0000-0000-0000-000000000000",
+    "Fields": [
+      {
+        "Key": "Code",
+        "Value": "Service"
+      },
+      {
+        "Key": "Name",
+        "Value": {
+          "Values": [
+            {
+              "Locale": "en-US",
+              "Value": "Service"
+            }
+          ]
+        }
+      },
+      {
+        "Key": "Description",
+        "Value": {
+          "Values": [
+            {
+              "Locale": "en-US",
+              "Value": "Represents a service level organization unit."
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ModelId": "86203b07-1d6b-4831-aca4-db052a26c5fd",
+    "RecordId": "f0bbe915-f6c3-47a2-b0ca-43056a6aad29",
+    "ExternalId": "Workshop.OrganizationUnitType.00000000-0000-0000-0000-000000000000",
+    "Fields": [
+      {
+        "Key": "Code",
+        "Value": "Workshop"
+      },
+      {
+        "Key": "Name",
+        "Value": {
+          "Values": [
+            {
+              "Locale": "en-US",
+              "Value": "Workshop"
+            }
+          ]
+        }
+      },
+      {
+        "Key": "Description",
+        "Value": {
+          "Values": [
+            {
+              "Locale": "en-US",
+              "Value": "Represents a workshop level organization unit."
+            }
+          ]
+        }
+      }
+    ]
+  },
+  {
+    "ModelId": "86203b07-1d6b-4831-aca4-db052a26c5fd",
+    "RecordId": "b96caee5-0075-49be-b716-8352a7652fb7",
+    "ExternalId": "Workroom.OrganizationUnitType.00000000-0000-0000-0000-000000000000",
+    "Fields": [
+      {
+        "Key": "Code",
+        "Value": "Workroom"
+      },
+      {
+        "Key": "Name",
+        "Value": {
+          "Values": [
+            {
+              "Locale": "en-US",
+              "Value": "Workroom"
+            }
+          ]
+        }
+      },
+      {
+        "Key": "Description",
+        "Value": {
+          "Values": [
+            {
+              "Locale": "en-US",
+              "Value": "Represents a workroom level organization unit."
+            }
+          ]
+        }
+      }
+    ]
+  }
+]

@@ -22,7 +22,9 @@ public static class DeploymentMapper
       Name = deployment.Name,
       Ticket = deployment.Ticket,
       Description = deployment.Description,
-      DataModelIds = deployment.DataModels.Select(m => m.DataModelId).ToList()
+      DataModelIds = deployment.DataModels.Select(m => m.DataModelId).ToList(),
+      LastSaveDateTime = deployment.LastSaveDateTime,
+      LastDeploymentDateTime = deployment.LastDeploymentDateTime
     };
   }
 
@@ -38,6 +40,8 @@ public static class DeploymentMapper
       deployment.SetName(dto.Name);
     deployment.SetTicket(dto.Ticket);
     deployment.SetDescription(dto.Description);
+    deployment.SetLastSaveDateTime(dto.LastSaveDateTime);
+    deployment.SetLastDeploymentDateTime(dto.LastDeploymentDateTime);
     foreach (var id in dto.DataModelIds)
       deployment.AddDataModel(id);
     return deployment;
