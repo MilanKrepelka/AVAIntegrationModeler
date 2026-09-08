@@ -87,6 +87,32 @@ public class DeploymentUpdateTest(CustomWebApplicationFactory<Program> factory) 
   }
 
   [Fact]
+  public async Task UpdateDeployment_SetsLastSaveDateTime()
+  {
+    var before = DateTime.UtcNow.AddSeconds(-1);
+
+    var updated = new DeploymentDTO
+    {
+      Id = SeedData.Deployment2.Id,
+      Code = SeedData.Deployment2.Code,
+      Name = "Updated For Date Check",
+      DataModelIds = new List<Guid>()
+    };
+
+    var response = await _client.PutAsJsonAsync(
+      $"/Deployments/{SeedData.Deployment2.Code}",
+      new { DeploymentCode = SeedData.Deployment2.Code, Deployment = updated });
+
+    response.StatusCode.ShouldBe(System.Net.HttpStatusCode.OK);
+
+    var dto = await response.Content.ReadFromJsonAsync<DeploymentDTO>();
+    dto.ShouldNotBeNull();
+    dto!.LastSaveDateTime.ShouldNotBeNull();
+    dto.LastSaveDateTime!.Value.ShouldBeGreaterThan(before);
+    dto.LastDeploymentDateTime.ShouldBeNull();
+  }
+
+  [Fact]
   public async Task UpdateDeployment_Neexistujici_Vrati404()
   {
     var dto = new DeploymentDTO

@@ -29,14 +29,35 @@ public partial class Areas : ComponentBase
       IsLoading = true;
       await InvokeAsync(StateHasChanged);
 
+      var areasTask = ApiClient.GetAreas(Datasource.Database, CancellationToken.None);
+      var dataModelsTask = ApiClient.GetDataModels(Datasource.Database, CancellationToken.None);
+      await Task.WhenAll(areasTask, dataModelsTask);
+
+      var areasResponse = areasTask.Result;
+      var dataModelsResponse = dataModelsTask.Result;
+
+      var allDataModels = dataModelsResponse?.DataModels ?? [];
+      var dataModelsByArea = allDataModels
+        .Where(dm => dm.AreaId.HasValue)
+        .GroupBy(dm => dm.AreaId!.Value)
+        .ToDictionary(g => g.Key, g => g.ToList());
+
       var newList = new List<AreaListViewModel>();
-      var response = await ApiClient.GetAreas(Datasource.Database, CancellationToken.None);
-      if (response?.Areas != null)
+      if (areasResponse?.Areas != null)
       {
-        foreach (var area in response.Areas)
+        foreach (var area in areasResponse.Areas)
         {
           var vm = Mapping.AreaMapper.MapToAreaListViewModel(area);
-          if (vm != null) newList.Add(vm);
+          if (vm == null) continue;
+
+          if (dataModelsByArea.TryGetValue(area.Id, out var areaModels))
+          {
+            vm.DataModels = areaModels
+              .Select(dm => Mapping.DataModelMapper.MapToViewModel(dm, allDataModels))
+              .ToList();
+          }
+
+          newList.Add(vm);
         }
       }
 

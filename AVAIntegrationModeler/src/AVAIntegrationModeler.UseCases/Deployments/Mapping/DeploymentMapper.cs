@@ -25,6 +25,8 @@ public static class DeploymentMapper
       DataModelIds = deployment.DataModels.Select(m => m.DataModelId).ToList(),
       CreatedAt = deployment.CreatedAt,
       LastSavedAt = deployment.LastSavedAt
+      LastSaveDateTime = deployment.LastSaveDateTime,
+      LastDeploymentDateTime = deployment.LastDeploymentDateTime
     };
   }
 
@@ -40,6 +42,8 @@ public static class DeploymentMapper
       deployment.SetName(dto.Name);
     deployment.SetTicket(dto.Ticket);
     deployment.SetDescription(dto.Description);
+    deployment.SetLastSaveDateTime(dto.LastSaveDateTime);
+    deployment.SetLastDeploymentDateTime(dto.LastDeploymentDateTime);
     foreach (var id in dto.DataModelIds)
       deployment.AddDataModel(id);
     return deployment;

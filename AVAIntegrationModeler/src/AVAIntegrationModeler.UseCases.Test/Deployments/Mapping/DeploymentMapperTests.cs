@@ -102,4 +102,97 @@ public class DeploymentMapperTests
     restored.Name.ShouldBe(original.Name);
     restored.DataModels.Count.ShouldBe(original.DataModels.Count);
   }
+
+  [Fact]
+  public void MapToDTO_MapujeLastSaveDateTime()
+  {
+    var dt = new DateTime(2026, 8, 31, 10, 0, 0, DateTimeKind.Utc);
+    var dep = new Deployment(Guid.NewGuid(), "DEP-DATE");
+    dep.SetName("Date Test");
+    dep.SetLastSaveDateTime(dt);
+
+    var dto = DeploymentMapper.MapToDTO(dep);
+
+    dto!.LastSaveDateTime.ShouldBe(dt);
+    dto.LastDeploymentDateTime.ShouldBeNull();
+  }
+
+  [Fact]
+  public void MapToDTO_MapujeLastDeploymentDateTime()
+  {
+    var dt = new DateTime(2026, 8, 31, 18, 0, 0, DateTimeKind.Utc);
+    var dep = new Deployment(Guid.NewGuid(), "DEP-DATE2");
+    dep.SetName("Date Test 2");
+    dep.SetLastDeploymentDateTime(dt);
+
+    var dto = DeploymentMapper.MapToDTO(dep);
+
+    dto!.LastDeploymentDateTime.ShouldBe(dt);
+    dto.LastSaveDateTime.ShouldBeNull();
+  }
+
+  [Fact]
+  public void MapToDTO_ObaDateTimyNull_VratiNull()
+  {
+    var dep = new Deployment(Guid.NewGuid(), "DEP-NODATES");
+    dep.SetName("No Dates");
+
+    var dto = DeploymentMapper.MapToDTO(dep);
+
+    dto!.LastSaveDateTime.ShouldBeNull();
+    dto.LastDeploymentDateTime.ShouldBeNull();
+  }
+
+  [Fact]
+  public void MapToEntity_MapujeLastSaveDateTime()
+  {
+    var dt = new DateTime(2026, 8, 31, 10, 0, 0, DateTimeKind.Utc);
+    var dto = new DeploymentDTO
+    {
+      Id = Guid.NewGuid(),
+      Code = "DEP-DATE",
+      Name = "Date Test",
+      LastSaveDateTime = dt
+    };
+
+    var dep = DeploymentMapper.MapToEntity(dto);
+
+    dep!.LastSaveDateTime.ShouldBe(dt);
+    dep.LastDeploymentDateTime.ShouldBeNull();
+  }
+
+  [Fact]
+  public void MapToEntity_MapujeLastDeploymentDateTime()
+  {
+    var dt = new DateTime(2026, 8, 31, 18, 0, 0, DateTimeKind.Utc);
+    var dto = new DeploymentDTO
+    {
+      Id = Guid.NewGuid(),
+      Code = "DEP-DEPDATE",
+      Name = "Deploy Date Test",
+      LastDeploymentDateTime = dt
+    };
+
+    var dep = DeploymentMapper.MapToEntity(dto);
+
+    dep!.LastDeploymentDateTime.ShouldBe(dt);
+    dep.LastSaveDateTime.ShouldBeNull();
+  }
+
+  [Fact]
+  public void RoundTrip_ZachováiDateTimes()
+  {
+    var savedt = new DateTime(2026, 8, 31, 10, 0, 0, DateTimeKind.Utc);
+    var deploydt = new DateTime(2026, 8, 30, 8, 0, 0, DateTimeKind.Utc);
+    var original = new Deployment(Guid.NewGuid(), "DEP-RT2");
+    original.SetName("Round Trip Dates");
+    original.SetLastSaveDateTime(savedt);
+    original.SetLastDeploymentDateTime(deploydt);
+
+    var dto = DeploymentMapper.MapToDTO(original)!;
+    var restored = DeploymentMapper.MapToEntity(dto)!;
+
+    restored.LastSaveDateTime.ShouldBe(savedt);
+    restored.LastDeploymentDateTime.ShouldBe(deploydt);
+  }
 }

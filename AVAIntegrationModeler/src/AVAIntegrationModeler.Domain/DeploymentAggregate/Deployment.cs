@@ -41,6 +41,16 @@ public class Deployment : DomainEntityBase<Guid>, IAggregateRoot
   /// </summary>
   public string? Description { get; private set; }
 
+  /// <summary>
+  /// Datum a čas posledního uložení nasazení (UTC).
+  /// </summary>
+  public DateTime? LastSaveDateTime { get; private set; }
+
+  /// <summary>
+  /// Datum a čas posledního nasazení do AVAPlace (UTC). Nastavuje se při skutečném nasazení.
+  /// </summary>
+  public DateTime? LastDeploymentDateTime { get; private set; }
+
   private readonly List<DeploymentDataModel> _dataModels = new();
 
   /// <summary>
@@ -81,6 +91,24 @@ public class Deployment : DomainEntityBase<Guid>, IAggregateRoot
   public Deployment SetDescription(string? description)
   {
     Description = description;
+    return this;
+  }
+
+  /// <summary>
+  /// Nastaví datum a čas posledního uložení nasazení.
+  /// </summary>
+  public Deployment SetLastSaveDateTime(DateTime? value)
+  {
+    LastSaveDateTime = value;
+    return this;
+  }
+
+  /// <summary>
+  /// Nastaví datum a čas posledního nasazení do AVAPlace.
+  /// </summary>
+  public Deployment SetLastDeploymentDateTime(DateTime? value)
+  {
+    LastDeploymentDateTime = value;
     return this;
   }
 

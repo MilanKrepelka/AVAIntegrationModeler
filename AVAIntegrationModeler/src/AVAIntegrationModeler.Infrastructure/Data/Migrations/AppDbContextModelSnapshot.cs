@@ -302,6 +302,10 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .HasColumnType("TEXT");
 
                     b.Property<DateTime?>("LastSavedAt")
+                    b.Property<DateTime?>("LastDeploymentDateTime")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastSaveDateTime")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("Name")

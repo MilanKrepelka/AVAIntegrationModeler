@@ -22,6 +22,10 @@
     {
         <div class="loading-indicator">Načítám data...</div>
     }
+    @if (_areasError is not null)
+    {
+        <div class="alert alert-warning" style="margin-bottom:8px">⚠️ @_areasError</div>
+    }
     <SfGrid ID="Grid"
             DataSource="@DataModelList"
             @ref="Grid"
@@ -31,19 +35,19 @@
             AllowSorting="true"
             AllowResizing="true"
             AllowSelection="true"
-            AllowGrouping="true"
             Toolbar="@(new List<string>() { "Search" })">
 
         <Syncfusion.Blazor.Navigations.SfToolbar>
             <Syncfusion.Blazor.Navigations.ToolbarItems>
                 <Syncfusion.Blazor.Navigations.ToolbarItem Text="Přidat datový model" PrefixIcon="e-icons e-add" Id="AddNewDataModel" OnClick="AddNewDataModel"></Syncfusion.Blazor.Navigations.ToolbarItem>
+                <Syncfusion.Blazor.Navigations.ToolbarItem Text="Obnovit" PrefixIcon="e-icons e-refresh" Id="Reload" OnClick="ReloadAsync"></Syncfusion.Blazor.Navigations.ToolbarItem>
                 <Syncfusion.Blazor.Navigations.ToolbarItem Text="Smazat všechny modely" PrefixIcon="e-icons e-delete" Id="DeleteAllDataModels" OnClick="DeleteAllDataModelsAsync"></Syncfusion.Blazor.Navigations.ToolbarItem>
             </Syncfusion.Blazor.Navigations.ToolbarItems>
         </Syncfusion.Blazor.Navigations.SfToolbar>
 
         <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
         <GridEditSettings AllowAdding="true" AllowEditing="true" AllowDeleting="true" Mode="Syncfusion.Blazor.Grids.EditMode.Normal"></GridEditSettings>
-        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
+        <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar" IgnoreAccent="true"></GridFilterSettings>
         <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"  
                        Mode="Syncfusion.Blazor.Grids.SelectionMode.Row" >
@@ -110,7 +114,13 @@
                                       OnClick="@(() => ShowModelMap(model!))"
                                       title="Map">
                             </SfButton>
-<SfButton CssClass="e-small e-round e-outline action-button e-danger"
+                            <SfButton CssClass="e-small e-round e-outline action-button"
+                                      IconCss="e-icons e-changes"
+                                      IsPrimary="false"
+                                      OnClick="@(() => ShowChanges(model!))"
+                                      title="Porovnat se zdrojem AVAPlace">
+                            </SfButton>
+                            <SfButton CssClass="e-small e-round e-outline action-button e-danger"
                                       IconCss="e-icons e-delete"
                                       IsPrimary="false"
                                       OnClick="@(() => DeleteDataModelAsync(model!))"
@@ -309,6 +319,9 @@
     
     private void EditDataModel(DataModelListViewModel model)
         => NavigationManager.NavigateTo($"/datamodeledit/{Datasource}/{model.Id}");
+
+    private void ShowChanges(DataModelListViewModel model)
+        => NavigationManager.NavigateTo($"/datamodelchanges/{model.Id}");
 
     private async Task OpenDocumentation(DataModelListViewModel model)
     {

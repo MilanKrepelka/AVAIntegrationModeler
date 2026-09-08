@@ -44,4 +44,12 @@ public record DeploymentDTO
   /// Datum a čas posledního uložení nasazení do databáze (UTC).
   /// </summary>
   public DateTime? LastSavedAt { get; init; }
+  /// Datum a čas posledního uložení nasazení (UTC).
+  /// </summary>
+  public DateTime? LastSaveDateTime { get; init; }
+
+  /// <summary>
+  /// Datum a čas posledního nasazení do AVAPlace (UTC).
+  /// </summary>
+  public DateTime? LastDeploymentDateTime { get; init; }
 }

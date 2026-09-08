@@ -1,8 +1,10 @@
 using Ardalis.Result;
+using Ardalis.SharedKernel;
 using Ardalis.Specification;
 using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Domain.AreaAggregate;
 using AVAIntegrationModeler.Domain.DataModelAggregate;
 using AVAIntegrationModeler.Domain.DataModelRecordAggregate;
 using AVAIntegrationModeler.UseCases.DataModelRecords;
@@ -49,11 +51,13 @@ public class DataModelImportServiceTests
   private static (
     IDataModelRepository DataModelRepo,
     IDataModelRecordRepository RecordRepo,
-    IIntegrationDataProvider IntegrationDataProvider) BuildMocks()
+    IIntegrationDataProvider IntegrationDataProvider,
+    IRepository<Area> AreaRepo) BuildMocks()
   {
     var dataModelRepo = Substitute.For<IDataModelRepository>();
     var recordRepo = Substitute.For<IDataModelRecordRepository>();
     var provider = Substitute.For<IIntegrationDataProvider>();
+    var areaRepo = Substitute.For<IRepository<Area>>();
 
     dataModelRepo.AddAsync(Arg.Any<DataModel>(), Arg.Any<CancellationToken>())
       .Returns(ci => Task.FromResult<DataModel>(ci.Arg<DataModel>()));
@@ -67,8 +71,19 @@ public class DataModelImportServiceTests
     provider.GetDataModelRecordsAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult(Enumerable.Empty<DataModelRecordDTO>()));
 
-    return (dataModelRepo, recordRepo, provider);
+    // Výchozí: žádné oblasti v DB (testy s neznámými kódy oblast nevyžadují)
+    areaRepo.ListAsync(Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult(new List<Area>()));
+
+    return (dataModelRepo, recordRepo, provider, areaRepo);
   }
+
+  private static DataModelImportService BuildService(
+    IDataModelRepository dataModelRepo,
+    IDataModelRecordRepository recordRepo,
+    IIntegrationDataProvider provider,
+    IRepository<Area> areaRepo) =>
+    new DataModelImportService(dataModelRepo, recordRepo, provider, areaRepo);
 
   #endregion
 
@@ -78,13 +93,13 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_VytvoriNovyDataModel_KdyzNeexistujeModelSeStejnymKodem()
   {
     // Arrange
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO("NOVY-KOD");
 
     dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult<DataModel?>(null));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     var result = await service.ImportModelAsync(dto, CancellationToken.None);
@@ -98,14 +113,14 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_AktualizujeExistujiciDataModel_KdyzModelSeStejnymKodemExistuje()
   {
     // Arrange
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO("EXISTUJICI-KOD");
     var existing = new DataModel(dto.Id, "EXISTUJICI-KOD"); // stejné Id jako dto → update path
 
     dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult<DataModel?>(existing));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     var result = await service.ImportModelAsync(dto, CancellationToken.None);
@@ -125,7 +140,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_VraciSpravneLocalModelId_PoUspesnomImportu()
   {
     // Arrange
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     DataModel? capturedModel = null;
 
@@ -139,7 +154,7 @@ public class DataModelImportServiceTests
         return Task.FromResult<DataModel>(capturedModel);
       });
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     var result = await service.ImportModelAsync(dto, CancellationToken.None);
@@ -155,7 +170,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_VraciError_KdyzAddAsyncVratiNull()
   {
     // Arrange
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
 
     dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
@@ -164,7 +179,7 @@ public class DataModelImportServiceTests
     dataModelRepo.AddAsync(Arg.Any<DataModel>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult<DataModel>(null!));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     var result = await service.ImportModelAsync(dto, CancellationToken.None);
@@ -182,7 +197,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_SynchronizujePole_KdyzDTOMaPole()
   {
     // Arrange
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     dto.Fields.Add(new DataModelFieldDTO
     {
@@ -196,7 +211,7 @@ public class DataModelImportServiceTests
     dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult<DataModel?>(null));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     var result = await service.ImportModelAsync(dto, CancellationToken.None);
@@ -215,7 +230,7 @@ public class DataModelImportServiceTests
   {
     // AVAPlace občas vrací Guid.Empty v ReferencedEntityTypeIds pro entity, které ještě nemají ID.
     // Import nesmí selhat — prázdné reference se přeskočí.
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     dto.Fields.Add(new DataModelFieldDTO
     {
@@ -228,7 +243,7 @@ public class DataModelImportServiceTests
     dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult<DataModel?>(null));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     var result = await service.ImportModelAsync(dto, CancellationToken.None);
@@ -241,7 +256,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_UspesneImportuje_KdyzVsechnyReferencedEntityTypeIdJsouGuidEmpty()
   {
     // Pokud jsou VŠECHNY reference Guid.Empty, pole se importuje bez referencí (ne selháním).
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     dto.Fields.Add(new DataModelFieldDTO
     {
@@ -254,7 +269,7 @@ public class DataModelImportServiceTests
     dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult<DataModel?>(null));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     var result = await service.ImportModelAsync(dto, CancellationToken.None);
@@ -271,7 +286,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_NevolajuRecordRepository_KdyzAVAPlaceNevraciZadneZaznamy()
   {
     // Arrange
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
 
     dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
@@ -280,7 +295,7 @@ public class DataModelImportServiceTests
     provider.GetDataModelRecordsAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult(Enumerable.Empty<DataModelRecordDTO>()));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     await service.ImportModelAsync(dto, CancellationToken.None);
@@ -298,7 +313,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_VytvoriNovyZaznam_KdyzExternalIdNeniNalezeno()
   {
     // Arrange
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     var recordDto = BuildRecordDTO("EXT-NOVY");
 
@@ -311,7 +326,7 @@ public class DataModelImportServiceTests
     recordRepo.ListAsync(Arg.Any<ISpecification<DataModelRecord>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult(new List<DataModelRecord>()));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     var result = await service.ImportModelAsync(dto, CancellationToken.None);
@@ -327,7 +342,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_AktualizujeExistujiciZaznam_KdyzExternalIdShoduje()
   {
     // Arrange
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     var existingModel = new DataModel(dto.Id, dto.Code); // stejné Id jako dto → update path modelu
     var recordDto = BuildRecordDTO("EXT-EXISTUJICI");
@@ -343,7 +358,7 @@ public class DataModelImportServiceTests
     recordRepo.ListAsync(Arg.Any<ISpecification<DataModelRecord>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult(new List<DataModelRecord> { existingRecord }));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     var result = await service.ImportModelAsync(dto, CancellationToken.None);
@@ -362,7 +377,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_SynchronizujePoleZaznamu_PriVytvoreniNovehoZaznamu()
   {
     // Arrange
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     var recordDto = new DataModelRecordDTO
     {
@@ -385,7 +400,7 @@ public class DataModelImportServiceTests
     recordRepo.ListAsync(Arg.Any<ISpecification<DataModelRecord>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult(new List<DataModelRecord>()));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     var result = await service.ImportModelAsync(dto, CancellationToken.None);
@@ -403,13 +418,13 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_VolaGetDataModelRecordsAsync_SeSpravnymAvaPlaceModelId()
   {
     // Arrange — dto.Id (AVAPlace GUID modelu) musí být použito pro dotaz na záznamy
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
 
     dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult<DataModel?>(null));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     await service.ImportModelAsync(dto, CancellationToken.None);
@@ -422,7 +437,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_ZpracujeViceZaznamu_KdyzAVAPlaceVratiViceZaznamu()
   {
     // Arrange
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     var records = new[]
     {
@@ -440,7 +455,7 @@ public class DataModelImportServiceTests
     recordRepo.ListAsync(Arg.Any<ISpecification<DataModelRecord>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult(new List<DataModelRecord>()));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     var result = await service.ImportModelAsync(dto, CancellationToken.None);
@@ -458,7 +473,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_PouzijeAvaPlaceIdPriVytvoreniNovehoDataModelu()
   {
     // Arrange
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     DataModel? capturedModel = null;
 
@@ -472,7 +487,7 @@ public class DataModelImportServiceTests
         return Task.FromResult<DataModel>(capturedModel);
       });
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     await service.ImportModelAsync(dto, CancellationToken.None);
@@ -486,7 +501,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_SmazaARekreujeDataModel_KdyzLocalIdNeshodujeS_AvaPlaceId()
   {
     // Arrange — model nalezen podle Code, ale má jiné Id než AVAPlace
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO("KOD-REKONCILIACE");
     var existingWithWrongId = new DataModel(Guid.NewGuid(), "KOD-REKONCILIACE"); // špatné Id (jiné než dto.Id)
     DataModel? capturedCreated = null;
@@ -501,7 +516,7 @@ public class DataModelImportServiceTests
         return Task.FromResult<DataModel>(capturedCreated);
       });
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     var result = await service.ImportModelAsync(dto, CancellationToken.None);
@@ -518,7 +533,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_PouzijeAvaPlaceIdPriVytvoreniNovehoZaznamu()
   {
     // Arrange
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     var recordDto = BuildRecordDTO("EXT-ID-TEST");
 
@@ -531,7 +546,7 @@ public class DataModelImportServiceTests
     recordRepo.ListAsync(Arg.Any<ISpecification<DataModelRecord>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult(new List<DataModelRecord>()));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     await service.ImportModelAsync(dto, CancellationToken.None);
@@ -546,7 +561,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_SmazaARekreujeZaznam_KdyzLocalIdNeshodujeS_AvaPlaceId()
   {
     // Arrange — záznam nalezen podle ExternalId, ale má jiné Id než AVAPlace
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     var recordDto = BuildRecordDTO("EXT-REKONCILIACE");
     var existingModel = new DataModel(dto.Id, dto.Code);
@@ -562,7 +577,7 @@ public class DataModelImportServiceTests
     recordRepo.ListAsync(Arg.Any<ISpecification<DataModelRecord>>(), Arg.Any<CancellationToken>())
       .Returns(Task.FromResult(new List<DataModelRecord> { existingRecordWithWrongId }));
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     var result = await service.ImportModelAsync(dto, CancellationToken.None);
@@ -590,7 +605,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_VolaAddAsyncSePrazdnymZaznamem_NezPridaPole()
   {
     // Arrange
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     var recordDto = new DataModelRecordDTO
     {
@@ -624,7 +639,7 @@ public class DataModelImportServiceTests
         return Task.FromResult<DataModelRecord>(record);
       });
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     await service.ImportModelAsync(dto, CancellationToken.None);
@@ -640,7 +655,7 @@ public class DataModelImportServiceTests
   public async Task ImportModelAsync_VolaSyncFieldsAndSaveAsync_AzPoAddAsync()
   {
     // Arrange — ověřuje pořadí operací: AddAsync → SyncFieldsAndSaveAsync
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     var recordDto = BuildRecordDTO("EXT-PORADI");
 
@@ -673,7 +688,7 @@ public class DataModelImportServiceTests
         return Task.CompletedTask;
       });
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     await service.ImportModelAsync(dto, CancellationToken.None);
@@ -689,7 +704,7 @@ public class DataModelImportServiceTests
   {
     // Arrange — ověřuje, že pole předaná SyncFieldsAndSaveAsync jsou nové instance
     // vytvořené po AddAsync, nikoliv ty, které by byly přidány do entity před AddAsync.
-    var (dataModelRepo, recordRepo, provider) = BuildMocks();
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
     var dto = BuildModelDTO();
     var recordDto = BuildRecordDTO("EXT-INSTANCE");
     recordDto.Fields.Add(new DataModelRecordFieldDTO { Key = "DalsiPole", IsLocalized = false, StringValue = "X" });
@@ -725,7 +740,7 @@ public class DataModelImportServiceTests
         return Task.CompletedTask;
       });
 
-    var service = new DataModelImportService(dataModelRepo, recordRepo, provider);
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
 
     // Act
     await service.ImportModelAsync(dto, CancellationToken.None);
@@ -738,6 +753,195 @@ public class DataModelImportServiceTests
     // recordDto má 2 pole (BuildRecordDTO vrátí 1 pole "Code" + přidáno "DalsiPole")
     capturedFieldsToAdd!.Count.ShouldBe(2,
       "SyncFieldsAndSaveAsync musí dostat všechna pole z DTO.");
+  }
+
+  #endregion
+
+  #region DataModelAreaMapping — statické mapování kódu na oblast
+
+  [Theory]
+  [InlineData("AccountingDepreciation", "AssetManagement")]
+  [InlineData("BankCard", "BankApp")]
+  [InlineData("Person", "HumanResources")]
+  [InlineData("Warehouse", "Warehouse")]
+  [InlineData("Invoice", "IsDoc")]
+  [InlineData("JobOrder", "JobOrder")]
+  public void DataModelAreaMapping_VraciSpravnyKodOblasti_ProZnamyKod(string dataModelCode, string expectedAreaCode)
+  {
+    var found = DataModelAreaMapping.TryGetAreaCode(dataModelCode, out var areaCode);
+
+    found.ShouldBeTrue();
+    areaCode.ShouldBe(expectedAreaCode);
+  }
+
+  [Theory]
+  [InlineData("MandantOrganization")]
+  [InlineData("NEZNAMY-MODEL")]
+  [InlineData("")]
+  public void DataModelAreaMapping_VraciFalse_ProNeznamyKod(string dataModelCode)
+  {
+    var found = DataModelAreaMapping.TryGetAreaCode(dataModelCode, out _);
+
+    found.ShouldBeFalse();
+  }
+
+  #endregion
+
+  #region ImportModelAsync — nastavení oblasti z mapování
+
+  [Fact]
+  public async Task ImportModelAsync_NastaviAreaId_KdyzNazevDataModeluJeVMapovani()
+  {
+    // Arrange — dto.Name="AccountingDepreciation" → oblast AssetManagement
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
+    var dto = BuildModelDTO(name: "AccountingDepreciation");
+    var areaId = Guid.NewGuid();
+    var area = new Area(areaId, "AssetManagement");
+
+    dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<DataModel?>(null));
+
+    areaRepo.ListAsync(Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult(new List<Area> { area }));
+
+    DataModel? capturedModel = null;
+    dataModelRepo.AddAsync(Arg.Any<DataModel>(), Arg.Any<CancellationToken>())
+      .Returns(ci =>
+      {
+        capturedModel = ci.Arg<DataModel>();
+        return Task.FromResult<DataModel>(capturedModel);
+      });
+
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
+
+    // Act
+    var result = await service.ImportModelAsync(dto, CancellationToken.None);
+
+    // Assert
+    result.IsSuccess.ShouldBeTrue();
+    capturedModel.ShouldNotBeNull();
+    capturedModel!.AreaId.ShouldBe(areaId);
+  }
+
+  [Fact]
+  public async Task ImportModelAsync_NenastaviAreaId_KdyzNazevDataModeluNeniVMapovani()
+  {
+    // Arrange — MandantOrganization je na kořenové úrovni, žádná oblast
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
+    var dto = BuildModelDTO(name: "MandantOrganization");
+
+    dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<DataModel?>(null));
+
+    DataModel? capturedModel = null;
+    dataModelRepo.AddAsync(Arg.Any<DataModel>(), Arg.Any<CancellationToken>())
+      .Returns(ci =>
+      {
+        capturedModel = ci.Arg<DataModel>();
+        return Task.FromResult<DataModel>(capturedModel);
+      });
+
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
+
+    // Act
+    var result = await service.ImportModelAsync(dto, CancellationToken.None);
+
+    // Assert — AreaId musí zůstat null
+    result.IsSuccess.ShouldBeTrue();
+    capturedModel.ShouldNotBeNull();
+    capturedModel!.AreaId.ShouldBeNull();
+    // Název není v mapování → ListAsync se vůbec nevolá
+    await areaRepo.DidNotReceive().ListAsync(Arg.Any<CancellationToken>());
+  }
+
+  [Fact]
+  public async Task ImportModelAsync_AutoVytvoriOblast_KdyzNazevJeVMapovaniAleOblastVDatabáziChybi()
+  {
+    // Arrange — název je v mapování (BankCard → BankApp), ale oblast v DB neexistuje
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
+    var dto = BuildModelDTO(name: "BankCard");
+
+    dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<DataModel?>(null));
+
+    // areaRepo.ListAsync vrací prázdný seznam (výchozí chování z BuildMocks)
+    Area? createdArea = null;
+    areaRepo.AddAsync(Arg.Any<Area>(), Arg.Any<CancellationToken>())
+      .Returns(ci =>
+      {
+        createdArea = ci.Arg<Area>();
+        return Task.FromResult<Area>(createdArea);
+      });
+
+    DataModel? capturedModel = null;
+    dataModelRepo.AddAsync(Arg.Any<DataModel>(), Arg.Any<CancellationToken>())
+      .Returns(ci =>
+      {
+        capturedModel = ci.Arg<DataModel>();
+        return Task.FromResult<DataModel>(capturedModel);
+      });
+
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
+
+    // Act
+    var result = await service.ImportModelAsync(dto, CancellationToken.None);
+
+    // Assert — oblast byla automaticky vytvořena a přiřazena
+    result.IsSuccess.ShouldBeTrue();
+    createdArea.ShouldNotBeNull();
+    createdArea!.Code.ShouldBe("BankApp");
+    capturedModel.ShouldNotBeNull();
+    capturedModel!.AreaId.ShouldBe(createdArea.Id);
+  }
+
+  [Fact]
+  public async Task ImportModelAsync_NastaviAreaIdPriAktualizaci_KdyzNazevDataModeluJeVMapovani()
+  {
+    // Arrange — update path: existující model se stejným Id jako dto
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
+    var dto = BuildModelDTO(name: "Person"); // → HumanResources
+    var areaId = Guid.NewGuid();
+    var area = new Area(areaId, "HumanResources");
+    var existing = new DataModel(dto.Id, dto.Code);
+
+    dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<DataModel?>(existing));
+
+    areaRepo.ListAsync(Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult(new List<Area> { area }));
+
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
+
+    // Act
+    var result = await service.ImportModelAsync(dto, CancellationToken.None);
+
+    // Assert — update path musí také nastavit oblast
+    result.IsSuccess.ShouldBeTrue();
+    existing.AreaId.ShouldBe(areaId);
+  }
+
+  [Fact]
+  public async Task ImportModelAsync_NacteOblastiPouzeJednou_PriViceImportechVRamciJedneInstance()
+  {
+    // Arrange — dva importy modelu ve stejné instanci služby (simuluje hromadný import)
+    var (dataModelRepo, recordRepo, provider, areaRepo) = BuildMocks();
+    var areaId = Guid.NewGuid();
+    var area = new Area(areaId, "AssetManagement");
+
+    dataModelRepo.FirstOrDefaultAsync(Arg.Any<ISpecification<DataModel>>(), Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult<DataModel?>(null));
+
+    areaRepo.ListAsync(Arg.Any<CancellationToken>())
+      .Returns(Task.FromResult(new List<Area> { area }));
+
+    var service = BuildService(dataModelRepo, recordRepo, provider, areaRepo);
+
+    // Act — dva různé modely ze stejné oblasti, matchováno přes Name
+    await service.ImportModelAsync(BuildModelDTO(name: "AssetCard"), CancellationToken.None);
+    await service.ImportModelAsync(BuildModelDTO(name: "AssetType"), CancellationToken.None);
+
+    // Assert — ListAsync se volá pouze jednou (cache)
+    await areaRepo.Received(1).ListAsync(Arg.Any<CancellationToken>());
   }
 
   #endregion

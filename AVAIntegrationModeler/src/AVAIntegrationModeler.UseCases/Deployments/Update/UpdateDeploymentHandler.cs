@@ -29,6 +29,7 @@ public class UpdateDeploymentHandler(
       existing.SetName(request.Deployment.Name);
       existing.SetTicket(request.Deployment.Ticket);
       existing.SetDescription(request.Deployment.Description);
+      existing.SetLastSaveDateTime(DateTime.UtcNow);
     }
     catch (ArgumentException ex)
     {
@@ -72,7 +73,9 @@ public class UpdateDeploymentHandler(
       Name = request.Deployment.Name,
       Ticket = request.Deployment.Ticket,
       Description = request.Deployment.Description,
-      DataModelIds = requestedIds.ToList()
+      DataModelIds = requestedIds.ToList(),
+      LastSaveDateTime = existing.LastSaveDateTime,
+      LastDeploymentDateTime = existing.LastDeploymentDateTime
     };
 
     await repository.SyncDataModelsAndSaveAsync(existing, toDelete, toAdd, cancellationToken);

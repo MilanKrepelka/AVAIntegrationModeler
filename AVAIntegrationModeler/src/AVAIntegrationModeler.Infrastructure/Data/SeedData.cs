@@ -98,11 +98,62 @@ public static class SeedData
     "Warehouse"
   );
 
+  // DataModels
+  public static DataModel DataModel1 { get; } = new(
+    Guid.Parse("a1000000-0000-0000-0000-000000000001"),
+    "DM-SEED-001"
+  );
+
+  public static DataModel DataModel2 { get; } = new(
+    Guid.Parse("a1000000-0000-0000-0000-000000000002"),
+    "DM-SEED-002"
+  );
+
+  // Deployments
+  public static Deployment Deployment1 { get; } = BuildDeployment1();
+  public static Deployment Deployment2 { get; } = BuildDeployment2();
+  public static Deployment Deployment3 { get; } = BuildDeployment3();
+
+  private static Deployment BuildDeployment1()
+  {
+    var d = new Deployment(
+      Guid.Parse("d1000000-0000-0000-0000-000000000001"),
+      "DEPLOY-SEED-001"
+    );
+    d.SetName("Seed Deployment 1");
+    // Má 2 DataModely — testováno v DeploymentUpdateTest.UpdateDeployment_OdebereDataModely
+    d.AddDataModel(DataModel1.Id);
+    d.AddDataModel(DataModel2.Id);
+    return d;
+  }
+
+  private static Deployment BuildDeployment2()
+  {
+    var d = new Deployment(
+      Guid.Parse("d1000000-0000-0000-0000-000000000002"),
+      "DEPLOY-SEED-002"
+    );
+    d.SetName("Seed Deployment 2");
+    return d;
+  }
+
+  private static Deployment BuildDeployment3()
+  {
+    var d = new Deployment(
+      Guid.Parse("d1000000-0000-0000-0000-000000000003"),
+      "DEPLOY-SEED-003"
+    );
+    d.SetName("Seed Deployment 3");
+    // Nemá žádné DataModely — testováno v DeploymentUpdateTest.UpdateDeployment_PridaDataModely
+    return d;
+  }
+
   static SeedData()
   {
-    
+    DataModel1.SetName("Seed Data Model 1");
+    DataModel2.SetName("Seed Data Model 2");
   }
-   
+
   public static async Task InitializeAsync(AppDbContext dbContext)
   {
     if (await dbContext.Areas.AnyAsync()) return;
@@ -130,6 +181,9 @@ public static class SeedData
       VehicleArea,
       WarehouseArea
     ]);
+
+    dbContext.Set<DataModel>().AddRange([DataModel1, DataModel2]);
+    dbContext.Set<Deployment>().AddRange([Deployment1, Deployment2, Deployment3]);
 
     await dbContext.SaveChangesAsync();
   }

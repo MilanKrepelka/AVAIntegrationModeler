@@ -19,4 +19,16 @@ public class AreaListViewModel
   /// Název oblasti.
   /// </summary>
   public string Name { get; init; } = string.Empty;
+
+  /// <summary>
+  /// Datové modely patřící do této oblasti.
+  /// </summary>
+  public List<DataModelListViewModel> DataModels { get; set; } = [];
+
+  /// <summary>
+  /// Textová reprezentace kódů datových modelů.
+  /// </summary>
+  public string DataModelsText => DataModels.Count > 0
+    ? string.Join(", ", DataModels.Select(m => m.Code))
+    : string.Empty;
 }

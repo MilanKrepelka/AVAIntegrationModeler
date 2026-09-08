@@ -1,0 +1,146 @@
+[
+  {
+    "number": 1,
+    "title": "Organizace vlastní vs cizí a mandantnost",
+    "points": [
+      "Když ještě mandantnost neexistovala, staré modely měly vždy vazbu na organizaci, která buď představovala organizaci vlastní nebo cizí.",
+      "Nyní nahrazujeme organizaci vlastní pomocí mandantnosti záznamu, např. OrganizationUnit nebo EmployeeDetail.",
+      "Vazba na organizaci nyní slouží výhradně pro organizace cizí (viz např. kontaktní osoby).",
+      "Pozn.: V případě potřeby více údajů z organizace vlastní je legitimní přidat i vazbu na model Organization (bez rozlišení cizí/vlastní)."
+    ]
+  },
+  {
+    "number": 2,
+    "title": "Separace interních firemních agend od těch veřejných",
+    "points": [
+      "Jako problém se ukázaly být modely, které současně sloužily pro interní i veřejné agendy (např. PersonRelation jako asociační tabulka i jako Employment).",
+      "Nyní interní firemní modely a veřejné modely důsledně oddělujeme — viz např. Person vs EmployeeDetail, PersonRelation vs Employment."
+    ]
+  },
+  {
+    "number": 3,
+    "title": "Megamodel vs malý model",
+    "points": [
+      "Jako problém se ukázaly staré \"mega\" modely — při plnění z více zdrojů nastal zásadní problém s konzistencí a porušováním 'single master' principu.",
+      "Základním principem je udržet jednotlivé datasource od sebe oddělené a nezávislé (separation, isolation and single responsibility).",
+      "Nyní vytváříme malé modely navázané na sebe (princip rybích šupin), např. EmployeeDetail, Employment, EmployeePayroll a EmployeeShift."
+    ]
+  },
+  {
+    "number": 4,
+    "title": "Využívání ValueObjectů pro seskupování atributů (NestedEntity), např. Address",
+    "points": [
+      "Velmi šikovná praktika seskupování atributů, které spolu souvisí, do něčeho jako 'struct' objektu.",
+      "Bohužel ji zatím příliš nevyužíváme."
+    ]
+  },
+  {
+    "number": 5,
+    "title": "Dělení modelu vs dědičnost modelu (např. Person vs EmployeeDetail)",
+    "points": [
+      "Staré modely se důsledně dělily o svůj obsah pomocí vazby 0:1. Vzhledem k významným komplikacím při integraci jsme tento přístup přehodnotili.",
+      "Duplicita údajů není problém — virtuální model není primárním zdrojem pravdy.",
+      "Nyní jednoznačně preferujeme oddělení modelů místo dědičnosti. Upřednostňujeme duplicitu dat před disjunkcí a dodržujeme 'single master' princip.",
+      "Pozn.: CSV importy nesmí vstupovat do virtuální domény napřímo — za import by pak nikdo nenese odpovědnost."
+    ]
+  },
+  {
+    "number": 6,
+    "title": "Časová platnost záznamů",
+    "points": [
+      "Nyní je trvalá — vypublikovaný záznam existuje ve virtuálním modelu tak dlouho, dokud ho primární zdroj pravdy nevymaže.",
+      "Latest (dle modifiedOn) vs FIFO — nyní míříme na integraci přes latest, odpovídá principu trvalé platnosti záznamů.",
+      "Platnost záznamu kalendářní (validFrom/validTo) není v DS systematicky řešena — lze řešit na úrovni konkrétního modelu.",
+      "Platnost záznamů fiskální ani mzdová není v DS systematicky řešena — tato komplexita by prozatím měla zůstat uvnitř ERP."
+    ]
+  },
+  {
+    "number": 7,
+    "title": "Číselníky master vs slave aplikací — jak správně synchronizovat číselníky",
+    "points": [
+      "Jde o virtuální číselníky plněné číselníkovým masterem (preferujeme přirozený klíč před umělým).",
+      "Směr MM (např. ERP → Advanto) — číselník synchronizuji ve stejném směru jako dato.",
+      "Směr MS (např. ERP → JobSignum) — číselník synchronizuji v opačném směru než dato.",
+      "Směr SM a SS — synchronizace číselníků do ERP je možná, ale nyní není příliš preferovaná."
+    ]
+  },
+  {
+    "number": 8,
+    "title": "Virtuální číselníky a nativní číselníky / enumy — jak správně synchronizovat enumy",
+    "points": [
+      "Používáme diskriminační klíče (vazba na virtuální číselník).",
+      "Umíme definovat napevno seedované virtuální číselníky — aplikace si musí transformovat svoje enumy při publikování a konzumování dat.",
+      "Případ ERP: A, B, C / Advanto: D, E / Recru: F, G, H, I a virtuální číselník: X, Y, Z — nutno se domluvit na kompromisu."
+    ]
+  },
+  {
+    "number": 9,
+    "title": "Vazby mezi nezávislými zdroji",
+    "points": [
+      "Neřešíme — každý zdroj publikuje svoje data a konzumuje cizí data.",
+      "Zdroj ale může konzumovat i svoje data (např. pro kompletní synchronizaci po rozpadu konzistence dat mezi doménami)."
+    ]
+  },
+  {
+    "number": 10,
+    "title": "Vazby vs klíče",
+    "points": [
+      "DS nyní pracuje s plnohodnotnými vazbami mezi záznamy — to poskytuje možnost zajistit a kontrolovat konzistenci virtuálních dat.",
+      "Při integraci někdy postačuje pracovat pouze s klíčem — DS momentálně vždy pracuje s ExternalId a při queryování s virtuálním klíčem (GUID).",
+      "Nedávno přidána podpora načítání dat na základě AK (alternate key) — v takovém případě je v modelu pouze stringové políčko (nejde o vazbu ve smyslu DS)."
+    ]
+  },
+  {
+    "number": 11,
+    "title": "DS nyní neumí netypové vazby",
+    "points": [
+      "Platí dohoda, že netypové vazby (tj. vazby na více modelů) zatím nechceme používat.",
+      "Netypovou vazbu nahrazujeme sadou property typu Lookup pro jednotlivé datové modely.",
+      "Podpora netypových vazeb (pouze typu Lookup) někdy v budoucnu není vyloučená."
+    ]
+  },
+  {
+    "number": 12,
+    "title": "Kauzalita při publikování dat",
+    "points": [
+      "V některých případech nelze data korektně synchronizovat, protože obsahují vazby v opačném směru závislostí.",
+      "Pro tento případ poskytuje DS mechanismus řízení ORPHANů (defaultně zakázáno, lze povolit per vazba).",
+      "NOTE: Aktuálně je tento mechanismus rozbitý!"
+    ]
+  },
+  {
+    "number": 13,
+    "title": "Transformace RAW formátů — před vstupem a po výstupu",
+    "points": [
+      "Zatím neřešíme — je to v kompetenci připojených datových zdrojů a jejich aplikací.",
+      "Pokud bychom to v budoucnu řešili, půjde výhradně o podporu bezstavových transformací."
+    ]
+  },
+  {
+    "number": 14,
+    "title": "Synchronizace PULL vs PUSH",
+    "points": [
+      "Request collaboration vs event collaboration — DS umí oboje.",
+      "Typická dohoda při integracích: synchronizace počátečního stavu, obnovení konzistence po rozpadu, validace při konzumaci a ignorování nevalidních změn.",
+      "Bacha na konzistenci/nekonzistenci dat — doporučuji si nehrát na kauzálního boha, události nastávají ve víceméně nekontrolovatelném pořadí."
+    ]
+  },
+  {
+    "number": 15,
+    "title": "Jak postupovat, když prointegrovaná aplikace změní svou logiku?",
+    "points": [
+      "Je to povolené? A je vůbec povolené něco v partnerských i ERP aplikacích měnit?",
+      "Bez smlouvy se pak partneři dost cukají a chtějí kompenzace — ověřit dohodnutý postup se stávajícími externími partnery.",
+      "Nabízí se verzování modelů (tj. vytvoření nových modelů a rozšíření integrace aplikací o nové modely).",
+      "Klíčové je mít modely navržené rozumně, hojně využívat malé modely a value objecty."
+    ]
+  },
+  {
+    "number": 16,
+    "title": "Okamžité vs odložené zpracování dat v consumeru",
+    "points": [
+      "Zkušenost z TPA integrace: mzdovky nechtěly, aby se změny propisovaly přímo do databáze, ale chtěly je ručně kontrolovat a potvrzovat.",
+      "Jde vlastně o EventSourcing techniku při konzumaci dat."
+    ]
+  }
+]

@@ -70,6 +70,8 @@
                                         DataSource="@FieldTypeOptions"
                                         @bind-Value="_editingField.FieldType"
                                         Placeholder="Typ pole" FloatLabelType="FloatLabelType.Always"
+                                        AllowFiltering="true"
+                                        FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
                                         CssClass="w-100">
                             <DropDownListFieldSettings Value="Value" Text="Text" />
                         </SfDropDownList>
@@ -101,6 +103,8 @@
                                            DataSource="@AvailableModels"
                                            @bind-Value="_editingField.ReferencedEntityTypeIds"
                                            Placeholder="Odkazované modely" FloatLabelType="FloatLabelType.Always"
+                                           AllowFiltering="true"
+                                           FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
                                            CssClass="w-100">
                                 <MultiSelectFieldSettings Value="Id" Text="Code" />
                             </SfMultiSelect>

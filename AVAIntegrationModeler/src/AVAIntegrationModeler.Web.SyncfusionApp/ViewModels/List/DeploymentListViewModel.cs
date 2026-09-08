@@ -24,4 +24,14 @@ public class DeploymentListViewModel
   /// Počet datových modelů v nasazení.
   /// </summary>
   public int DataModelCount { get; init; }
+
+  /// <summary>
+  /// Datum a čas posledního uložení nasazení (UTC).
+  /// </summary>
+  public DateTime? LastSaveDateTime { get; init; }
+
+  /// <summary>
+  /// Datum a čas posledního nasazení do AVAPlace (UTC).
+  /// </summary>
+  public DateTime? LastDeploymentDateTime { get; init; }
 }

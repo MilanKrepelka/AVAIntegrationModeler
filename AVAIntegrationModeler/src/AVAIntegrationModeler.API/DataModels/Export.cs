@@ -4,6 +4,7 @@ using AVAIntegrationModeler.API.Serialization;
 using AVAIntegrationModeler.AVAPlace.Mapping;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.UseCases.DataModelRecords.Export;
 using AVAIntegrationModeler.UseCases.DataModels.Export;
 
 namespace AVAIntegrationModeler.API.DataModels;
@@ -40,8 +41,10 @@ public class Export(IMediator _mediator) : Endpoint<ExportDataModelsRequest>
       foreach (var entry in result.Value.Entries)
       {
         var payload = entry.Data is DataModelDTO model
-          ? DataModelMapper.MapToDefinition(model)
-          : entry.Data;
+          ? (object)DataModelMapper.MapToDefinition(model)
+          : entry.Data is List<DataModelRecordDTO> records
+            ? DataModelRecordExportMapper.MapToExport(records)
+            : entry.Data;
         var zipEntry = archive.CreateEntry(entry.FileName, CompressionLevel.Optimal);
         await using var entryStream = zipEntry.Open();
         await JsonSerializer.SerializeAsync(entryStream, payload, ExportJsonOptions.Instance, ct);
