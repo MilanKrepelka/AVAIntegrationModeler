@@ -1,10 +1,12 @@
 ﻿using System.Reflection;
+using AVAIntegrationModeler.Domain;
 using AVAIntegrationModeler.Domain.AreaAggregate;
 using AVAIntegrationModeler.Domain.ContributorAggregate;
 using AVAIntegrationModeler.Domain.DataModelAggregate;
 using AVAIntegrationModeler.Domain.DeploymentAggregate;
 using AVAIntegrationModeler.Domain.FeatureAggregate;
 using AVAIntegrationModeler.Domain.IntegrationMapAggregate;
+using AVAIntegrationModeler.Domain.MapLayoutAggregate;
 using AVAIntegrationModeler.Domain.ScenarioAggregate;
 using AVAIntegrationModeler.Infrastructure.Data.Config;
 using Microsoft.AspNetCore.Components;
@@ -35,6 +37,7 @@ public class AppDbContext : DbContext
   public DbSet<Scenario> Scenarios => Set<Scenario>();
   public DbSet<DataModel> DataModels => Set<DataModel>();
   public DbSet<Area> Areas => Set<Area>();
+  public DbSet<MapLayout> MapLayouts => Set<MapLayout>();
 
   public DbSet<DataModelField> DataModelFields => Set<DataModelField>(); // ✅
   public DbSet<DataModelFieldEntityTypeReference> DataModelFieldEntityTypeReferences => Set<DataModelFieldEntityTypeReference>(); // ✅ NOVÉ
@@ -63,6 +66,21 @@ public class AppDbContext : DbContext
 
   public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
   {
+    foreach (var entry in ChangeTracker.Entries()
+        .Where(e => e.State == EntityState.Added || e.State == EntityState.Modified))
+    {
+      if (entry.Entity is DomainEntityBase<Guid> guidEntity)
+      {
+        if (entry.State == EntityState.Added) guidEntity.MarkCreated();
+        guidEntity.MarkSaved();
+      }
+      else if (entry.Entity is DomainEntityBase baseEntity)
+      {
+        if (entry.State == EntityState.Added) baseEntity.MarkCreated();
+        baseEntity.MarkSaved();
+      }
+    }
+
     int result = await base.SaveChangesAsync(cancellationToken).ConfigureAwait(false);
 
     // ignore events if no dispatcher provided

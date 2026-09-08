@@ -8,7 +8,7 @@ namespace AVAIntegrationModeler.Domain.FeatureAggregate;
 /// <summary>
 /// Aggregate root pro integrační feature.
 /// </summary>
-public class Feature : EntityBase<Guid>, IAggregateRoot
+public class Feature : DomainEntityBase<Guid>, IAggregateRoot
 {
   // Privátní konstruktor pro EF Core
   private Feature() { }

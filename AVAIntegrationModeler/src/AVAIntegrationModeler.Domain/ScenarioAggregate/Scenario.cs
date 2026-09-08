@@ -12,7 +12,7 @@ namespace AVAIntegrationModeler.Domain.ScenarioAggregate;
 /// <summary>
 /// Doménový objekt pro integrační scénář.
 /// </summary>
-public class Scenario : EntityBase<Guid>, IAggregateRoot
+public class Scenario : DomainEntityBase<Guid>, IAggregateRoot
 {
   /// <summary>
   /// Konstruktor pro vytvoření nového scénáře.

@@ -36,6 +36,14 @@ public record DeploymentDTO
   public List<Guid> DataModelIds { get; init; } = new();
 
   /// <summary>
+  /// Datum a čas vytvoření nasazení v databázi (UTC).
+  /// </summary>
+  public DateTime? CreatedAt { get; init; }
+
+  /// <summary>
+  /// Datum a čas posledního uložení nasazení do databáze (UTC).
+  /// </summary>
+  public DateTime? LastSavedAt { get; init; }
   /// Datum a čas posledního uložení nasazení (UTC).
   /// </summary>
   public DateTime? LastSaveDateTime { get; init; }

@@ -30,7 +30,9 @@ public static class ScenarioMapper
       Name = LocalizedValueMapper.MapToDTO(scenario.Name),
       Description = LocalizedValueMapper.MapToDTO(scenario.Description),
       InputFeatureId = scenario.InputFeature,
-      OutputFeatureId = scenario.OutputFeature
+      OutputFeatureId = scenario.OutputFeature,
+      CreatedAt = scenario.CreatedAt,
+      LastSavedAt = scenario.LastSavedAt
     };
     return result;
   }

@@ -10,7 +10,7 @@ namespace AVAIntegrationModeler.Domain.IntegrationMapAggregate;
 /// <summary>
 /// Položka integrační mapy - reprezentuje jeden scénář a jeho aktivační klíče.
 /// </summary>
-public class IntegrationMapItem : EntityBase<Guid>
+public class IntegrationMapItem : DomainEntityBase<Guid>
 {
   /// <summary>
   /// Privátní kolekce aktivačních klíčů.

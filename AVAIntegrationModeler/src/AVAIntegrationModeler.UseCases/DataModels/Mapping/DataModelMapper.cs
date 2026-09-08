@@ -29,7 +29,9 @@ public static class DataModelMapper
       Notes = dataModel.Notes,
       IsAggregateRoot = dataModel.IsAggregateRoot,
       AreaId = dataModel.AreaId,
-      Fields = dataModel.Fields.Select(DataModelFieldMapper.MapToDataModelFieldDTO).ToList()
+      Fields = dataModel.Fields.Select(DataModelFieldMapper.MapToDataModelFieldDTO).ToList(),
+      CreatedAt = dataModel.CreatedAt,
+      LastSavedAt = dataModel.LastSavedAt
     };
     
     return result;

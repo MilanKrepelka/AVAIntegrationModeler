@@ -666,6 +666,19 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
   }
 
   /// <inheritdoc/>
+  public async Task<Result> SaveAreaMap(Guid areaId, string diagramJson, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(SaveAreaMap)} starting. areaId={areaId}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PutAsync($"areas/{areaId}/map")
+      .WithBody(new { AreaId = areaId, DiagramJson = diagramJson })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<object>();
+    return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));
+  }
+
+  /// <inheritdoc/>
   public async Task<DeploymentListResponse> GetDeployments(CancellationToken cancellationToken)
   {
     _logger.LogDebug($"{nameof(GetDeployments)} starting.");
@@ -817,6 +830,36 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
   }
 
   /// <inheritdoc/>
+  public async Task<Result> SaveMapLayout(string key, string diagramJson, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(SaveMapLayout)} starting. key={key}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PutAsync($"maplayouts/{Uri.EscapeDataString(key)}")
+      .WithBody(new { Key = key, DiagramJson = diagramJson })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<object>();
+    return result.IsSuccess ? Result.NoContent() : Result.Error(string.Join("; ", result.Errors));
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result> DeleteMapLayout(string key, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(DeleteMapLayout)} starting. key={key}");
+    try
+    {
+      var fluent = new FluentClient(_httpClient);
+      var response = await fluent
+        .DeleteAsync($"maplayouts/{Uri.EscapeDataString(key)}")
+        .WithCancellationToken(cancellationToken)
+        .AsMessage();
+      return response.IsSuccessStatusCode ? Result.Success() : Result.Error($"HTTP {(int)response.StatusCode}");
+    }
+    catch (Exception ex)
+    {
+      _logger.LogError(ex, $"{nameof(DeleteMapLayout)} failed.");
+      return Result.Error(ex.Message);
+    }
   public async Task<Contracts.DataModels.DeploymentChangesSummaryDTO?> GetDeploymentChangesSummary(
     string deploymentCode, string deploymentName, List<Guid> dataModelIds, CancellationToken cancellationToken)
   {

@@ -1,0 +1,275 @@
+@page "/areamap/{areaId:guid}"
+@rendermode InteractiveServer
+@using AVAIntegrationModeler.API.Client
+@using AVAIntegrationModeler.Contracts
+@using AVAIntegrationModeler.Contracts.DTO
+@using Syncfusion.Blazor.Diagram
+@using System.Text.Json
+@inject IAVAIntegrationModelerApiClient ApiClient
+@inject NavigationManager NavigationManager
+
+<PageTitle>Mapa oblasti</PageTitle>
+
+<h3>Mapa oblasti</h3>
+
+@if (IsLoading)
+{
+    <p>Načítám data…</p>
+}
+else if (_area is null)
+{
+    <p>Oblast nenalezena.</p>
+}
+else
+{
+    <div style="margin-bottom:8px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <button class="btn btn-primary" @onclick="SaveMapAsync" disabled="@_isSaving">
+            @(_isSaving ? "Ukládám…" : "Uložit mapu")
+        </button>
+        <button class="btn btn-outline-secondary" @onclick="RegenerateAsync" disabled="@_isSaving">
+            Regenerovat mapu
+        </button>
+        @if (_area.LastMapSave.HasValue)
+        {
+            <small class="text-muted">
+                Naposledy uloženo: @_area.LastMapSave.Value.ToLocalTime().ToString("g")
+                @if (_regenerated)
+                {
+                    <span class="text-warning ms-2">(přegenerováno — nové modely od posledního uložení)</span>
+                }
+            </small>
+        }
+    </div>
+
+    @if (_saveMessage is not null)
+    {
+        <div class="alert @(_saveSuccess ? "alert-success" : "alert-danger")" style="margin-bottom:8px">
+            @_saveMessage
+        </div>
+    }
+
+    <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick">
+        @if (_savedPositions.Count == 0)
+        {
+            <Layout Type="LayoutType.RadialTree" HorizontalSpacing="100" VerticalSpacing="100" FixedNode="@areaId.ToString()">
+            </Layout>
+        }
+    </SfDiagramComponent>
+}
+
+@code {
+    [Parameter] public Guid areaId { get; set; }
+
+    SfDiagramComponent? diagram;
+    int connectorCount = 0;
+    DiagramObjectCollection<Node> nodes = new();
+    DiagramObjectCollection<Connector> connectors = new();
+
+    AreaDTO? _area;
+    List<DataModelDTO> _areaModels = new();
+    bool IsLoading { get; set; } = true;
+    bool _isSaving;
+    string? _saveMessage;
+    bool _saveSuccess;
+    bool _regenerated;
+
+    /// <summary>Pozice uzlů načtené z uloženého diagramu: nodeId → (offsetX, offsetY).</summary>
+    Dictionary<string, (double OffsetX, double OffsetY)> _savedPositions = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        await base.OnInitializedAsync();
+        await LoadAsync(forceRegenerate: false);
+    }
+
+    private async Task LoadAsync(bool forceRegenerate)
+    {
+        try
+        {
+            IsLoading = true;
+            _regenerated = false;
+            _savedPositions = new();
+            connectorCount = 0;
+
+            _area = await ApiClient.GetArea(Datasource.Database, areaId, CancellationToken.None);
+            if (_area is null || _area.Id == Guid.Empty) { _area = null; return; }
+
+            var modelsResponse = await ApiClient.GetDataModels(Datasource.Database, CancellationToken.None);
+            _areaModels = modelsResponse?.DataModels?
+                .Where(m => m.AreaId == areaId)
+                .ToList() ?? new List<DataModelDTO>();
+
+            if (!forceRegenerate && _area.MapDiagramJson is not null)
+            {
+                if (!HasNewModels())
+                {
+                    // Obnovit pozice uzlů z uloženého diagramu
+                    _savedPositions = ParseNodePositions(_area.MapDiagramJson);
+                }
+                else
+                {
+                    // Nové modely přibyly od posledního uložení — regenerovat rozložení
+                    _regenerated = true;
+                }
+            }
+
+            BuildDiagram();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Chyba při načítání mapy oblasti: {ex.Message}");
+            nodes = new();
+            connectors = new();
+            _savedPositions = new();
+        }
+        finally
+        {
+            IsLoading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    /// <summary>Vrátí true, pokud nějaký model oblasti byl vytvořen po posledním uložení mapy.</summary>
+    private bool HasNewModels()
+    {
+        if (_area?.LastMapSave is null) return false;
+        return _areaModels.Any(m => m.CreatedAt.HasValue && m.CreatedAt.Value > _area.LastMapSave.Value);
+    }
+
+    /// <summary>Parsuje pozice uzlů ze Syncfusion SaveDiagram JSON.</summary>
+    private static Dictionary<string, (double, double)> ParseNodePositions(string json)
+    {
+        var result = new Dictionary<string, (double, double)>();
+        try
+        {
+            using var doc = JsonDocument.Parse(json);
+            if (!doc.RootElement.TryGetProperty("nodes", out var nodesEl)) return result;
+            foreach (var node in nodesEl.EnumerateArray())
+            {
+                if (node.TryGetProperty("id", out var idEl) &&
+                    node.TryGetProperty("offsetX", out var xEl) &&
+                    node.TryGetProperty("offsetY", out var yEl))
+                {
+                    var id = idEl.GetString();
+                    if (id is not null)
+                        result[id] = (xEl.GetDouble(), yEl.GetDouble());
+                }
+            }
+        }
+        catch { /* ignorovat chyby parsování — fallback na automatické rozložení */ }
+        return result;
+    }
+
+    private void BuildDiagram()
+    {
+        var areaNodeId = areaId.ToString();
+        var areaLabel = string.IsNullOrWhiteSpace(_area!.Name) ? _area.Code : _area.Name;
+
+        var newNodes = new DiagramObjectCollection<Node>();
+        var newConnectors = new DiagramObjectCollection<Connector>();
+        newNodes.Add(CreateNode(areaNodeId, areaLabel, isRoot: true));
+
+        foreach (var model in _areaModels)
+        {
+            var nodeId = model.Id.ToString();
+            var label = string.IsNullOrWhiteSpace(model.Name) ? model.Code : model.Name;
+            newNodes.Add(CreateNode(nodeId, label, isRoot: false));
+            newConnectors.Add(CreateConnector(areaNodeId, nodeId));
+        }
+
+        nodes = newNodes;
+        connectors = newConnectors;
+    }
+
+    private async Task RegenerateAsync()
+    {
+        _saveMessage = null;
+        await LoadAsync(forceRegenerate: true);
+    }
+
+    private Node CreateNode(string id, string label, bool isRoot)
+    {
+        var fillColor = isRoot ? "var(--accent, #FF7043)" : "var(--primary-500, #357BD2)";
+        var textColor = isRoot ? "black" : "white";
+
+        var node = new Node
+        {
+            ID = id,
+            Width = 160,
+            Height = 55,
+            Constraints = NodeConstraints.Default | NodeConstraints.ReadOnly,
+            Style = new ShapeStyle { Fill = fillColor, StrokeColor = "White" },
+            Shape = new FlowShape { Type = NodeShapes.Flow, Shape = NodeFlowShapes.Process },
+            Annotations = new DiagramObjectCollection<ShapeAnnotation>
+            {
+                new ShapeAnnotation
+                {
+                    Content = label,
+                    Style = new TextStyle { Color = textColor, Fill = "transparent" }
+                }
+            }
+        };
+
+        if (_savedPositions.TryGetValue(id, out var pos))
+        {
+            node.OffsetX = pos.OffsetX;
+            node.OffsetY = pos.OffsetY;
+        }
+
+        return node;
+    }
+
+    private Connector CreateConnector(string sourceId, string targetId)
+    {
+        return new Connector
+        {
+            ID = $"connector{++connectorCount}",
+            SourceID = sourceId,
+            TargetID = targetId
+        };
+    }
+
+    private async Task SaveMapAsync()
+    {
+        if (diagram is null || _area is null) return;
+        _isSaving = true;
+        _saveMessage = null;
+        await InvokeAsync(StateHasChanged);
+
+        try
+        {
+            var json = diagram.SaveDiagram();
+            var result = await ApiClient.SaveAreaMap(areaId, json, CancellationToken.None);
+            _saveSuccess = result.IsSuccess;
+            _saveMessage = result.IsSuccess
+                ? "Mapa byla úspěšně uložena."
+                : string.Join(", ", result.Errors);
+
+            if (result.IsSuccess)
+            {
+                _regenerated = false;
+                _area = await ApiClient.GetArea(Datasource.Database, areaId, CancellationToken.None);
+            }
+        }
+        catch (Exception ex)
+        {
+            _saveSuccess = false;
+            _saveMessage = $"Chyba při ukládání mapy: {ex.Message}";
+        }
+        finally
+        {
+            _isSaving = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private void OnNodeClick(ClickEventArgs args)
+    {
+        if (args.Count != 2) return;
+        if (args.ActualObject is Node node && node.ID != areaId.ToString())
+        {
+            if (Guid.TryParse(node.ID, out var modelId))
+                NavigationManager.NavigateTo($"/datamodelmap/{modelId}");
+        }
+    }
+}

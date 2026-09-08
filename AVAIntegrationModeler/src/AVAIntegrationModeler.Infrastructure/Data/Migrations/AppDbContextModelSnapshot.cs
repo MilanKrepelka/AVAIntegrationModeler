@@ -28,6 +28,18 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastMapSave")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastSavedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("MapDiagramJson")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -46,6 +58,12 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastSavedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -74,6 +92,9 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasMaxLength(1000)
@@ -83,6 +104,9 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER")
                         .HasDefaultValue(false);
+
+                    b.Property<DateTime?>("LastSavedAt")
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -105,6 +129,9 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("DataModelId")
@@ -142,6 +169,9 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .HasMaxLength(200)
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("LastSavedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -160,7 +190,13 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("DataModelFieldId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastSavedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ReferencedEntityTypeId")
@@ -184,9 +220,15 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("ExternalId")
                         .IsRequired()
                         .HasMaxLength(500)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastSavedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("ModelId")
@@ -201,6 +243,9 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("CreatedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("CzechValue")
@@ -222,6 +267,9 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.Property<string>("Key")
                         .IsRequired()
                         .HasMaxLength(200)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastSavedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<string>("StringValue")
@@ -246,10 +294,14 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("Description")
                         .HasMaxLength(2000)
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("LastSavedAt")
                     b.Property<DateTime?>("LastDeploymentDateTime")
                         .HasColumnType("TEXT");
 
@@ -279,10 +331,16 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid>("DataModelId")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid>("DeploymentId")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastSavedAt")
                         .HasColumnType("TEXT");
 
                     b.HasKey("Id");
@@ -303,6 +361,12 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastSavedAt")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
@@ -320,11 +384,48 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.Property<Guid?>("AreaId")
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastSavedAt")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AreaId");
 
                     b.ToTable("IntegrationMaps", (string)null);
+                });
+
+            modelBuilder.Entity("AVAIntegrationModeler.Domain.MapLayoutAggregate.MapLayout", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("DiagramJson")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Key")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastMapSave")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastSavedAt")
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("Key")
+                        .IsUnique();
+
+                    b.ToTable("MapLayouts", (string)null);
                 });
 
             modelBuilder.Entity("AVAIntegrationModeler.Domain.ScenarioAggregate.Scenario", b =>
@@ -338,7 +439,13 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("TEXT");
 
+                    b.Property<DateTime?>("CreatedAt")
+                        .HasColumnType("TEXT");
+
                     b.Property<Guid?>("InputFeature")
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime?>("LastSavedAt")
                         .HasColumnType("TEXT");
 
                     b.Property<Guid?>("OutputFeature")
@@ -489,9 +596,15 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                                 .HasDefaultValue(false)
                                 .HasColumnName("ConsumeOnly");
 
+                            b1.Property<DateTime?>("CreatedAt")
+                                .HasColumnType("TEXT");
+
                             b1.Property<Guid>("FeatureId")
                                 .HasColumnType("TEXT")
                                 .HasColumnName("IncludedFeatureId");
+
+                            b1.Property<DateTime?>("LastSavedAt")
+                                .HasColumnType("TEXT");
 
                             b1.Property<Guid>("OwnerFeatureId")
                                 .HasColumnType("TEXT");
@@ -511,6 +624,12 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                     b.OwnsMany("AVAIntegrationModeler.Domain.FeatureAggregate.IncludedModel", "IncludedModels", b1 =>
                         {
                             b1.Property<Guid>("Id")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTime?>("CreatedAt")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTime?>("LastSavedAt")
                                 .HasColumnType("TEXT");
 
                             b1.Property<Guid>("ModelId")
@@ -561,7 +680,13 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                             b1.Property<Guid>("Id")
                                 .HasColumnType("TEXT");
 
+                            b1.Property<DateTime?>("CreatedAt")
+                                .HasColumnType("TEXT");
+
                             b1.Property<Guid>("IntegrationsMapId")
+                                .HasColumnType("TEXT");
+
+                            b1.Property<DateTime?>("LastSavedAt")
                                 .HasColumnType("TEXT");
 
                             b1.Property<Guid>("ScenarioId")
@@ -583,12 +708,18 @@ namespace AVAIntegrationModeler.Infrastructure.Data.Migrations
                                     b2.Property<Guid>("Id")
                                         .HasColumnType("TEXT");
 
+                                    b2.Property<DateTime?>("CreatedAt")
+                                        .HasColumnType("TEXT");
+
                                     b2.Property<Guid>("IntegrationMapItemId")
                                         .HasColumnType("TEXT");
 
                                     b2.Property<string>("Key")
                                         .IsRequired()
                                         .HasMaxLength(200)
+                                        .HasColumnType("TEXT");
+
+                                    b2.Property<DateTime?>("LastSavedAt")
                                         .HasColumnType("TEXT");
 
                                     b2.HasKey("Id");

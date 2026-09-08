@@ -8,7 +8,7 @@ namespace AVAIntegrationModeler.Domain.DataModelAggregate;
 /// <summary>
 /// Entita představující pole datového modelu. V klasickém pojetí tříd je to atribut nebo property.
 /// </summary>
-public class DataModelField : EntityBase<Guid>
+public class DataModelField : DomainEntityBase<Guid>
 {
   // Privátní konstruktor pro EF Domain
   private DataModelField() { }

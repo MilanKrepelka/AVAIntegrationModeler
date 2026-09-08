@@ -3,7 +3,7 @@ namespace AVAIntegrationModeler.Domain.DeploymentAggregate;
 /// <summary>
 /// Entita reprezentující datový model zahrnutý v nasazení.
 /// </summary>
-public class DeploymentDataModel : EntityBase<Guid>
+public class DeploymentDataModel : DomainEntityBase<Guid>
 {
   /// <summary>
   /// Privátní konstruktor pro EF Core.
