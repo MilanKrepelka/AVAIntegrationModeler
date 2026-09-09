@@ -1,164 +1,144 @@
 {
-  "Id": "00000000-0000-0000-0000-000000000000",
-  "Code": "ORG-PLACEHOLDER",
-  "Name": "Organization",
-  "Description": "public information about organization, its addresses, contacts and bank accounts",
-  "Notes": "",
-  "IsAggregateRoot": true,
-  "Fields": [
+  "id": "00000000-0000-0000-0000-000000000000",
+  "code": "ORG-PLACEHOLDER",
+  "name": "Organization",
+  "description": "public information about organization, its addresses, contacts and bank accounts",
+  "notes": "",
+  "isAggregateRoot": true,
+  "fields": [
     {
-      "Name": "Addresses",
-      "Label": "Addresses",
-      "Description": "company addresses",
-      "IsPublishedForLookup": false,
-      "IsCollection": true,
-      "IsLocalized": false,
-      "IsNullable": true,
-      "FieldType": "NestedEntity",
-      "ReferencedEntityTypeIds": [
+      "name": "Addresses",
+      "label": "Addresses",
+      "description": "company addresses",
+      "isPublishedForLookup": false,
+      "isCollection": true,
+      "isLocalized": false,
+      "isNullable": true,
+      "fieldType": "NestedEntity",
+      "referencedEntityTypeIds": [
         "4b3e7a23-f83e-432c-8b03-2b8054169106"
-      ],
-      "Expression": null
+      ]
     },
     {
-      "Name": "BankAccounts",
-      "Label": "BankAccounts",
-      "Description": "company bank accounts",
-      "IsPublishedForLookup": false,
-      "IsCollection": true,
-      "IsLocalized": false,
-      "IsNullable": true,
-      "FieldType": "NestedEntity",
-      "ReferencedEntityTypeIds": [
+      "name": "BankAccounts",
+      "label": "BankAccounts",
+      "description": "company bank accounts",
+      "isPublishedForLookup": false,
+      "isCollection": true,
+      "isLocalized": false,
+      "isNullable": true,
+      "fieldType": "NestedEntity",
+      "referencedEntityTypeIds": [
         "d77c9e98-c027-4c08-836d-132589babfbe"
-      ],
-      "Expression": null
+      ]
     },
     {
-      "Name": "Code",
-      "Label": "Code",
-      "Description": "company identifier combined from IdentificationNumber and CountryCode",
-      "IsPublishedForLookup": true,
-      "IsCollection": false,
-      "IsLocalized": false,
-      "IsNullable": false,
-      "FieldType": "Text",
-      "ReferencedEntityTypeIds": [],
-      "Expression": null
+      "name": "Code",
+      "label": "Code",
+      "description": "company identifier combined from IdentificationNumber and CountryCode",
+      "isPublishedForLookup": true,
+      "isCollection": false,
+      "isLocalized": false,
+      "isNullable": false,
+      "fieldType": "Text"
     },
     {
-      "Name": "Contacts",
-      "Label": "Contacts",
-      "Description": "company contacts",
-      "IsPublishedForLookup": false,
-      "IsCollection": true,
-      "IsLocalized": false,
-      "IsNullable": true,
-      "FieldType": "NestedEntity",
-      "ReferencedEntityTypeIds": [
+      "name": "Contacts",
+      "label": "Contacts",
+      "description": "company contacts",
+      "isPublishedForLookup": false,
+      "isCollection": true,
+      "isLocalized": false,
+      "isNullable": true,
+      "fieldType": "NestedEntity",
+      "referencedEntityTypeIds": [
         "ef0acd96-3e88-4fc6-a331-4f0f2c571395"
-      ],
-      "Expression": null
+      ]
     },
     {
-      "Name": "CountryCode",
-      "Label": "CountryCode",
-      "Description": "country code which issued national identification number (ISO 3166-1 alpha-2 format)",
-      "IsPublishedForLookup": true,
-      "IsCollection": false,
-      "IsLocalized": false,
-      "IsNullable": false,
-      "FieldType": "Text",
-      "ReferencedEntityTypeIds": [],
-      "Expression": null
+      "name": "CountryCode",
+      "label": "CountryCode",
+      "description": "country code which issued national identification number (ISO 3166-1 alpha-2 format)",
+      "isPublishedForLookup": true,
+      "isCollection": false,
+      "isLocalized": false,
+      "isNullable": false,
+      "fieldType": "Text"
     },
     {
-      "Name": "DateOfFoundation",
-      "Label": "DateOfFoundation",
-      "Description": "date of foundation",
-      "IsPublishedForLookup": false,
-      "IsCollection": false,
-      "IsLocalized": false,
-      "IsNullable": true,
-      "FieldType": "Date",
-      "ReferencedEntityTypeIds": [],
-      "Expression": null
+      "name": "DateOfFoundation",
+      "label": "DateOfFoundation",
+      "description": "date of foundation",
+      "isPublishedForLookup": false,
+      "isCollection": false,
+      "isLocalized": false,
+      "isNullable": true,
+      "fieldType": "Date"
     },
     {
-      "Name": "DateOfTermination",
-      "Label": "DateOfTermination",
-      "Description": "date of termination",
-      "IsPublishedForLookup": false,
-      "IsCollection": false,
-      "IsLocalized": false,
-      "IsNullable": true,
-      "FieldType": "Date",
-      "ReferencedEntityTypeIds": [],
-      "Expression": null
+      "name": "DateOfTermination",
+      "label": "DateOfTermination",
+      "description": "date of termination",
+      "isPublishedForLookup": false,
+      "isCollection": false,
+      "isLocalized": false,
+      "isNullable": true,
+      "fieldType": "Date"
     },
     {
-      "Name": "IdentificationNumber",
-      "Label": "IdentificationNumber",
-      "Description": "national identification number of company issued by national authority (notes: IC in CZ)",
-      "IsPublishedForLookup": true,
-      "IsCollection": false,
-      "IsLocalized": false,
-      "IsNullable": false,
-      "FieldType": "Text",
-      "ReferencedEntityTypeIds": [],
-      "Expression": null
+      "name": "IdentificationNumber",
+      "label": "IdentificationNumber",
+      "description": "national identification number of company issued by national authority (notes: IC in CZ)",
+      "isPublishedForLookup": true,
+      "isCollection": false,
+      "isLocalized": false,
+      "isNullable": false,
+      "fieldType": "Text"
     },
     {
-      "Name": "LegalForm",
-      "Label": "LegalForm",
-      "Description": "legal form of company",
-      "IsPublishedForLookup": false,
-      "IsCollection": false,
-      "IsLocalized": false,
-      "IsNullable": true,
-      "FieldType": "LookupEntity",
-      "ReferencedEntityTypeIds": [
+      "name": "LegalForm",
+      "label": "LegalForm",
+      "description": "legal form of company",
+      "isPublishedForLookup": false,
+      "isCollection": false,
+      "isLocalized": false,
+      "isNullable": true,
+      "fieldType": "LookupEntity",
+      "referencedEntityTypeIds": [
         "6a763172-3b82-4074-8ee6-0bfa86f15e50"
-      ],
-      "Expression": null
+      ]
     },
     {
-      "Name": "Name",
-      "Label": "Name",
-      "Description": "company name",
-      "IsPublishedForLookup": true,
-      "IsCollection": false,
-      "IsLocalized": false,
-      "IsNullable": true,
-      "FieldType": "Text",
-      "ReferencedEntityTypeIds": [],
-      "Expression": null
+      "name": "Name",
+      "label": "Name",
+      "description": "company name",
+      "isPublishedForLookup": true,
+      "isCollection": false,
+      "isLocalized": false,
+      "isNullable": true,
+      "fieldType": "Text"
     },
     {
-      "Name": "TaxId",
-      "Label": "TaxId",
-      "Description": "tax identifier (notes: DIC in CZ)",
-      "IsPublishedForLookup": false,
-      "IsCollection": false,
-      "IsLocalized": false,
-      "IsNullable": true,
-      "FieldType": "Text",
-      "ReferencedEntityTypeIds": [],
-      "Expression": null
+      "name": "TaxId",
+      "label": "TaxId",
+      "description": "tax identifier (notes: DIC in CZ)",
+      "isPublishedForLookup": false,
+      "isCollection": false,
+      "isLocalized": false,
+      "isNullable": true,
+      "fieldType": "Text"
     },
     {
-      "Name": "VatIn",
-      "Label": "VatIn",
-      "Description": "vat identification number (notes: IC DPH in SK)",
-      "IsPublishedForLookup": false,
-      "IsCollection": false,
-      "IsLocalized": false,
-      "IsNullable": true,
-      "FieldType": "Text",
-      "ReferencedEntityTypeIds": [],
-      "Expression": null
+      "name": "VatIn",
+      "label": "VatIn",
+      "description": "vat identification number (notes: IC DPH in SK)",
+      "isPublishedForLookup": false,
+      "isCollection": false,
+      "isLocalized": false,
+      "isNullable": true,
+      "fieldType": "Text"
     }
   ],
-  "UtcCreatedOn": "0001-01-01T00:00:00",
-  "UtcModifiedOn": "0001-01-01T00:00:00"
+  "utcCreatedOn": "0001-01-01T00:00:00",
+  "utcModifiedOn": "0001-01-01T00:00:00"
 }

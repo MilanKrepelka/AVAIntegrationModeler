@@ -20,7 +20,9 @@ public static class DeploymentMapper
       Id = dto.Id,
       Code = dto.Code,
       Name = dto.Name,
-      DataModelCount = dto.DataModelIds.Count
+      DataModelCount = dto.DataModelIds.Count,
+      LastSaveDateTime = dto.LastSaveDateTime,
+      LastDeploymentDateTime = dto.LastDeploymentDateTime
     };
   }
 }

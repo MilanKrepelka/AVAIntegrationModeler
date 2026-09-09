@@ -49,7 +49,9 @@ public class ExportDeploymentHandler(
       var sortedModel = model with { Fields = SortFieldsByName(model.Fields) };
       entries.Add(new ExportEntry<object>(BuildDefinitionFileName(sortedModel, areaCodesById), sortedModel));
 
-      var modelRecords = (await _records.ListAsync(Datasource.Database, model.Id, cancellationToken: ct)).ToList();
+      var modelRecords = (await _records.ListAsync(Datasource.Database, model.Id, cancellationToken: ct))
+        .Select(r => r with { Fields = r.Fields.OrderBy(f => f.Key, StringComparer.OrdinalIgnoreCase).ToList() })
+        .ToList();
       if (modelRecords.Count > 0)
         entries.Add(new ExportEntry<object>(BuildRecordsFileName(sortedModel, areaCodesById), modelRecords));
     }

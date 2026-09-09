@@ -1,0 +1,63 @@
+﻿{
+  "id": "fbd72d37-fa38-4174-987e-f70729f585e2",
+  "code": "OrganizationUnit",
+  "name": "OrganizationUnit",
+  "description": "information about organization structure",
+  "isAggregateRoot": true,
+  "fields": [
+    {
+      "name": "Code",
+      "description": "code of organization unit (i.e. key for entity lookup)",
+      "isPublishedForLookup": true,
+      "isNullable": false,
+      "fieldType": "Text"
+    },
+    {
+      "name": "Name",
+      "description": "name of organization unit",
+      "isPublishedForLookup": true,
+      "isNullable": true,
+      "fieldType": "Text"
+    },
+    {
+      "name": "Organization",
+      "description": "organization, relation to organization entity",
+      "isCollection": false,
+      "isNullable": false,
+      "fieldType": "LookupEntity",
+      "referencedEntityTypeIds": [
+        "b6530960-bb27-4980-b1bf-80ba28e78e0e"
+      ]
+    },
+    {
+      "name": "Parent",
+      "description": "parent organization unit, relationship to organization unit entity",
+      "isCollection": false,
+      "isNullable": true,
+      "fieldType": "LookupEntity",
+      "referencedEntityTypeIds": [
+        "fbd72d37-fa38-4174-987e-f70729f585e2"
+      ]
+    },
+    {
+      "name": "Units",
+      "description": "child organization units, relationship to organization unit entity",
+      "isCollection": true,
+      "isNullable": true,
+      "fieldType": "LookupEntity",
+      "referencedEntityTypeIds": [
+        "fbd72d37-fa38-4174-987e-f70729f585e2"
+      ]
+    },
+    {
+      "name": "Type",
+      "description": "type of organization unit, relationship to organization unit type entity",
+      "isCollection": false,
+      "isNullable": false,
+      "fieldType": "LookupEntity",
+      "referencedEntityTypeIds": [
+        "86203b07-1d6b-4831-aca4-db052a26c5fd"
+      ]
+    }
+  ]
+}

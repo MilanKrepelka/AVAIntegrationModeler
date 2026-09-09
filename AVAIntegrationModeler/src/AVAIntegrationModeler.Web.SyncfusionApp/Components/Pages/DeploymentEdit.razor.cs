@@ -1,9 +1,10 @@
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 using Ardalis.Result;
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
 using Microsoft.AspNetCore.Components;
+using Microsoft.JSInterop;
 
 namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
 
@@ -17,6 +18,7 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
 
   [Inject] private IAVAIntegrationModelerApiClient ApiClient { get; set; } = default!;
   [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+  [Inject] private IJSRuntime JS { get; set; } = default!;
 
   [Parameter] public string? deploymentCode { get; set; }
 
@@ -44,6 +46,10 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
 
     public List<Guid> DataModelIds { get; set; } = new();
 
+    public DateTime? LastSaveDateTime { get; set; }
+
+    public DateTime? LastDeploymentDateTime { get; set; }
+
     public static DeploymentEditModel New()
     {
       var id = Guid.NewGuid();
@@ -59,6 +65,10 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
   private string? _saveMessage;
   private bool _saveSuccess;
 
+  private string? _avaPlaceMessage;
+  private bool _avaPlaceSuccess;
+  private bool _avaPlaceLoading;
+
   protected override void OnInitialized()
   {
     _cts = new CancellationTokenSource();
@@ -71,7 +81,7 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
     try
     {
       var modelsResponse = await ApiClient.GetDataModels(Datasource.Database, _cts?.Token ?? CancellationToken.None);
-      _availableDataModels = modelsResponse?.DataModels?.Select(m => new DataModelDTO
+      _availableDataModels = modelsResponse?.DataModels?.OrderBy(item=>item.Code)?.Select(m => new DataModelDTO
       {
         Id = m.Id, Code = m.Code, Name = m.Name
       }).ToList() ?? new();
@@ -93,7 +103,9 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
             Name = dto.Name,
             Ticket = dto.Ticket,
             Description = dto.Description,
-            DataModelIds = dto.DataModelIds.ToList()
+            DataModelIds = dto.DataModelIds.ToList(),
+            LastSaveDateTime = dto.LastSaveDateTime,
+            LastDeploymentDateTime = dto.LastDeploymentDateTime
           };
         }
       }
@@ -184,6 +196,91 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
   {
     NavigationManager.NavigateTo("/deployments");
   }
+
+  /// <summary>
+  /// Stáhne ZIP s exportem DataModelů a jejich záznamů pro toto nasazení.
+  /// </summary>
+  private async Task ExportAsync()
+  {
+    if (string.IsNullOrEmpty(deploymentCode)) return;
+    try
+    {
+      var bytes = await ApiClient.ExportDeployment(deploymentCode, _cts?.Token ?? CancellationToken.None);
+      await JS.InvokeVoidAsync("downloadFile", $"export-{deploymentCode}.zip", "application/zip", bytes);
+    }
+    catch (Exception ex)
+    {
+      Console.WriteLine($"Chyba při exportu nasazení: {ex.Message}");
+    }
+  }
+
+  /// <summary>
+  /// Nahraje DataModely a záznamy nasazení do AVAPlace.
+  /// </summary>
+  private async Task UploadToAvaPlaceAsync()
+  {
+    if (string.IsNullOrEmpty(deploymentCode)) return;
+    _avaPlaceLoading = true;
+    _avaPlaceMessage = null;
+    await InvokeAsync(StateHasChanged);
+    try
+    {
+      var result = await ApiClient.UploadDeploymentToAvaPlace(deploymentCode, _cts?.Token ?? CancellationToken.None);
+      if (_disposed) return;
+      _avaPlaceSuccess = result.IsSuccess;
+      _avaPlaceMessage = result.IsSuccess
+        ? $"Import do AVAPlace proběhl úspěšně. Verze: {result.Value.VersionCode}, modely: {result.Value.ModelsImported}, záznamy: {result.Value.RecordGroupsImported}."
+        : string.Join(", ", result.Errors);
+    }
+    catch (Exception ex)
+    {
+      if (!_disposed)
+      {
+        _avaPlaceSuccess = false;
+        _avaPlaceMessage = $"Chyba při nahrávání do AVAPlace: {ex.Message}";
+      }
+    }
+    finally
+    {
+      _avaPlaceLoading = false;
+      await InvokeAsync(StateHasChanged);
+    }
+  }
+
+  private Contracts.DataModels.DeploymentChangesSummaryDTO? _changesSummary;
+  private bool _loadingSummary;
+  private string? _summaryError;
+
+  /// <summary>
+  /// Načte souhrnné porovnání DataModelů nasazení.
+  /// </summary>
+  private async Task LoadChangesSummaryAsync()
+  {
+    if (string.IsNullOrEmpty(deploymentCode)) return;
+    _loadingSummary = true;
+    _changesSummary = null;
+    _summaryError = null;
+    await InvokeAsync(StateHasChanged);
+    try
+    {
+      _changesSummary = await ApiClient.GetDeploymentChangesSummary(
+        _edit.Code, _edit.Name, _edit.DataModelIds, _cts?.Token ?? CancellationToken.None);
+      if (_changesSummary is null)
+        _summaryError = "Nepodařilo se načíst přehled změn.";
+    }
+    catch (Exception ex)
+    {
+      _summaryError = $"Chyba: {ex.Message}";
+    }
+    finally
+    {
+      _loadingSummary = false;
+      await InvokeAsync(StateHasChanged);
+    }
+  }
+
+  private void NavigateToModelChanges(Guid modelId)
+    => NavigationManager.NavigateTo($"/datamodelchanges/{modelId}");
 
   public void Dispose()
   {

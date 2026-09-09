@@ -2,6 +2,7 @@
 @rendermode InteractiveServer
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Grids
+@using Syncfusion.Blazor.Inputs
 @using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List
 
 <PageTitle>Oblasti</PageTitle>
@@ -17,7 +18,7 @@
                 AllowSorting="true"
                 AllowResizing="true"
                 AllowSelection="true"
-                AllowGrouping="true"
+                AllowDetail="true"
                 Toolbar="@(new List<string>() { "Search" })">
 
             <Syncfusion.Blazor.Navigations.SfToolbar>
@@ -27,7 +28,7 @@
             </Syncfusion.Blazor.Navigations.SfToolbar>
 
             <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
-            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar"></GridFilterSettings>
+            <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar" IgnoreAccent="true"></GridFilterSettings>
             <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
 
             <GridColumns>
@@ -49,7 +50,8 @@
                         }
                     </Template>
                 </GridColumn>
-                <GridColumn HeaderText="Akce" Width="190" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+                <GridColumn Field=@nameof(AreaListViewModel.DataModelsText) HeaderText="Datové modely" Width="250" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn HeaderText="Akce" Width="140" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
                     <Template>
                         @{
                             var model = (context as AreaListViewModel);
@@ -77,6 +79,56 @@
                     </Template>
                 </GridColumn>
             </GridColumns>
+
+            <GridTemplates>
+                <DetailTemplate>
+                    @{
+                        var area = (context as AreaListViewModel);
+                        <div class="detail-form">
+                            @if (area!.DataModels.Count == 0)
+                            {
+                                <p style="color:var(--bs-secondary,#6c757d);font-style:italic">Žádné datové modely přiřazeny k této oblasti.</p>
+                            }
+                            else
+                            {
+                                <div class="fields-section">
+                                    <h5>Datové modely (@area.DataModels.Count)</h5>
+                                    <div class="fields-grid">
+                                        @foreach (var model in area.DataModels.OrderBy(m => m.Code))
+                                        {
+                                            <div class="field-card">
+                                                <div class="field-header">
+                                                    <strong>@model.Code</strong>
+                                                    @if (model.IsAggregateRoot)
+                                                    {
+                                                        <span class="field-type-badge">Aggregate Root</span>
+                                                    }
+                                                </div>
+                                                @if (!string.IsNullOrEmpty(model.Name))
+                                                {
+                                                    <div class="field-detail">
+                                                        <span class="field-label">Název:</span> @model.Name
+                                                    </div>
+                                                }
+                                                @if (!string.IsNullOrEmpty(model.Description))
+                                                {
+                                                    <div class="field-detail">
+                                                        <span class="field-label">Popis:</span> @model.Description
+                                                    </div>
+                                                }
+                                                <div class="field-flags">
+                                                    <span class="flag-badge">@model.Fields.Count polí</span>
+                                                </div>
+                                            </div>
+                                        }
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    }
+                </DetailTemplate>
+            </GridTemplates>
+
         </SfGrid>
     </div>
 </div>

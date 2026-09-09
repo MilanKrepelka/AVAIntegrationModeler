@@ -1,5 +1,7 @@
 ﻿using Ardalis.Result;
 using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Contracts.Dashboard;
+using AVAIntegrationModeler.Contracts.DataModels;
 using AVAIntegrationModeler.Contracts.Deployments;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Contracts.Scenarios;
@@ -159,6 +161,11 @@ public interface IAVAIntegrationModelerApiClient
   Task<DeploymentListResponse> GetDeployments(CancellationToken cancellationToken);
 
   /// <summary>
+  /// Vrátí seznam posledních <paramref name="count"/> nasazení.
+  /// </summary>
+  Task<DeploymentListResponse> GetRecentDeployments(int count = 5, CancellationToken cancellationToken = default);
+
+  /// <summary>
   /// Vrátí nasazení podle identifikátoru.
   /// </summary>
   Task<DeploymentDTO> GetDeployment(Guid id, CancellationToken cancellationToken);
@@ -187,6 +194,37 @@ public interface IAVAIntegrationModelerApiClient
   /// Exportuje DataModely nasazení včetně jejich záznamů jako ZIP archív.
   /// </summary>
   Task<byte[]> ExportDeployment(string deploymentCode, CancellationToken cancellationToken);
+
+  /// Nahraje DataModely a záznamy nasazení do AVAPlace přes CreateMetadataVersion + ImportDataModel + ImportUnifiedData.
+  /// </summary>
+  Task<Result<UploadDeploymentToAvaPlaceResult>> UploadDeploymentToAvaPlace(string deploymentCode, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Vrátí hluboké porovnání datového modelu (včetně polí) mezi lokální databází a AVAPlace.
+  /// </summary>
+  /// <param name="dataModelId">Identifikátor datového modelu.</param>
+  /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+  /// <returns>Výsledek porovnání nebo null pokud model nebyl nalezen.</returns>
+  Task<DataModelComparisonDTO?> GetDataModelChanges(Guid dataModelId, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Vrátí souhrnné porovnání DataModelů nasazení mezi lokální databází a AVAPlace.
+  /// DataModelIds jsou předány přímo — bez DB lookupu nasazení.
+  /// </summary>
+  /// <param name="deploymentCode">Kód nasazení (informativní).</param>
+  /// <param name="deploymentName">Název nasazení (informativní).</param>
+  /// <param name="dataModelIds">Identifikátory DataModelů nasazení.</param>
+  /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+  Task<Contracts.DataModels.DeploymentChangesSummaryDTO?> GetDeploymentChangesSummary(
+    string deploymentCode,
+    string deploymentName,
+    List<Guid> dataModelIds,
+    CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Vrátí souhrn statistik dashboardu (počty modelů a nasazení).
+  /// </summary>
+  Task<GetDashboardSummaryResponse> GetDashboardSummary(CancellationToken cancellationToken = default);
 
   /// <summary>
   /// Vrátí JSON diagramu pojmenované mapy nebo null, pokud neexistuje.

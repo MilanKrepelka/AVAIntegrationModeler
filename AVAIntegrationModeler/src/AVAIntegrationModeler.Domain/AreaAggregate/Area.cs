@@ -17,6 +17,12 @@ public class Area : DomainEntityBase<Guid>, IAggregateRoot
     Id = id;
     SetCode(code);
   }
+  public Area(Guid id, string code, string name)
+  {
+    Id = id;
+    SetCode(code);
+    SetName(name);
+  }
 
   /// <summary>
   /// Kód oblasti.

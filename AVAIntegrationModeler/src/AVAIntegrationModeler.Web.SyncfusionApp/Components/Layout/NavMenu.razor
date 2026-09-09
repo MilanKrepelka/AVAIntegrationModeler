@@ -8,7 +8,12 @@
 
 <div class="nav-scrollable" onclick="document.querySelector('.navbar-toggler').click()">
     <nav class="flex-column">
-        <details class="nav-item px-3 nav-item-group" open>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/areas" Match="NavLinkMatch.All">
+                <span class="bi e-icons e-user-defined e-large" aria-hidden="true"></span>Oblasti
+            </NavLink>
+        </div>
+        <details class="nav-item px-3 nav-item-group" open="@_modelsOpen">
             <summary class="nav-link nav-group-summary">
                 <span class="bi e-icons e-transform e-large" aria-hidden="true"></span>
                 @Localization.SharedResources.Models
@@ -23,16 +28,8 @@
                 </NavLink>
             </div>
         </details>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/features" Match="NavLinkMatch.All">
-                <span class="bi e-icons e-group-2 e-large" aria-hidden="true"></span>@Localization.SharedResources.Features
-            </NavLink>
-        </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/areas" Match="NavLinkMatch.All">
-                <span class="bi e-icons e-map e-large" aria-hidden="true"></span>Oblasti
-            </NavLink>
-        </div>
+       
+       
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="/vdmareamap" Match="NavLinkMatch.All">
                 <span class="bi e-icons e-organizational-chart e-large" aria-hidden="true"></span>Mapa oblastí
@@ -43,37 +40,13 @@
                 <span class="bi e-icons e-export e-large" aria-hidden="true"></span>Nasazení
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/controls" Match="NavLinkMatch.All">
-                <span class="bi e-icons e-grid-view e-large" aria-hidden="true"></span>Controls
-            </NavLink>
-        </div>
+       
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="/ai" Match="NavLinkMatch.All">
-                <span class="bi e-icons e-comment e-large" aria-hidden="true"></span>AI Asistent
+                <span class="bi e-icons e-multiple-comment e-large" aria-hidden="true"></span>AI Asistent
             </NavLink>
         </div>
-        <div class="nav-item px-3">
-            <NavLink class="nav-link" href="/integration-architect-rules" Match="NavLinkMatch.All">
-                <span class="bi e-icons e-info e-large" aria-hidden="true"></span>Pravidla
-            </NavLink>
-        </div>
-        <details class="nav-item px-3 nav-item-group" open>
-            <summary class="nav-link nav-group-summary">
-                <span class="bi e-icons e-user-defined e-large" aria-hidden="true"></span>
-                @Localization.SharedResources.Scenarios
-                <span class="nav-chevron">&#8250;</span>
-            </summary>
-            <div class="nav-submenu">
-                <NavLink class="nav-link nav-sublink" href="/scenarios/database">
-                    <span class="bi e-icons e-database e-small" aria-hidden="true"></span>Databáze
-                </NavLink>
-                <NavLink class="nav-link nav-sublink" href="/scenarios/avaplace">
-                    <span class="bi e-icons e-cloud e-small" aria-hidden="true"></span>AVAPlace
-                </NavLink>
-            </div>
-        </details>
-        <details class="nav-item px-3 nav-item-group" open>
+        <details class="nav-item px-3 nav-item-group" open="@_dataModelRecordsOpen">
             <summary class="nav-link nav-group-summary">
                 <span class="bi e-icons e-table e-large" aria-hidden="true"></span>
                 @Localization.SharedResources.DataModelRecords
@@ -88,6 +61,39 @@
                 </NavLink>
             </div>
         </details>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/integration-architect-rules" Match="NavLinkMatch.All">
+                <span class="bi e-icons e-flags e-large" aria-hidden="true"></span>Pravidla
+            </NavLink>
+        </div>
+        <!-- oddělovač -->
+        <hr class="nav-divider" />
+        
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/features" Match="NavLinkMatch.All">
+                <span class="bi e-icons e-large" aria-hidden="true"></span>@Localization.SharedResources.Features
+            </NavLink>
+        </div>
+        <details class="nav-item px-3 nav-item-group" open="@_scenariosOpen">
+            <summary class="nav-link nav-group-summary">
+                <span class="bi e-icons e-large" aria-hidden="true"></span>
+                @Localization.SharedResources.Scenarios
+                <span class="nav-chevron">&#8250;</span>
+            </summary>
+            <div class="nav-submenu">
+                <NavLink class="nav-link nav-sublink" href="/scenarios/database">
+                    <span class="bi e-icons e-small" aria-hidden="true"></span>Databáze
+                </NavLink>
+                <NavLink class="nav-link nav-sublink" href="/scenarios/avaplace">
+                    <span class="bi e-icons e-small" aria-hidden="true"></span>AVAPlace
+                </NavLink>
+            </div>
+        </details>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" href="/controls" Match="NavLinkMatch.All">
+                <span class="bi e-icons e-large" aria-hidden="true"></span>Controls
+            </NavLink>
+        </div>
     </nav>
 </div>
 

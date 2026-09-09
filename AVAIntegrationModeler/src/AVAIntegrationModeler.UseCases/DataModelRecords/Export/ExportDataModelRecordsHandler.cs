@@ -43,7 +43,7 @@ public class ExportDataModelRecordsHandler(
       .GroupBy(r => r.ModelId)
       .Select(g => new ExportEntry<List<DataModelRecordDTO>>(
         BuildFileName(g.Key, modelsById, areaCodesById),
-        g.ToList()));
+        g.Select(r => r with { Fields = r.Fields.OrderBy(f => f.Key, StringComparer.OrdinalIgnoreCase).ToList() }).ToList()));
 
     return Result.Success(new ExportResult<List<DataModelRecordDTO>>("records-export.zip", entries));
   }

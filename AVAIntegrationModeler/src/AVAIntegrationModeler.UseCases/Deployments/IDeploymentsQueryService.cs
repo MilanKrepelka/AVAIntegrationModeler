@@ -23,6 +23,11 @@ public interface IDeploymentsQueryService : ICacheableQueryService
   Task<DeploymentDTO> GetDeployment(string code, CancellationToken cancellationToken);
 
   /// <summary>
+  /// Vrátí posledních <paramref name="count"/> nasazení.
+  /// </summary>
+  Task<IEnumerable<DeploymentDTO>> ListRecentAsync(int count, CancellationToken cancellationToken = default);
+
+  /// <summary>
   /// Ověří existenci nasazení podle kódu bez vyhazování výjimky.
   /// </summary>
   Task<bool> ExistsByCodeAsync(string code, CancellationToken cancellationToken);

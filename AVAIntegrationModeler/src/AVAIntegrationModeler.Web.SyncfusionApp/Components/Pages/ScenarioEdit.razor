@@ -60,7 +60,7 @@
                 <label>Vstupní feature</label>
                 <SfDropDownList TItem="FeatureDTO" TValue="Guid?" DataSource="@_features"
                                 Placeholder="Vyberte vstupní feature"
-                                @bind-Value="_edit.InputFeatureId" AllowFiltering="true" ShowClearButton="true">
+                                @bind-Value="_edit.InputFeatureId" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" ShowClearButton="true">
                     <DropDownListFieldSettings Text="Code" Value="Id"></DropDownListFieldSettings>
                 </SfDropDownList>
                 <ValidationMessage For="@(() => _edit.InputFeatureId)" />
@@ -69,7 +69,7 @@
                 <label>Výstupní feature</label>
                 <SfDropDownList TItem="FeatureDTO" TValue="Guid?" DataSource="@_features"
                                 Placeholder="Vyberte výstupní feature"
-                                @bind-Value="_edit.OutputFeatureId" AllowFiltering="true" ShowClearButton="true">
+                                @bind-Value="_edit.OutputFeatureId" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" ShowClearButton="true">
                     <DropDownListFieldSettings Text="Code" Value="Id"></DropDownListFieldSettings>
                 </SfDropDownList>
                 <ValidationMessage For="@(() => _edit.OutputFeatureId)" />
