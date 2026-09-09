@@ -195,20 +195,6 @@ public interface IAVAIntegrationModelerApiClient
   /// </summary>
   Task<byte[]> ExportDeployment(string deploymentCode, CancellationToken cancellationToken);
 
-  /// <summary>
-  /// Vrátí JSON diagramu pojmenované mapy nebo null, pokud neexistuje.
-  /// </summary>
-  Task<MapLayoutDTO?> GetMapLayout(string key, CancellationToken cancellationToken);
-
-  /// <summary>
-  /// Uloží JSON diagramu pojmenované mapy (upsert).
-  /// </summary>
-  Task<Result> SaveMapLayout(string key, string diagramJson, CancellationToken cancellationToken);
-
-  /// <summary>
-  /// Smaže uložený JSON diagramu pojmenované mapy.
-  /// </summary>
-  Task<Result> DeleteMapLayout(string key, CancellationToken cancellationToken);
   /// Nahraje DataModely a záznamy nasazení do AVAPlace přes CreateMetadataVersion + ImportDataModel + ImportUnifiedData.
   /// </summary>
   Task<Result<UploadDeploymentToAvaPlaceResult>> UploadDeploymentToAvaPlace(string deploymentCode, CancellationToken cancellationToken);
@@ -239,4 +225,19 @@ public interface IAVAIntegrationModelerApiClient
   /// Vrátí souhrn statistik dashboardu (počty modelů a nasazení).
   /// </summary>
   Task<GetDashboardSummaryResponse> GetDashboardSummary(CancellationToken cancellationToken = default);
+
+  /// <summary>
+  /// Vrátí JSON diagramu pojmenované mapy nebo null, pokud neexistuje.
+  /// </summary>
+  Task<MapLayoutDTO?> GetMapLayout(string key, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Uloží JSON diagramu pojmenované mapy (upsert).
+  /// </summary>
+  Task<Result> SaveMapLayout(string key, string diagramJson, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Smaže uložený JSON diagramu pojmenované mapy.
+  /// </summary>
+  Task<Result> DeleteMapLayout(string key, CancellationToken cancellationToken);
 }
