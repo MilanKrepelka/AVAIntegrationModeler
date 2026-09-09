@@ -10,9 +10,9 @@
 @inject IAVAIntegrationModelerApiClient ApiClient
 @inject NavigationManager NavigationManager
 
-<PageTitle>Data Model Map</PageTitle>
+<PageTitle>@(_modelName ?? "Data Model Map")</PageTitle>
 
-<h3>Data Model Map</h3>
+<h3>@(_modelName ?? "Data Model Map")</h3>
 
 @if (!IsLoading)
 {
@@ -92,6 +92,9 @@ else
 
     // Server-side computed radial positions (fallback when no saved positions)
     Dictionary<string, (double X, double Y)> _computedPositions = new();
+
+    // Název kořenového modelu pro zobrazení v nadpisu
+    string? _modelName;
 
     // Save/load state
     int _regenerateCount = 0;
@@ -189,6 +192,8 @@ else
             {
                 _forestToRender = forest;
             }
+
+            _modelName = _forestToRender.FirstOrDefault()?.Name;
 
             var chosenRootId = modelId != Guid.Empty ? modelId : (_forestToRender.FirstOrDefault()?.Id ?? Guid.Empty);
             radialRoot = chosenRootId == Guid.Empty ? string.Empty : chosenRootId.ToString();
@@ -501,7 +506,9 @@ else
                 new ShapeAnnotation
                 {
                     Content = label,
-                    Style = new TextStyle { Color = textColor, Fill = "transparent" }
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Style = new TextStyle { Color = textColor, Fill = "transparent", TextAlign = TextAlign.Center }
                 }
             }
         };

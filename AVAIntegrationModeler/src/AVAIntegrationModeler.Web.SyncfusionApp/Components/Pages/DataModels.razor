@@ -58,7 +58,7 @@
             <GridColumn Field=@nameof(DataModelListViewModel.AreaName) HeaderText="Oblast" Width="150" FilterSettings="@_containsFilter"></GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.Code) HeaderText="Kód" Width="120" FilterSettings="@_containsFilter"></GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.Name) HeaderText="Název" Width="200" FilterSettings="@_containsFilter"></GridColumn>
-            <GridColumn Field=@nameof(DataModelListViewModel.Description) HeaderText="Popis" Width="250" FilterSettings="@_containsFilter"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.Description) HeaderText="Popis" Width="250" FilterSettings="@_containsFilter" Visible="false"></GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.IsAggregateRootText) HeaderText="Aggregate Root" Width="100">
                 <Template>
                     @{
@@ -75,23 +75,8 @@
                 </Template>
             </GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.FieldsText) HeaderText="Pole" Width="200" FilterSettings="@_containsFilter"></GridColumn>
-            <GridColumn Field=@nameof(DataModelListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="true">
-                <Template>
-                    @{
-                        var model = (context as DataModelListViewModel);
-                        <div class="id-cell-container">
-                            <span class="id-text">@model!.Id.ToString()</span>
-                            <SfButton CssClass="e-small e-round action-button"
-                                      IconCss="e-icons e-copy"
-                                      IsPrimary="false"
-                                      OnClick="@(() => CopyToClipboard(model.Id.ToString()))"
-                                      title="Kopírovat ID do schránky">
-                            </SfButton>
-                        </div>
-                    }
-                </Template>
-            </GridColumn>
-            <GridColumn HeaderText="Akce" Width="150" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+            <GridColumn Field=@nameof(DataModelListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="false"></GridColumn>
+            <GridColumn HeaderText="Akce" Width="195" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
                 <Template>
                     @{
                         var model = (context as DataModelListViewModel);
@@ -103,19 +88,19 @@
                                       title="Editovat">
                             </SfButton>
                             <SfButton CssClass="e-small e-round e-outline action-button"
-                                      IconCss="e-icons e-hyperlink-open"
+                                      IconCss="e-icons e-copy"
                                       IsPrimary="false"
-                                      OnClick="@(() => OpenDocumentation(model!))"
-                                      title="Dokumentace">
+                                      OnClick="@(() => CopyToClipboard(model!.Id.ToString()))"
+                                      title="Kopírovat ID do schránky">
                             </SfButton>
                             <SfButton CssClass="e-small e-round e-outline action-button"
                                       IconCss="e-icons e-chart-scatter"
                                       IsPrimary="false"
                                       OnClick="@(() => ShowModelMap(model!))"
-                                      title="Map">
+                                      title="Mapa modelu">
                             </SfButton>
                             <SfButton CssClass="e-small e-round e-outline action-button"
-                                      IconCss="e-icons e-changes"
+                                      IconCss="e-icons e-compare"
                                       IsPrimary="false"
                                       OnClick="@(() => ShowChanges(model!))"
                                       title="Porovnat se zdrojem AVAPlace">

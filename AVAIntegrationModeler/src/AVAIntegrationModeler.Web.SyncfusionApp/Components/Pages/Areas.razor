@@ -34,23 +34,7 @@
             <GridColumns>
                 <GridColumn Field=@nameof(AreaListViewModel.Code) HeaderText="Kód" Width="150" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn Field=@nameof(AreaListViewModel.Name) HeaderText="Název" Width="300" FilterSettings="@_containsFilter"></GridColumn>
-                <GridColumn Field=@nameof(AreaListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="true">
-                    <Template>
-                        @{
-                            var area = (context as AreaListViewModel);
-                            <div class="id-cell-container">
-                                <span class="id-text">@area!.Id.ToString()</span>
-                                <SfButton CssClass="e-small e-round action-button copy-icon-button"
-                                          IconCss="e-icons e-copy"
-                                          IsPrimary="false"
-                                          OnClick="@(() => CopyToClipboard(area.Id.ToString()))"
-                                          title="Kopírovat ID do schránky">
-                                </SfButton>
-                            </div>
-                        }
-                    </Template>
-                </GridColumn>
-                <GridColumn Field=@nameof(AreaListViewModel.DataModelsText) HeaderText="Datové modely" Width="250" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field=@nameof(AreaListViewModel.DataModelsText) HeaderText="Datové modely" Width="400" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn HeaderText="Akce" Width="140" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
                     <Template>
                         @{
@@ -163,12 +147,6 @@
         await Task.Delay(3000);
         _notification = null;
         await InvokeAsync(StateHasChanged);
-    }
-
-    private async Task CopyToClipboard(string text)
-    {
-        await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
-        await ShowNotification($"ID zkopírováno: {text.Substring(0, 8)}...");
     }
 
     private void EditArea(AreaListViewModel area)

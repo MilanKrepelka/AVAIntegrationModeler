@@ -53,7 +53,7 @@ else
         <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick">
             @if (_savedPositions.Count == 0)
             {
-                <Layout Type="LayoutType.RadialTree" HorizontalSpacing="100" VerticalSpacing="100" FixedNode="@VdmNodeId">
+                <Layout Type="LayoutType.RadialTree" HorizontalSpacing="40" VerticalSpacing="40" FixedNode="@VdmNodeId">
                 </Layout>
             }
         </SfDiagramComponent>
@@ -180,8 +180,8 @@ else
         var node = new Node
         {
             ID = id,
-            Width = 160,
-            Height = 55,
+            Width = 180,
+            Height = 60,
             Constraints = NodeConstraints.Default | NodeConstraints.ReadOnly,
             Style = new ShapeStyle { Fill = fillColor, StrokeColor = "White" },
             Shape = new FlowShape { Type = NodeShapes.Flow, Shape = NodeFlowShapes.Process },
@@ -190,7 +190,9 @@ else
                 new ShapeAnnotation
                 {
                     Content = label,
-                    Style = new TextStyle { Color = textColor, Fill = "transparent", TextAlign = TextAlign.Center }
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Style = new TextStyle { Color = textColor, Fill = "transparent", TextAlign = TextAlign.Center, Bold = false }
                 }
             }
         };
