@@ -77,4 +77,20 @@ public partial class Deployments : ComponentBase
       await ShowNotification($"Chyba exportu: {ex.Message}", false);
     }
   }
+
+  private async Task DeleteDeploymentAsync(DeploymentListViewModel deployment)
+  {
+    var confirmed = await JS.InvokeAsync<bool>("confirm", $"Opravdu smazat nasazení '{deployment.Code}'?");
+    if (!confirmed) return;
+
+    var result = await ApiClient.DeleteDeployment(deployment.Code, CancellationToken.None);
+    await ShowNotification(
+      result.IsSuccess
+        ? $"Nasazení '{deployment.Code}' bylo smazáno."
+        : $"Nasazení se nepodařilo smazat: {string.Join(", ", result.Errors)}",
+      result.IsSuccess);
+
+    if (result.IsSuccess)
+      await LoadItemsAsync();
+  }
 }

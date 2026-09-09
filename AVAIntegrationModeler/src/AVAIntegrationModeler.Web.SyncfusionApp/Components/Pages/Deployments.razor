@@ -67,6 +67,12 @@
                                           OnClick="@(() => ExportDeploymentAsync(model!))"
                                           title="Exportovat DataModely a záznamy">
                                 </SfButton>
+                                <SfButton CssClass="e-small e-round e-outline action-button e-danger"
+                                          IconCss="e-icons e-delete"
+                                          IsPrimary="false"
+                                          OnClick="@(() => DeleteDeploymentAsync(model!))"
+                                          title="Smazat">
+                                </SfButton>
                             </div>
                         }
                     </Template>
