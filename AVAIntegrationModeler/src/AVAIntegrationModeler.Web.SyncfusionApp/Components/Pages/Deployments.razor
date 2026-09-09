@@ -34,7 +34,8 @@
                 <GridColumn Field=@nameof(DeploymentListViewModel.Name) HeaderText="Název" Width="300" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn Field=@nameof(DeploymentListViewModel.DataModelCount) HeaderText="Datové modely" Width="150"></GridColumn>
                 <GridColumn Field=@nameof(DeploymentListViewModel.LastDeploymentDateTime) HeaderText="Poslední nasazení" Width="180" Type="ColumnType.DateTime" Format="dd.MM.yyyy HH:mm"></GridColumn>
-                <GridColumn Field=@nameof(DeploymentListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="false"></GridColumn>
+                <GridColumn Field=@nameof(DeploymentListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="1" Visible="false" AllowSearching="false"></GridColumn>
+                <GridColumn Field=@nameof(DeploymentListViewModel.IdText) HeaderText="ID Text" Width="1" Visible="false" AllowSearching="true" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn HeaderText="Akce" Width="165" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
                     <Template>
                         @{

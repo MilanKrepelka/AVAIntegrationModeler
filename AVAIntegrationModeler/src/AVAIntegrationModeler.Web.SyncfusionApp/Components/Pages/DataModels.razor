@@ -58,7 +58,7 @@
             <GridColumn Field=@nameof(DataModelListViewModel.AreaName) HeaderText="Oblast" Width="150" FilterSettings="@_containsFilter"></GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.Code) HeaderText="Kód" Width="120" FilterSettings="@_containsFilter"></GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.Name) HeaderText="Název" Width="200" FilterSettings="@_containsFilter"></GridColumn>
-            <GridColumn Field=@nameof(DataModelListViewModel.Description) HeaderText="Popis" Width="250" FilterSettings="@_containsFilter" Visible="false"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.Description) HeaderText="Popis" Width="1" FilterSettings="@_containsFilter" Visible="false" AllowSearching="true"></GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.IsAggregateRootText) HeaderText="Aggregate Root" Width="100">
                 <Template>
                     @{
@@ -75,7 +75,8 @@
                 </Template>
             </GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.FieldsText) HeaderText="Pole" Width="200" FilterSettings="@_containsFilter"></GridColumn>
-            <GridColumn Field=@nameof(DataModelListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="false"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="1" Visible="false" AllowSearching="false"></GridColumn>
+            <GridColumn Field=@nameof(DataModelListViewModel.IdText) HeaderText="ID Text" Width="1" Visible="false" AllowSearching="true" FilterSettings="@_containsFilter"></GridColumn>
             <GridColumn HeaderText="Akce" Width="195" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
                 <Template>
                     @{

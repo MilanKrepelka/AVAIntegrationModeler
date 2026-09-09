@@ -34,4 +34,9 @@ public class DeploymentListViewModel
   /// Datum a čas posledního nasazení do AVAPlace (UTC).
   /// </summary>
   public DateTime? LastDeploymentDateTime { get; init; }
+
+  /// <summary>
+  /// Textová reprezentace ID pro vyhledávání v gridu.
+  /// </summary>
+  public string IdText => Id.ToString();
 }
