@@ -190,9 +190,10 @@ else
                 new ShapeAnnotation
                 {
                     Content = label,
+                    Offset = new DiagramPoint { X = 0.5, Y = 0.5 },
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
-                    Style = new TextStyle { Color = textColor, Fill = "transparent", TextAlign = TextAlign.Center, Bold = false }
+                    Style = new TextStyle { Color = textColor, TextAlign = TextAlign.Center }
                 }
             }
         };
