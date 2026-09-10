@@ -55,8 +55,11 @@ else
     else
     {
         <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick">
-            <Layout Type="LayoutType.RadialTree" HorizontalSpacing="40" VerticalSpacing="40" FixedNode="@_areaNodeId">
-            </Layout>
+            @if (_savedPositions.Count == 0)
+            {
+                <Layout Type="LayoutType.RadialTree" HorizontalSpacing="40" VerticalSpacing="40" FixedNode="@_areaNodeId">
+                </Layout>
+            }
         </SfDiagramComponent>
     }
 }

@@ -66,11 +66,14 @@ else if (nodes == null || nodes.Count == 0)
 else
 {
     <SfDiagramComponent @key="(_maxDepth, _regenerateCount)" @ref="diagram" Connectors="@connectors" Height="700px" Nodes="@nodes" Created="OnDiagramCreated" Click="OnNodeClicked">
-        <Layout Type="LayoutType.RadialTree"
-                HorizontalSpacing="40"
-                VerticalSpacing="40"
-                FixedNode="@radialRoot">
-        </Layout>
+        @if (_savedPositions.Count == 0)
+        {
+            <Layout Type="LayoutType.RadialTree"
+                    HorizontalSpacing="40"
+                    VerticalSpacing="40"
+                    FixedNode="@radialRoot">
+            </Layout>
+        }
     </SfDiagramComponent>
 }
 
