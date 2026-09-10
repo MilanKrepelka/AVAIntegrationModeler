@@ -65,7 +65,12 @@ else if (nodes == null || nodes.Count == 0)
 }
 else
 {
-    <SfDiagramComponent @key="(_maxDepth, _regenerateCount)" @ref="diagram" Connectors="@connectors" Height="700px" Nodes="@nodes" Created="OnDiagramCreated">
+    <SfDiagramComponent @key="(_maxDepth, _regenerateCount)" @ref="diagram" Connectors="@connectors" Height="700px" Nodes="@nodes" Created="OnDiagramCreated" Click="OnNodeClicked">
+        <Layout Type="LayoutType.RadialTree"
+                HorizontalSpacing="40"
+                VerticalSpacing="40"
+                FixedNode="@radialRoot">
+        </Layout>
     </SfDiagramComponent>
 }
 
@@ -89,9 +94,6 @@ else
     // Cached data for re-rendering on level change
     List<DataModelTree> _forestToRender = new();
     int _maxDepth = 2;
-
-    // Server-side computed radial positions (fallback when no saved positions)
-    Dictionary<string, (double X, double Y)> _computedPositions = new();
 
     // Název kořenového modelu pro zobrazení v nadpisu
     string? _modelName;
@@ -127,6 +129,26 @@ else
     private void OnDiagramCreated()
     {
         diagram?.FitToPage(new FitOptions { Mode = FitMode.Both, Region = DiagramRegion.Content });
+    }
+
+    private DateTime _lastClickTime = DateTime.MinValue;
+    private string? _lastClickedNodeId;
+
+    private void OnNodeClicked(ClickEventArgs args)
+    {
+        if (args.Element is not Node node || !Guid.TryParse(node.ID, out _))
+            return;
+
+        var now = DateTime.Now;
+        if (node.ID == _lastClickedNodeId && (now - _lastClickTime).TotalMilliseconds < 500)
+        {
+            _lastClickedNodeId = null;
+            NavigationManager.NavigateTo($"/datamodeledit/Database/{node.ID}");
+            return;
+        }
+
+        _lastClickTime = now;
+        _lastClickedNodeId = node.ID;
     }
 
     private async Task OnLevelChanged(int level)
@@ -197,9 +219,6 @@ else
 
             var chosenRootId = modelId != Guid.Empty ? modelId : (_forestToRender.FirstOrDefault()?.Id ?? Guid.Empty);
             radialRoot = chosenRootId == Guid.Empty ? string.Empty : chosenRootId.ToString();
-
-            if (_savedPositions.Count == 0)
-                ComputePositions();
 
             BuildNodesAndConnectors();
         }
@@ -305,64 +324,6 @@ else
         }
     }
 
-    /// <summary>Vypočítá radiální pozice pro všechny uzly ve forestu (bez závislosti na Syncfusion layoutu).</summary>
-    private void ComputePositions()
-    {
-        _computedPositions = new();
-        if (_forestToRender.Count == 0) return;
-
-        // Spočítáme počet listů v podstromu, aby byl úhel proporcionální
-        int CountLeaves(DataModelTree node, HashSet<Guid> seen)
-        {
-            if (!seen.Add(node.Id)) return 0;
-            if (node.Children.Count == 0) return 1;
-            int sum = 0;
-            foreach (var ch in node.Children) sum += CountLeaves(ch, seen);
-            return Math.Max(sum, 1);
-        }
-
-        var root = _forestToRender[0];
-
-        void Layout(DataModelTree node, double x, double y, double startAngle, double endAngle, double radius, HashSet<string> placed)
-        {
-            var key = node.Id.ToString();
-            if (placed.Contains(key)) return;
-            placed.Add(key);
-            _computedPositions[key] = (x, y);
-
-            var children = node.Children;
-            if (children.Count == 0 || radius < 20) return;
-
-            double span = endAngle - startAngle;
-            // Celkový počet listů pro proporcionální dělení úhlu
-            int totalLeaves = 0;
-            var leafCounts = new int[children.Count];
-            for (int i = 0; i < children.Count; i++)
-            {
-                leafCounts[i] = CountLeaves(children[i], new HashSet<Guid>());
-                totalLeaves += leafCounts[i];
-            }
-            if (totalLeaves == 0) totalLeaves = 1;
-
-            double angleOffset = startAngle;
-            for (int i = 0; i < children.Count; i++)
-            {
-                double childSpan = span * leafCounts[i] / totalLeaves;
-                double angle = angleOffset + childSpan * 0.5;
-                double cx = x + radius * Math.Cos(angle);
-                double cy = y + radius * Math.Sin(angle);
-                Layout(children[i], cx, cy,
-                    angleOffset,
-                    angleOffset + childSpan,
-                    radius * 0.65,
-                    placed);
-                angleOffset += childSpan;
-            }
-        }
-
-        Layout(root, 800, 500, 0, Math.PI * 2, 500, new HashSet<string>(StringComparer.OrdinalIgnoreCase));
-    }
-
     /// <summary>Sestaví JSON se pozicemi všech uzlů celého stromu (bez omezení hloubky).</summary>
     private string BuildFullPositionsJson()
     {
@@ -380,8 +341,6 @@ else
             double x = 0, y = 0;
             if (_savedPositions.TryGetValue(id, out var saved))
                 (x, y) = (saved.OffsetX, saved.OffsetY);
-            else if (_computedPositions.TryGetValue(id, out var comp))
-                (x, y) = comp;
 
             writer.WriteStartObject();
             writer.WriteString("id", id);
@@ -506,6 +465,8 @@ else
                 new ShapeAnnotation
                 {
                     Content = label,
+                    Width = 170,
+                    Height = 55,
                     Offset = new DiagramPoint { X = 0.5, Y = 0.5 },
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
@@ -518,11 +479,6 @@ else
         {
             diagramNode.OffsetX = pos.OffsetX;
             diagramNode.OffsetY = pos.OffsetY;
-        }
-        else if (_computedPositions.TryGetValue(id, out var comp))
-        {
-            diagramNode.OffsetX = comp.X;
-            diagramNode.OffsetY = comp.Y;
         }
 
         target.Add(diagramNode);

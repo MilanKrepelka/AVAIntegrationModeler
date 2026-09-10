@@ -51,11 +51,8 @@ else
     else
     {
         <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick">
-            @if (_savedPositions.Count == 0)
-            {
-                <Layout Type="LayoutType.RadialTree" HorizontalSpacing="40" VerticalSpacing="40" FixedNode="@VdmNodeId">
-                </Layout>
-            }
+            <Layout Type="LayoutType.RadialTree" HorizontalSpacing="40" VerticalSpacing="40" FixedNode="@VdmNodeId">
+            </Layout>
         </SfDiagramComponent>
     }
 }
@@ -190,6 +187,8 @@ else
                 new ShapeAnnotation
                 {
                     Content = label,
+                    Width = 170,
+                    Height = 55,
                     Offset = new DiagramPoint { X = 0.5, Y = 0.5 },
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,

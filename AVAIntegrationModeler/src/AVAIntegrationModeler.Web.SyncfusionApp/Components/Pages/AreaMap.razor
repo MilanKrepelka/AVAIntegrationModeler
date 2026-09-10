@@ -48,13 +48,17 @@ else
         </div>
     }
 
-    <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick">
-        @if (_savedPositions.Count == 0)
-        {
-            <Layout Type="LayoutType.RadialTree" HorizontalSpacing="40" VerticalSpacing="40" FixedNode="@areaId.ToString()">
+    @if (nodes.Count == 0)
+    {
+        <p>Žádné uzly k zobrazení.</p>
+    }
+    else
+    {
+        <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick">
+            <Layout Type="LayoutType.RadialTree" HorizontalSpacing="40" VerticalSpacing="40" FixedNode="@_areaNodeId">
             </Layout>
-        }
-    </SfDiagramComponent>
+        </SfDiagramComponent>
+    }
 }
 
 @code {
@@ -72,6 +76,8 @@ else
     string? _saveMessage;
     bool _saveSuccess;
     bool _regenerated;
+
+    string _areaNodeId = string.Empty;
 
     /// <summary>Pozice uzlů načtené z uloženého diagramu: nodeId → (offsetX, offsetY).</summary>
     Dictionary<string, (double OffsetX, double OffsetY)> _savedPositions = new();
@@ -163,6 +169,7 @@ else
     private void BuildDiagram()
     {
         var areaNodeId = areaId.ToString();
+        _areaNodeId = areaNodeId;
         var areaLabel = string.IsNullOrWhiteSpace(_area!.Name) ? _area.Code : _area.Name;
 
         var newNodes = new DiagramObjectCollection<Node>();
@@ -205,6 +212,8 @@ else
                 new ShapeAnnotation
                 {
                     Content = label,
+                    Width = 170,
+                    Height = 55,
                     Offset = new DiagramPoint { X = 0.5, Y = 0.5 },
                     HorizontalAlignment = HorizontalAlignment.Center,
                     VerticalAlignment = VerticalAlignment.Center,
