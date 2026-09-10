@@ -5,7 +5,7 @@
 @using Syncfusion.Blazor.Inputs
 @using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List
 
-<PageTitle>Oblasti</PageTitle>
+<PageTitle>@Localization.SharedResources.Areas_Title</PageTitle>
 
 <div id="ControlRegion">
     <div id="GridContainer">
@@ -23,7 +23,7 @@
 
             <Syncfusion.Blazor.Navigations.SfToolbar>
                 <Syncfusion.Blazor.Navigations.ToolbarItems>
-                    <Syncfusion.Blazor.Navigations.ToolbarItem Text="Přidat oblast" PrefixIcon="e-icons e-add" Id="AddNew" OnClick="AddNew"></Syncfusion.Blazor.Navigations.ToolbarItem>
+                    <Syncfusion.Blazor.Navigations.ToolbarItem Text="@Localization.SharedResources.Areas_AddNew" PrefixIcon="e-icons e-add" Id="AddNew" OnClick="AddNew"></Syncfusion.Blazor.Navigations.ToolbarItem>
                 </Syncfusion.Blazor.Navigations.ToolbarItems>
             </Syncfusion.Blazor.Navigations.SfToolbar>
 
@@ -32,10 +32,10 @@
             <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
 
             <GridColumns>
-                <GridColumn Field=@nameof(AreaListViewModel.Code) HeaderText="Kód" Width="150" FilterSettings="@_containsFilter"></GridColumn>
-                <GridColumn Field=@nameof(AreaListViewModel.Name) HeaderText="Název" Width="300" FilterSettings="@_containsFilter"></GridColumn>
-                <GridColumn Field=@nameof(AreaListViewModel.DataModelsText) HeaderText="Datové modely" Width="400" FilterSettings="@_containsFilter"></GridColumn>
-                <GridColumn HeaderText="Akce" Width="140" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+                <GridColumn Field=@nameof(AreaListViewModel.Code) HeaderText="@Localization.SharedResources.Common_Code" Width="150" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field=@nameof(AreaListViewModel.Name) HeaderText="@Localization.SharedResources.Common_Name" Width="300" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field=@nameof(AreaListViewModel.DataModelsText) HeaderText="@Localization.SharedResources.Areas_DataModelsColumn" Width="400" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn HeaderText="@Localization.SharedResources.Common_Actions" Width="140" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
                     <Template>
                         @{
                             var model = (context as AreaListViewModel);
@@ -44,19 +44,19 @@
                                           IconCss="e-icons e-edit"
                                           IsPrimary="false"
                                           OnClick="@(() => EditArea(model!))"
-                                          title="Editovat">
+                                          title="@Localization.SharedResources.Common_Edit">
                                 </SfButton>
                                 <SfButton CssClass="e-small e-round e-outline action-button"
                                           IconCss="e-icons e-chart-scatter"
                                           IsPrimary="false"
                                           OnClick="@(() => NavigationManager.NavigateTo($"/areamap/{model!.Id}"))"
-                                          title="Zobrazit mapu">
+                                          title="@Localization.SharedResources.Common_ShowMap">
                                 </SfButton>
                                 <SfButton CssClass="e-small e-round e-outline action-button e-danger"
                                           IconCss="e-icons e-delete"
                                           IsPrimary="false"
                                           OnClick="@(() => DeleteAreaAsync(model!))"
-                                          title="Smazat">
+                                          title="@Localization.SharedResources.Common_Delete">
                                 </SfButton>
                             </div>
                         }
@@ -71,12 +71,12 @@
                         <div class="detail-form">
                             @if (area!.DataModels.Count == 0)
                             {
-                                <p style="color:var(--bs-secondary,#6c757d);font-style:italic">Žádné datové modely přiřazeny k této oblasti.</p>
+                                <p style="color:var(--bs-secondary,#6c757d);font-style:italic">@Localization.SharedResources.Areas_NoDataModels</p>
                             }
                             else
                             {
                                 <div class="fields-section">
-                                    <h5>Datové modely (@area.DataModels.Count)</h5>
+                                    <h5>@string.Format(Localization.SharedResources.Areas_DataModelsCount, area.DataModels.Count)</h5>
                                     <div class="fields-grid">
                                         @foreach (var model in area.DataModels.OrderBy(m => m.Code))
                                         {
@@ -91,17 +91,17 @@
                                                 @if (!string.IsNullOrEmpty(model.Name))
                                                 {
                                                     <div class="field-detail">
-                                                        <span class="field-label">Název:</span> @model.Name
+                                                        <span class="field-label">@Localization.SharedResources.Common_Name:</span> @model.Name
                                                     </div>
                                                 }
                                                 @if (!string.IsNullOrEmpty(model.Description))
                                                 {
                                                     <div class="field-detail">
-                                                        <span class="field-label">Popis:</span> @model.Description
+                                                        <span class="field-label">@Localization.SharedResources.Common_Description:</span> @model.Description
                                                     </div>
                                                 }
                                                 <div class="field-flags">
-                                                    <span class="flag-badge">@model.Fields.Count polí</span>
+                                                    <span class="flag-badge">@string.Format(Localization.SharedResources.Areas_FieldsCount, model.Fields.Count)</span>
                                                 </div>
                                             </div>
                                         }

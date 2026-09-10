@@ -11,7 +11,7 @@
     <ValidationSummary />
 
     <div class="container">
-        <h2>@(IsCreate ? "Nový záznam" : "Upravit záznam")</h2>
+        <h2>@(IsCreate ? Localization.SharedResources.DataModelRecords_NewTitle : Localization.SharedResources.DataModelRecords_EditTitle)</h2>
 
         <div class="row" style="margin-bottom:16px">
             <div class="col-12 col-md-8">
@@ -25,7 +25,7 @@
 
         @if (_dataModel is not null && _dataModel.Fields.Any())
         {
-            <h4 style="margin-top:16px">Pole záznamu</h4>
+            <h4 style="margin-top:16px">@Localization.SharedResources.DataModelRecords_RecordFields</h4>
 
             @foreach (var field in _dataModel.Fields)
             {
@@ -45,7 +45,7 @@
                     {
                         <div class="col-12 col-md-6" style="margin-top:4px">
                             <SfTextBox CssClass="w-100"
-                                       Placeholder="Česky"
+                                       Placeholder="@Localization.SharedResources.Common_Czech"
                                        FloatLabelType="FloatLabelType.Always"
                                        Value="@fv.CzechValue"
                                        ValueChanged="@((string v) => fv.CzechValue = v)">
@@ -76,11 +76,11 @@
         }
         else if (IsLoading)
         {
-            <p><em>Načítám schéma modelu...</em></p>
+            <p><em>@Localization.SharedResources.DataModelRecords_LoadingSchema</em></p>
         }
         else
         {
-            <p class="text-muted">Tento datový model nemá definovaná žádná pole.</p>
+            <p class="text-muted">@Localization.SharedResources.DataModelRecords_NoFields</p>
         }
 
         @if (_saveMessage is not null)
@@ -92,9 +92,9 @@
 
         <div style="margin-top:16px; display:flex; gap:8px">
             <SfButton CssClass="e-primary" HtmlAttributes="@(new Dictionary<string, object> { { "type", "submit" } })">
-                Uložit
+                @Localization.SharedResources.Common_Save
             </SfButton>
-            <SfButton CssClass="e-outline" Type="Button" OnClick="GoBack">Zpět</SfButton>
+            <SfButton CssClass="e-outline" Type="Button" OnClick="GoBack">@Localization.SharedResources.Common_Back</SfButton>
         </div>
     </div>
 </EditForm>

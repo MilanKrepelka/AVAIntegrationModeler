@@ -1,5 +1,6 @@
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Localization;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Web.SyncfusionApp.Mapping;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
@@ -87,7 +88,7 @@ public partial class DataModelRecords : ComponentBase
 
   private async Task DeleteRecordAsync(DataModelRecordListViewModel record)
   {
-    var confirmed = await JS.InvokeAsync<bool>("confirm", $"Opravdu smazat záznam '{record.ExternalId}'?");
+    var confirmed = await JS.InvokeAsync<bool>("confirm", string.Format(SharedResources.DataModelRecords_DeleteConfirm, record.ExternalId));
     if (!confirmed) return;
 
     await _apiClient.DeleteDataModelRecord(Datasource, record.Id, CancellationToken.None);

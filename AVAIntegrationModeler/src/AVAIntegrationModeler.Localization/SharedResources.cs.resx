@@ -168,4 +168,478 @@
   <data name="Identifier" xml:space="preserve">
     <value>Identifikátor</value>
   </data>
+  <data name="Common.Code" xml:space="preserve">
+    <value>Kód</value>
+  </data>
+  <data name="Common.Name" xml:space="preserve">
+    <value>Název</value>
+  </data>
+  <data name="Common.Description" xml:space="preserve">
+    <value>Popis</value>
+  </data>
+  <data name="Common.Actions" xml:space="preserve">
+    <value>Akce</value>
+  </data>
+  <data name="Common.Edit" xml:space="preserve">
+    <value>Editovat</value>
+  </data>
+  <data name="Common.Delete" xml:space="preserve">
+    <value>Smazat</value>
+  </data>
+  <data name="Common.Save" xml:space="preserve">
+    <value>Uložit</value>
+  </data>
+  <data name="Common.Back" xml:space="preserve">
+    <value>Zpět</value>
+  </data>
+  <data name="Common.BackToList" xml:space="preserve">
+    <value>← Zpět na seznam</value>
+  </data>
+  <data name="Common.Copy" xml:space="preserve">
+    <value>Kopírovat</value>
+  </data>
+  <data name="Common.CopyIdToClipboard" xml:space="preserve">
+    <value>Kopírovat ID do schránky</value>
+  </data>
+  <data name="Common.IdCopied" xml:space="preserve">
+    <value>ID zkopírováno: {0}...</value>
+  </data>
+  <data name="Common.ShowMap" xml:space="preserve">
+    <value>Zobrazit mapu</value>
+  </data>
+  <data name="Common.Loading" xml:space="preserve">
+    <value>Načítám...</value>
+  </data>
+  <data name="Common.LoadingData" xml:space="preserve">
+    <value>Načítám data...</value>
+  </data>
+  <data name="Common.Refresh" xml:space="preserve">
+    <value>Obnovit</value>
+  </data>
+  <data name="Common.Add" xml:space="preserve">
+    <value>Přidat</value>
+  </data>
+  <data name="Common.Remove" xml:space="preserve">
+    <value>Odebrat</value>
+  </data>
+  <data name="Common.Yes" xml:space="preserve">
+    <value>Ano</value>
+  </data>
+  <data name="Common.No" xml:space="preserve">
+    <value>Ne</value>
+  </data>
+  <data name="Common.Czech" xml:space="preserve">
+    <value>Česky</value>
+  </data>
+  <data name="Common.English" xml:space="preserve">
+    <value>Anglicky</value>
+  </data>
+  <data name="Common.NameCzech" xml:space="preserve">
+    <value>Název (Česky)</value>
+  </data>
+  <data name="Common.NameEnglish" xml:space="preserve">
+    <value>Název (English)</value>
+  </data>
+  <data name="Common.DescriptionCzech" xml:space="preserve">
+    <value>Popis (Česky)</value>
+  </data>
+  <data name="Common.DescriptionEnglish" xml:space="preserve">
+    <value>Popis (English)</value>
+  </data>
+  <data name="Common.Database" xml:space="preserve">
+    <value>Databáze</value>
+  </data>
+  <data name="Common.Area" xml:space="preserve">
+    <value>Oblast</value>
+  </data>
+  <data name="Common.TryAgain" xml:space="preserve">
+    <value>Zkusit znovu</value>
+  </data>
+  <data name="Common.Status" xml:space="preserve">
+    <value>Stav</value>
+  </data>
+  <data name="Common.UnexpectedError" xml:space="preserve">
+    <value>Došlo k neočekávané chybě.</value>
+  </data>
+  <data name="NavMenu.Areas" xml:space="preserve">
+    <value>Oblasti</value>
+  </data>
+  <data name="NavMenu.AreaMap" xml:space="preserve">
+    <value>Mapa oblastí</value>
+  </data>
+  <data name="NavMenu.Deployments" xml:space="preserve">
+    <value>Nasazení</value>
+  </data>
+  <data name="NavMenu.AIAssistant" xml:space="preserve">
+    <value>AI Asistent</value>
+  </data>
+  <data name="NavMenu.Rules" xml:space="preserve">
+    <value>Pravidla</value>
+  </data>
+  <data name="Areas.Title" xml:space="preserve">
+    <value>Oblasti</value>
+  </data>
+  <data name="Areas.AddNew" xml:space="preserve">
+    <value>Přidat oblast</value>
+  </data>
+  <data name="Areas.DataModelsColumn" xml:space="preserve">
+    <value>Datové modely</value>
+  </data>
+  <data name="Areas.NoDataModels" xml:space="preserve">
+    <value>Žádné datové modely přiřazeny k této oblasti.</value>
+  </data>
+  <data name="Areas.DataModelsCount" xml:space="preserve">
+    <value>Datové modely ({0})</value>
+  </data>
+  <data name="Areas.FieldsCount" xml:space="preserve">
+    <value>{0} polí</value>
+  </data>
+  <data name="Areas.NewTitle" xml:space="preserve">
+    <value>Nová oblast</value>
+  </data>
+  <data name="Areas.EditTitle" xml:space="preserve">
+    <value>Upravit oblast</value>
+  </data>
+  <data name="Areas.CodePlaceholder" xml:space="preserve">
+    <value>Kód oblasti</value>
+  </data>
+  <data name="Areas.NamePlaceholder" xml:space="preserve">
+    <value>Název oblasti</value>
+  </data>
+  <data name="Areas.DeleteConfirm" xml:space="preserve">
+    <value>Opravdu smazat oblast '{0}'?</value>
+  </data>
+  <data name="Areas.DeletedSuccess" xml:space="preserve">
+    <value>Oblast '{0}' byla smazána.</value>
+  </data>
+  <data name="Areas.DeletedError" xml:space="preserve">
+    <value>Oblast se nepodařilo smazat: {0}</value>
+  </data>
+  <data name="Areas.SavedSuccess" xml:space="preserve">
+    <value>Oblast {0} byla uložena.</value>
+  </data>
+  <data name="Areas.CreatedSuccess" xml:space="preserve">
+    <value>Oblast {0} byla vytvořena.</value>
+  </data>
+  <data name="Scenarios.Title" xml:space="preserve">
+    <value>Integrační scénáře</value>
+  </data>
+  <data name="Scenarios.AddNew" xml:space="preserve">
+    <value>Přidat scénář</value>
+  </data>
+  <data name="Scenarios.InputFeature" xml:space="preserve">
+    <value>Vstupní feature</value>
+  </data>
+  <data name="Scenarios.OutputFeature" xml:space="preserve">
+    <value>Výstupní feature</value>
+  </data>
+  <data name="Scenarios.EditTitle" xml:space="preserve">
+    <value>Upravit scénář</value>
+  </data>
+  <data name="Scenarios.CodePlaceholder" xml:space="preserve">
+    <value>Kód scénáře</value>
+  </data>
+  <data name="Scenarios.LinkedFeatures" xml:space="preserve">
+    <value>Propojené feature</value>
+  </data>
+  <data name="Scenarios.SelectInputFeature" xml:space="preserve">
+    <value>Vyberte vstupní feature</value>
+  </data>
+  <data name="Scenarios.SelectOutputFeature" xml:space="preserve">
+    <value>Vyberte výstupní feature</value>
+  </data>
+  <data name="Scenarios.SavedSuccess" xml:space="preserve">
+    <value>Integrační scénář {0} byl v pořádku {1}.</value>
+  </data>
+  <data name="Scenarios.Created" xml:space="preserve">
+    <value>vytvořen</value>
+  </data>
+  <data name="Scenarios.Saved" xml:space="preserve">
+    <value>uložen</value>
+  </data>
+  <data name="DataModels.TitleDatabase" xml:space="preserve">
+    <value>Data Modely — Databáze</value>
+  </data>
+  <data name="DataModels.AddNew" xml:space="preserve">
+    <value>Přidat datový model</value>
+  </data>
+  <data name="DataModels.DeleteAll" xml:space="preserve">
+    <value>Smazat všechny modely</value>
+  </data>
+  <data name="DataModels.AggregateRootColumn" xml:space="preserve">
+    <value>Agregátní kořen</value>
+  </data>
+  <data name="DataModels.FieldsColumn" xml:space="preserve">
+    <value>Pole</value>
+  </data>
+  <data name="DataModels.ModelMap" xml:space="preserve">
+    <value>Mapa modelu</value>
+  </data>
+  <data name="DataModels.CompareWithAvaPlace" xml:space="preserve">
+    <value>Porovnat se zdrojem AVAPlace</value>
+  </data>
+  <data name="DataModels.FieldsSection" xml:space="preserve">
+    <value>Pole datového modelu ({0})</value>
+  </data>
+  <data name="DataModels.NewTitle" xml:space="preserve">
+    <value>Nový datový model</value>
+  </data>
+  <data name="DataModels.EditTitle" xml:space="preserve">
+    <value>Upravit datový model</value>
+  </data>
+  <data name="DataModels.AreaOptional" xml:space="preserve">
+    <value>Oblast (nepovinná)</value>
+  </data>
+  <data name="DataModels.AggregateRootLabel" xml:space="preserve">
+    <value>Je agregátním kořenem (Aggregate Root)</value>
+  </data>
+  <data name="DataModels.AggregateRootDetail" xml:space="preserve">
+    <value>Agregátní kořen</value>
+  </data>
+  <data name="DataModels.TitleAvaPlace" xml:space="preserve">
+    <value>Datové modely — AVAPlace</value>
+  </data>
+  <data name="DataModels.ImportAll" xml:space="preserve">
+    <value>Importovat vše do databáze</value>
+  </data>
+  <data name="DataModels.ImportToDatabase" xml:space="preserve">
+    <value>Importovat do lokální databáze</value>
+  </data>
+  <data name="DataModels.Documentation" xml:space="preserve">
+    <value>Dokumentace</value>
+  </data>
+  <data name="DataModels.StatusSame" xml:space="preserve">
+    <value>Shodné</value>
+  </data>
+  <data name="DataModels.StatusDifferent" xml:space="preserve">
+    <value>Liší se</value>
+  </data>
+  <data name="DataModels.StatusOnlyInDatabase" xml:space="preserve">
+    <value>Pouze v Database</value>
+  </data>
+  <data name="DataModels.StatusOnlyInAvaPlace" xml:space="preserve">
+    <value>Pouze v AVAPlace</value>
+  </data>
+  <data name="DataModels.StatusOnlyDb" xml:space="preserve">
+    <value>Pouze DB</value>
+  </data>
+  <data name="DataModels.StatusOnlyAva" xml:space="preserve">
+    <value>Pouze AVAPlace</value>
+  </data>
+  <data name="DataModels.CompareDbVsAvaPlace" xml:space="preserve">
+    <value>Porovnat DB vs AVAPlace</value>
+  </data>
+  <data name="DataModelChanges.Title" xml:space="preserve">
+    <value>Změny DataModelu</value>
+  </data>
+  <data name="DataModelChanges.LoadingComparison" xml:space="preserve">
+    <value>Načítám porovnání...</value>
+  </data>
+  <data name="DataModelChanges.ModelProperties" xml:space="preserve">
+    <value>Vlastnosti modelu</value>
+  </data>
+  <data name="DataModelChanges.AllPropertiesSame" xml:space="preserve">
+    <value>✓ Všechny vlastnosti modelu jsou shodné.</value>
+  </data>
+  <data name="DataModelChanges.PropertyColumn" xml:space="preserve">
+    <value>Vlastnost</value>
+  </data>
+  <data name="DataModelChanges.ModelFields" xml:space="preserve">
+    <value>Pole datového modelu</value>
+  </data>
+  <data name="DataModelChanges.NoFields" xml:space="preserve">
+    <value>Žádná pole.</value>
+  </data>
+  <data name="DataModelChanges.SameFieldsHidden" xml:space="preserve">
+    <value>{0} shodných polí je skrytých.</value>
+  </data>
+  <data name="DataModelChanges.ShowSameFields" xml:space="preserve">
+    <value>Zobrazit shodná pole</value>
+  </data>
+  <data name="DataModelChanges.HideSameFields" xml:space="preserve">
+    <value>Skrýt shodná pole</value>
+  </data>
+  <data name="DataModelChanges.TotalCount" xml:space="preserve">
+    <value>celkem</value>
+  </data>
+  <data name="DataModelChanges.DifferentCount" xml:space="preserve">
+    <value>liší se</value>
+  </data>
+  <data name="Deployments.Title" xml:space="preserve">
+    <value>Nasazení</value>
+  </data>
+  <data name="Deployments.AddNew" xml:space="preserve">
+    <value>Přidat nasazení</value>
+  </data>
+  <data name="Deployments.LastDeployment" xml:space="preserve">
+    <value>Poslední nasazení</value>
+  </data>
+  <data name="Deployments.ExportTitle" xml:space="preserve">
+    <value>Exportovat DataModely a záznamy</value>
+  </data>
+  <data name="Deployments.NewTitle" xml:space="preserve">
+    <value>Nové nasazení</value>
+  </data>
+  <data name="Deployments.EditTitle" xml:space="preserve">
+    <value>Upravit nasazení</value>
+  </data>
+  <data name="Deployments.CodePlaceholder" xml:space="preserve">
+    <value>Kód nasazení</value>
+  </data>
+  <data name="Deployments.NamePlaceholder" xml:space="preserve">
+    <value>Název nasazení</value>
+  </data>
+  <data name="Deployments.TicketPlaceholder" xml:space="preserve">
+    <value>Ticket URL (volitelné)</value>
+  </data>
+  <data name="Deployments.DescriptionPlaceholder" xml:space="preserve">
+    <value>Popis nasazení (volitelné)</value>
+  </data>
+  <data name="Deployments.LastSave" xml:space="preserve">
+    <value>Poslední uložení</value>
+  </data>
+  <data name="Deployments.DataModelsInDeployment" xml:space="preserve">
+    <value>Datové modely v nasazení</value>
+  </data>
+  <data name="Deployments.NoDataModels" xml:space="preserve">
+    <value>Zatím nejsou přidány žádné datové modely.</value>
+  </data>
+  <data name="Deployments.SelectDataModel" xml:space="preserve">
+    <value>Vyberte datový model</value>
+  </data>
+  <data name="Deployments.SearchModel" xml:space="preserve">
+    <value>Hledat model...</value>
+  </data>
+  <data name="Deployments.ChangesSummaryTitle" xml:space="preserve">
+    <value>Přehled změn — DB vs AVAPlace</value>
+  </data>
+  <data name="Deployments.LoadChangesSummary" xml:space="preserve">
+    <value>Načíst přehled změn</value>
+  </data>
+  <data name="Deployments.UploadToAvaPlace" xml:space="preserve">
+    <value>Nahrát do AVAPlace</value>
+  </data>
+  <data name="Deployments.Uploading" xml:space="preserve">
+    <value>Nahrávám...</value>
+  </data>
+  <data name="Deployments.ExportDataModels" xml:space="preserve">
+    <value>Export datových modelů</value>
+  </data>
+  <data name="Deployments.StatusSameLabel" xml:space="preserve">
+    <value>✓ Shodné: {0}</value>
+  </data>
+  <data name="Deployments.StatusDifferentLabel" xml:space="preserve">
+    <value>⚡ Liší se: {0}</value>
+  </data>
+  <data name="Deployments.StatusOnlyDbLabel" xml:space="preserve">
+    <value>→ Pouze DB: {0}</value>
+  </data>
+  <data name="Deployments.StatusOnlyAvaLabel" xml:space="preserve">
+    <value>← Pouze AVAPlace: {0}</value>
+  </data>
+  <data name="Deployments.StatusSame" xml:space="preserve">
+    <value>✓ Shodný</value>
+  </data>
+  <data name="Deployments.StatusDifferent" xml:space="preserve">
+    <value>⚡ Liší se</value>
+  </data>
+  <data name="Deployments.StatusOnlyDb" xml:space="preserve">
+    <value>→ Pouze DB</value>
+  </data>
+  <data name="Deployments.StatusOnlyAvaPlace" xml:space="preserve">
+    <value>← Pouze AVAPlace</value>
+  </data>
+  <data name="Deployments.StatusColumn" xml:space="preserve">
+    <value>Stav</value>
+  </data>
+  <data name="Deployments.FieldsDelta" xml:space="preserve">
+    <value>Pole Δ</value>
+  </data>
+  <data name="Deployments.FieldsDeltaTitle" xml:space="preserve">
+    <value>Liší se / Pouze DB / Pouze AVAPlace</value>
+  </data>
+  <data name="Deployments.DetailChanges" xml:space="preserve">
+    <value>Detail změn</value>
+  </data>
+  <data name="Deployments.Saved" xml:space="preserve">
+    <value>Nasazení {0} bylo uloženo.</value>
+  </data>
+  <data name="Deployments.Created" xml:space="preserve">
+    <value>Nasazení {0} bylo vytvořeno.</value>
+  </data>
+  <data name="DataModelRecords.Title" xml:space="preserve">
+    <value>Záznamy datových modelů</value>
+  </data>
+  <data name="DataModelRecords.ModelLabel" xml:space="preserve">
+    <value>Model:</value>
+  </data>
+  <data name="DataModelRecords.SelectModel" xml:space="preserve">
+    <value>-- Vyberte model --</value>
+  </data>
+  <data name="DataModelRecords.AllModels" xml:space="preserve">
+    <value>-- Všechny modely --</value>
+  </data>
+  <data name="DataModelRecords.AddRecord" xml:space="preserve">
+    <value>Přidat záznam</value>
+  </data>
+  <data name="DataModelRecords.AvaPlaceReadOnly" xml:space="preserve">
+    <value>Zobrazení záznamů z AVAPlace — pouze pro čtení.</value>
+  </data>
+  <data name="DataModelRecords.SelectModelForAvaPlace" xml:space="preserve">
+    <value>Pro zobrazení záznamů z AVAPlace vyberte datový model.</value>
+  </data>
+  <data name="DataModelRecords.FieldValues" xml:space="preserve">
+    <value>Hodnoty polí</value>
+  </data>
+  <data name="DataModelRecords.Localized" xml:space="preserve">
+    <value>Lokalizované</value>
+  </data>
+  <data name="DataModelRecords.NewTitle" xml:space="preserve">
+    <value>Nový záznam</value>
+  </data>
+  <data name="DataModelRecords.EditTitle" xml:space="preserve">
+    <value>Upravit záznam</value>
+  </data>
+  <data name="DataModelRecords.RecordFields" xml:space="preserve">
+    <value>Pole záznamu</value>
+  </data>
+  <data name="DataModelRecords.LoadingSchema" xml:space="preserve">
+    <value>Načítám schéma modelu...</value>
+  </data>
+  <data name="DataModelRecords.NoFields" xml:space="preserve">
+    <value>Tento datový model nemá definovaná žádná pole.</value>
+  </data>
+  <data name="DataModelRecords.Saved" xml:space="preserve">
+    <value>Záznam byl úspěšně uložen.</value>
+  </data>
+  <data name="DataModelRecords.Created" xml:space="preserve">
+    <value>Záznam byl úspěšně vytvořen.</value>
+  </data>
+  <data name="DataModelRecords.DeleteConfirm" xml:space="preserve">
+    <value>Opravdu smazat záznam '{0}'?</value>
+  </data>
+  <data name="Features.Title" xml:space="preserve">
+    <value>Integrační Features</value>
+  </data>
+  <data name="Features.IncludedFeaturesColumn" xml:space="preserve">
+    <value>Zahrnuté Features</value>
+  </data>
+  <data name="Features.IncludedModelsColumn" xml:space="preserve">
+    <value>Zahrnuté Modely</value>
+  </data>
+  <data name="Features.IncludedFeatures" xml:space="preserve">
+    <value>Zahrnuté Features:</value>
+  </data>
+  <data name="Features.IncludedDataModels" xml:space="preserve">
+    <value>Zahrnuté Data Modely:</value>
+  </data>
+  <data name="Features.CodePlaceholder" xml:space="preserve">
+    <value>Kód feature</value>
+  </data>
+  <data name="Features.NameCzechPlaceholder" xml:space="preserve">
+    <value>Český název</value>
+  </data>
+  <data name="Features.DescriptionCzechPlaceholder" xml:space="preserve">
+    <value>Český popis</value>
+  </data>
 </root>

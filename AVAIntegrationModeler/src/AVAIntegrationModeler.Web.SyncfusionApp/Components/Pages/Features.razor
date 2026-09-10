@@ -6,11 +6,11 @@
 @using Syncfusion.Blazor.DropDowns
 @using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 
-<PageTitle>Integra�n� Features</PageTitle>
+<PageTitle>@Localization.SharedResources.Features_Title</PageTitle>
 
 <div id="ControlRegion">
-    <SfGrid ID="Grid" 
-        DataSource="@FeaturesList" 
+    <SfGrid ID="Grid"
+        DataSource="@FeaturesList"
         @ref="Grid"
         EnableAltRow= "false"
         AllowPaging="true"
@@ -28,64 +28,64 @@
         <GridEvents OnToolbarClick="ToolbarClick" TValue="FeatureListViewModel"></GridEvents>
         <GridColumns>
             <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
-            <GridColumn Field=@nameof(FeatureListViewModel.Code) HeaderText="K�d" Width="120" FilterSettings="@_containsFilter"></GridColumn>
-            <GridColumn Field="Name.EnglishValue" HeaderText="N�zev" Width="200" FilterSettings="@_containsFilter"></GridColumn>
-            <GridColumn Field="Description.EnglishValue" HeaderText="Popis" Width="250" FilterSettings="@_containsFilter"></GridColumn>
-            <GridColumn Field=@nameof(FeatureListViewModel.IncludedFeaturesText) HeaderText="Zahrnut� Features" Width="200" FilterSettings="@_containsFilter"></GridColumn>
-            <GridColumn Field=@nameof(FeatureListViewModel.IncludedModelsText) HeaderText="Zahrnut� Modely" Width="200" FilterSettings="@_containsFilter"></GridColumn>
+            <GridColumn Field=@nameof(FeatureListViewModel.Code) HeaderText="@Localization.SharedResources.Common_Code" Width="120" FilterSettings="@_containsFilter"></GridColumn>
+            <GridColumn Field="Name.EnglishValue" HeaderText="@Localization.SharedResources.Common_Name" Width="200" FilterSettings="@_containsFilter"></GridColumn>
+            <GridColumn Field="Description.EnglishValue" HeaderText="@Localization.SharedResources.Common_Description" Width="250" FilterSettings="@_containsFilter"></GridColumn>
+            <GridColumn Field=@nameof(FeatureListViewModel.IncludedFeaturesText) HeaderText="@Localization.SharedResources.Features_IncludedFeaturesColumn" Width="200" FilterSettings="@_containsFilter"></GridColumn>
+            <GridColumn Field=@nameof(FeatureListViewModel.IncludedModelsText) HeaderText="@Localization.SharedResources.Features_IncludedModelsColumn" Width="200" FilterSettings="@_containsFilter"></GridColumn>
             <GridColumn Field=@nameof(FeatureListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="250" Visible="false"></GridColumn>
         </GridColumns>
-        
+
         <GridTemplates>
             <DetailTemplate>
                 @{
                     var feature = (context as FeatureListViewModel);
                     <div class="detail-form">
                         <h4>@feature!.Code</h4>
-                        
+
                         <div class="form-row">
                             <div class="form-group">
-                                <label>K�d:</label>
-                                <SfTextBox Value="@feature.Code" Placeholder="K�d feature"></SfTextBox>
+                                <label>@Localization.SharedResources.Common_Code:</label>
+                                <SfTextBox Value="@feature.Code" Placeholder="@Localization.SharedResources.Features_CodePlaceholder"></SfTextBox>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label>ID:</label>
                                 <SfTextBox Value="@feature.Id.ToString()" Readonly="true"></SfTextBox>
                             </div>
                         </div>
-                        
+
                         <div class="form-row">
                             <div class="form-group">
-                                <label>N�zev (�esky):</label>
-                                <SfTextBox Value="@feature.Name.CzechValue" Placeholder="�esk� n�zev"></SfTextBox>
+                                <label>@Localization.SharedResources.Common_NameCzech:</label>
+                                <SfTextBox Value="@feature.Name.CzechValue" Placeholder="@Localization.SharedResources.Features_NameCzechPlaceholder"></SfTextBox>
                             </div>
-                            
+
                             <div class="form-group">
-                                <label>N�zev (English):</label>
+                                <label>@Localization.SharedResources.Common_NameEnglish:</label>
                                 <SfTextBox Value="@feature.Name.EnglishValue" Placeholder="English name"></SfTextBox>
                             </div>
                         </div>
-                        
+
                         <div class="form-row">
                             <div class="form-group full-width">
-                                <label>Popis (�esky):</label>
-                                <SfTextBox @bind-Value="feature.Description.CzechValue" Placeholder="�esk� popis" Multiline="true"></SfTextBox>
+                                <label>@Localization.SharedResources.Common_DescriptionCzech:</label>
+                                <SfTextBox @bind-Value="feature.Description.CzechValue" Placeholder="@Localization.SharedResources.Features_DescriptionCzechPlaceholder" Multiline="true"></SfTextBox>
                             </div>
                         </div>
-                        
+
                         <div class="form-row">
                             <div class="form-group full-width">
-                                <label>Popis (English):</label>
+                                <label>@Localization.SharedResources.Common_DescriptionEnglish:</label>
                                 <SfTextBox @bind-Value="feature.Description.EnglishValue" Placeholder="English description" Multiline="true"></SfTextBox>
                             </div>
                         </div>
-                        
+
                         @if (feature.IncludedFeatures?.Any() == true)
                         {
                             <div class="form-row">
                                 <div class="form-group full-width">
-                                    <label>Zahrnut� Features:</label>
+                                    <label>@Localization.SharedResources.Features_IncludedFeatures:</label>
                                     <div class="included-items">
                                         @foreach (var includedFeature in feature.IncludedFeatures)
                                         {
@@ -95,12 +95,12 @@
                                 </div>
                             </div>
                         }
-                        
+
                         @if (feature.IncludedModels?.Any() == true)
                         {
                             <div class="form-row">
                                 <div class="form-group full-width">
-                                    <label>Zahrnut� Data Modely:</label>
+                                    <label>@Localization.SharedResources.Features_IncludedDataModels:</label>
                                     <div class="included-items">
                                         @foreach (var includedModel in feature.IncludedModels)
                                         {

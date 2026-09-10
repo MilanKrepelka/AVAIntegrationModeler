@@ -9,14 +9,14 @@
 @using AVAIntegrationModeler.Contracts
 @using AVAIntegrationModeler.Contracts.DTO
 
-<PageTitle>Záznamy datových modelů</PageTitle>
+<PageTitle>@Localization.SharedResources.DataModelRecords_Title</PageTitle>
 
 <div id="ControlRegion">
     <div style="display:flex; align-items:center; gap:16px; margin-bottom:8px; flex-wrap:wrap">
         <div style="display:flex; align-items:center; gap:8px">
-            <label>Model:</label>
+            <label>@Localization.SharedResources.DataModelRecords_ModelLabel:</label>
             <SfDropDownList TItem="DataModelDTO" TValue="Guid?"
-                            Placeholder="@(Datasource == Datasource.AVAPlace ? "-- Vyberte model --" : "-- Všechny modely --")"
+                            Placeholder="@(Datasource == Datasource.AVAPlace ? Localization.SharedResources.DataModelRecords_SelectModel : Localization.SharedResources.DataModelRecords_AllModels)"
                             DataSource="@_dataModelList"
                             Value="@SelectedModelId"
                             ValueChanged="@HandleModelChange"
@@ -29,7 +29,7 @@
         @if (Datasource == Datasource.Database)
         {
             <SfButton CssClass="e-primary" IconCss="e-icons e-plus" OnClick="AddNewRecord" Disabled="@(SelectedModelId == null)">
-                Přidat záznam
+                @Localization.SharedResources.DataModelRecords_AddRecord
             </SfButton>
             <SfButton CssClass="e-outline" IconCss="e-icons e-export" Type="Button" OnClick="ExportAsync">
                 Export
@@ -40,19 +40,19 @@
     @if (Datasource == Datasource.AVAPlace)
     {
         <div class="alert alert-info" style="margin-bottom:8px">
-            Zobrazení záznamů z <strong>AVAPlace</strong> — pouze pro čtení.
+            @Localization.SharedResources.DataModelRecords_AvaPlaceReadOnly
         </div>
     }
 
     @if (Datasource == Datasource.AVAPlace && SelectedModelId == null)
     {
         <div class="alert alert-warning" style="margin-top:8px">
-            Pro zobrazení záznamů z <strong>AVAPlace</strong> vyberte datový model.
+            @Localization.SharedResources.DataModelRecords_SelectModelForAvaPlace
         </div>
     }
     else if (IsLoading)
     {
-        <p><em>Načítám...</em></p>
+        <p><em>@Localization.SharedResources.Common_LoadingData</em></p>
     }
     else
     {
@@ -75,9 +75,9 @@
                 <GridColumn Type="Syncfusion.Blazor.Grids.ColumnType.CheckBox" Width="50"></GridColumn>
                 <GridColumn Field=@nameof(DataModelRecordListViewModel.ModelName) HeaderText="Model" Width="200" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn Field=@nameof(DataModelRecordListViewModel.ExternalId) HeaderText="External ID" Width="300" FilterSettings="@_containsFilter"></GridColumn>
-                <GridColumn Field=@nameof(DataModelRecordListViewModel.FieldsSummary) HeaderText="Hodnoty polí" Width="400" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field=@nameof(DataModelRecordListViewModel.FieldsSummary) HeaderText="@Localization.SharedResources.DataModelRecords_FieldValues" Width="400" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn Field=@nameof(DataModelRecordListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="100" Visible="false"></GridColumn>
-                <GridColumn HeaderText="Akce" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Visible="@(Datasource == Datasource.Database)">
+                <GridColumn HeaderText="@Localization.SharedResources.Common_Actions" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Visible="@(Datasource == Datasource.Database)">
                     <Template>
                         @{
                             var record = (context as DataModelRecordListViewModel);
@@ -85,12 +85,12 @@
                                 <SfButton CssClass="e-small e-round e-outline action-button"
                                           IconCss="e-icons e-edit"
                                           OnClick="@(() => EditRecord(record!))"
-                                          title="Editovat">
+                                          title="@Localization.SharedResources.Common_Edit">
                                 </SfButton>
                                 <SfButton CssClass="e-small e-round e-outline action-button e-danger"
                                           IconCss="e-icons e-delete"
                                           OnClick="@(() => DeleteRecordAsync(record!))"
-                                          title="Smazat">
+                                          title="@Localization.SharedResources.Common_Delete">
                                 </SfButton>
                             </div>
                         }
@@ -113,7 +113,7 @@
                                                 <strong>@field.Key</strong>
                                                 @if (field.IsLocalized)
                                                 {
-                                                    <span class="field-type-badge">Lokalizované</span>
+                                                    <span class="field-type-badge">@Localization.SharedResources.DataModelRecords_Localized</span>
                                                 }
                                             </div>
                                             @if (field.IsLocalized)

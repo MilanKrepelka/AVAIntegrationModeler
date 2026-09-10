@@ -3,6 +3,7 @@ using Ardalis.Result;
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Localization;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 
@@ -163,7 +164,7 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
         if (_disposed) return;
         _saveSuccess = result.IsSuccess;
         _saveMessage = result.IsSuccess
-          ? $"Nasazení {dto.Code} bylo uloženo."
+          ? string.Format(SharedResources.Deployments_Saved, dto.Code)
           : result.IsInvalid()
             ? string.Join(", ", result.ValidationErrors.Select(e => e.ErrorMessage))
             : string.Join(", ", result.Errors);
@@ -174,7 +175,7 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
         if (_disposed) return;
         _saveSuccess = result.IsSuccess;
         _saveMessage = result.IsSuccess
-          ? $"Nasazení {dto.Code} bylo vytvořeno."
+          ? string.Format(SharedResources.Deployments_Created, dto.Code)
           : result.IsInvalid()
             ? string.Join(", ", result.ValidationErrors.Select(e => e.ErrorMessage))
             : string.Join(", ", result.Errors);
@@ -187,7 +188,7 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
       if (!_disposed)
       {
         _saveSuccess = false;
-        _saveMessage = "Došlo k neočekávané chybě.";
+        _saveMessage = SharedResources.Common_UnexpectedError;
       }
     }
   }

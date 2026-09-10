@@ -1,5 +1,6 @@
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Localization;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -88,14 +89,14 @@ public partial class Areas : ComponentBase
 
   private async Task DeleteAreaAsync(AreaListViewModel area)
   {
-    var confirmed = await JS.InvokeAsync<bool>("confirm", $"Opravdu smazat oblast '{area.Code}'?");
+    var confirmed = await JS.InvokeAsync<bool>("confirm", string.Format(SharedResources.Areas_DeleteConfirm, area.Code));
     if (!confirmed) return;
 
     var result = await ApiClient.DeleteArea(Datasource.Database, area.Code, CancellationToken.None);
     await ShowNotification(
       result.IsSuccess
-        ? $"Oblast '{area.Code}' byla smazána."
-        : $"Oblast se nepodařilo smazat: {string.Join(", ", result.Errors)}",
+        ? string.Format(SharedResources.Areas_DeletedSuccess, area.Code)
+        : string.Format(SharedResources.Areas_DeletedError, string.Join(", ", result.Errors)),
       result.IsSuccess);
 
     if (result.IsSuccess)

@@ -8,7 +8,7 @@
 @using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 
 
-<PageTitle>Integrační scénáře</PageTitle>
+<PageTitle>@Localization.SharedResources.Scenarios_Title</PageTitle>
 
 <div id="ControlRegion">
     <div id="GridContainer">
@@ -25,7 +25,7 @@
 
             <Syncfusion.Blazor.Navigations.SfToolbar>
                 <Syncfusion.Blazor.Navigations.ToolbarItems>
-                    <Syncfusion.Blazor.Navigations.ToolbarItem Text="Přidat scénář" PrefixIcon="e-icons e-add" Id="AddNew" OnClick="AddNewScenario"></Syncfusion.Blazor.Navigations.ToolbarItem>
+                    <Syncfusion.Blazor.Navigations.ToolbarItem Text="@Localization.SharedResources.Scenarios_AddNew" PrefixIcon="e-icons e-add" Id="AddNew" OnClick="AddNewScenario"></Syncfusion.Blazor.Navigations.ToolbarItem>
                 </Syncfusion.Blazor.Navigations.ToolbarItems>
             </Syncfusion.Blazor.Navigations.SfToolbar>
 
@@ -41,11 +41,11 @@
             </GridSelectionSettings>
             <GridColumns>
                 <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
-                <GridColumn Field=@nameof(ScenarioListViewModel.Code) HeaderText="Kód" Width="120" FilterSettings="@_containsFilter"></GridColumn>
-                <GridColumn Field="Name.EnglishValue" HeaderText="Název" Width="200" FilterSettings="@_containsFilter"></GridColumn>
-                <GridColumn Field="Description.EnglishValue" HeaderText="Popis" Width="250" Visible="false" FilterSettings="@_containsFilter"></GridColumn>
-                <GridColumn Field="InputFeature.Code" HeaderText="Vstupní feature" Width="150" FilterSettings="@_containsFilter"></GridColumn>
-                <GridColumn Field="OutputFeature.Code" HeaderText="Výstupní feature" Width="150" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field=@nameof(ScenarioListViewModel.Code) HeaderText="@Localization.SharedResources.Common_Code" Width="120" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field="Name.EnglishValue" HeaderText="@Localization.SharedResources.Common_Name" Width="200" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field="Description.EnglishValue" HeaderText="@Localization.SharedResources.Common_Description" Width="250" Visible="false" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field="InputFeature.Code" HeaderText="@Localization.SharedResources.Scenarios_InputFeature" Width="150" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field="OutputFeature.Code" HeaderText="@Localization.SharedResources.Scenarios_OutputFeature" Width="150" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn Field=@nameof(ScenarioListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="true">
                     <Template>
                         @{
@@ -57,13 +57,13 @@
                                           IconCss="e-icons e-copy"
                                           IsPrimary="false"
                                           OnClick="@(() => CopyToClipboard(scenario.Id.ToString()))"
-                                          title="Kopírovat ID do schránky">
+                                          title="@Localization.SharedResources.Common_CopyIdToClipboard">
                                 </SfButton>
                             </div>
                         }
                     </Template>
                 </GridColumn>
-                <GridColumn HeaderText="Akce" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+                <GridColumn HeaderText="@Localization.SharedResources.Common_Actions" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
                     <Template>
                         @{
                             var model = (context as ScenarioListViewModel);
@@ -72,7 +72,7 @@
                                           IconCss="e-icons e-edit"
                                           IsPrimary="false"
                                           OnClick="@(() => EditDataModel(model!))"
-                                          title="Editovat">
+                                          title="@Localization.SharedResources.Common_Edit">
                                 </SfButton>
 
                                 <SfButton CssClass="e-small e-round e-outline action-button"
@@ -96,10 +96,10 @@
                             
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Kód:</label>
-                                    <SfTextBox Value="@scenario.Code" Placeholder="Kód scénáře" Readonly="true"></SfTextBox>
+                                    <label>@Localization.SharedResources.Common_Code:</label>
+                                    <SfTextBox Value="@scenario.Code" Placeholder="@Localization.SharedResources.Scenarios_CodePlaceholder" Readonly="true"></SfTextBox>
                                 </div>
-                                
+
                                 <div class="form-group">
                                     <label>ID:</label>
                                     <div class="input-with-button">
@@ -107,46 +107,46 @@
                                         <SfButton CssClass="e-small action-button"
                                                   IconCss="e-icons e-copy"
                                                   OnClick="@(() => CopyToClipboard(scenario.Id.ToString()))"
-                                                  Content="Kopírovat">
+                                                  Content="@Localization.SharedResources.Common_Copy">
                                         </SfButton>
                                     </div>
                                 </div>
                             </div>
-                            
+
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Název (Česky):</label>
+                                    <label>@Localization.SharedResources.Common_NameCzech:</label>
                                     <SfTextBox Value="@scenario.Name.CzechValue" Placeholder="" Readonly="true"></SfTextBox>
                                 </div>
-                                
+
                                 <div class="form-group">
-                                    <label>Název (English):</label>
+                                    <label>@Localization.SharedResources.Common_NameEnglish:</label>
                                     <SfTextBox Value="@scenario.Name.EnglishValue" Placeholder="" Readonly="true"></SfTextBox>
                                 </div>
                             </div>
-                            
+
                             <div class="form-row">
                                 <div class="form-group full-width">
-                                    <label>Popis (Česky):</label>
+                                    <label>@Localization.SharedResources.Common_DescriptionCzech:</label>
                                     <SfTextBox @bind-Value="scenario.Description.CzechValue" Placeholder="" Multiline="true" Readonly="true"></SfTextBox>
                                 </div>
                             </div>
-                            
+
                             <div class="form-row">
                                 <div class="form-group full-width">
-                                    <label>Popis (English):</label>
+                                    <label>@Localization.SharedResources.Common_DescriptionEnglish:</label>
                                     <SfTextBox @bind-Value="scenario.Description.EnglishValue" Placeholder="" Multiline="true" Readonly="true"></SfTextBox>
                                 </div>
                             </div>
-                            
+
                             <div class="form-row">
                                 <div class="form-group">
-                                    <label>Vstupní feature:</label>
+                                    <label>@Localization.SharedResources.Scenarios_InputFeature:</label>
                                     <SfTextBox Value="@scenario.InputFeature.Code" Readonly="true"></SfTextBox>
                                 </div>
-                                
+
                                 <div class="form-group">
-                                    <label>Výstupní feature:</label>
+                                    <label>@Localization.SharedResources.Scenarios_OutputFeature:</label>
                                     <SfTextBox Value="@scenario.OutputFeature.Code" Readonly="true"></SfTextBox>
                                 </div>
                             </div>
@@ -195,7 +195,7 @@
     private async Task CopyToClipboard(string text)
     {
         await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
-        await ShowNotification($"ID zkopírováno: {text.Substring(0, 8)}...");
+        await ShowNotification(string.Format(Localization.SharedResources.Common_IdCopied, text.Substring(0, 8)));
     }
 
     private async Task ShowModelMap(ScenarioListViewModel scenario)
