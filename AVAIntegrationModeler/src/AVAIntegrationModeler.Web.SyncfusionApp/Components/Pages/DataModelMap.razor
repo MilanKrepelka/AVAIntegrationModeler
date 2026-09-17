@@ -17,6 +17,7 @@
 @if (!IsLoading)
 {
     <div style="margin-bottom:8px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <button class="btn btn-outline-secondary" @onclick="GoBack">Zpět</button>
         <button class="btn btn-primary" @onclick="SaveMapAsync" disabled="@_isSaving">
             @(_isSaving ? "Ukládám…" : "Uložit mapu")
         </button>
@@ -79,6 +80,7 @@ else
 
 @code {
     [Parameter] public Guid modelId { get; set; }
+    [SupplyParameterFromQuery(Name = "returnUrl")] public string? ReturnUrl { get; set; }
 
     private string MapLayoutKey => $"datamodelmap-{modelId}";
 
@@ -131,7 +133,18 @@ else
 
     private void OnDiagramCreated()
     {
-        diagram?.FitToPage(new FitOptions { Mode = FitMode.Both, Region = DiagramRegion.Content });
+        _ = InvokeAsync(async () =>
+        {
+            if (_savedPositions.Count == 0)
+                await diagram!.DoLayoutAsync();
+            diagram?.FitToPage(new FitOptions { Mode = FitMode.Both, Region = DiagramRegion.Content });
+        });
+    }
+
+    private void GoBack()
+    {
+        var url = string.IsNullOrEmpty(ReturnUrl) ? "/datamodels/database" : ReturnUrl;
+        NavigationManager.NavigateTo(url, forceLoad: true);
     }
 
     private void OnNodeClicked(ClickEventArgs args)

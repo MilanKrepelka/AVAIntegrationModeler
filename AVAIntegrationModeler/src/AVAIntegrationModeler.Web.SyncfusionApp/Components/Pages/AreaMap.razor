@@ -23,6 +23,7 @@ else if (_area is null)
 else
 {
     <div style="margin-bottom:8px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <button class="btn btn-outline-secondary" @onclick="GoBack">Zpět</button>
         <button class="btn btn-primary" @onclick="SaveMapAsync" disabled="@_isSaving">
             @(_isSaving ? "Ukládám…" : "Uložit mapu")
         </button>
@@ -57,7 +58,7 @@ else
     }
     else
     {
-        <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick">
+        <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick" Created="OnDiagramCreated">
             @if (_savedPositions.Count == 0)
             {
                 <Layout Type="LayoutType.RadialTree" HorizontalSpacing="40" VerticalSpacing="40" FixedNode="@_areaNodeId">
@@ -69,6 +70,7 @@ else
 
 @code {
     [Parameter] public Guid areaId { get; set; }
+    [SupplyParameterFromQuery(Name = "returnUrl")] public string? ReturnUrl { get; set; }
 
     SfDiagramComponent? diagram;
     int connectorCount = 0;
@@ -194,6 +196,16 @@ else
         connectors = newConnectors;
     }
 
+    private void OnDiagramCreated()
+    {
+        _ = InvokeAsync(async () =>
+        {
+            if (_savedPositions.Count == 0)
+                await diagram!.DoLayoutAsync();
+            diagram?.FitToPage(new FitOptions { Mode = FitMode.Both, Region = DiagramRegion.Content });
+        });
+    }
+
     private async Task RegenerateAsync()
     {
         _saveMessage = null;
@@ -281,13 +293,19 @@ else
         }
     }
 
+    private void GoBack()
+    {
+        var url = string.IsNullOrEmpty(ReturnUrl) ? "/vdmareamap" : ReturnUrl;
+        NavigationManager.NavigateTo(url, forceLoad: true);
+    }
+
     private void OnNodeClick(ClickEventArgs args)
     {
         if (args.Count != 2) return;
         if (args.ActualObject is Node node && node.ID != areaId.ToString())
         {
             if (Guid.TryParse(node.ID, out var modelId))
-                NavigationManager.NavigateTo($"/datamodelmap/{modelId}");
+                NavigationManager.NavigateTo($"/datamodelmap/{modelId}?returnUrl=/areamap/{areaId}", forceLoad: true);
         }
     }
 }

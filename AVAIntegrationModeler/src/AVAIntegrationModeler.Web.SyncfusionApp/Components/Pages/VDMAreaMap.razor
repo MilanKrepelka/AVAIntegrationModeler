@@ -50,7 +50,7 @@ else
     }
     else
     {
-        <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick">
+        <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick" Created="OnDiagramCreated">
             @if (_savedPositions.Count == 0)
             {
                 <Layout Type="LayoutType.RadialTree" HorizontalSpacing="40" VerticalSpacing="40" FixedNode="@VdmNodeId">
@@ -140,6 +140,16 @@ else
             IsLoading = false;
             await InvokeAsync(StateHasChanged);
         }
+    }
+
+    private void OnDiagramCreated()
+    {
+        _ = InvokeAsync(async () =>
+        {
+            if (_savedPositions.Count == 0)
+                await diagram!.DoLayoutAsync();
+            diagram?.FitToPage(new FitOptions { Mode = FitMode.Both, Region = DiagramRegion.Content });
+        });
     }
 
     private async Task RegenerateAsync()
@@ -259,7 +269,7 @@ else
         if (args.ActualObject is Node node && node.ID != VdmNodeId)
         {
             if (Guid.TryParse(node.ID, out var areaId))
-                NavigationManager.NavigateTo($"/areamap/{areaId}");
+                NavigationManager.NavigateTo($"/areamap/{areaId}?returnUrl=/vdmareamap", forceLoad: true);
         }
     }
 }
