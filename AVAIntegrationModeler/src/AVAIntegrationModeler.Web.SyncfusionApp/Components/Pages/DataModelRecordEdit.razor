@@ -1,6 +1,6 @@
 @page "/datamodelrecordedit/{dataSourceAsString}/{modelId:guid}/{recordId:guid}"
 @page "/datamodelrecordedit/{dataSourceAsString}/{modelId:guid}"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using AVAIntegrationModeler.Contracts.DTO
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
