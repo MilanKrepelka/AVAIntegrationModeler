@@ -2,7 +2,6 @@
 
 public record DataModelRecordDTO
 {
-  [System.Text.Json.Serialization.JsonPropertyName("recordId")]
   public Guid Id { get; init; }
 
   public Guid ModelId { get; init; }
