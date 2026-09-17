@@ -273,7 +273,9 @@ Výjimky, kde tlačítko může zůstat vně: kontextové akce závislé na výb
 
 ### Vzor pro list stránky (SfGrid + načítání dat)
 
-**Rendermode**: List stránky s `SfGrid` používají `@rendermode InteractiveServer` (bez prerender). **Nepoužívat `InteractiveServerRenderMode(prerender: true)` na list stránkách** — kombinace prerender + `OnInitializedAsync` způsobuje dvojitou inicializaci a SfGrid nedetekuje změnu dat při navigaci zpět.
+**Rendermode**: List stránky s `SfGrid` a stránky s `SfDiagramComponent` **vždy** používají `@rendermode @(new InteractiveServerRenderMode(prerender: false))`. **Nikdy nepoužívat `@rendermode InteractiveServer`** (= `prerender: true`) na stránkách se Syncfusion komponentami — prerender vykreslí statické HTML bez JS před připojením SignalR circuit:
+- `SfGrid`: dvojitá inicializace, přehled je prázdný po navigaci zpět, probliknutí nefiltrovaných dat
+- `SfDiagramComponent`: texty uzlů nejsou centrované při prvním načtení, opraví se až po F5
 
 **Načítání dat**: Vždy vytvořit novou instanci listu a přiřadit ji (ne mutovat existující):
 ```csharp
