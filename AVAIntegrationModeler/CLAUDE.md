@@ -306,12 +306,13 @@ if (Grid != null) await Grid.Refresh();
 
 ### Navigace zpět a `returnUrl`
 
-Edit stránky mají tlačítko Zpět (`GoBack` / `NavigateBack`), které standardně naviguje na výchozí přehled (např. `/datamodels/{datasource}`). Pokud je edit stránka otevřena z jiného místa než výchozího přehledu (mapa, jiná edit stránka), musí volající předat query parametr `returnUrl`, aby Zpět vrátilo uživatele na správnou stránku.
+Každá stránka s tlačítkem Zpět (`GoBack` / `NavigateBack`) **musí** implementovat query parametr `returnUrl`. Bez něj Zpět vždy skáče na napevno zakódovaný výchozí přehled, což je špatně pokaždé, když je stránka otevřena odjinud.
 
-**Pravidlo: každá navigace na edit nebo detail stránku z non-standardního místa MUSÍ předat `returnUrl`.**
+#### Povinný vzor pro každou novou stránku s tlačítkem Zpět
 
-Implementační vzor v `GoBack()` / `NavigateBack()`:
+**code-behind (`.razor.cs`)**:
 ```csharp
+// Povinný query parametr — musí být na každé stránce s tlačítkem Zpět
 [SupplyParameterFromQuery(Name = "returnUrl")] public string? ReturnUrl { get; set; }
 
 private void GoBack()
@@ -319,23 +320,40 @@ private void GoBack()
     if (!string.IsNullOrEmpty(ReturnUrl))
         NavigationManager.NavigateTo(ReturnUrl);
     else
-        NavigationManager.NavigateTo("/vychozi-prehled");
+        NavigationManager.NavigateTo("/vychozi-prehled"); // fallback pro přímý vstup
 }
 ```
 
-Volající předá `returnUrl` v URL:
+#### Povinný vzor pro každého volajícího
+
+Každé tlačítko / odkaz, které naviguje na jinou stránku a ta stránka má Zpět, **musí předat `returnUrl`** odpovídající aktuální stránce:
+
 ```csharp
+// Navigace s returnUrl — povinné kdykoli cílová stránka má tlačítko Zpět
 NavigationManager.NavigateTo($"/datamodeledit/Database/{id}?returnUrl=/datamodelmap/{id}");
 ```
 
-Stránky s implementovaným `returnUrl`:
-- `DataModelEdit` — query param `returnUrl`; výchozí zpět: `/datamodels/{datasource}`
-- `DataModelChanges` — query param `returnUrl`; výchozí zpět: `/datamodels/database`
+Pokud cílová stránka přijímá i jiné query parametry, řetěz je spojíš `&`:
+```csharp
+NavigationManager.NavigateTo($"/datamodeledit/Database?areaId={areaId}&returnUrl=/areamap/{areaId}");
+```
 
-Volající předávající `returnUrl`:
-- `AreaMap.razor` → `DataModelEdit` (nový model): `returnUrl=/areamap/{areaId}`
-- `DataModelMap.razor` → `DataModelEdit` (edit modelu): `returnUrl=/datamodelmap/{modelId}`
-- `DeploymentEdit.razor` → `DataModelChanges` (oba výskyty): `returnUrl=/deploymentedit/{deploymentCode}`
+#### Stránky s implementovaným `returnUrl`
+
+| Stránka | Výchozí zpět (fallback) |
+|---|---|
+| `DataModelEdit` | `/datamodels/{datasource}` |
+| `DataModelChanges` | `/datamodels/database` |
+
+#### Kdo předává `returnUrl` (přehled volajících)
+
+| Volající | Cíl | `returnUrl` |
+|---|---|---|
+| `AreaMap.razor` | `DataModelEdit` (nový model) | `/areamap/{areaId}` |
+| `DataModelMap.razor` | `DataModelEdit` (edit modelu) | `/datamodelmap/{modelId}` |
+| `DeploymentEdit.razor` | `DataModelChanges` (oba výskyty) | `/deploymentedit/{deploymentCode}` |
+
+**Při přidávání nové stránky nebo nového navigačního tlačítka:** zkontroluj, zda cílová stránka má Zpět — pokud ano, přidej `returnUrl`. Chybějící `returnUrl` je bug, ne opomenutí.
 
 ### ViewModels a mapování
 
