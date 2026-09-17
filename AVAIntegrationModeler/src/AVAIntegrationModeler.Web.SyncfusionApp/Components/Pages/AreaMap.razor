@@ -1,5 +1,5 @@
 @page "/areamap/{areaId:guid}"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using AVAIntegrationModeler.API.Client
 @using AVAIntegrationModeler.Contracts
 @using AVAIntegrationModeler.Contracts.DTO

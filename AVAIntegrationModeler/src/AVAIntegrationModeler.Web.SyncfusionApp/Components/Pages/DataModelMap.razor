@@ -1,5 +1,5 @@
 @page "/datamodelmap/{modelId:guid}"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using AVAIntegrationModeler.API.Client
 @using AVAIntegrationModeler.Contracts
 @using AVAIntegrationModeler.Contracts.DTO
@@ -134,24 +134,11 @@ else
         diagram?.FitToPage(new FitOptions { Mode = FitMode.Both, Region = DiagramRegion.Content });
     }
 
-    private DateTime _lastClickTime = DateTime.MinValue;
-    private string? _lastClickedNodeId;
-
     private void OnNodeClicked(ClickEventArgs args)
     {
-        if (args.Element is not Node node || !Guid.TryParse(node.ID, out _))
-            return;
-
-        var now = DateTime.Now;
-        if (node.ID == _lastClickedNodeId && (now - _lastClickTime).TotalMilliseconds < 500)
-        {
-            _lastClickedNodeId = null;
-            NavigationManager.NavigateTo($"/datamodeledit/Database/{node.ID}?returnUrl=/datamodelmap/{node.ID}");
-            return;
-        }
-
-        _lastClickTime = now;
-        _lastClickedNodeId = node.ID;
+        if (args.Count != 2) return;
+        if (args.ActualObject is Node node && Guid.TryParse(node.ID, out _))
+            NavigationManager.NavigateTo($"/datamodeledit/Database/{node.ID}?returnUrl=/datamodelmap/{modelId}");
     }
 
     private async Task OnLevelChanged(int level)

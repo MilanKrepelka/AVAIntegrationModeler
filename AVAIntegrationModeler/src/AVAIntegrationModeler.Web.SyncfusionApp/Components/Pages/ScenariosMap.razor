@@ -1,5 +1,5 @@
 ﻿@page "/scenariomap/{dataSourceAsString}/{scenarioCode}"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Grids
