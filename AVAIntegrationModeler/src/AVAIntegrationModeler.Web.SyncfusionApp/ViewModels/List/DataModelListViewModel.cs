@@ -81,6 +81,11 @@ public class DataModelListViewModel
   /// Textová reprezentace pro IsAggregateRoot.
   /// </summary>
   public string IsAggregateRootText => IsAggregateRoot ? "Ano" : "Ne";
+
+  /// <summary>
+  /// Textová reprezentace ID pro vyhledávání v gridu.
+  /// </summary>
+  public string IdText => Id.ToString();
 }
 
 /// <summary>

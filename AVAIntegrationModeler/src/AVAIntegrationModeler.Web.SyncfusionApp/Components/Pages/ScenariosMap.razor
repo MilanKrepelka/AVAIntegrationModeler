@@ -10,9 +10,9 @@
 
 <SfDiagramComponent @ref="@diagram" Connectors="@connectors" Height="700px" Nodes="@nodes">
     <Layout Type="LayoutType.RadialTree"
-            Orientation="LayoutOrientation.TopToBottom"
-            HorizontalSpacing="100"
-            VerticalSpacing="80">
+            HorizontalSpacing="40"
+            VerticalSpacing="40"
+            FixedNode="Scenario">
     </Layout>
 </SfDiagramComponent>
 
@@ -127,18 +127,23 @@
             //OffsetX = x,
             //OffsetY = y,
 
-            Width = 9*(label.Length),
+            Width = 180,
             Height = 60,
             Style = new ShapeStyle { Fill = fillColor, StrokeColor = "White" },
             Shape = new FlowShape { Type = NodeShapes.Flow, Shape = NodeFlowShapes.Process },
             Annotations = new DiagramObjectCollection<ShapeAnnotation>
-        {
-            new ShapeAnnotation
             {
-                Content = label,
-                Style = new TextStyle { Color = textColor, Fill = "transparent" }
+                new ShapeAnnotation
+                {
+                    Content = label,
+                    Width = 170,
+                    Height = 55,
+                    Offset = new DiagramPoint { X = 0.5, Y = 0.5 },
+                    HorizontalAlignment = HorizontalAlignment.Center,
+                    VerticalAlignment = VerticalAlignment.Center,
+                    Style = new TextStyle { Color = textColor, TextAlign = Syncfusion.Blazor.Diagram.TextAlign.Center }
+                }
             }
-        }
         };
         nodes.Add(diagramNode);
     }

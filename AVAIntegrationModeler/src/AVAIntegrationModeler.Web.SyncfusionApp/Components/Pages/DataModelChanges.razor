@@ -4,7 +4,7 @@
 @using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.DataModelChanges
 @using Syncfusion.Blazor.Buttons
 
-<PageTitle>Změny DataModelu</PageTitle>
+<PageTitle>@Localization.SharedResources.DataModelChanges_Title</PageTitle>
 
 <style>
     .changes-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; flex-wrap: wrap; }
@@ -33,12 +33,12 @@
 
     @if (IsLoading)
     {
-        <div class="loading-indicator">Načítám porovnání...</div>
+        <div class="loading-indicator">@Localization.SharedResources.DataModelChanges_LoadingComparison</div>
     }
     else if (ErrorMessage is not null)
     {
         <div class="alert alert-danger">@ErrorMessage</div>
-        <SfButton CssClass="e-outline" OnClick="GoBack">← Zpět na seznam</SfButton>
+        <SfButton CssClass="e-outline" OnClick="GoBack">@Localization.SharedResources.Common_BackToList</SfButton>
     }
     else if (ViewModel.Comparison is { } cmp)
     {
@@ -64,26 +64,26 @@
         </div>
 
         <div style="display:flex; gap:8px; margin-bottom:16px; flex-wrap:wrap">
-            <SfButton CssClass="e-outline e-small" IconCss="e-icons e-refresh" OnClick="ReloadAsync">Obnovit</SfButton>
-            <SfButton CssClass="e-outline e-small" OnClick="GoBack">← Zpět na seznam</SfButton>
+            <SfButton CssClass="e-outline e-small" IconCss="e-icons e-refresh" OnClick="ReloadAsync">@Localization.SharedResources.Common_Refresh</SfButton>
+            <SfButton CssClass="e-outline e-small" OnClick="GoBack">@Localization.SharedResources.Common_BackToList</SfButton>
             <SfButton CssClass="e-outline e-small" OnClick="ToggleSameFields">
-                @(ViewModel.ShowSameFields ? "Skrýt shodná pole" : "Zobrazit shodná pole")
+                @(ViewModel.ShowSameFields ? Localization.SharedResources.DataModelChanges_HideSameFields : Localization.SharedResources.DataModelChanges_ShowSameFields)
             </SfButton>
         </div>
 
         @if (cmp.ExistsInDatabase && cmp.ExistsInAvaPlace)
         {
-            <div class="section-title">Vlastnosti modelu</div>
+            <div class="section-title">@Localization.SharedResources.DataModelChanges_ModelProperties</div>
             @if (cmp.PropertyDiffs.Count == 0)
             {
-                <p class="status-same">✓ Všechny vlastnosti modelu jsou shodné.</p>
+                <p class="status-same">@Localization.SharedResources.DataModelChanges_AllPropertiesSame</p>
             }
             else
             {
                 <table class="diff-table">
                     <thead>
                         <tr>
-                            <th style="width:20%">Vlastnost</th>
+                            <th style="width:20%">@Localization.SharedResources.DataModelChanges_PropertyColumn</th>
                             <th style="width:40%">Database</th>
                             <th style="width:40%">AVAPlace</th>
                         </tr>
@@ -103,14 +103,14 @@
         }
 
         <div class="section-title">
-            Pole datového modelu
-            (@cmp.FieldComparisons.Count celkem,
-             @cmp.FieldComparisons.Count(f => f.Status != ComparisonStatus.Same) liší se)
+            @Localization.SharedResources.DataModelChanges_ModelFields
+            (@string.Format(Localization.SharedResources.DataModelChanges_TotalCount, cmp.FieldComparisons.Count),
+             @string.Format(Localization.SharedResources.DataModelChanges_DifferentCount, cmp.FieldComparisons.Count(f => f.Status != ComparisonStatus.Same)))
         </div>
 
         @if (!cmp.FieldComparisons.Any())
         {
-            <p class="text-muted">Žádná pole.</p>
+            <p class="text-muted">@Localization.SharedResources.DataModelChanges_NoFields</p>
         }
         else
         {
@@ -129,7 +129,7 @@
                             <table class="diff-table">
                                 <thead>
                                     <tr>
-                                        <th style="width:22%">Vlastnost</th>
+                                        <th style="width:22%">@Localization.SharedResources.DataModelChanges_PropertyColumn</th>
                                         <th style="width:39%">Database</th>
                                         <th style="width:39%">AVAPlace</th>
                                     </tr>
@@ -166,8 +166,8 @@
         @if (!ViewModel.ShowSameFields && cmp.FieldComparisons.Count(f => f.Status == ComparisonStatus.Same) > 0)
         {
             <p class="text-muted" style="margin-top:8px; font-size:.85rem">
-                @cmp.FieldComparisons.Count(f => f.Status == ComparisonStatus.Same) shodných polí je skrytých.
-                <button class="btn btn-link btn-sm p-0" @onclick="ToggleSameFields">Zobrazit</button>
+                @string.Format(Localization.SharedResources.DataModelChanges_SameFieldsHidden, cmp.FieldComparisons.Count(f => f.Status == ComparisonStatus.Same))
+                <button class="btn btn-link btn-sm p-0" @onclick="ToggleSameFields">@Localization.SharedResources.DataModelChanges_ShowSameFields</button>
             </p>
         }
     }
@@ -176,10 +176,10 @@
 @code {
     private string GetModelStatusText(ComparisonStatus status) => status switch
     {
-        ComparisonStatus.Same => "Shodné",
-        ComparisonStatus.Different => "Liší se",
-        ComparisonStatus.OnlyInDatabase => "Pouze v Database",
-        ComparisonStatus.OnlyInAvaPlace => "Pouze v AVAPlace",
+        ComparisonStatus.Same => Localization.SharedResources.DataModels_StatusSame,
+        ComparisonStatus.Different => Localization.SharedResources.DataModels_StatusDifferent,
+        ComparisonStatus.OnlyInDatabase => Localization.SharedResources.DataModels_StatusOnlyInDatabase,
+        ComparisonStatus.OnlyInAvaPlace => Localization.SharedResources.DataModels_StatusOnlyInAvaPlace,
         _ => status.ToString()
     };
 

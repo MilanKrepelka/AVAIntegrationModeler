@@ -3,6 +3,7 @@ using Ardalis.Result;
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Localization;
 using Microsoft.AspNetCore.Components;
 
 namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
@@ -146,7 +147,7 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
       if (result.IsSuccess)
       {
         _saveSuccess = true;
-        _saveMessage = $"Záznam byl v pořádku {(IsCreate ? "vytvořen" : "uložen")}.";
+        _saveMessage = IsCreate ? SharedResources.DataModelRecords_Created : SharedResources.DataModelRecords_Saved;
       }
       else
       {
@@ -160,7 +161,7 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
     catch (Exception ex)
     {
       _saveSuccess = false;
-      _saveMessage = "Došlo k neočekávané chybě.";
+      _saveMessage = SharedResources.Common_UnexpectedError;
       Console.WriteLine($"SaveAsync error: {ex.Message}");
     }
   }

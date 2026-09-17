@@ -168,4 +168,478 @@
   <data name="Identifier" xml:space="preserve">
     <value>Identifier</value>
   </data>
+  <data name="Common.Code" xml:space="preserve">
+    <value>Code</value>
+  </data>
+  <data name="Common.Name" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Common.Description" xml:space="preserve">
+    <value>Description</value>
+  </data>
+  <data name="Common.Actions" xml:space="preserve">
+    <value>Actions</value>
+  </data>
+  <data name="Common.Edit" xml:space="preserve">
+    <value>Edit</value>
+  </data>
+  <data name="Common.Delete" xml:space="preserve">
+    <value>Delete</value>
+  </data>
+  <data name="Common.Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="Common.Back" xml:space="preserve">
+    <value>Back</value>
+  </data>
+  <data name="Common.BackToList" xml:space="preserve">
+    <value>← Back to list</value>
+  </data>
+  <data name="Common.Copy" xml:space="preserve">
+    <value>Copy</value>
+  </data>
+  <data name="Common.CopyIdToClipboard" xml:space="preserve">
+    <value>Copy ID to clipboard</value>
+  </data>
+  <data name="Common.IdCopied" xml:space="preserve">
+    <value>ID copied: {0}...</value>
+  </data>
+  <data name="Common.ShowMap" xml:space="preserve">
+    <value>Show map</value>
+  </data>
+  <data name="Common.Loading" xml:space="preserve">
+    <value>Loading...</value>
+  </data>
+  <data name="Common.LoadingData" xml:space="preserve">
+    <value>Loading data...</value>
+  </data>
+  <data name="Common.Refresh" xml:space="preserve">
+    <value>Refresh</value>
+  </data>
+  <data name="Common.Add" xml:space="preserve">
+    <value>Add</value>
+  </data>
+  <data name="Common.Remove" xml:space="preserve">
+    <value>Remove</value>
+  </data>
+  <data name="Common.Yes" xml:space="preserve">
+    <value>Yes</value>
+  </data>
+  <data name="Common.No" xml:space="preserve">
+    <value>No</value>
+  </data>
+  <data name="Common.Czech" xml:space="preserve">
+    <value>Czech</value>
+  </data>
+  <data name="Common.English" xml:space="preserve">
+    <value>English</value>
+  </data>
+  <data name="Common.NameCzech" xml:space="preserve">
+    <value>Name (Czech)</value>
+  </data>
+  <data name="Common.NameEnglish" xml:space="preserve">
+    <value>Name (English)</value>
+  </data>
+  <data name="Common.DescriptionCzech" xml:space="preserve">
+    <value>Description (Czech)</value>
+  </data>
+  <data name="Common.DescriptionEnglish" xml:space="preserve">
+    <value>Description (English)</value>
+  </data>
+  <data name="Common.Database" xml:space="preserve">
+    <value>Database</value>
+  </data>
+  <data name="Common.Area" xml:space="preserve">
+    <value>Area</value>
+  </data>
+  <data name="Common.TryAgain" xml:space="preserve">
+    <value>Try again</value>
+  </data>
+  <data name="Common.Status" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Common.UnexpectedError" xml:space="preserve">
+    <value>An unexpected error occurred.</value>
+  </data>
+  <data name="NavMenu.Areas" xml:space="preserve">
+    <value>Areas</value>
+  </data>
+  <data name="NavMenu.AreaMap" xml:space="preserve">
+    <value>Area map</value>
+  </data>
+  <data name="NavMenu.Deployments" xml:space="preserve">
+    <value>Deployments</value>
+  </data>
+  <data name="NavMenu.AIAssistant" xml:space="preserve">
+    <value>AI Assistant</value>
+  </data>
+  <data name="NavMenu.Rules" xml:space="preserve">
+    <value>Rules</value>
+  </data>
+  <data name="Areas.Title" xml:space="preserve">
+    <value>Areas</value>
+  </data>
+  <data name="Areas.AddNew" xml:space="preserve">
+    <value>Add area</value>
+  </data>
+  <data name="Areas.DataModelsColumn" xml:space="preserve">
+    <value>Data Models</value>
+  </data>
+  <data name="Areas.NoDataModels" xml:space="preserve">
+    <value>No data models assigned to this area.</value>
+  </data>
+  <data name="Areas.DataModelsCount" xml:space="preserve">
+    <value>Data Models ({0})</value>
+  </data>
+  <data name="Areas.FieldsCount" xml:space="preserve">
+    <value>{0} fields</value>
+  </data>
+  <data name="Areas.NewTitle" xml:space="preserve">
+    <value>New area</value>
+  </data>
+  <data name="Areas.EditTitle" xml:space="preserve">
+    <value>Edit area</value>
+  </data>
+  <data name="Areas.CodePlaceholder" xml:space="preserve">
+    <value>Area code</value>
+  </data>
+  <data name="Areas.NamePlaceholder" xml:space="preserve">
+    <value>Area name</value>
+  </data>
+  <data name="Areas.DeleteConfirm" xml:space="preserve">
+    <value>Really delete area '{0}'?</value>
+  </data>
+  <data name="Areas.DeletedSuccess" xml:space="preserve">
+    <value>Area '{0}' was deleted.</value>
+  </data>
+  <data name="Areas.DeletedError" xml:space="preserve">
+    <value>Area could not be deleted: {0}</value>
+  </data>
+  <data name="Areas.SavedSuccess" xml:space="preserve">
+    <value>Area {0} was saved.</value>
+  </data>
+  <data name="Areas.CreatedSuccess" xml:space="preserve">
+    <value>Area {0} was created.</value>
+  </data>
+  <data name="Scenarios.Title" xml:space="preserve">
+    <value>Integration scenarios</value>
+  </data>
+  <data name="Scenarios.AddNew" xml:space="preserve">
+    <value>Add scenario</value>
+  </data>
+  <data name="Scenarios.InputFeature" xml:space="preserve">
+    <value>Input feature</value>
+  </data>
+  <data name="Scenarios.OutputFeature" xml:space="preserve">
+    <value>Output feature</value>
+  </data>
+  <data name="Scenarios.EditTitle" xml:space="preserve">
+    <value>Edit scenario</value>
+  </data>
+  <data name="Scenarios.CodePlaceholder" xml:space="preserve">
+    <value>Scenario code</value>
+  </data>
+  <data name="Scenarios.LinkedFeatures" xml:space="preserve">
+    <value>Linked features</value>
+  </data>
+  <data name="Scenarios.SelectInputFeature" xml:space="preserve">
+    <value>Select input feature</value>
+  </data>
+  <data name="Scenarios.SelectOutputFeature" xml:space="preserve">
+    <value>Select output feature</value>
+  </data>
+  <data name="Scenarios.SavedSuccess" xml:space="preserve">
+    <value>Integration scenario {0} was {1} successfully.</value>
+  </data>
+  <data name="Scenarios.Created" xml:space="preserve">
+    <value>created</value>
+  </data>
+  <data name="Scenarios.Saved" xml:space="preserve">
+    <value>saved</value>
+  </data>
+  <data name="DataModels.TitleDatabase" xml:space="preserve">
+    <value>Data Models — Database</value>
+  </data>
+  <data name="DataModels.AddNew" xml:space="preserve">
+    <value>Add data model</value>
+  </data>
+  <data name="DataModels.DeleteAll" xml:space="preserve">
+    <value>Delete all models</value>
+  </data>
+  <data name="DataModels.AggregateRootColumn" xml:space="preserve">
+    <value>Aggregate Root</value>
+  </data>
+  <data name="DataModels.FieldsColumn" xml:space="preserve">
+    <value>Fields</value>
+  </data>
+  <data name="DataModels.ModelMap" xml:space="preserve">
+    <value>Model map</value>
+  </data>
+  <data name="DataModels.CompareWithAvaPlace" xml:space="preserve">
+    <value>Compare with AVAPlace source</value>
+  </data>
+  <data name="DataModels.FieldsSection" xml:space="preserve">
+    <value>Data model fields ({0})</value>
+  </data>
+  <data name="DataModels.NewTitle" xml:space="preserve">
+    <value>New data model</value>
+  </data>
+  <data name="DataModels.EditTitle" xml:space="preserve">
+    <value>Edit data model</value>
+  </data>
+  <data name="DataModels.AreaOptional" xml:space="preserve">
+    <value>Area (optional)</value>
+  </data>
+  <data name="DataModels.AggregateRootLabel" xml:space="preserve">
+    <value>Is Aggregate Root</value>
+  </data>
+  <data name="DataModels.AggregateRootDetail" xml:space="preserve">
+    <value>Aggregate root</value>
+  </data>
+  <data name="DataModels.TitleAvaPlace" xml:space="preserve">
+    <value>Data Models — AVAPlace</value>
+  </data>
+  <data name="DataModels.ImportAll" xml:space="preserve">
+    <value>Import all to database</value>
+  </data>
+  <data name="DataModels.ImportToDatabase" xml:space="preserve">
+    <value>Import to local database</value>
+  </data>
+  <data name="DataModels.Documentation" xml:space="preserve">
+    <value>Documentation</value>
+  </data>
+  <data name="DataModels.StatusSame" xml:space="preserve">
+    <value>Same</value>
+  </data>
+  <data name="DataModels.StatusDifferent" xml:space="preserve">
+    <value>Different</value>
+  </data>
+  <data name="DataModels.StatusOnlyInDatabase" xml:space="preserve">
+    <value>Only in Database</value>
+  </data>
+  <data name="DataModels.StatusOnlyInAvaPlace" xml:space="preserve">
+    <value>Only in AVAPlace</value>
+  </data>
+  <data name="DataModels.StatusOnlyDb" xml:space="preserve">
+    <value>Only DB</value>
+  </data>
+  <data name="DataModels.StatusOnlyAva" xml:space="preserve">
+    <value>Only AVAPlace</value>
+  </data>
+  <data name="DataModels.CompareDbVsAvaPlace" xml:space="preserve">
+    <value>Compare DB vs AVAPlace</value>
+  </data>
+  <data name="DataModelChanges.Title" xml:space="preserve">
+    <value>DataModel Changes</value>
+  </data>
+  <data name="DataModelChanges.LoadingComparison" xml:space="preserve">
+    <value>Loading comparison...</value>
+  </data>
+  <data name="DataModelChanges.ModelProperties" xml:space="preserve">
+    <value>Model properties</value>
+  </data>
+  <data name="DataModelChanges.AllPropertiesSame" xml:space="preserve">
+    <value>✓ All model properties are identical.</value>
+  </data>
+  <data name="DataModelChanges.PropertyColumn" xml:space="preserve">
+    <value>Property</value>
+  </data>
+  <data name="DataModelChanges.ModelFields" xml:space="preserve">
+    <value>Data model fields</value>
+  </data>
+  <data name="DataModelChanges.NoFields" xml:space="preserve">
+    <value>No fields.</value>
+  </data>
+  <data name="DataModelChanges.SameFieldsHidden" xml:space="preserve">
+    <value>{0} identical fields hidden.</value>
+  </data>
+  <data name="DataModelChanges.ShowSameFields" xml:space="preserve">
+    <value>Show identical fields</value>
+  </data>
+  <data name="DataModelChanges.HideSameFields" xml:space="preserve">
+    <value>Hide identical fields</value>
+  </data>
+  <data name="DataModelChanges.TotalCount" xml:space="preserve">
+    <value>total</value>
+  </data>
+  <data name="DataModelChanges.DifferentCount" xml:space="preserve">
+    <value>different</value>
+  </data>
+  <data name="Deployments.Title" xml:space="preserve">
+    <value>Deployments</value>
+  </data>
+  <data name="Deployments.AddNew" xml:space="preserve">
+    <value>Add deployment</value>
+  </data>
+  <data name="Deployments.LastDeployment" xml:space="preserve">
+    <value>Last deployment</value>
+  </data>
+  <data name="Deployments.ExportTitle" xml:space="preserve">
+    <value>Export data models and records</value>
+  </data>
+  <data name="Deployments.NewTitle" xml:space="preserve">
+    <value>New deployment</value>
+  </data>
+  <data name="Deployments.EditTitle" xml:space="preserve">
+    <value>Edit deployment</value>
+  </data>
+  <data name="Deployments.CodePlaceholder" xml:space="preserve">
+    <value>Deployment code</value>
+  </data>
+  <data name="Deployments.NamePlaceholder" xml:space="preserve">
+    <value>Deployment name</value>
+  </data>
+  <data name="Deployments.TicketPlaceholder" xml:space="preserve">
+    <value>Ticket URL (optional)</value>
+  </data>
+  <data name="Deployments.DescriptionPlaceholder" xml:space="preserve">
+    <value>Deployment description (optional)</value>
+  </data>
+  <data name="Deployments.LastSave" xml:space="preserve">
+    <value>Last save</value>
+  </data>
+  <data name="Deployments.DataModelsInDeployment" xml:space="preserve">
+    <value>Data models in deployment</value>
+  </data>
+  <data name="Deployments.NoDataModels" xml:space="preserve">
+    <value>No data models added yet.</value>
+  </data>
+  <data name="Deployments.SelectDataModel" xml:space="preserve">
+    <value>Select data model</value>
+  </data>
+  <data name="Deployments.SearchModel" xml:space="preserve">
+    <value>Search model...</value>
+  </data>
+  <data name="Deployments.ChangesSummaryTitle" xml:space="preserve">
+    <value>Changes overview — DB vs AVAPlace</value>
+  </data>
+  <data name="Deployments.LoadChangesSummary" xml:space="preserve">
+    <value>Load changes overview</value>
+  </data>
+  <data name="Deployments.UploadToAvaPlace" xml:space="preserve">
+    <value>Upload to AVAPlace</value>
+  </data>
+  <data name="Deployments.Uploading" xml:space="preserve">
+    <value>Uploading...</value>
+  </data>
+  <data name="Deployments.ExportDataModels" xml:space="preserve">
+    <value>Export data models</value>
+  </data>
+  <data name="Deployments.StatusSameLabel" xml:space="preserve">
+    <value>✓ Same: {0}</value>
+  </data>
+  <data name="Deployments.StatusDifferentLabel" xml:space="preserve">
+    <value>⚡ Different: {0}</value>
+  </data>
+  <data name="Deployments.StatusOnlyDbLabel" xml:space="preserve">
+    <value>→ Only DB: {0}</value>
+  </data>
+  <data name="Deployments.StatusOnlyAvaLabel" xml:space="preserve">
+    <value>← Only AVAPlace: {0}</value>
+  </data>
+  <data name="Deployments.StatusSame" xml:space="preserve">
+    <value>✓ Same</value>
+  </data>
+  <data name="Deployments.StatusDifferent" xml:space="preserve">
+    <value>⚡ Different</value>
+  </data>
+  <data name="Deployments.StatusOnlyDb" xml:space="preserve">
+    <value>→ Only DB</value>
+  </data>
+  <data name="Deployments.StatusOnlyAvaPlace" xml:space="preserve">
+    <value>← Only AVAPlace</value>
+  </data>
+  <data name="Deployments.StatusColumn" xml:space="preserve">
+    <value>Status</value>
+  </data>
+  <data name="Deployments.FieldsDelta" xml:space="preserve">
+    <value>Fields Δ</value>
+  </data>
+  <data name="Deployments.FieldsDeltaTitle" xml:space="preserve">
+    <value>Different / Only DB / Only AVAPlace</value>
+  </data>
+  <data name="Deployments.DetailChanges" xml:space="preserve">
+    <value>Change details</value>
+  </data>
+  <data name="Deployments.Saved" xml:space="preserve">
+    <value>Deployment {0} was saved.</value>
+  </data>
+  <data name="Deployments.Created" xml:space="preserve">
+    <value>Deployment {0} was created.</value>
+  </data>
+  <data name="DataModelRecords.Title" xml:space="preserve">
+    <value>Data model records</value>
+  </data>
+  <data name="DataModelRecords.ModelLabel" xml:space="preserve">
+    <value>Model:</value>
+  </data>
+  <data name="DataModelRecords.SelectModel" xml:space="preserve">
+    <value>-- Select model --</value>
+  </data>
+  <data name="DataModelRecords.AllModels" xml:space="preserve">
+    <value>-- All models --</value>
+  </data>
+  <data name="DataModelRecords.AddRecord" xml:space="preserve">
+    <value>Add record</value>
+  </data>
+  <data name="DataModelRecords.AvaPlaceReadOnly" xml:space="preserve">
+    <value>Viewing records from AVAPlace — read only.</value>
+  </data>
+  <data name="DataModelRecords.SelectModelForAvaPlace" xml:space="preserve">
+    <value>Select a data model to view records from AVAPlace.</value>
+  </data>
+  <data name="DataModelRecords.FieldValues" xml:space="preserve">
+    <value>Field values</value>
+  </data>
+  <data name="DataModelRecords.Localized" xml:space="preserve">
+    <value>Localized</value>
+  </data>
+  <data name="DataModelRecords.NewTitle" xml:space="preserve">
+    <value>New record</value>
+  </data>
+  <data name="DataModelRecords.EditTitle" xml:space="preserve">
+    <value>Edit record</value>
+  </data>
+  <data name="DataModelRecords.RecordFields" xml:space="preserve">
+    <value>Record fields</value>
+  </data>
+  <data name="DataModelRecords.LoadingSchema" xml:space="preserve">
+    <value>Loading model schema...</value>
+  </data>
+  <data name="DataModelRecords.NoFields" xml:space="preserve">
+    <value>This data model has no defined fields.</value>
+  </data>
+  <data name="DataModelRecords.Saved" xml:space="preserve">
+    <value>Record was saved successfully.</value>
+  </data>
+  <data name="DataModelRecords.Created" xml:space="preserve">
+    <value>Record was created successfully.</value>
+  </data>
+  <data name="DataModelRecords.DeleteConfirm" xml:space="preserve">
+    <value>Really delete record '{0}'?</value>
+  </data>
+  <data name="Features.Title" xml:space="preserve">
+    <value>Integration Features</value>
+  </data>
+  <data name="Features.IncludedFeaturesColumn" xml:space="preserve">
+    <value>Included Features</value>
+  </data>
+  <data name="Features.IncludedModelsColumn" xml:space="preserve">
+    <value>Included Models</value>
+  </data>
+  <data name="Features.IncludedFeatures" xml:space="preserve">
+    <value>Included Features:</value>
+  </data>
+  <data name="Features.IncludedDataModels" xml:space="preserve">
+    <value>Included Data Models:</value>
+  </data>
+  <data name="Features.CodePlaceholder" xml:space="preserve">
+    <value>Feature code</value>
+  </data>
+  <data name="Features.NameCzechPlaceholder" xml:space="preserve">
+    <value>Czech name</value>
+  </data>
+  <data name="Features.DescriptionCzechPlaceholder" xml:space="preserve">
+    <value>Czech description</value>
+  </data>
 </root>

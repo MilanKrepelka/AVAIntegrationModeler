@@ -3,6 +3,7 @@ using Ardalis.Result;
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Localization;
 using AVAIntegrationModeler.Web.SyncfusionApp.Extensions;
 using Microsoft.AspNetCore.Components;
 
@@ -179,10 +180,10 @@ public partial class ScenarioEdit : ComponentBase, IDisposable
 
       if (_disposed || _cts?.Token.IsCancellationRequested == true) return;
 
-      string operationText = dataOperation == DataOperation.Create ? "vytvořen" : "uložen";
+      string operationText = dataOperation == DataOperation.Create ? SharedResources.Scenarios_Created : SharedResources.Scenarios_Saved;
       _saveSuccess = result.IsSuccess;
       _saveMessage = result.IsSuccess
-        ? $"Integrační scénář {updated.Code} byl v pořádku {operationText}."
+        ? string.Format(SharedResources.Scenarios_SavedSuccess, updated.Code, operationText)
         : result.IsInvalid()
           ? string.Join(", ", result.ValidationErrors.Select(e => e.ErrorMessage))
           : string.Join(", ", result.Errors);
@@ -197,7 +198,7 @@ public partial class ScenarioEdit : ComponentBase, IDisposable
       if (!_disposed)
       {
         _saveSuccess = false;
-        _saveMessage = "Došlo k neočekávané chybě.";
+        _saveMessage = SharedResources.Common_UnexpectedError;
       }
     }
   }

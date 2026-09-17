@@ -3,6 +3,7 @@ using Ardalis.Result;
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Contracts.DTO;
+using AVAIntegrationModeler.Localization;
 using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets;
 using Microsoft.AspNetCore.Components;
 
@@ -198,7 +199,7 @@ public partial class DataModelEdit : ComponentBase, IDisposable
       if (!_disposed)
       {
         _saveSuccess = false;
-        _saveMessage = "Došlo k neočekávané chybě.";
+        _saveMessage = SharedResources.Common_UnexpectedError;
       }
     }
   }

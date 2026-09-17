@@ -12,11 +12,11 @@
     <ValidationSummary />
 
     <div class="container">
-        <h2>Upravit scénář</h2>
+        <h2>@Localization.SharedResources.Scenarios_EditTitle</h2>
 
         <div class="row">
             <div class="col-12 col-md-6">
-                <SfTextBox CssClass="w-100" Placeholder="Kód scénáře" FloatLabelType="FloatLabelType.Always" @bind-Value="_edit.Code"></SfTextBox>
+                <SfTextBox CssClass="w-100" Placeholder="@Localization.SharedResources.Scenarios_CodePlaceholder" FloatLabelType="FloatLabelType.Always" @bind-Value="_edit.Code"></SfTextBox>
                 <ValidationMessage For="@(() => _edit.Code)" />
             </div>
             <div class="col-12 col-md-6">
@@ -30,22 +30,22 @@
             </div>
         </div>
 
-        <h4 style="margin-top:16px">Název</h4>
+        <h4 style="margin-top:16px">@Localization.SharedResources.Common_Name</h4>
         <div class="row">
             <div class="col-12 col-md-6">
-                <SfTextBox CssClass="w-100" Placeholder="Česky" FloatLabelType="FloatLabelType.Always" @bind-Value="_edit.NameCz"></SfTextBox>
+                <SfTextBox CssClass="w-100" Placeholder="@Localization.SharedResources.Common_Czech" FloatLabelType="FloatLabelType.Always" @bind-Value="_edit.NameCz"></SfTextBox>
                 <ValidationMessage For="@(() => _edit.NameCz)" />
             </div>
             <div class="col-12 col-md-6">
-                <SfTextBox CssClass="w-100" Placeholder="Anglicky" FloatLabelType="FloatLabelType.Always" @bind-Value="_edit.NameEn"></SfTextBox>
+                <SfTextBox CssClass="w-100" Placeholder="@Localization.SharedResources.Common_English" FloatLabelType="FloatLabelType.Always" @bind-Value="_edit.NameEn"></SfTextBox>
                 <ValidationMessage For="@(() => _edit.NameEn)" />
             </div>
         </div>
 
-        <h4 style="margin-top:16px">Popis</h4>
+        <h4 style="margin-top:16px">@Localization.SharedResources.Common_Description</h4>
         <div class="row">
             <div class="col-12 col-md-6">
-                <SfTextArea CssClass="w-100" Placeholder="Popis (CZ)" FloatLabelType="FloatLabelType.Always" @bind-Value="_edit.DescriptionCz" Rows="3"></SfTextArea>
+                <SfTextArea CssClass="w-100" Placeholder="@Localization.SharedResources.Common_DescriptionCzech" FloatLabelType="FloatLabelType.Always" @bind-Value="_edit.DescriptionCz" Rows="3"></SfTextArea>
                 <ValidationMessage For="@(() => _edit.DescriptionCz)" />
             </div>
             <div class="col-12 col-md-6">
@@ -54,21 +54,21 @@
             </div>
         </div>
 
-        <h4 style="margin-top:16px">Propojené feature</h4>
+        <h4 style="margin-top:16px">@Localization.SharedResources.Scenarios_LinkedFeatures</h4>
         <div class="row">
             <div class="col-12 col-md-6">
-                <label>Vstupní feature</label>
+                <label>@Localization.SharedResources.Scenarios_InputFeature</label>
                 <SfDropDownList TItem="FeatureDTO" TValue="Guid?" DataSource="@_features"
-                                Placeholder="Vyberte vstupní feature"
+                                Placeholder="@Localization.SharedResources.Scenarios_SelectInputFeature"
                                 @bind-Value="_edit.InputFeatureId" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" ShowClearButton="true">
                     <DropDownListFieldSettings Text="Code" Value="Id"></DropDownListFieldSettings>
                 </SfDropDownList>
                 <ValidationMessage For="@(() => _edit.InputFeatureId)" />
             </div>
             <div class="col-12 col-md-6">
-                <label>Výstupní feature</label>
+                <label>@Localization.SharedResources.Scenarios_OutputFeature</label>
                 <SfDropDownList TItem="FeatureDTO" TValue="Guid?" DataSource="@_features"
-                                Placeholder="Vyberte výstupní feature"
+                                Placeholder="@Localization.SharedResources.Scenarios_SelectOutputFeature"
                                 @bind-Value="_edit.OutputFeatureId" AllowFiltering="true" FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains" ShowClearButton="true">
                     <DropDownListFieldSettings Text="Code" Value="Id"></DropDownListFieldSettings>
                 </SfDropDownList>
@@ -84,7 +84,7 @@
         }
 
         <div style="margin-top:16px">
-            <SfButton CssClass="e-primary" Type="Submit">Uložit</SfButton>
+            <SfButton CssClass="e-primary" Type="Submit">@Localization.SharedResources.Common_Save</SfButton>
         </div>
     </div>
 </EditForm>

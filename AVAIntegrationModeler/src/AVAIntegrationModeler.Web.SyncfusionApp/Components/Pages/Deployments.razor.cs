@@ -1,4 +1,5 @@
 using AVAIntegrationModeler.API.Client;
+using AVAIntegrationModeler.Localization;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -74,7 +75,7 @@ public partial class Deployments : ComponentBase
     }
     catch (Exception ex)
     {
-      await ShowNotification($"Chyba exportu: {ex.Message}", false);
+      await ShowNotification($"Export error: {ex.Message}", false);
     }
   }
 

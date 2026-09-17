@@ -4,7 +4,7 @@
 @using Syncfusion.Blazor.Grids
 @using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List
 
-<PageTitle>Nasazení</PageTitle>
+<PageTitle>@Localization.SharedResources.Deployments_Title</PageTitle>
 
 <div id="ControlRegion">
     <div id="GridContainer">
@@ -21,7 +21,7 @@
 
             <Syncfusion.Blazor.Navigations.SfToolbar>
                 <Syncfusion.Blazor.Navigations.ToolbarItems>
-                    <Syncfusion.Blazor.Navigations.ToolbarItem Text="Přidat nasazení" PrefixIcon="e-icons e-add" Id="AddNew" OnClick="AddNew"></Syncfusion.Blazor.Navigations.ToolbarItem>
+                    <Syncfusion.Blazor.Navigations.ToolbarItem Text="@Localization.SharedResources.Deployments_AddNew" PrefixIcon="e-icons e-add" Id="AddNew" OnClick="AddNew"></Syncfusion.Blazor.Navigations.ToolbarItem>
                 </Syncfusion.Blazor.Navigations.ToolbarItems>
             </Syncfusion.Blazor.Navigations.SfToolbar>
 
@@ -30,27 +30,13 @@
             <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
 
             <GridColumns>
-                <GridColumn Field=@nameof(DeploymentListViewModel.Code) HeaderText="Kód" Width="150" FilterSettings="@_containsFilter"></GridColumn>
-                <GridColumn Field=@nameof(DeploymentListViewModel.Name) HeaderText="Název" Width="300" FilterSettings="@_containsFilter"></GridColumn>
-                <GridColumn Field=@nameof(DeploymentListViewModel.DataModelCount) HeaderText="Datové modely" Width="150"></GridColumn>
-                <GridColumn Field=@nameof(DeploymentListViewModel.LastDeploymentDateTime) HeaderText="Poslední nasazení" Width="180" Type="ColumnType.DateTime" Format="dd.MM.yyyy HH:mm"></GridColumn>
-                <GridColumn Field=@nameof(DeploymentListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="320" Visible="true">
-                    <Template>
-                        @{
-                            var dep = (context as DeploymentListViewModel);
-                            <div class="id-cell-container">
-                                <span class="id-text">@dep!.Id.ToString()</span>
-                                <SfButton CssClass="e-small e-round action-button copy-icon-button"
-                                          IconCss="e-icons e-copy"
-                                          IsPrimary="false"
-                                          OnClick="@(() => CopyToClipboard(dep.Id.ToString()))"
-                                          title="Kopírovat ID do schránky">
-                                </SfButton>
-                            </div>
-                        }
-                    </Template>
-                </GridColumn>
-                <GridColumn HeaderText="Akce" Width="140" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
+                <GridColumn Field=@nameof(DeploymentListViewModel.Code) HeaderText="@Localization.SharedResources.Common_Code" Width="150" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field=@nameof(DeploymentListViewModel.Name) HeaderText="@Localization.SharedResources.Common_Name" Width="300" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn Field=@nameof(DeploymentListViewModel.DataModelCount) HeaderText="@Localization.SharedResources.Areas_DataModelsColumn" Width="150"></GridColumn>
+                <GridColumn Field=@nameof(DeploymentListViewModel.LastDeploymentDateTime) HeaderText="@Localization.SharedResources.Deployments_LastDeployment" Width="180" Type="ColumnType.DateTime" Format="dd.MM.yyyy HH:mm"></GridColumn>
+                <GridColumn Field=@nameof(DeploymentListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="1" Visible="false" AllowSearching="false"></GridColumn>
+                <GridColumn Field=@nameof(DeploymentListViewModel.IdText) HeaderText="ID Text" Width="1" Visible="false" AllowSearching="true" FilterSettings="@_containsFilter"></GridColumn>
+                <GridColumn HeaderText="@Localization.SharedResources.Common_Actions" Width="165" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
                     <Template>
                         @{
                             var model = (context as DeploymentListViewModel);
@@ -59,19 +45,25 @@
                                           IconCss="e-icons e-edit"
                                           IsPrimary="false"
                                           OnClick="@(() => EditDeployment(model!))"
-                                          title="Editovat">
+                                          title="@Localization.SharedResources.Common_Edit">
+                                </SfButton>
+                                <SfButton CssClass="e-small e-round e-outline action-button"
+                                          IconCss="e-icons e-copy"
+                                          IsPrimary="false"
+                                          OnClick="@(() => CopyToClipboard(model!.Id.ToString()))"
+                                          title="@Localization.SharedResources.Common_CopyIdToClipboard">
                                 </SfButton>
                                 <SfButton CssClass="e-small e-round e-outline action-button"
                                           IconCss="e-icons e-export"
                                           IsPrimary="false"
                                           OnClick="@(() => ExportDeploymentAsync(model!))"
-                                          title="Exportovat DataModely a záznamy">
+                                          title="@Localization.SharedResources.Deployments_ExportTitle">
                                 </SfButton>
                                 <SfButton CssClass="e-small e-round e-outline action-button e-danger"
                                           IconCss="e-icons e-delete"
                                           IsPrimary="false"
                                           OnClick="@(() => DeleteDeploymentAsync(model!))"
-                                          title="Smazat">
+                                          title="@Localization.SharedResources.Common_Delete">
                                 </SfButton>
                             </div>
                         }
@@ -117,7 +109,7 @@
     private async Task CopyToClipboard(string text)
     {
         await JS.InvokeVoidAsync("navigator.clipboard.writeText", text);
-        await ShowNotification($"ID zkopírováno: {text.Substring(0, 8)}...");
+        await ShowNotification(string.Format(Localization.SharedResources.Common_IdCopied, text.Substring(0, 8)));
     }
 
     private void EditDeployment(DeploymentListViewModel deployment)

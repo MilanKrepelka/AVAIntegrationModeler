@@ -13,12 +13,12 @@
     <ValidationSummary />
 
     <div class="container">
-        <h2>@(IsNew ? "Nový datový model" : "Upravit datový model")</h2>
+        <h2>@(IsNew ? Localization.SharedResources.DataModels_NewTitle : Localization.SharedResources.DataModels_EditTitle)</h2>
 
         <div class="row">
             <div class="col-12 col-md-6">
                 <SfTextBox CssClass="w-100"
-                           Placeholder="Kód"
+                           Placeholder="@Localization.SharedResources.Common_Code"
                            FloatLabelType="FloatLabelType.Always"
                            @bind-Value="_edit.Code">
                 </SfTextBox>
@@ -26,7 +26,7 @@
             </div>
             <div class="col-12 col-md-6">
                 <SfTextBox CssClass="w-100"
-                           Placeholder="ID"
+                           Placeholder="@Localization.SharedResources.Identifier"
                            FloatLabelType="FloatLabelType.Always"
                            @bind-Value="_edit.IdText"
                            Readonly="true">
@@ -37,7 +37,7 @@
         <div class="row" style="margin-top:16px">
             <div class="col-12">
                 <SfTextBox CssClass="w-100"
-                           Placeholder="Název"
+                           Placeholder="@Localization.SharedResources.Common_Name"
                            FloatLabelType="FloatLabelType.Always"
                            @bind-Value="_edit.Name">
                 </SfTextBox>
@@ -48,7 +48,7 @@
         <div class="row" style="margin-top:16px">
             <div class="col-12">
                 <SfTextArea CssClass="w-100"
-                            Placeholder="Popis"
+                            Placeholder="@Localization.SharedResources.Common_Description"
                             FloatLabelType="FloatLabelType.Always"
                             @bind-Value="_edit.Description"
                             Rows="3">
@@ -59,7 +59,7 @@
         <div class="row" style="margin-top:16px">
             <div class="col-12">
                 <SfTextArea CssClass="w-100"
-                            Placeholder="Poznámky"
+                            Placeholder="@Localization.SharedResources.DataModels_Notes"
                             FloatLabelType="FloatLabelType.Always"
                             @bind-Value="_edit.Notes"
                             Rows="3">
@@ -69,7 +69,7 @@
 
         <div class="row" style="margin-top:16px">
             <div class="col-12">
-                <SfCheckBox @bind-Checked="_edit.IsAggregateRoot" Label="Je agregátním kořenem (Aggregate Root)"></SfCheckBox>
+                <SfCheckBox @bind-Checked="_edit.IsAggregateRoot" Label="@Localization.SharedResources.DataModels_AggregateRootLabel"></SfCheckBox>
             </div>
         </div>
 
@@ -78,7 +78,7 @@
                 <SfDropDownList TItem="AreaDTO" TValue="Guid?"
                                 DataSource="@_availableAreas"
                                 @bind-Value="_edit.AreaId"
-                                Placeholder="Oblast (nepovinná)"
+                                Placeholder="@Localization.SharedResources.DataModels_AreaOptional"
                                 FloatLabelType="FloatLabelType.Always"
                                 AllowFiltering="true"
                                 FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
@@ -97,8 +97,8 @@
         }
 
         <div style="margin-top:24px">
-            <SfButton CssClass="e-primary" Type="Submit">Uložit</SfButton>
-            <SfButton CssClass="e-outline" Type="Button" style="margin-left:8px" OnClick="NavigateBack">Zpět</SfButton>
+            <SfButton CssClass="e-primary" Type="Submit">@Localization.SharedResources.Common_Save</SfButton>
+            <SfButton CssClass="e-outline" Type="Button" style="margin-left:8px" OnClick="NavigateBack">@Localization.SharedResources.Common_Back</SfButton>
         </div>
     </div>
 </EditForm>
