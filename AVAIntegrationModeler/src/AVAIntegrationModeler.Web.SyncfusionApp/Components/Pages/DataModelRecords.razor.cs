@@ -3,6 +3,7 @@ using AVAIntegrationModeler.Contracts;
 using AVAIntegrationModeler.Localization;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.Web.SyncfusionApp.Mapping;
+using AVAIntegrationModeler.Web.SyncfusionApp.Services;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
@@ -15,6 +16,7 @@ public partial class DataModelRecords : ComponentBase
   [Inject] private IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
   [Inject] private NavigationManager NavigationManager { get; set; } = default!;
   [Inject] private IJSRuntime JS { get; set; } = default!;
+  [Inject] private GridFilterStateService _filterState { get; set; } = default!;
 
   [Parameter] public string? Ds { get; set; }
 
@@ -24,6 +26,10 @@ public partial class DataModelRecords : ComponentBase
   public bool IsLoading { get; set; } = true;
   public Datasource Datasource { get; set; } = Datasource.Database;
   public Guid? SelectedModelId { get; set; }
+
+  private List<GridFilterColumn> _filterPredicates = new();
+  private bool _gridVisible = true;
+  private bool _pendingFilterRestore = false;
 
   public List<DataModelRecordListViewModel> RecordList { get; set; } = new();
 
@@ -41,10 +47,34 @@ public partial class DataModelRecords : ComponentBase
 
     _initialized = true;
     Datasource = newDs;
+    _filterPredicates = _filterState.GetOrEmpty($"DataModelRecords_{newDs}");
+    _pendingFilterRestore = _filterPredicates.Count > 0;
     SelectedModelId = null;
     await LoadDataModelsAsync();
     await LoadRecordsAsync();
+    if (_pendingFilterRestore) _gridVisible = false;
+    await InvokeAsync(StateHasChanged);
     if (Grid != null) await Grid.Refresh();
+    await RestoreFiltersAsync();
+  }
+
+  private async Task RestoreFiltersAsync()
+  {
+    if (!_pendingFilterRestore) return;
+    _pendingFilterRestore = false;
+    try
+    {
+      if (Grid != null)
+        foreach (var col in _filterPredicates)
+          if (col.Value != null)
+            await Grid.FilterByColumnAsync(col.Field, col.Operator.ToString().ToLower(), col.Value, col.Predicate ?? "and", col.MatchCase);
+    }
+    finally
+    {
+      _gridVisible = true;
+      IsLoading = false;
+      await InvokeAsync(StateHasChanged);
+    }
   }
 
   protected override Task OnInitializedAsync() => base.OnInitializedAsync();
@@ -104,5 +134,11 @@ public partial class DataModelRecords : ComponentBase
     var ids = selected.Select(r => r.Id).ToList();
     var bytes = await _apiClient.ExportDataModelRecords(Datasource, ids, CancellationToken.None);
     await JS.InvokeVoidAsync("downloadFile", "export.zip", "application/zip", bytes);
+  }
+
+  private void OnGridActionCompleted(ActionEventArgs<DataModelRecordListViewModel> args)
+  {
+    if (args.RequestType is Syncfusion.Blazor.Grids.Action.Filtering or Syncfusion.Blazor.Grids.Action.ClearFiltering)
+      _filterState.Save($"DataModelRecords_{Datasource}", Grid?.FilterSettings?.Columns);
   }
 }

@@ -1,8 +1,10 @@
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Localization;
+using AVAIntegrationModeler.Web.SyncfusionApp.Services;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Syncfusion.Blazor.Grids;
 
 namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
 
@@ -13,9 +15,20 @@ public partial class Deployments : ComponentBase
 {
   [Inject] IAVAIntegrationModelerApiClient ApiClient { get; set; } = default!;
   [Inject] private NavigationManager NavigationManager { get; set; } = default!;
+  [Inject] GridFilterStateService _filterState { get; set; } = default!;
 
   public bool IsLoading { get; set; } = false;
   public List<DeploymentListViewModel> DeploymentsList { get; set; } = new();
+
+  private List<GridFilterColumn> _filterPredicates = new();
+  private bool _gridVisible = true;
+  private bool _pendingFilterRestore = false;
+
+  protected override void OnInitialized()
+  {
+    _filterPredicates = _filterState.GetOrEmpty("Deployments");
+    _pendingFilterRestore = _filterPredicates.Count > 0;
+  }
 
   protected override async Task OnInitializedAsync()
   {
@@ -55,8 +68,29 @@ public partial class Deployments : ComponentBase
     finally
     {
       IsLoading = false;
+      if (_pendingFilterRestore) { IsLoading = true; _gridVisible = false; }
       await InvokeAsync(StateHasChanged);
       if (Grid != null) await Grid.Refresh();
+      await RestoreFiltersAsync();
+    }
+  }
+
+  private async Task RestoreFiltersAsync()
+  {
+    if (!_pendingFilterRestore) return;
+    _pendingFilterRestore = false;
+    try
+    {
+      if (Grid != null)
+        foreach (var col in _filterPredicates)
+          if (col.Value != null)
+            await Grid.FilterByColumnAsync(col.Field, col.Operator.ToString().ToLower(), col.Value, col.Predicate ?? "and", col.MatchCase);
+    }
+    finally
+    {
+      _gridVisible = true;
+      IsLoading = false;
+      await InvokeAsync(StateHasChanged);
     }
   }
 

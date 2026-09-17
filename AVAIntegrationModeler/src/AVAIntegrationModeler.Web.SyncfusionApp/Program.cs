@@ -17,6 +17,7 @@ builder.Services.Configure<AnthropicOptions>(builder.Configuration.GetSection("A
 builder.Services.AddSingleton<IntegrationHintService>();
 builder.Services.AddScoped<DomainContextBuilder>();
 builder.Services.AddScoped<AnthropicChatService>();
+builder.Services.AddScoped<GridFilterStateService>();
 //builder.Services.AddWebAppHttpClientFactory(builder.Configuration);
 
 var app = builder.Build();

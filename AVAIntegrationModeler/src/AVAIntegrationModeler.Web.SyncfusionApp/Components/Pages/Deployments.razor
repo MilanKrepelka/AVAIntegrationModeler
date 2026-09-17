@@ -7,7 +7,7 @@
 <PageTitle>@Localization.SharedResources.Deployments_Title</PageTitle>
 
 <div id="ControlRegion">
-    <div id="GridContainer">
+    <div id="GridContainer" style="@(!_gridVisible ? "visibility:hidden" : "")">
         <SfGrid ID="Grid"
                 DataSource="@DeploymentsList"
                 @ref="Grid"
@@ -27,6 +27,7 @@
 
             <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar" IgnoreAccent="true"></GridFilterSettings>
+            <GridEvents TValue="DeploymentListViewModel" OnActionComplete="OnGridActionCompleted"></GridEvents>
             <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
 
             <GridColumns>
@@ -115,5 +116,11 @@
     private void EditDeployment(DeploymentListViewModel deployment)
     {
         NavigationManager.NavigateTo($"/deploymentedit/{deployment.Code}");
+    }
+
+    private void OnGridActionCompleted(ActionEventArgs<DeploymentListViewModel> args)
+    {
+        if (args.RequestType is Syncfusion.Blazor.Grids.Action.Filtering or Syncfusion.Blazor.Grids.Action.ClearFiltering)
+            _filterState.Save("Deployments", Grid?.FilterSettings?.Columns);
     }
 }

@@ -26,6 +26,7 @@
     {
         <div class="alert alert-warning" style="margin-bottom:8px">⚠️ @_areasError</div>
     }
+    <div style="@(!_gridVisible ? "visibility:hidden" : "")">
     <SfGrid ID="Grid"
             DataSource="@DataModelList"
             @ref="Grid"
@@ -52,7 +53,9 @@
         <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple"  
                        Mode="Syncfusion.Blazor.Grids.SelectionMode.Row" >
 </GridSelectionSettings>
-        <GridEvents OnToolbarClick="ToolbarClick" TValue="DataModelListViewModel"></GridEvents>
+        <GridEvents OnToolbarClick="ToolbarClick"
+                    OnActionComplete="OnGridActionCompleted"
+                    TValue="DataModelListViewModel"></GridEvents>
         <GridColumns>
             <GridColumn Type='Syncfusion.Blazor.Grids.ColumnType.CheckBox' Width="50"></GridColumn>
             <GridColumn Field=@nameof(DataModelListViewModel.AreaName) HeaderText="@Localization.SharedResources.Common_Area" Width="150" FilterSettings="@_containsFilter"></GridColumn>
@@ -253,6 +256,7 @@
         </GridTemplates>
 
     </SfGrid>
+    </div>
 </div>
 
 @if (_notification != null)
@@ -275,6 +279,12 @@
         {
             //this.Grid?.ExportToExcelAsync();
         }
+    }
+
+    private void OnGridActionCompleted(ActionEventArgs<DataModelListViewModel> args)
+    {
+        if (args.RequestType is Syncfusion.Blazor.Grids.Action.Filtering or Syncfusion.Blazor.Grids.Action.ClearFiltering)
+            _filterState.Save("DataModels", Grid?.FilterSettings?.Columns);
     }
 
     [Inject] private IJSRuntime JS { get; set; } = default!;

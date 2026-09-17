@@ -11,7 +11,7 @@
 <PageTitle>@Localization.SharedResources.Scenarios_Title</PageTitle>
 
 <div id="ControlRegion">
-    <div id="GridContainer">
+    <div id="GridContainer" style="@(!_gridVisible ? "visibility:hidden" : "")">
         <SfGrid ID="Grid"
             DataSource="@ScenariosList"
             @ref="Grid"
@@ -219,5 +219,7 @@
     private void OnActionComplete(ActionEventArgs<ScenarioListViewModel> args)
     {
         IsLoading = false;
+        if (args.RequestType is Syncfusion.Blazor.Grids.Action.Filtering or Syncfusion.Blazor.Grids.Action.ClearFiltering)
+            _filterState.Save($"Scenarios_{Datasource}", Grid?.FilterSettings?.Columns);
     }
 }

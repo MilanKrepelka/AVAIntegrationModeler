@@ -56,6 +56,7 @@
     }
     else
     {
+        <div style="@(!_gridVisible ? "visibility:hidden" : "")">
         <SfGrid ID="RecordsGrid"
                 DataSource="@RecordList"
                 @ref="Grid"
@@ -68,6 +69,7 @@
 
             <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar" IgnoreAccent="true"></GridFilterSettings>
+            <GridEvents TValue="DataModelRecordListViewModel" OnActionComplete="OnGridActionCompleted"></GridEvents>
             <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
             <GridSelectionSettings Type="Syncfusion.Blazor.Grids.SelectionType.Multiple" Mode="Syncfusion.Blazor.Grids.SelectionMode.Row" />
 
@@ -134,5 +136,6 @@
                 </DetailTemplate>
             </GridTemplates>
         </SfGrid>
+        </div>
     }
 </div>

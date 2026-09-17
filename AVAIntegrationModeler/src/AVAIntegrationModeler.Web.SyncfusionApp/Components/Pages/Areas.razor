@@ -8,7 +8,7 @@
 <PageTitle>@Localization.SharedResources.Areas_Title</PageTitle>
 
 <div id="ControlRegion">
-    <div id="GridContainer">
+    <div id="GridContainer" style="@(!_gridVisible ? "visibility:hidden" : "")">
         <SfGrid ID="Grid"
                 DataSource="@AreasList"
                 @ref="Grid"
@@ -29,6 +29,7 @@
 
             <GridSearchSettings IgnoreCase="true"></GridSearchSettings>
             <GridFilterSettings Type="Syncfusion.Blazor.Grids.FilterType.FilterBar" IgnoreAccent="true"></GridFilterSettings>
+            <GridEvents TValue="AreaListViewModel" OnActionComplete="OnGridActionCompleted"></GridEvents>
             <GridPageSettings PageSizes="true" PageSize="20"></GridPageSettings>
 
             <GridColumns>
@@ -152,5 +153,11 @@
     private void EditArea(AreaListViewModel area)
     {
         NavigationManager.NavigateTo($"/areaedit/{area.Code}");
+    }
+
+    private void OnGridActionCompleted(ActionEventArgs<AreaListViewModel> args)
+    {
+        if (args.RequestType is Syncfusion.Blazor.Grids.Action.Filtering or Syncfusion.Blazor.Grids.Action.ClearFiltering)
+            _filterState.Save("Areas", Grid?.FilterSettings?.Columns);
     }
 }
