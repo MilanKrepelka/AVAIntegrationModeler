@@ -94,6 +94,11 @@
             <SfButton CssClass="e-primary" HtmlAttributes="@(new Dictionary<string, object> { { "type", "submit" } })">
                 @Localization.SharedResources.Common_Save
             </SfButton>
+            <SfButton CssClass="e-success"
+                      HtmlAttributes="@(new Dictionary<string, object> { { "type", "submit" } })"
+                      OnClick="@(() => _saveAndNew = true)">
+                Uložit a nový záznam
+            </SfButton>
             <SfButton CssClass="e-outline" Type="Button" OnClick="GoBack">@Localization.SharedResources.Common_Back</SfButton>
         </div>
     </div>

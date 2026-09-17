@@ -26,6 +26,7 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
   private DataModelRecordDTO? _existingRecord;
   private string? _saveMessage;
   private bool _saveSuccess;
+  private bool _saveAndNew;
 
   public bool IsLoading { get; set; } = true;
   public bool IsCreate => recordId == Guid.Empty;
@@ -164,6 +165,14 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
       _saveMessage = SharedResources.Common_UnexpectedError;
       Console.WriteLine($"SaveAsync error: {ex.Message}");
     }
+
+    if (_saveSuccess && _saveAndNew)
+    {
+      _saveAndNew = false;
+      NavigationManager.NavigateTo($"/datamodelrecordedit/{dataSourceAsString}/{modelId}");
+      return;
+    }
+    _saveAndNew = false;
   }
 
   private void GenerateExternalId()
