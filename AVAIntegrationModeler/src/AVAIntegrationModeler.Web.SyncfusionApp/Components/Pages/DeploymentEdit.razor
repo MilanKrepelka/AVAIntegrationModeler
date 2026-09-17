@@ -116,7 +116,7 @@
                                     <td>@(dm?.Name ?? "")</td>
                                     <td style="white-space:nowrap">
                                         <SfButton CssClass="e-small e-outline"
-                                                  IconCss="e-icons e-changes"
+                                                  IconCss="e-icons e-eye"
                                                   Type="Button"
                                                   title="@Localization.SharedResources.DataModels_CompareDbVsAvaPlace"
                                                   OnClick="@(() => NavigationManager.NavigateTo($"/datamodelchanges/{id}"))">
@@ -256,7 +256,7 @@
                                         </td>
                                         <td>
                                             <SfButton CssClass="e-small e-outline"
-                                                      IconCss="e-icons e-changes"
+                                                      IconCss="e-icons e-eye"
                                                       Type="Button"
                                                       title="@Localization.SharedResources.Deployments_DetailChanges"
                                                       OnClick="@(() => NavigateToModelChanges(item.DataModelId))">
