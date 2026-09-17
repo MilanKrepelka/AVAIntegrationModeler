@@ -19,6 +19,8 @@ public partial class DataModelEdit : ComponentBase, IDisposable
 
   [Parameter] public Guid? id { get; set; }
   [Parameter] public string dataSourceAsString { get; set; } = string.Empty;
+  [SupplyParameterFromQuery(Name = "areaId")] public Guid? InitialAreaId { get; set; }
+  [SupplyParameterFromQuery(Name = "returnUrl")] public string? ReturnUrl { get; set; }
 
   private Datasource _datasource = Datasource.Database;
   private bool IsNew => id is null || id == Guid.Empty;
@@ -77,7 +79,7 @@ public partial class DataModelEdit : ComponentBase, IDisposable
     if (IsNew)
     {
       var newId = Guid.NewGuid();
-      _edit = new DataModelEditModel { Id = newId, IdText = newId.ToString() };
+      _edit = new DataModelEditModel { Id = newId, IdText = newId.ToString(), AreaId = InitialAreaId };
       _fields = [];
     }
     else
@@ -206,7 +208,10 @@ public partial class DataModelEdit : ComponentBase, IDisposable
 
   private void NavigateBack()
   {
-    NavigationManager.NavigateTo($"/datamodels/{_datasource.ToString().ToLower()}");
+    if (!string.IsNullOrEmpty(ReturnUrl))
+      NavigationManager.NavigateTo(ReturnUrl);
+    else
+      NavigationManager.NavigateTo($"/datamodels/{_datasource.ToString().ToLower()}");
   }
 
   public void Dispose()

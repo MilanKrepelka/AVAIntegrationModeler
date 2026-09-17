@@ -119,7 +119,7 @@
                                                   IconCss="e-icons e-eye"
                                                   Type="Button"
                                                   title="@Localization.SharedResources.DataModels_CompareDbVsAvaPlace"
-                                                  OnClick="@(() => NavigationManager.NavigateTo($"/datamodelchanges/{id}"))">
+                                                  OnClick="@(() => NavigationManager.NavigateTo($"/datamodelchanges/{id}?returnUrl=/deploymentedit/{deploymentCode}"))">
                                         </SfButton>
                                         <SfButton CssClass="e-small e-danger e-outline"
                                                   Type="Button"

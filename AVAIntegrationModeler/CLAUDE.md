@@ -304,6 +304,39 @@ await InvokeAsync(StateHasChanged);
 if (Grid != null) await Grid.Refresh();
 ```
 
+### Navigace zpět a `returnUrl`
+
+Edit stránky mají tlačítko Zpět (`GoBack` / `NavigateBack`), které standardně naviguje na výchozí přehled (např. `/datamodels/{datasource}`). Pokud je edit stránka otevřena z jiného místa než výchozího přehledu (mapa, jiná edit stránka), musí volající předat query parametr `returnUrl`, aby Zpět vrátilo uživatele na správnou stránku.
+
+**Pravidlo: každá navigace na edit nebo detail stránku z non-standardního místa MUSÍ předat `returnUrl`.**
+
+Implementační vzor v `GoBack()` / `NavigateBack()`:
+```csharp
+[SupplyParameterFromQuery(Name = "returnUrl")] public string? ReturnUrl { get; set; }
+
+private void GoBack()
+{
+    if (!string.IsNullOrEmpty(ReturnUrl))
+        NavigationManager.NavigateTo(ReturnUrl);
+    else
+        NavigationManager.NavigateTo("/vychozi-prehled");
+}
+```
+
+Volající předá `returnUrl` v URL:
+```csharp
+NavigationManager.NavigateTo($"/datamodeledit/Database/{id}?returnUrl=/datamodelmap/{id}");
+```
+
+Stránky s implementovaným `returnUrl`:
+- `DataModelEdit` — query param `returnUrl`; výchozí zpět: `/datamodels/{datasource}`
+- `DataModelChanges` — query param `returnUrl`; výchozí zpět: `/datamodels/database`
+
+Volající předávající `returnUrl`:
+- `AreaMap.razor` → `DataModelEdit` (nový model): `returnUrl=/areamap/{areaId}`
+- `DataModelMap.razor` → `DataModelEdit` (edit modelu): `returnUrl=/datamodelmap/{modelId}`
+- `DeploymentEdit.razor` → `DataModelChanges` (oba výskyty): `returnUrl=/deploymentedit/{deploymentCode}`
+
 ### ViewModels a mapování
 
 Stránky pracují s vlastními view modely ze složky `ViewModels/List/` (`ScenarioListViewModel`, `DataModelListViewModel`, `FeatureListViewModel`, `IntegrationMapListViewModel`). Mapování z API response DTO na view modely zajišťují třídy ve složce `Mapping/`.

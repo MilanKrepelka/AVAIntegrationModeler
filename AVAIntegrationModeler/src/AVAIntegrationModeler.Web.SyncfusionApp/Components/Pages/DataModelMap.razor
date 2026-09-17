@@ -146,7 +146,7 @@ else
         if (node.ID == _lastClickedNodeId && (now - _lastClickTime).TotalMilliseconds < 500)
         {
             _lastClickedNodeId = null;
-            NavigationManager.NavigateTo($"/datamodeledit/Database/{node.ID}");
+            NavigationManager.NavigateTo($"/datamodeledit/Database/{node.ID}?returnUrl=/datamodelmap/{node.ID}");
             return;
         }
 

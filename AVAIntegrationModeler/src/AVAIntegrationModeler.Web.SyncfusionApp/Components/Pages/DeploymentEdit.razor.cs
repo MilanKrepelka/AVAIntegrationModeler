@@ -281,7 +281,7 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
   }
 
   private void NavigateToModelChanges(Guid modelId)
-    => NavigationManager.NavigateTo($"/datamodelchanges/{modelId}");
+    => NavigationManager.NavigateTo($"/datamodelchanges/{modelId}?returnUrl=/deploymentedit/{deploymentCode}");
 
   public void Dispose()
   {

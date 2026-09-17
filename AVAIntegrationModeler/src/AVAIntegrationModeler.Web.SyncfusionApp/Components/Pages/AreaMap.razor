@@ -29,6 +29,9 @@ else
         <button class="btn btn-outline-secondary" @onclick="RegenerateAsync" disabled="@_isSaving">
             Regenerovat mapu
         </button>
+        <button class="btn btn-success" @onclick="@(() => NavigationManager.NavigateTo($"/datamodeledit/Database?areaId={areaId}&returnUrl=/areamap/{areaId}"))">
+            Nový model
+        </button>
         @if (_area.LastMapSave.HasValue)
         {
             <small class="text-muted">
