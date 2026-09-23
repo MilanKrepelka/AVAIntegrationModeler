@@ -174,6 +174,15 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
     var resource = $"{ApiVersionPrefix}/process/importdatamodel";
     Logger.LogDebug($"Importing data model to {CombineUri(resource)}, targetVersion={targetVersion}, allowUpdate={allowUpdate}");
 
+    if (Logger.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+    {
+      var pos = jsonContent.Position;
+      using var reader = new System.IO.StreamReader(jsonContent, System.Text.Encoding.UTF8, leaveOpen: true);
+      var json = await reader.ReadToEndAsync(ct);
+      Logger.LogDebug($"ImportDataModel payload: {json}");
+      jsonContent.Position = pos;
+    }
+
     var body = new StreamContent(jsonContent);
     body.Headers.ContentType = new MediaTypeHeaderValue("application/json") { CharSet = "utf-8" };
 
