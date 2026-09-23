@@ -104,7 +104,7 @@ public class UploadDeploymentToAvaPlaceEndpoint(
         RecordGroupsImported = recordGroupsImported,
         Errors = importErrors
       },
-      importErrors.Count == 0 ? 200 : 207, ct);
+      200, ct);
   }
 
   private static MemoryStream SerializeToUtf8Stream<T>(T data)
