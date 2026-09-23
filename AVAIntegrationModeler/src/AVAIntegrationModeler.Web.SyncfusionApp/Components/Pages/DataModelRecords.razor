@@ -79,21 +79,32 @@
                 <GridColumn Field=@nameof(DataModelRecordListViewModel.ExternalId) HeaderText="External ID" Width="300" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn Field=@nameof(DataModelRecordListViewModel.FieldsSummary) HeaderText="@Localization.SharedResources.DataModelRecords_FieldValues" Width="400" FilterSettings="@_containsFilter"></GridColumn>
                 <GridColumn Field=@nameof(DataModelRecordListViewModel.Id) HeaderText="ID" IsPrimaryKey="true" Width="100" Visible="false"></GridColumn>
-                <GridColumn HeaderText="@Localization.SharedResources.Common_Actions" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center" Visible="@(Datasource == Datasource.Database)">
+                <GridColumn HeaderText="@Localization.SharedResources.Common_Actions" Width="120" TextAlign="Syncfusion.Blazor.Grids.TextAlign.Center">
                     <Template>
                         @{
                             var record = (context as DataModelRecordListViewModel);
                             <div class="action-buttons">
-                                <SfButton CssClass="e-small e-round e-outline action-button"
-                                          IconCss="e-icons e-edit"
-                                          OnClick="@(() => EditRecord(record!))"
-                                          title="@Localization.SharedResources.Common_Edit">
-                                </SfButton>
-                                <SfButton CssClass="e-small e-round e-outline action-button e-danger"
-                                          IconCss="e-icons e-delete"
-                                          OnClick="@(() => DeleteRecordAsync(record!))"
-                                          title="@Localization.SharedResources.Common_Delete">
-                                </SfButton>
+                                @if (Datasource == Datasource.Database)
+                                {
+                                    <SfButton CssClass="e-small e-round e-outline action-button"
+                                              IconCss="e-icons e-edit"
+                                              OnClick="@(() => EditRecord(record!))"
+                                              title="@Localization.SharedResources.Common_Edit">
+                                    </SfButton>
+                                    <SfButton CssClass="e-small e-round e-outline action-button e-danger"
+                                              IconCss="e-icons e-delete"
+                                              OnClick="@(() => DeleteRecordAsync(record!))"
+                                              title="@Localization.SharedResources.Common_Delete">
+                                    </SfButton>
+                                }
+                                else
+                                {
+                                    <SfButton CssClass="e-small e-round e-outline action-button"
+                                              IconCss="e-icons e-eye"
+                                              OnClick="@(() => ViewRecord(record!))"
+                                              title="@Localization.SharedResources.DataModelRecords_View">
+                                    </SfButton>
+                                }
                             </div>
                         }
                     </Template>

@@ -116,6 +116,9 @@ public partial class DataModelRecords : ComponentBase
   private void EditRecord(DataModelRecordListViewModel record)
     => NavigationManager.NavigateTo($"/datamodelrecordedit/{Datasource}/{record.ModelId}/{record.Id}");
 
+  private void ViewRecord(DataModelRecordListViewModel record)
+    => NavigationManager.NavigateTo($"/datamodelrecordview/{Datasource}/{record.ModelId}/{record.Id}?returnUrl=/datamodelrecords/{Ds}");
+
   private async Task DeleteRecordAsync(DataModelRecordListViewModel record)
   {
     var confirmed = await JS.InvokeAsync<bool>("confirm", string.Format(SharedResources.DataModelRecords_DeleteConfirm, record.ExternalId));
