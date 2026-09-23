@@ -7,6 +7,7 @@
 @using System.Text.Json
 @inject IAVAIntegrationModelerApiClient ApiClient
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 
 <PageTitle>Mapa oblastí</PageTitle>
 
@@ -50,13 +51,15 @@ else
     }
     else
     {
-        <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="900px" Nodes="@nodes" Click="@OnNodeClick" Created="OnDiagramCreated">
-            @if (_savedPositions.Count == 0)
-            {
-                <Layout Type="LayoutType.RadialTree" HorizontalSpacing="40" VerticalSpacing="40" FixedNode="@VdmNodeId">
-                </Layout>
-            }
-        </SfDiagramComponent>
+        <div id="diagram-fill-vdmareamap" style="height:@_diagramHeight">
+            <SfDiagramComponent @ref="diagram" Connectors="@connectors" Height="@_diagramHeight" Nodes="@nodes" Click="@OnNodeClick" Created="OnDiagramCreated">
+                @if (_savedPositions.Count == 0)
+                {
+                    <Layout Type="LayoutType.RadialTree" HorizontalSpacing="40" VerticalSpacing="40" FixedNode="@VdmNodeId">
+                    </Layout>
+                }
+            </SfDiagramComponent>
+        </div>
     }
 }
 
@@ -75,6 +78,7 @@ else
     bool _saveSuccess;
     bool _regenerated;
     DateTime? _lastMapSave;
+    string _diagramHeight = "900px";
 
     /// <summary>Pozice uzlů načtené z uloženého diagramu: nodeId → (offsetX, offsetY).</summary>
     Dictionary<string, (double OffsetX, double OffsetY)> _savedPositions = new();
@@ -83,6 +87,16 @@ else
     {
         await base.OnInitializedAsync();
         await LoadAsync(forceRegenerate: false);
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (firstRender)
+        {
+            var h = await JSRuntime.InvokeAsync<int>("setDiagramFillHeight", "diagram-fill-vdmareamap");
+            _diagramHeight = h + "px";
+            await InvokeAsync(StateHasChanged);
+        }
     }
 
     private async Task LoadAsync(bool forceRegenerate)
