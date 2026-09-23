@@ -6,6 +6,7 @@ using AVAIntegrationModeler.AVAPlace.Mapping;
 using AVAIntegrationModeler.Contracts.Deployments;
 using AVAIntegrationModeler.Contracts.DTO;
 using AVAIntegrationModeler.AVAPlace.Options;
+using AVAIntegrationModeler.UseCases.DataModelRecords.Export;
 using AVAIntegrationModeler.UseCases.Deployments.Export;
 using Microsoft.Extensions.Options;
 
@@ -66,7 +67,8 @@ public class UploadDeploymentToAvaPlaceEndpoint(
           }
           else if (entry.Data is List<DataModelRecordDTO> records && currentModelCode is not null)
           {
-            using var recordStream = SerializeToUtf8Stream(records);
+            var exportRecords = DataModelRecordExportMapper.MapToExport(records);
+            using var recordStream = SerializeToUtf8Stream(exportRecords);
             await client.ImportUnifiedDataAsync(currentModelCode, versionCode, allowUpdate: true, allowChangeExternalId: true, recordStream, ct);
             recordGroupsImported++;
           }
