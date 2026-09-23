@@ -8,6 +8,7 @@ using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using ASOL.Core.ApiConnector;
+using ASOL.Core.Localization;
 using ASOL.DataService.Connector;
 using ASOL.DataService.Connector.Options;
 using ASOL.DataService.Contracts;
@@ -165,10 +166,39 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
         UtcCreatedOn = item["UtcCreatedOn"]?.ToObject<DateTimeOffset>() ?? default,
         UtcModifiedOn = item["UtcModifiedOn"]?.ToObject<DateTimeOffset>() ?? default,
         Code = item["Code"]?.ToString(),
+        Name = ParseLocalizedValue(item["Name"]),
+        Description = ParseLocalizedValue(item["Description"]),
       };
       result.Add(record);
     }
     return result;
+  }
+
+  /// <summary>
+  /// Parsuje JSON token na <see cref="LocalizedValue{T}"/>. Podporuje objekt se 'values' polem i plain string.
+  /// </summary>
+  private static LocalizedValue<string>? ParseLocalizedValue(JToken? token)
+  {
+    if (token == null || token.Type == JTokenType.Null)
+      return null;
+
+    if (token.Type == JTokenType.Object)
+      return token.ToObject<LocalizedValue<string>>();
+
+    if (token.Type == JTokenType.String)
+    {
+      var str = token.ToString();
+      return new LocalizedValue<string>
+      {
+        Values = new List<LocalizedValueItem<string>>
+        {
+          new() { Locale = "cs-CZ", Value = str },
+          new() { Locale = "en-US", Value = str },
+        }
+      };
+    }
+
+    return null;
   }
 
   /// <inheritdoc/>
