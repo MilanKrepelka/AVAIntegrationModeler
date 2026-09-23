@@ -5,7 +5,7 @@ using AVAIntegrationModeler.AVAPlace;
 using AVAIntegrationModeler.AVAPlace.Mapping;
 using AVAIntegrationModeler.Contracts.Deployments;
 using AVAIntegrationModeler.Contracts.DTO;
-using AVAIntegrationModeler.Contracts.Options;
+using AVAIntegrationModeler.AVAPlace.Options;
 using AVAIntegrationModeler.UseCases.Deployments.Export;
 using Microsoft.Extensions.Options;
 
