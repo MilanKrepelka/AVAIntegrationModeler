@@ -154,9 +154,22 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
     Logger.LogDebug($"Creating metadata version on {CombineUri(resource)}");
 
     var request = (await AddAuthentication(Client.PostAsync(resource), ct))
+        .WithOptions(ignoreHttpErrors: true)
         .WithCancellationToken(ct);
 
-    var result = await request.As<JObject>();
+    var response = await request.AsMessage();
+    if (!response.IsSuccessStatusCode)
+    {
+      var responseBody = await response.Content.ReadAsStringAsync(ct);
+      Logger.LogError($"CreateMetadataVersion selhalo: {(int)response.StatusCode} {response.StatusCode} — {responseBody}");
+      throw new HttpRequestException(
+          $"CreateMetadataVersion selhalo: {(int)response.StatusCode} {response.StatusCode} — {responseBody}",
+          inner: null,
+          statusCode: response.StatusCode);
+    }
+
+    var resultJson = await response.Content.ReadAsStringAsync(ct);
+    var result = JObject.Parse(resultJson);
     var code = result?["code"]?.ToString();
     if (string.IsNullOrEmpty(code))
       throw new InvalidOperationException("DataService nevrátil kód nově vytvořené verze metadat.");
@@ -198,7 +211,10 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
     {
       var responseBody = await response.Content.ReadAsStringAsync(ct);
       Logger.LogError($"ImportDataModel selhalo: {(int)response.StatusCode} {response.StatusCode} — {responseBody}");
-      response.EnsureSuccessStatusCode();
+      throw new HttpRequestException(
+          $"ImportDataModel selhalo pro verzi {targetVersion}: {(int)response.StatusCode} {response.StatusCode} — {responseBody}",
+          inner: null,
+          statusCode: response.StatusCode);
     }
   }
 
@@ -238,7 +254,10 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
     {
       var responseBody = await response.Content.ReadAsStringAsync(ct);
       Logger.LogError($"ImportUnifiedData selhalo: {(int)response.StatusCode} {response.StatusCode} — {responseBody}");
-      response.EnsureSuccessStatusCode();
+      throw new HttpRequestException(
+          $"ImportUnifiedData selhalo pro model {modelCode}, verzi {targetVersion}: {(int)response.StatusCode} {response.StatusCode} — {responseBody}",
+          inner: null,
+          statusCode: response.StatusCode);
     }
   }
 }
