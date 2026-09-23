@@ -47,6 +47,7 @@ public class UploadDeploymentToAvaPlaceEndpoint(
     string versionCode = string.Empty;
     int modelsImported = 0;
     int recordGroupsImported = 0;
+    var importErrors = new List<string>();
 
     await ServiceRuntimeTenantContext.ExecuteInContextAsync<ICustomDataServiceClient>(
       HttpContext.RequestServices, _avaPlaceOptions.Value.TenantId, async client =>
@@ -54,23 +55,43 @@ public class UploadDeploymentToAvaPlaceEndpoint(
         versionCode = await client.CreateMetadataVersionAsync(ct);
 
         string? currentModelCode = null;
+        bool currentModelImported = false;
 
         foreach (var entry in exportResult.Value.Entries)
         {
           if (entry.Data is DataModelDTO modelDto)
           {
             currentModelCode = modelDto.Code;
-            var definition = DataModelMapper.MapToDefinition(modelDto);
-            using var modelStream = SerializeToUtf8Stream(definition);
-            await client.ImportDataModelAsync(versionCode, allowUpdate: true, modelStream, ct);
-            modelsImported++;
+            currentModelImported = false;
+            try
+            {
+              var definition = DataModelMapper.MapToDefinition(modelDto);
+              using var modelStream = SerializeToUtf8Stream(definition);
+              await client.ImportDataModelAsync(versionCode, allowUpdate: true, modelStream, ct);
+              modelsImported++;
+              currentModelImported = true;
+            }
+            catch (Exception ex)
+            {
+              importErrors.Add($"Model {currentModelCode}: {ex.Message}");
+            }
           }
           else if (entry.Data is List<DataModelRecordDTO> records && currentModelCode is not null)
           {
-            var exportRecords = DataModelRecordExportMapper.MapToExport(records);
-            using var recordStream = SerializeToUtf8Stream(exportRecords);
-            await client.ImportUnifiedDataAsync(currentModelCode, versionCode, allowUpdate: true, allowChangeExternalId: true, recordStream, ct);
-            recordGroupsImported++;
+            if (!currentModelImported)
+              continue;
+
+            try
+            {
+              var exportRecords = DataModelRecordExportMapper.MapToExport(records);
+              using var recordStream = SerializeToUtf8Stream(exportRecords);
+              await client.ImportUnifiedDataAsync(currentModelCode, versionCode, allowUpdate: true, allowChangeExternalId: true, recordStream, ct);
+              recordGroupsImported++;
+            }
+            catch (Exception ex)
+            {
+              importErrors.Add($"Záznamy modelu {currentModelCode}: {ex.Message}");
+            }
           }
         }
       });
@@ -80,9 +101,10 @@ public class UploadDeploymentToAvaPlaceEndpoint(
       {
         VersionCode = versionCode,
         ModelsImported = modelsImported,
-        RecordGroupsImported = recordGroupsImported
+        RecordGroupsImported = recordGroupsImported,
+        Errors = importErrors
       },
-      200, ct);
+      importErrors.Count == 0 ? 200 : 207, ct);
   }
 
   private static MemoryStream SerializeToUtf8Stream<T>(T data)

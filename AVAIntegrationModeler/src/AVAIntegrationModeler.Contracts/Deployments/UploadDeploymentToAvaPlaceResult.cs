@@ -13,4 +13,7 @@ public class UploadDeploymentToAvaPlaceResult
 
   /// <summary>Počet importovaných skupin unifikovaných dat (DataModelRecordy).</summary>
   public int RecordGroupsImported { get; set; }
+
+  /// <summary>Chyby při importu jednotlivých modelů nebo jejich záznamů. Prázdný seznam = vše OK.</summary>
+  public List<string> Errors { get; set; } = [];
 }
