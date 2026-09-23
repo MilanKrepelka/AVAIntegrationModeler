@@ -116,6 +116,7 @@ else
 
     string? _loadError;
     string _diagramHeight = "700px";
+    bool _heightSet;
 
     bool IsLoading { get; set; } = true;
 
@@ -127,11 +128,15 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (!_heightSet)
         {
             var h = await JSRuntime.InvokeAsync<int>("setDiagramFillHeight", "diagram-fill-datamodelmap");
-            _diagramHeight = h + "px";
-            await InvokeAsync(StateHasChanged);
+            if (h > 200)
+            {
+                _heightSet = true;
+                _diagramHeight = h + "px";
+                await InvokeAsync(StateHasChanged);
+            }
         }
     }
 

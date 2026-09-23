@@ -40,14 +40,19 @@
 
     private bool _needsLayout;
     private string _diagramHeight = "700px";
+    private bool _heightSet;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (!_heightSet)
         {
             var h = await JSRuntime.InvokeAsync<int>("setDiagramFillHeight", "diagram-fill-scenariosmap");
-            _diagramHeight = h + "px";
-            await InvokeAsync(StateHasChanged);
+            if (h > 200)
+            {
+                _heightSet = true;
+                _diagramHeight = h + "px";
+                await InvokeAsync(StateHasChanged);
+            }
         }
         if (_needsLayout && diagram is not null)
         {

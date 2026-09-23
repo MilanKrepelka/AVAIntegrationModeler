@@ -90,6 +90,7 @@ else
 
     string _areaNodeId = string.Empty;
     string _diagramHeight = "900px";
+    bool _heightSet;
 
     /// <summary>Pozice uzlů načtené z uloženého diagramu: nodeId → (offsetX, offsetY).</summary>
     Dictionary<string, (double OffsetX, double OffsetY)> _savedPositions = new();
@@ -102,11 +103,15 @@ else
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        if (firstRender)
+        if (!_heightSet)
         {
             var h = await JSRuntime.InvokeAsync<int>("setDiagramFillHeight", "diagram-fill-areamap");
-            _diagramHeight = h + "px";
-            await InvokeAsync(StateHasChanged);
+            if (h > 200)
+            {
+                _heightSet = true;
+                _diagramHeight = h + "px";
+                await InvokeAsync(StateHasChanged);
+            }
         }
     }
 
