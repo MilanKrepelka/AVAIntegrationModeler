@@ -143,8 +143,32 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
       return new List<Models.DataModelRecord>();
     }
 
-    var result = await response.As<DataCollection<Models.DataModelRecord>>();
-    return result?.Items ?? new List<Models.DataModelRecord>();
+    // Parsujeme přes JObject aby nám nevadil type mismatch (např. Description jako string vs LocalizedValue<string>).
+    var root = await response.As<JObject>();
+    var items = root?["items"] as Newtonsoft.Json.Linq.JArray ?? root?["Items"] as Newtonsoft.Json.Linq.JArray;
+    if (items is null) return new List<Models.DataModelRecord>();
+
+    var result = new List<Models.DataModelRecord>();
+    foreach (var item in items)
+    {
+      var record = new Models.DataModelRecord
+      {
+        Id = new Models.DataModelRecordCompositeId
+        {
+          ModelId = item["Id"]?["ModelId"]?.ToObject<Guid>() ?? Guid.Empty,
+          RecordId = item["Id"]?["RecordId"]?.ToObject<Guid>() ?? Guid.Empty,
+        },
+        ExternalId = item["ExternalId"]?.ToString(),
+        SourceId = item["SourceId"]?.ToObject<Guid>() ?? Guid.Empty,
+        MandantCode = item["MandantCode"]?.ToString(),
+        Released = item["Released"]?.ToObject<bool>() ?? false,
+        UtcCreatedOn = item["UtcCreatedOn"]?.ToObject<DateTimeOffset>() ?? default,
+        UtcModifiedOn = item["UtcModifiedOn"]?.ToObject<DateTimeOffset>() ?? default,
+        Code = item["Code"]?.ToString(),
+      };
+      result.Add(record);
+    }
+    return result;
   }
 
   /// <inheritdoc/>
