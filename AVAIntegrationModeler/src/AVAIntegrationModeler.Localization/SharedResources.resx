@@ -618,6 +618,12 @@
   <data name="DataModelRecords.DeleteConfirm" xml:space="preserve">
     <value>Really delete record '{0}'?</value>
   </data>
+  <data name="DataModelRecords.ViewTitle" xml:space="preserve">
+    <value>View record</value>
+  </data>
+  <data name="DataModelRecords.View" xml:space="preserve">
+    <value>View</value>
+  </data>
   <data name="Features.Title" xml:space="preserve">
     <value>Integration Features</value>
   </data>

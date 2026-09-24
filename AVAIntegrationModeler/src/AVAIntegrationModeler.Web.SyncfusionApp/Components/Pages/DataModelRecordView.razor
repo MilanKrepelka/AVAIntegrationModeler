@@ -1,0 +1,127 @@
+@page "/datamodelrecordview/{dataSourceAsString}/{modelId:guid}/{recordId:guid}"
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
+@using AVAIntegrationModeler.Contracts.DTO
+@using Syncfusion.Blazor.Inputs
+@using Syncfusion.Blazor.Buttons
+
+<PageTitle>@Localization.SharedResources.DataModelRecords_ViewTitle</PageTitle>
+
+<div class="container">
+    <h2>@Localization.SharedResources.DataModelRecords_ViewTitle</h2>
+
+    <div class="row" style="margin-bottom:16px">
+        <div class="col-12 col-md-8">
+            <SfTextBox CssClass="w-100"
+                       Placeholder="External ID"
+                       FloatLabelType="FloatLabelType.Always"
+                       Value="@_externalId"
+                       Readonly="true">
+            </SfTextBox>
+        </div>
+    </div>
+
+    @if (_dataModel is not null && _fieldValues.Any())
+    {
+        <h4 style="margin-top:16px">@Localization.SharedResources.DataModelRecords_RecordFields</h4>
+
+        @foreach (var field in _dataModel.Fields)
+        {
+            var key = field.Name;
+            if (!_fieldValues.ContainsKey(key)) continue;
+            var fv = _fieldValues[key];
+
+            <div class="row" style="margin-bottom:12px">
+                <div class="col-12">
+                    <strong>@field.Label (@field.Name)</strong>
+                    @if (!string.IsNullOrEmpty(field.Description))
+                    {
+                        <small class="text-muted"> — @field.Description</small>
+                    }
+                </div>
+                @if (field.IsLocalized)
+                {
+                    <div class="col-12 col-md-6" style="margin-top:4px">
+                        <SfTextBox CssClass="w-100"
+                                   Placeholder="@Localization.SharedResources.Common_Czech"
+                                   FloatLabelType="FloatLabelType.Always"
+                                   Value="@(fv.CzechValue ?? "")"
+                                   Readonly="true">
+                        </SfTextBox>
+                    </div>
+                    <div class="col-12 col-md-6" style="margin-top:4px">
+                        <SfTextBox CssClass="w-100"
+                                   Placeholder="English"
+                                   FloatLabelType="FloatLabelType.Always"
+                                   Value="@(fv.EnglishValue ?? "")"
+                                   Readonly="true">
+                        </SfTextBox>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12 col-md-6" style="margin-top:4px">
+                        <SfTextBox CssClass="w-100"
+                                   Placeholder="@field.Label"
+                                   FloatLabelType="FloatLabelType.Always"
+                                   Value="@(fv.StringValue ?? "")"
+                                   Readonly="true">
+                        </SfTextBox>
+                    </div>
+                }
+            </div>
+        }
+
+        @* Pole záznamu, která nejsou ve schématu (specifická pro AVAPlace) *@
+        @foreach (var kvp in _fieldValues.Where(kv => _dataModel.Fields.All(f => f.Name != kv.Key)))
+        {
+            var fv = kvp.Value;
+            <div class="row" style="margin-bottom:12px">
+                <div class="col-12">
+                    <strong>@kvp.Key</strong>
+                </div>
+                @if (fv.IsLocalized)
+                {
+                    <div class="col-12 col-md-6" style="margin-top:4px">
+                        <SfTextBox CssClass="w-100"
+                                   Placeholder="@Localization.SharedResources.Common_Czech"
+                                   FloatLabelType="FloatLabelType.Always"
+                                   Value="@(fv.CzechValue ?? "")"
+                                   Readonly="true">
+                        </SfTextBox>
+                    </div>
+                    <div class="col-12 col-md-6" style="margin-top:4px">
+                        <SfTextBox CssClass="w-100"
+                                   Placeholder="English"
+                                   FloatLabelType="FloatLabelType.Always"
+                                   Value="@(fv.EnglishValue ?? "")"
+                                   Readonly="true">
+                        </SfTextBox>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12 col-md-6" style="margin-top:4px">
+                        <SfTextBox CssClass="w-100"
+                                   Placeholder="@kvp.Key"
+                                   FloatLabelType="FloatLabelType.Always"
+                                   Value="@(fv.StringValue ?? "")"
+                                   Readonly="true">
+                        </SfTextBox>
+                    </div>
+                }
+            </div>
+        }
+    }
+    else if (IsLoading)
+    {
+        <p><em>@Localization.SharedResources.DataModelRecords_LoadingSchema</em></p>
+    }
+    else
+    {
+        <p class="text-muted">@Localization.SharedResources.DataModelRecords_NoFields</p>
+    }
+
+    <div style="margin-top:16px">
+        <SfButton CssClass="e-outline" Type="Button" OnClick="GoBack">@Localization.SharedResources.Common_Back</SfButton>
+    </div>
+</div>

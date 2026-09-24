@@ -17,6 +17,8 @@ public static class DataModelRecordExportMapper
 
   /// <summary>Namapuje jeden záznam na export formát.</summary>
   public static ExportRecord MapToExport(DataModelRecordDTO dto) => new(
+    dto.ModelId,
+    dto.Id,
     dto.ExternalId,
     dto.Fields.Select(MapField).ToList());
 

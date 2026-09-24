@@ -273,7 +273,9 @@ Výjimky, kde tlačítko může zůstat vně: kontextové akce závislé na výb
 
 ### Vzor pro list stránky (SfGrid + načítání dat)
 
-**Rendermode**: List stránky s `SfGrid` používají `@rendermode InteractiveServer` (bez prerender). **Nepoužívat `InteractiveServerRenderMode(prerender: true)` na list stránkách** — kombinace prerender + `OnInitializedAsync` způsobuje dvojitou inicializaci a SfGrid nedetekuje změnu dat při navigaci zpět.
+**Rendermode**: List stránky s `SfGrid` a stránky s `SfDiagramComponent` **vždy** používají `@rendermode @(new InteractiveServerRenderMode(prerender: false))`. **Nikdy nepoužívat `@rendermode InteractiveServer`** (= `prerender: true`) na stránkách se Syncfusion komponentami — prerender vykreslí statické HTML bez JS před připojením SignalR circuit:
+- `SfGrid`: dvojitá inicializace, přehled je prázdný po navigaci zpět, probliknutí nefiltrovaných dat
+- `SfDiagramComponent`: texty uzlů nejsou centrované při prvním načtení, opraví se až po F5
 
 **Načítání dat**: Vždy vytvořit novou instanci listu a přiřadit ji (ne mutovat existující):
 ```csharp
@@ -303,6 +305,57 @@ IsLoading = false;
 await InvokeAsync(StateHasChanged);
 if (Grid != null) await Grid.Refresh();
 ```
+
+### Navigace zpět a `returnUrl`
+
+Každá stránka s tlačítkem Zpět (`GoBack` / `NavigateBack`) **musí** implementovat query parametr `returnUrl`. Bez něj Zpět vždy skáče na napevno zakódovaný výchozí přehled, což je špatně pokaždé, když je stránka otevřena odjinud.
+
+#### Povinný vzor pro každou novou stránku s tlačítkem Zpět
+
+**code-behind (`.razor.cs`)**:
+```csharp
+// Povinný query parametr — musí být na každé stránce s tlačítkem Zpět
+[SupplyParameterFromQuery(Name = "returnUrl")] public string? ReturnUrl { get; set; }
+
+private void GoBack()
+{
+    if (!string.IsNullOrEmpty(ReturnUrl))
+        NavigationManager.NavigateTo(ReturnUrl);
+    else
+        NavigationManager.NavigateTo("/vychozi-prehled"); // fallback pro přímý vstup
+}
+```
+
+#### Povinný vzor pro každého volajícího
+
+Každé tlačítko / odkaz, které naviguje na jinou stránku a ta stránka má Zpět, **musí předat `returnUrl`** odpovídající aktuální stránce:
+
+```csharp
+// Navigace s returnUrl — povinné kdykoli cílová stránka má tlačítko Zpět
+NavigationManager.NavigateTo($"/datamodeledit/Database/{id}?returnUrl=/datamodelmap/{id}");
+```
+
+Pokud cílová stránka přijímá i jiné query parametry, řetěz je spojíš `&`:
+```csharp
+NavigationManager.NavigateTo($"/datamodeledit/Database?areaId={areaId}&returnUrl=/areamap/{areaId}");
+```
+
+#### Stránky s implementovaným `returnUrl`
+
+| Stránka | Výchozí zpět (fallback) |
+|---|---|
+| `DataModelEdit` | `/datamodels/{datasource}` |
+| `DataModelChanges` | `/datamodels/database` |
+
+#### Kdo předává `returnUrl` (přehled volajících)
+
+| Volající | Cíl | `returnUrl` |
+|---|---|---|
+| `AreaMap.razor` | `DataModelEdit` (nový model) | `/areamap/{areaId}` |
+| `DataModelMap.razor` | `DataModelEdit` (edit modelu) | `/datamodelmap/{modelId}` |
+| `DeploymentEdit.razor` | `DataModelChanges` (oba výskyty) | `/deploymentedit/{deploymentCode}` |
+
+**Při přidávání nové stránky nebo nového navigačního tlačítka:** zkontroluj, zda cílová stránka má Zpět — pokud ano, přidej `returnUrl`. Chybějící `returnUrl` je bug, ne opomenutí.
 
 ### ViewModels a mapování
 

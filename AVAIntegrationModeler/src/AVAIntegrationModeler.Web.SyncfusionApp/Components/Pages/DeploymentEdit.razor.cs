@@ -228,10 +228,20 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
     {
       var result = await ApiClient.UploadDeploymentToAvaPlace(deploymentCode, _cts?.Token ?? CancellationToken.None);
       if (_disposed) return;
-      _avaPlaceSuccess = result.IsSuccess;
-      _avaPlaceMessage = result.IsSuccess
-        ? $"Import do AVAPlace proběhl úspěšně. Verze: {result.Value.VersionCode}, modely: {result.Value.ModelsImported}, záznamy: {result.Value.RecordGroupsImported}."
-        : string.Join(", ", result.Errors);
+      if (result.IsSuccess)
+      {
+        var v = result.Value;
+        var hasErrors = v.Errors.Count > 0;
+        _avaPlaceSuccess = !hasErrors;
+        _avaPlaceMessage = hasErrors
+          ? $"Import dokončen s chybami. Verze: {v.VersionCode}, modely: {v.ModelsImported}, záznamy: {v.RecordGroupsImported}.\n{string.Join("\n", v.Errors)}"
+          : $"Import do AVAPlace proběhl úspěšně. Verze: {v.VersionCode}, modely: {v.ModelsImported}, záznamy: {v.RecordGroupsImported}.";
+      }
+      else
+      {
+        _avaPlaceSuccess = false;
+        _avaPlaceMessage = string.Join(", ", result.Errors);
+      }
     }
     catch (Exception ex)
     {
@@ -281,7 +291,7 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
   }
 
   private void NavigateToModelChanges(Guid modelId)
-    => NavigationManager.NavigateTo($"/datamodelchanges/{modelId}");
+    => NavigationManager.NavigateTo($"/datamodelchanges/{modelId}?returnUrl=/deploymentedit/{deploymentCode}");
 
   public void Dispose()
   {

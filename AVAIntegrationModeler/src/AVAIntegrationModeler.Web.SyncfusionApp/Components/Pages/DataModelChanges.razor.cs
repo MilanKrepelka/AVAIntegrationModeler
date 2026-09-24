@@ -10,6 +10,7 @@ namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
 public partial class DataModelChanges : ComponentBase, IDisposable
 {
   [Parameter] public Guid Id { get; set; }
+  [SupplyParameterFromQuery(Name = "returnUrl")] public string? ReturnUrl { get; set; }
 
   [Inject] private IAVAIntegrationModelerApiClient ApiClient { get; set; } = default!;
   [Inject] private NavigationManager NavigationManager { get; set; } = default!;
@@ -59,7 +60,13 @@ public partial class DataModelChanges : ComponentBase, IDisposable
 
   private void ToggleSameFields() => ViewModel.ShowSameFields = !ViewModel.ShowSameFields;
 
-  private void GoBack() => NavigationManager.NavigateTo("/datamodels/database");
+  private void GoBack()
+  {
+    if (!string.IsNullOrEmpty(ReturnUrl))
+      NavigationManager.NavigateTo(ReturnUrl);
+    else
+      NavigationManager.NavigateTo("/datamodels/database");
+  }
 
   public void Dispose() => _disposed = true;
 }

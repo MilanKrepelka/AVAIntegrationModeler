@@ -1,5 +1,5 @@
 @page "/datamodelmap/{modelId:guid}"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using AVAIntegrationModeler.API.Client
 @using AVAIntegrationModeler.Contracts
 @using AVAIntegrationModeler.Contracts.DTO
@@ -9,6 +9,7 @@
 @using System.Text.Json
 @inject IAVAIntegrationModelerApiClient ApiClient
 @inject NavigationManager NavigationManager
+@inject IJSRuntime JSRuntime
 
 <PageTitle>@(_modelName ?? "Data Model Map")</PageTitle>
 
@@ -17,6 +18,7 @@
 @if (!IsLoading)
 {
     <div style="margin-bottom:8px; display:flex; align-items:center; gap:12px; flex-wrap:wrap;">
+        <button class="btn btn-outline-secondary" @onclick="GoBack">Zpět</button>
         <button class="btn btn-primary" @onclick="SaveMapAsync" disabled="@_isSaving">
             @(_isSaving ? "Ukládám…" : "Uložit mapu")
         </button>
@@ -65,7 +67,8 @@ else if (nodes == null || nodes.Count == 0)
 }
 else
 {
-    <SfDiagramComponent @key="(_maxDepth, _regenerateCount)" @ref="diagram" Connectors="@connectors" Height="700px" Nodes="@nodes" Created="OnDiagramCreated" Click="OnNodeClicked">
+    <div id="diagram-fill-datamodelmap" style="height:@_diagramHeight">
+    <SfDiagramComponent @key="(_maxDepth, _regenerateCount)" @ref="diagram" Connectors="@connectors" Height="@_diagramHeight" Nodes="@nodes" Created="OnDiagramCreated" Click="OnNodeClicked">
         @if (_savedPositions.Count == 0)
         {
             <Layout Type="LayoutType.RadialTree"
@@ -75,10 +78,12 @@ else
             </Layout>
         }
     </SfDiagramComponent>
+    </div>
 }
 
 @code {
     [Parameter] public Guid modelId { get; set; }
+    [SupplyParameterFromQuery(Name = "returnUrl")] public string? ReturnUrl { get; set; }
 
     private string MapLayoutKey => $"datamodelmap-{modelId}";
 
@@ -110,6 +115,8 @@ else
     bool _saveSuccess;
 
     string? _loadError;
+    string _diagramHeight = "700px";
+    bool _heightSet;
 
     bool IsLoading { get; set; } = true;
 
@@ -117,6 +124,20 @@ else
     {
         await base.OnInitializedAsync();
         await LoadModelsAndRenderTreeAsync();
+    }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_heightSet)
+        {
+            var h = await JSRuntime.InvokeAsync<int>("setDiagramFillHeight", "diagram-fill-datamodelmap");
+            if (h > 200)
+            {
+                _heightSet = true;
+                _diagramHeight = h + "px";
+                await InvokeAsync(StateHasChanged);
+            }
+        }
     }
 
     private async Task RegenerateAsync()
@@ -131,27 +152,25 @@ else
 
     private void OnDiagramCreated()
     {
-        diagram?.FitToPage(new FitOptions { Mode = FitMode.Both, Region = DiagramRegion.Content });
+        _ = InvokeAsync(async () =>
+        {
+            if (_savedPositions.Count == 0)
+                await diagram!.DoLayoutAsync();
+            diagram?.FitToPage(new FitOptions { Mode = FitMode.Both, Region = DiagramRegion.Content });
+        });
     }
 
-    private DateTime _lastClickTime = DateTime.MinValue;
-    private string? _lastClickedNodeId;
+    private void GoBack()
+    {
+        var url = string.IsNullOrEmpty(ReturnUrl) ? "/datamodels/database" : ReturnUrl;
+        NavigationManager.NavigateTo(url, forceLoad: true);
+    }
 
     private void OnNodeClicked(ClickEventArgs args)
     {
-        if (args.Element is not Node node || !Guid.TryParse(node.ID, out _))
-            return;
-
-        var now = DateTime.Now;
-        if (node.ID == _lastClickedNodeId && (now - _lastClickTime).TotalMilliseconds < 500)
-        {
-            _lastClickedNodeId = null;
-            NavigationManager.NavigateTo($"/datamodeledit/Database/{node.ID}");
-            return;
-        }
-
-        _lastClickTime = now;
-        _lastClickedNodeId = node.ID;
+        if (args.Count != 2) return;
+        if (args.ActualObject is Node node && Guid.TryParse(node.ID, out _))
+            NavigationManager.NavigateTo($"/datamodeledit/Database/{node.ID}?returnUrl=/datamodelmap/{modelId}");
     }
 
     private async Task OnLevelChanged(int level)

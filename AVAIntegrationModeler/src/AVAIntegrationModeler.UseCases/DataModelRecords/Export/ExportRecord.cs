@@ -1,7 +1,7 @@
 namespace AVAIntegrationModeler.UseCases.DataModelRecords.Export;
 
 /// <summary>Export reprezentace záznamu DataModelu ve formátu kompatibilním s ASOL AVAPlace.</summary>
-public record ExportRecord(string ExternalId, List<ExportRecordField> Fields);
+public record ExportRecord(Guid ModelId, Guid RecordId, string ExternalId, List<ExportRecordField> Fields);
 
 /// <summary>
 /// Export pole záznamu. <see cref="Value"/> je při serializaci buď prostý string (nelokalizované pole),

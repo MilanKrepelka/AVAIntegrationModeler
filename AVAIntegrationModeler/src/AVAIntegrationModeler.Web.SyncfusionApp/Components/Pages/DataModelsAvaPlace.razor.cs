@@ -1,18 +1,31 @@
 using AVAIntegrationModeler.API.Client;
 using AVAIntegrationModeler.Contracts;
+using AVAIntegrationModeler.Web.SyncfusionApp.Services;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
+using Syncfusion.Blazor.Grids;
 
 namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Pages;
 
 public partial class DataModelsAvaPlace : ComponentBase, IDisposable
 {
   [Inject] IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
+  [Inject] GridFilterStateService _filterState { get; set; } = default!;
 
   public bool IsLoading { get; set; } = false;
   public Datasource Datasource { get; set; } = Datasource.AVAPlace;
   public List<DataModelListViewModel> DataModelList { get; set; } = new();
+
+  private List<GridFilterColumn> _filterPredicates = new();
+  private bool _gridVisible = true;
+  private bool _pendingFilterRestore = false;
+
+  protected override void OnInitialized()
+  {
+    _filterPredicates = _filterState.GetOrEmpty("DataModelsAvaPlace");
+    _pendingFilterRestore = _filterPredicates.Count > 0;
+  }
 
   private CancellationTokenSource _cts = new();
 
@@ -50,8 +63,30 @@ public partial class DataModelsAvaPlace : ComponentBase, IDisposable
       if (!token.IsCancellationRequested)
       {
         IsLoading = false;
+        if (_pendingFilterRestore) { IsLoading = true; _gridVisible = false; }
         await InvokeAsync(StateHasChanged);
+        if (Grid != null) await Grid.Refresh();
+        await RestoreFiltersAsync();
       }
+    }
+  }
+
+  private async Task RestoreFiltersAsync()
+  {
+    if (!_pendingFilterRestore) return;
+    _pendingFilterRestore = false;
+    try
+    {
+      if (Grid != null)
+        foreach (var col in _filterPredicates)
+          if (col.Value != null)
+            await Grid.FilterByColumnAsync(col.Field, col.Operator.ToString().ToLower(), col.Value, col.Predicate ?? "and", col.MatchCase);
+    }
+    finally
+    {
+      _gridVisible = true;
+      IsLoading = false;
+      await InvokeAsync(StateHasChanged);
     }
   }
 

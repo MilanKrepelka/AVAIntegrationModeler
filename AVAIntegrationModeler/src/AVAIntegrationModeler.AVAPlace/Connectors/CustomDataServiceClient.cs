@@ -8,6 +8,7 @@ using System.Text.Json.Nodes;
 using System.Threading;
 using System.Threading.Tasks;
 using ASOL.Core.ApiConnector;
+using ASOL.Core.Localization;
 using ASOL.DataService.Connector;
 using ASOL.DataService.Connector.Options;
 using ASOL.DataService.Contracts;
@@ -143,8 +144,61 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
       return new List<Models.DataModelRecord>();
     }
 
-    var result = await response.As<DataCollection<Models.DataModelRecord>>();
-    return result?.Items ?? new List<Models.DataModelRecord>();
+    // Parsujeme přes JObject aby nám nevadil type mismatch (např. Description jako string vs LocalizedValue<string>).
+    var root = await response.As<JObject>();
+    var items = root?["items"] as Newtonsoft.Json.Linq.JArray ?? root?["Items"] as Newtonsoft.Json.Linq.JArray;
+    if (items is null) return new List<Models.DataModelRecord>();
+
+    var result = new List<Models.DataModelRecord>();
+    foreach (var item in items)
+    {
+      var record = new Models.DataModelRecord
+      {
+        Id = new Models.DataModelRecordCompositeId
+        {
+          ModelId = item["Id"]?["ModelId"]?.ToObject<Guid>() ?? Guid.Empty,
+          RecordId = item["Id"]?["RecordId"]?.ToObject<Guid>() ?? Guid.Empty,
+        },
+        ExternalId = item["ExternalId"]?.ToString(),
+        SourceId = item["SourceId"]?.ToObject<Guid>() ?? Guid.Empty,
+        MandantCode = item["MandantCode"]?.ToString(),
+        Released = item["Released"]?.ToObject<bool>() ?? false,
+        UtcCreatedOn = item["UtcCreatedOn"]?.ToObject<DateTimeOffset>() ?? default,
+        UtcModifiedOn = item["UtcModifiedOn"]?.ToObject<DateTimeOffset>() ?? default,
+        Code = item["Code"]?.ToString(),
+        Name = ParseLocalizedValue(item["Name"]),
+        Description = ParseLocalizedValue(item["Description"]),
+      };
+      result.Add(record);
+    }
+    return result;
+  }
+
+  /// <summary>
+  /// Parsuje JSON token na <see cref="LocalizedValue{T}"/>. Podporuje objekt se 'values' polem i plain string.
+  /// </summary>
+  private static LocalizedValue<string>? ParseLocalizedValue(JToken? token)
+  {
+    if (token == null || token.Type == JTokenType.Null)
+      return null;
+
+    if (token.Type == JTokenType.Object)
+      return token.ToObject<LocalizedValue<string>>();
+
+    if (token.Type == JTokenType.String)
+    {
+      var str = token.ToString();
+      return new LocalizedValue<string>
+      {
+        Values = new List<LocalizedValueItem<string>>
+        {
+          new() { Locale = "cs-CZ", Value = str },
+          new() { Locale = "en-US", Value = str },
+        }
+      };
+    }
+
+    return null;
   }
 
   /// <inheritdoc/>
@@ -154,9 +208,22 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
     Logger.LogDebug($"Creating metadata version on {CombineUri(resource)}");
 
     var request = (await AddAuthentication(Client.PostAsync(resource), ct))
+        .WithOptions(ignoreHttpErrors: true)
         .WithCancellationToken(ct);
 
-    var result = await request.As<JObject>();
+    var response = await request.AsMessage();
+    if (!response.IsSuccessStatusCode)
+    {
+      var responseBody = await response.Content.ReadAsStringAsync(ct);
+      Logger.LogError($"CreateMetadataVersion selhalo: {(int)response.StatusCode} {response.StatusCode} — {responseBody}");
+      throw new HttpRequestException(
+          $"CreateMetadataVersion selhalo: {(int)response.StatusCode} {response.StatusCode} — {responseBody}",
+          inner: null,
+          statusCode: response.StatusCode);
+    }
+
+    var resultJson = await response.Content.ReadAsStringAsync(ct);
+    var result = JObject.Parse(resultJson);
     var code = result?["code"]?.ToString();
     if (string.IsNullOrEmpty(code))
       throw new InvalidOperationException("DataService nevrátil kód nově vytvořené verze metadat.");
@@ -174,6 +241,15 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
     var resource = $"{ApiVersionPrefix}/process/importdatamodel";
     Logger.LogDebug($"Importing data model to {CombineUri(resource)}, targetVersion={targetVersion}, allowUpdate={allowUpdate}");
 
+    if (Logger.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+    {
+      var pos = jsonContent.Position;
+      using var reader = new System.IO.StreamReader(jsonContent, System.Text.Encoding.UTF8, leaveOpen: true);
+      var json = await reader.ReadToEndAsync(ct);
+      Logger.LogDebug($"ImportDataModel payload: {json}");
+      jsonContent.Position = pos;
+    }
+
     var body = new StreamContent(jsonContent);
     body.Headers.ContentType = new MediaTypeHeaderValue("application/json") { CharSet = "utf-8" };
 
@@ -189,7 +265,10 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
     {
       var responseBody = await response.Content.ReadAsStringAsync(ct);
       Logger.LogError($"ImportDataModel selhalo: {(int)response.StatusCode} {response.StatusCode} — {responseBody}");
-      response.EnsureSuccessStatusCode();
+      throw new HttpRequestException(
+          $"ImportDataModel selhalo pro verzi {targetVersion}: {(int)response.StatusCode} {response.StatusCode} — {responseBody}",
+          inner: null,
+          statusCode: response.StatusCode);
     }
   }
 
@@ -203,6 +282,15 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
 
     var resource = $"{ApiVersionPrefix}/process/importunifieddata/{Uri.EscapeDataString(modelCode)}";
     Logger.LogDebug($"Importing unified data to {CombineUri(resource)}, targetVersion={targetVersion}, allowUpdate={allowUpdate}, allowChangeExternalId={allowChangeExternalId}");
+
+    if (Logger.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
+    {
+      var pos = jsonContent.Position;
+      using var reader = new System.IO.StreamReader(jsonContent, System.Text.Encoding.UTF8, leaveOpen: true);
+      var json = await reader.ReadToEndAsync(ct);
+      Logger.LogDebug($"ImportUnifiedData payload ({modelCode}): {json}");
+      jsonContent.Position = pos;
+    }
 
     var body = new StreamContent(jsonContent);
     body.Headers.ContentType = new MediaTypeHeaderValue("application/json") { CharSet = "utf-8" };
@@ -220,7 +308,10 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
     {
       var responseBody = await response.Content.ReadAsStringAsync(ct);
       Logger.LogError($"ImportUnifiedData selhalo: {(int)response.StatusCode} {response.StatusCode} — {responseBody}");
-      response.EnsureSuccessStatusCode();
+      throw new HttpRequestException(
+          $"ImportUnifiedData selhalo pro model {modelCode}, verzi {targetVersion}: {(int)response.StatusCode} {response.StatusCode} — {responseBody}",
+          inner: null,
+          statusCode: response.StatusCode);
     }
   }
 }

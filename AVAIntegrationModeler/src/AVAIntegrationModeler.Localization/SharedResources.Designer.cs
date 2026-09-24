@@ -370,6 +370,8 @@ namespace AVAIntegrationModeler.Localization {
         public static string DataModelRecords_Saved { get { return ResourceManager.GetString("DataModelRecords.Saved", resourceCulture); } }
         public static string DataModelRecords_Created { get { return ResourceManager.GetString("DataModelRecords.Created", resourceCulture); } }
         public static string DataModelRecords_DeleteConfirm { get { return ResourceManager.GetString("DataModelRecords.DeleteConfirm", resourceCulture); } }
+        public static string DataModelRecords_ViewTitle { get { return ResourceManager.GetString("DataModelRecords.ViewTitle", resourceCulture); } }
+        public static string DataModelRecords_View { get { return ResourceManager.GetString("DataModelRecords.View", resourceCulture); } }
 
         public static string Features_Title { get { return ResourceManager.GetString("Features.Title", resourceCulture); } }
         public static string Features_IncludedFeaturesColumn { get { return ResourceManager.GetString("Features.IncludedFeaturesColumn", resourceCulture); } }

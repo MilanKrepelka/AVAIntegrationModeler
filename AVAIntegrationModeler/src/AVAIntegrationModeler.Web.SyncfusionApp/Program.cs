@@ -17,7 +17,9 @@ builder.Services.Configure<AnthropicOptions>(builder.Configuration.GetSection("A
 builder.Services.AddSingleton<IntegrationHintService>();
 builder.Services.AddScoped<DomainContextBuilder>();
 builder.Services.AddScoped<AnthropicChatService>();
+builder.Services.AddScoped<GridFilterStateService>();
 //builder.Services.AddWebAppHttpClientFactory(builder.Configuration);
+builder.Services.AddLocalization();
 
 var app = builder.Build();
 //Register Syncfusion license https://help.syncfusion.com/common/essential-studio/licensing/how-to-generate
@@ -33,6 +35,10 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseRequestLocalization(new RequestLocalizationOptions()
+    .SetDefaultCulture("cs-CZ")
+    .AddSupportedCultures(["cs-CZ", "en-US"])
+    .AddSupportedUICultures(["cs-CZ", "en-US"]));
 
 app.UseAntiforgery();
 

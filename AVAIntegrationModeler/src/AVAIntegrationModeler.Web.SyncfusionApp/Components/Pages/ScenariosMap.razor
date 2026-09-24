@@ -1,5 +1,5 @@
 ﻿@page "/scenariomap/{dataSourceAsString}/{scenarioCode}"
-@rendermode InteractiveServer
+@rendermode @(new InteractiveServerRenderMode(prerender: false))
 @using AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets
 @using Syncfusion.Blazor.Buttons
 @using Syncfusion.Blazor.Grids
@@ -7,14 +7,17 @@
 @using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Notifications
 @using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
+@inject IJSRuntime JSRuntime
 
-<SfDiagramComponent @ref="@diagram" Connectors="@connectors" Height="700px" Nodes="@nodes">
-    <Layout Type="LayoutType.RadialTree"
-            HorizontalSpacing="40"
-            VerticalSpacing="40"
-            FixedNode="Scenario">
-    </Layout>
-</SfDiagramComponent>
+<div id="diagram-fill-scenariosmap" style="height:@_diagramHeight">
+    <SfDiagramComponent @ref="@diagram" Connectors="@connectors" Height="@_diagramHeight" Nodes="@nodes">
+        <Layout Type="LayoutType.RadialTree"
+                HorizontalSpacing="40"
+                VerticalSpacing="40"
+                FixedNode="Scenario">
+        </Layout>
+    </SfDiagramComponent>
+</div>
 
 
 @code
@@ -36,6 +39,27 @@
     DiagramObjectCollection<Connector> connectors = new DiagramObjectCollection<Connector>();
 
     private bool _needsLayout;
+    private string _diagramHeight = "700px";
+    private bool _heightSet;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!_heightSet)
+        {
+            var h = await JSRuntime.InvokeAsync<int>("setDiagramFillHeight", "diagram-fill-scenariosmap");
+            if (h > 200)
+            {
+                _heightSet = true;
+                _diagramHeight = h + "px";
+                await InvokeAsync(StateHasChanged);
+            }
+        }
+        if (_needsLayout && diagram is not null)
+        {
+            await diagram.DoLayoutAsync();
+            _needsLayout = false;
+        }
+    }
 
     // protected override async Task OnInitializedAsync()
     // {
@@ -48,16 +72,6 @@
     //     // Defer layout until @ref is ready
     //     _needsLayout = true;
     // }
-
-    protected override async Task OnAfterRenderAsync(bool firstRender)
-    {
-        if (_needsLayout && diagram is not null)
-        {
-            // Re-run layout after nodes/connectors are added
-            await diagram.DoLayoutAsync();
-            _needsLayout = false;
-        }
-    }
 
     private void InitDiagramModel()
     {

@@ -618,6 +618,12 @@
   <data name="DataModelRecords.DeleteConfirm" xml:space="preserve">
     <value>Opravdu smazat záznam '{0}'?</value>
   </data>
+  <data name="DataModelRecords.ViewTitle" xml:space="preserve">
+    <value>Zobrazení záznamu</value>
+  </data>
+  <data name="DataModelRecords.View" xml:space="preserve">
+    <value>Zobrazit</value>
+  </data>
   <data name="Features.Title" xml:space="preserve">
     <value>Integrační Features</value>
   </data>
