@@ -467,45 +467,47 @@ public class CustomDataServiceClientTests
   }
 
   // ---------------------------------------------------------------------------
-  // GetOrganizationMarkdownDocumentAsync
+  // GetDataModelMarkdownDocumentAsync
   // ---------------------------------------------------------------------------
 
   /// <summary>
   /// HTTP 200 s markdown obsahem — metoda vrátí obsah jako řetězec.
   /// </summary>
   [Fact]
-  public async Task GetOrganizationMarkdownDocumentAsync_Success_ReturnsContent()
+  public async Task GetDataModelMarkdownDocumentAsync_Success_ReturnsContent()
   {
-    var markdown = "# Organizace\n\nObsah dokumentu.";
+    var markdown = "# Datový model\n\nObsah dokumentu.";
     var response = new HttpResponseMessage(HttpStatusCode.OK)
     {
       Content = new StringContent(markdown, Encoding.UTF8, "text/markdown")
     };
     var client = CreateClient(response);
 
-    var result = await client.GetOrganizationMarkdownDocumentAsync(months: 12, CancellationToken.None);
+    var result = await client.GetDataModelMarkdownDocumentAsync(Guid.NewGuid(), months: 12, CancellationToken.None);
 
     result.ShouldBe(markdown);
   }
 
   /// <summary>
-  /// URL musí cílit na <c>Process/MarkdownDocument/Organization</c> s query param <c>months</c> a použít GET.
+  /// URL musí cílit na <c>Process/MarkdownDocument/{modelId}</c> s query param <c>months</c> a použít GET.
   /// </summary>
   [Fact]
-  public async Task GetOrganizationMarkdownDocumentAsync_BuildsCorrectUrl()
+  public async Task GetDataModelMarkdownDocumentAsync_BuildsCorrectUrl()
   {
     var handler = new FakeHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.OK)
     {
       Content = new StringContent("# doc", Encoding.UTF8, "text/plain")
     });
     var client = CreateClient(handler);
+    var modelId = Guid.NewGuid();
 
-    await client.GetOrganizationMarkdownDocumentAsync(months: 6, CancellationToken.None);
+    await client.GetDataModelMarkdownDocumentAsync(modelId, months: 6, CancellationToken.None);
 
     handler.LastRequest.ShouldNotBeNull();
     handler.LastRequest!.Method.ShouldBe(HttpMethod.Get);
     var uri = handler.LastRequest.RequestUri!.ToString();
-    uri.ShouldContain("Process/MarkdownDocument/Organization");
+    uri.ShouldContain("Process/MarkdownDocument/");
+    uri.ShouldContain(modelId.ToString());
     uri.ShouldContain("months=6");
   }
 
@@ -513,7 +515,7 @@ public class CustomDataServiceClientTests
   /// HTTP 500 musí způsobit <see cref="HttpRequestException"/>.
   /// </summary>
   [Fact]
-  public async Task GetOrganizationMarkdownDocumentAsync_ServerError_Throws()
+  public async Task GetDataModelMarkdownDocumentAsync_ServerError_Throws()
   {
     var client = CreateClient(new HttpResponseMessage(HttpStatusCode.InternalServerError)
     {
@@ -521,7 +523,7 @@ public class CustomDataServiceClientTests
     });
 
     await Should.ThrowAsync<HttpRequestException>(() =>
-      client.GetOrganizationMarkdownDocumentAsync(months: 12, CancellationToken.None));
+      client.GetDataModelMarkdownDocumentAsync(Guid.NewGuid(), months: 12, CancellationToken.None));
   }
 
   // ---------------------------------------------------------------------------

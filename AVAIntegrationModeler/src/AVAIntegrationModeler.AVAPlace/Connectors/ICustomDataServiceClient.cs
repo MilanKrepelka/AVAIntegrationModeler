@@ -78,13 +78,14 @@ public interface ICustomDataServiceClient : IDataServiceClient
   Task ImportUnifiedDataAsync(string modelCode, string targetVersion, bool allowUpdate, bool allowChangeExternalId, Stream jsonContent, CancellationToken ct = default);
 
   /// <summary>
-  /// Vrátí markdown dokument pro organizaci z DataService.
-  /// Odpovídá GET /api/v1/Process/MarkdownDocument/Organization?months={months}.
+  /// Vrátí markdown dokument pro daný datový model z DataService.
+  /// Odpovídá GET /api/v1/Process/MarkdownDocument/{modelId}?months={months}.
   /// </summary>
+  /// <param name="modelId">Identifikátor datového modelu</param>
   /// <param name="months">Počet měsíců pro generování dokumentu</param>
   /// <param name="ct">Token pro zrušení operace</param>
   /// <returns>Obsah markdown dokumentu jako řetězec</returns>
-  Task<string> GetOrganizationMarkdownDocumentAsync(int months = 12, CancellationToken ct = default);
+  Task<string> GetDataModelMarkdownDocumentAsync(Guid modelId, int months = 12, CancellationToken ct = default);
 
   /// <summary>
   /// Vrátí markdown dokument měsíčních rozdílů metadat z DataService.

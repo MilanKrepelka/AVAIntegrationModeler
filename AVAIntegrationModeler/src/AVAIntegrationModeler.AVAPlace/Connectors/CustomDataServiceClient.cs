@@ -273,12 +273,12 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
   }
 
   /// <inheritdoc/>
-  public async Task<string> GetOrganizationMarkdownDocumentAsync(int months = 12, CancellationToken ct = default)
+  public async Task<string> GetDataModelMarkdownDocumentAsync(Guid modelId, int months = 12, CancellationToken ct = default)
   {
     ct.ThrowIfCancellationRequested();
 
-    var resource = $"{ApiVersionPrefix}/Process/MarkdownDocument/Organization";
-    Logger.LogDebug($"Retrieving organization markdown document from {CombineUri(resource)}, months={months}");
+    var resource = $"{ApiVersionPrefix}/Process/MarkdownDocument/{modelId}";
+    Logger.LogDebug($"Retrieving data model markdown document from {CombineUri(resource)}, months={months}");
 
     var response = await (await AddAuthentication(Client.GetAsync(resource), ct))
         .WithArgument("months", months)
@@ -288,9 +288,9 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
     if (!response.Status.Equals(System.Net.HttpStatusCode.OK))
     {
       var responseBody = await response.Message.Content.ReadAsStringAsync(ct);
-      Logger.LogError($"GetOrganizationMarkdownDocument selhalo: {(int)response.Status} {response.Status} — {responseBody}");
+      Logger.LogError($"GetDataModelMarkdownDocument selhalo: {(int)response.Status} {response.Status} — {responseBody}");
       throw new HttpRequestException(
-          $"GetOrganizationMarkdownDocument selhalo: {(int)response.Status} {response.Status} — {responseBody}",
+          $"GetDataModelMarkdownDocument selhalo: {(int)response.Status} {response.Status} — {responseBody}",
           inner: null,
           statusCode: response.Status);
     }
