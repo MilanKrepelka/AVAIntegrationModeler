@@ -24,10 +24,19 @@ public partial class DataModelRecordView : ComponentBase, IDisposable
 
   private Datasource _datasource;
   private DataModelDTO? _dataModel;
-  private DataModelRecordDTO? _record;
+
+  private class FieldValueModel
+  {
+    public bool IsLocalized { get; set; }
+    public string? StringValue { get; set; }
+    public string? CzechValue { get; set; }
+    public string? EnglishValue { get; set; }
+  }
+
+  private string _externalId = string.Empty;
+  private Dictionary<string, FieldValueModel> _fieldValues = new();
 
   public bool IsLoading { get; set; } = true;
-  public string? ErrorMessage { get; set; }
 
   protected override void OnInitialized()
   {
@@ -43,31 +52,55 @@ public partial class DataModelRecordView : ComponentBase, IDisposable
     _datasource = ds;
 
     IsLoading = true;
-    ErrorMessage = null;
 
     try
     {
       var ct = _cts?.Token ?? CancellationToken.None;
 
       _dataModel = await _apiClient.GetDataModel(_datasource, modelId, ct);
-      _record = await _apiClient.GetDataModelRecord(_datasource, recordId, ct);
+
+      _fieldValues.Clear();
+      if (_dataModel is not null)
+        foreach (var field in _dataModel.Fields)
+          _fieldValues[field.Name] = new FieldValueModel { IsLocalized = field.IsLocalized };
+
+      var record = await _apiClient.GetDataModelRecord(_datasource, recordId, ct);
+      if (record is not null)
+      {
+        _externalId = record.ExternalId;
+        foreach (var f in record.Fields)
+        {
+          if (_fieldValues.TryGetValue(f.Key, out var fv))
+          {
+            fv.IsLocalized = f.IsLocalized;
+            fv.StringValue = f.StringValue;
+            fv.CzechValue = f.CzechValue;
+            fv.EnglishValue = f.EnglishValue;
+          }
+          else
+          {
+            // pole existuje v záznamu, ale ne ve schématu — zobrazíme ho taky
+            _fieldValues[f.Key] = new FieldValueModel
+            {
+              IsLocalized = f.IsLocalized,
+              StringValue = f.StringValue,
+              CzechValue = f.CzechValue,
+              EnglishValue = f.EnglishValue,
+            };
+          }
+        }
+      }
     }
     catch (OperationCanceledException) { }
     catch (Exception ex)
     {
-      ErrorMessage = ex.Message;
+      Console.WriteLine($"DataModelRecordView: {ex.Message}");
     }
     finally
     {
       IsLoading = false;
     }
   }
-
-  /// <summary>
-  /// Vrátí hodnotu pole záznamu podle klíče.
-  /// </summary>
-  private DataModelRecordFieldDTO? GetField(string key)
-    => _record?.Fields.FirstOrDefault(f => string.Equals(f.Key, key, StringComparison.OrdinalIgnoreCase));
 
   private void GoBack()
   {

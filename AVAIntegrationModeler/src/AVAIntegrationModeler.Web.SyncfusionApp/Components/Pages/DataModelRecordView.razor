@@ -14,19 +14,21 @@
             <SfTextBox CssClass="w-100"
                        Placeholder="External ID"
                        FloatLabelType="FloatLabelType.Always"
-                       Value="@(_record?.ExternalId ?? "")"
+                       Value="@_externalId"
                        Readonly="true">
             </SfTextBox>
         </div>
     </div>
 
-    @if (_dataModel is not null && _dataModel.Fields.Any())
+    @if (_dataModel is not null && _fieldValues.Any())
     {
         <h4 style="margin-top:16px">@Localization.SharedResources.DataModelRecords_RecordFields</h4>
 
         @foreach (var field in _dataModel.Fields)
         {
-            var fieldValue = GetField(field.Name);
+            var key = field.Name;
+            if (!_fieldValues.ContainsKey(key)) continue;
+            var fv = _fieldValues[key];
 
             <div class="row" style="margin-bottom:12px">
                 <div class="col-12">
@@ -42,7 +44,7 @@
                         <SfTextBox CssClass="w-100"
                                    Placeholder="@Localization.SharedResources.Common_Czech"
                                    FloatLabelType="FloatLabelType.Always"
-                                   Value="@(fieldValue?.CzechValue ?? "")"
+                                   Value="@(fv.CzechValue ?? "")"
                                    Readonly="true">
                         </SfTextBox>
                     </div>
@@ -50,7 +52,7 @@
                         <SfTextBox CssClass="w-100"
                                    Placeholder="English"
                                    FloatLabelType="FloatLabelType.Always"
-                                   Value="@(fieldValue?.EnglishValue ?? "")"
+                                   Value="@(fv.EnglishValue ?? "")"
                                    Readonly="true">
                         </SfTextBox>
                     </div>
@@ -61,7 +63,48 @@
                         <SfTextBox CssClass="w-100"
                                    Placeholder="@field.Label"
                                    FloatLabelType="FloatLabelType.Always"
-                                   Value="@(fieldValue?.StringValue ?? "")"
+                                   Value="@(fv.StringValue ?? "")"
+                                   Readonly="true">
+                        </SfTextBox>
+                    </div>
+                }
+            </div>
+        }
+
+        @* Pole záznamu, která nejsou ve schématu (specifická pro AVAPlace) *@
+        @foreach (var kvp in _fieldValues.Where(kv => _dataModel.Fields.All(f => f.Name != kv.Key)))
+        {
+            var fv = kvp.Value;
+            <div class="row" style="margin-bottom:12px">
+                <div class="col-12">
+                    <strong>@kvp.Key</strong>
+                </div>
+                @if (fv.IsLocalized)
+                {
+                    <div class="col-12 col-md-6" style="margin-top:4px">
+                        <SfTextBox CssClass="w-100"
+                                   Placeholder="@Localization.SharedResources.Common_Czech"
+                                   FloatLabelType="FloatLabelType.Always"
+                                   Value="@(fv.CzechValue ?? "")"
+                                   Readonly="true">
+                        </SfTextBox>
+                    </div>
+                    <div class="col-12 col-md-6" style="margin-top:4px">
+                        <SfTextBox CssClass="w-100"
+                                   Placeholder="English"
+                                   FloatLabelType="FloatLabelType.Always"
+                                   Value="@(fv.EnglishValue ?? "")"
+                                   Readonly="true">
+                        </SfTextBox>
+                    </div>
+                }
+                else
+                {
+                    <div class="col-12 col-md-6" style="margin-top:4px">
+                        <SfTextBox CssClass="w-100"
+                                   Placeholder="@kvp.Key"
+                                   FloatLabelType="FloatLabelType.Always"
+                                   Value="@(fv.StringValue ?? "")"
                                    Readonly="true">
                         </SfTextBox>
                     </div>
@@ -76,11 +119,6 @@
     else
     {
         <p class="text-muted">@Localization.SharedResources.DataModelRecords_NoFields</p>
-    }
-
-    @if (ErrorMessage is not null)
-    {
-        <div class="alert alert-danger" style="margin-top:16px">@ErrorMessage</div>
     }
 
     <div style="margin-top:16px">
