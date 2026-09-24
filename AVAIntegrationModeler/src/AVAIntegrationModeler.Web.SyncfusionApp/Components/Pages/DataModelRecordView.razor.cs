@@ -64,7 +64,18 @@ public partial class DataModelRecordView : ComponentBase, IDisposable
         foreach (var field in _dataModel.Fields)
           _fieldValues[field.Name] = new FieldValueModel { IsLocalized = field.IsLocalized };
 
-      var record = await _apiClient.GetDataModelRecord(_datasource, recordId, ct);
+      // AVAPlace nemá endpoint pro jeden záznam — načteme všechny a vyfiltrujeme
+      DataModelRecordDTO? record;
+      if (_datasource == Datasource.AVAPlace)
+      {
+        var allRecords = await _apiClient.GetDataModelRecords(_datasource, modelId, ct);
+        record = allRecords.Records.FirstOrDefault(r => r.Id == recordId);
+      }
+      else
+      {
+        record = await _apiClient.GetDataModelRecord(_datasource, recordId, ct);
+      }
+
       if (record is not null)
       {
         _externalId = record.ExternalId;
