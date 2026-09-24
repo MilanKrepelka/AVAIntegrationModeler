@@ -12,7 +12,7 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
 {
   private bool _disposed = false;
   private CancellationTokenSource? _cts;
-  private readonly Guid _newRecordId = Guid.NewGuid();
+  private Guid _newRecordId = Guid.NewGuid();
 
   [Inject] private IAVAIntegrationModelerApiClient _apiClient { get; set; } = default!;
   [Inject] private NavigationManager NavigationManager { get; set; } = default!;
@@ -60,6 +60,9 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
     if (!Enum.TryParse<Datasource>(dataSourceAsString, true, out var ds))
       ds = Datasource.Database;
     _datasource = ds;
+
+    if (recordId == Guid.Empty)
+      _newRecordId = Guid.NewGuid();
 
     IsLoading = true;
 
@@ -149,6 +152,18 @@ public partial class DataModelRecordEdit : ComponentBase, IDisposable
       {
         _saveSuccess = true;
         _saveMessage = IsCreate ? SharedResources.DataModelRecords_Created : SharedResources.DataModelRecords_Saved;
+
+        if (IsCreate)
+        {
+          if (_saveAndNew)
+          {
+            _saveAndNew = false;
+            NavigationManager.NavigateTo($"/datamodelrecordedit/{dataSourceAsString}/{modelId}");
+            return;
+          }
+          NavigationManager.NavigateTo($"/datamodelrecordedit/{dataSourceAsString}/{modelId}/{result.Value}");
+          return;
+        }
       }
       else
       {
