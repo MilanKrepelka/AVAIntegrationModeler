@@ -273,6 +273,58 @@ public class CustomDataServiceClient : DataServiceClient, ICustomDataServiceClie
   }
 
   /// <inheritdoc/>
+  public async Task<string> GetOrganizationMarkdownDocumentAsync(int months = 12, CancellationToken ct = default)
+  {
+    ct.ThrowIfCancellationRequested();
+
+    var resource = $"{ApiVersionPrefix}/Process/MarkdownDocument/Organization";
+    Logger.LogDebug($"Retrieving organization markdown document from {CombineUri(resource)}, months={months}");
+
+    var response = await (await AddAuthentication(Client.GetAsync(resource), ct))
+        .WithArgument("months", months)
+        .WithOptions(ignoreHttpErrors: true)
+        .WithCancellationToken(ct);
+
+    if (!response.Status.Equals(System.Net.HttpStatusCode.OK))
+    {
+      var responseBody = await response.Message.Content.ReadAsStringAsync(ct);
+      Logger.LogError($"GetOrganizationMarkdownDocument selhalo: {(int)response.Status} {response.Status} — {responseBody}");
+      throw new HttpRequestException(
+          $"GetOrganizationMarkdownDocument selhalo: {(int)response.Status} {response.Status} — {responseBody}",
+          inner: null,
+          statusCode: response.Status);
+    }
+
+    return await response.Message.Content.ReadAsStringAsync(ct);
+  }
+
+  /// <inheritdoc/>
+  public async Task<string> GetMonthlyMetadataDifferencesDocumentAsync(int months = 12, CancellationToken ct = default)
+  {
+    ct.ThrowIfCancellationRequested();
+
+    var resource = $"{ApiVersionPrefix}/Process/MonthlyMetadataDifferencesDocument";
+    Logger.LogDebug($"Retrieving monthly metadata differences document from {CombineUri(resource)}, months={months}");
+
+    var response = await (await AddAuthentication(Client.GetAsync(resource), ct))
+        .WithArgument("months", months)
+        .WithOptions(ignoreHttpErrors: true)
+        .WithCancellationToken(ct);
+
+    if (!response.Status.Equals(System.Net.HttpStatusCode.OK))
+    {
+      var responseBody = await response.Message.Content.ReadAsStringAsync(ct);
+      Logger.LogError($"GetMonthlyMetadataDifferencesDocument selhalo: {(int)response.Status} {response.Status} — {responseBody}");
+      throw new HttpRequestException(
+          $"GetMonthlyMetadataDifferencesDocument selhalo: {(int)response.Status} {response.Status} — {responseBody}",
+          inner: null,
+          statusCode: response.Status);
+    }
+
+    return await response.Message.Content.ReadAsStringAsync(ct);
+  }
+
+  /// <inheritdoc/>
   public async Task ImportUnifiedDataAsync(string modelCode, string targetVersion, bool allowUpdate, bool allowChangeExternalId, Stream jsonContent, CancellationToken ct = default)
   {
     if (string.IsNullOrEmpty(modelCode)) throw new ArgumentNullException(nameof(modelCode));
