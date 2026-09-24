@@ -200,6 +200,14 @@ public interface IAVAIntegrationModelerApiClient
   Task<Result<UploadDeploymentToAvaPlaceResult>> UploadDeploymentToAvaPlace(string deploymentCode, CancellationToken cancellationToken);
 
   /// <summary>
+  /// Exportuje markdown dokumentaci nasazení jako ZIP archív.
+  /// </summary>
+  /// <param name="deploymentCode">Kód nasazení</param>
+  /// <param name="months">Počet měsíců pro generování dokumentů (výchozí 12)</param>
+  /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+  Task<byte[]> ExportDeploymentDocumentation(string deploymentCode, int months = 12, CancellationToken cancellationToken = default);
+
+  /// <summary>
   /// Vrátí hluboké porovnání datového modelu (včetně polí) mezi lokální databází a AVAPlace.
   /// </summary>
   /// <param name="dataModelId">Identifikátor datového modelu.</param>

@@ -258,6 +258,35 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
     }
   }
 
+  private bool _docsExportLoading;
+  private string? _docsExportError;
+
+  /// <summary>
+  /// Stáhne ZIP s markdown dokumentací nasazení.
+  /// </summary>
+  private async Task ExportDocumentationAsync()
+  {
+    if (string.IsNullOrEmpty(deploymentCode)) return;
+    _docsExportLoading = true;
+    _docsExportError = null;
+    await InvokeAsync(StateHasChanged);
+    try
+    {
+      var bytes = await ApiClient.ExportDeploymentDocumentation(deploymentCode, cancellationToken: _cts?.Token ?? CancellationToken.None);
+      await JS.InvokeVoidAsync("downloadFile", $"deployment-{deploymentCode}-docs.zip", "application/zip", bytes);
+    }
+    catch (Exception ex)
+    {
+      if (!_disposed)
+        _docsExportError = ex.Message;
+    }
+    finally
+    {
+      _docsExportLoading = false;
+      await InvokeAsync(StateHasChanged);
+    }
+  }
+
   private Contracts.DataModels.DeploymentChangesSummaryDTO? _changesSummary;
   private bool _loadingSummary;
   private string? _summaryError;

@@ -782,6 +782,17 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
   }
 
   /// <inheritdoc/>
+  public async Task<byte[]> ExportDeploymentDocumentation(string deploymentCode, int months = 12, CancellationToken cancellationToken = default)
+  {
+    _logger.LogDebug($"{nameof(ExportDeploymentDocumentation)} starting. deploymentCode={deploymentCode}, months={months}");
+    var response = await _httpClient.GetAsync(
+      $"deployments/{Uri.EscapeDataString(deploymentCode)}/export-documentation?months={months}",
+      cancellationToken);
+    response.EnsureSuccessStatusCode();
+    return await response.Content.ReadAsByteArrayAsync(cancellationToken);
+  }
+
+  /// <inheritdoc/>
   public async Task<Result<UploadDeploymentToAvaPlaceResult>> UploadDeploymentToAvaPlace(
     string deploymentCode, CancellationToken cancellationToken)
   {

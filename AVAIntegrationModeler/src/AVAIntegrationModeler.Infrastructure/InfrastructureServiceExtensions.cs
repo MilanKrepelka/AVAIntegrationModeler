@@ -11,6 +11,7 @@ using AVAIntegrationModeler.UseCases.DataModels;
 using AVAIntegrationModeler.UseCases.DataModels.Import;
 using AVAIntegrationModeler.UseCases.Dashboard;
 using AVAIntegrationModeler.UseCases.Deployments;
+using AVAIntegrationModeler.UseCases.Documentation;
 using AVAIntegrationModeler.UseCases.Features;
 using AVAIntegrationModeler.UseCases.IntegrationMaps;
 using AVAIntegrationModeler.UseCases.Scenarios;
@@ -37,7 +38,8 @@ public static class InfrastructureServiceExtensions
             .AddScoped<IDeploymentsQueryService, DeploymentsQueryService>()
             .AddScoped<IDashboardQueryService, DashboardQueryService>()
             .AddScoped<IDeleteContributorService, DeleteContributorService>()
-            .AddScoped<IDataModelImportService, DataModelImportService>();
+            .AddScoped<IDataModelImportService, DataModelImportService>()
+            .AddScoped<IDocumentationQueryService, DocumentationQueryService>();
 
     logger.LogInformation("{Project} services registered", "Infrastructure");
 
