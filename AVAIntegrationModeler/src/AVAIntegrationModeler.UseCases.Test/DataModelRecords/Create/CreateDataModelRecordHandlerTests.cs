@@ -37,7 +37,7 @@ public class CreateDataModelRecordHandlerTests
     _handler = new CreateDataModelRecordHandler(_repository, _queryService, _validationService);
   }
 
-  private static DataModelRecordDTO MakeDto(Guid id, string externalId = "EXT-001", IList<DataModelRecordFieldDTO>? fields = null) => new()
+  private static DataModelRecordDTO MakeDto(Guid id, string externalId = "EXT-001", List<DataModelRecordFieldDTO>? fields = null) => new()
   {
     Id = id,
     ModelId = ModelId,
