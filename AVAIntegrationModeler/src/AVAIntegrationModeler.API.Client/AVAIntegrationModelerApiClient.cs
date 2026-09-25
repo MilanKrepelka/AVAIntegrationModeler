@@ -531,6 +531,44 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
   }
 
   /// <inheritdoc/>
+  public async Task<(byte[] Content, string FileName)> ExportDataModelRecordsToXls(
+    Datasource datasource, Guid modelId, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(ExportDataModelRecordsToXls)} starting. datasource={datasource}, modelId={modelId}");
+    var response = await _httpClient.GetAsync(
+      $"datamodelrecords/export-xls?datasource={datasource}&modelId={modelId}",
+      cancellationToken);
+    response.EnsureSuccessStatusCode();
+    var content = await response.Content.ReadAsByteArrayAsync(cancellationToken);
+    var fileName = response.Content.Headers.ContentDisposition?.FileNameStar
+      ?? response.Content.Headers.ContentDisposition?.FileName
+      ?? $"records-{modelId}-{DateTime.UtcNow:yyyy-MM-dd}.xlsx";
+    return (content, fileName);
+  }
+
+  /// <inheritdoc/>
+  public async Task<Result<ImportDataModelRecordsXlsResult>> ImportDataModelRecordsFromXls(
+    Datasource datasource, Guid modelId, byte[] fileContent, string fileName, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(ImportDataModelRecordsFromXls)} starting. datasource={datasource}, modelId={modelId}");
+    using var form = new MultipartFormDataContent();
+    form.Add(new StringContent(datasource.ToString()), "Datasource");
+    form.Add(new StringContent(modelId.ToString()), "ModelId");
+    using var fileBytes = new ByteArrayContent(fileContent);
+    fileBytes.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+    form.Add(fileBytes, "File", fileName);
+    var response = await _httpClient.PostAsync("datamodelrecords/import-xls", form, cancellationToken);
+    if (!response.IsSuccessStatusCode)
+      return Result<ImportDataModelRecordsXlsResult>.Error("Import selhal. Kód chyby: " + (int)response.StatusCode);
+    var json = await response.Content.ReadAsStringAsync(cancellationToken);
+    var result = JsonConvert.DeserializeObject<ImportDataModelRecordsXlsResult>(json);
+    return result is not null
+      ? Result<ImportDataModelRecordsXlsResult>.Success(result)
+      : Result<ImportDataModelRecordsXlsResult>.Error("Nepodařilo se deserializovat odpověď.");
+  }
+
+  /// <inheritdoc/>
   public async Task<Result> DeleteDataModelRecord(Datasource datasource, Guid recordId, CancellationToken cancellationToken)
   {
     _logger.LogDebug($"{nameof(DeleteDataModelRecord)} starting. datasource={datasource}, recordId={recordId}");

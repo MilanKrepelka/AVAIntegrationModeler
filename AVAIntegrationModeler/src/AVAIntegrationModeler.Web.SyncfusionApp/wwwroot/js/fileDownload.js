@@ -9,3 +9,8 @@ function downloadFile(fileName, contentType, bytes) {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
+
+function triggerClick(elementId) {
+    const el = document.getElementById(elementId);
+    if (el) el.click();
+}

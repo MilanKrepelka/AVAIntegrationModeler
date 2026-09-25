@@ -6,6 +6,7 @@ using AVAIntegrationModeler.Web.SyncfusionApp.Mapping;
 using AVAIntegrationModeler.Web.SyncfusionApp.Services;
 using AVAIntegrationModeler.Web.SyncfusionApp.ViewModels.List;
 using Microsoft.AspNetCore.Components;
+using Microsoft.AspNetCore.Components.Forms;
 using Microsoft.JSInterop;
 using Syncfusion.Blazor.Grids;
 
@@ -36,6 +37,8 @@ public partial class DataModelRecords : ComponentBase
   private List<DataModelDTO> _dataModelList = new();
 
   private bool _initialized = false;
+  private bool _importLoading = false;
+  private ImportDataModelRecordsXlsResult? _importResult;
 
   protected override async Task OnParametersSetAsync()
   {
@@ -137,6 +140,54 @@ public partial class DataModelRecords : ComponentBase
     var ids = selected.Select(r => r.Id).ToList();
     var bytes = await _apiClient.ExportDataModelRecords(Datasource, ids, CancellationToken.None);
     await JS.InvokeVoidAsync("downloadFile", "export.zip", "application/zip", bytes);
+  }
+
+  private async Task ExportToXlsAsync()
+  {
+    if (!SelectedModelId.HasValue) return;
+    var (content, fileName) = await _apiClient.ExportDataModelRecordsToXls(
+      Datasource, SelectedModelId.Value, CancellationToken.None);
+    await JS.InvokeVoidAsync("downloadFile", fileName,
+      "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", content);
+  }
+
+  private async Task OpenXlsFilePicker()
+  {
+    await JS.InvokeVoidAsync("triggerClick", "xls-import-input");
+  }
+
+  private async Task ImportFromXlsAsync(InputFileChangeEventArgs e)
+  {
+    if (!SelectedModelId.HasValue || e.File is null) return;
+
+    _importLoading = true;
+    _importResult = null;
+    await InvokeAsync(StateHasChanged);
+
+    try
+    {
+      using var ms = new MemoryStream();
+      await e.File.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024).CopyToAsync(ms);
+      var bytes = ms.ToArray();
+
+      var result = await _apiClient.ImportDataModelRecordsFromXls(
+        Datasource, SelectedModelId.Value, bytes, e.File.Name, CancellationToken.None);
+
+      if (result.IsSuccess)
+      {
+        _importResult = result.Value;
+        if (result.Value.CreatedCount > 0 || result.Value.UpdatedCount > 0)
+        {
+          await LoadRecordsAsync();
+          if (Grid != null) await Grid.Refresh();
+        }
+      }
+    }
+    finally
+    {
+      _importLoading = false;
+      await InvokeAsync(StateHasChanged);
+    }
   }
 
   private void OnGridActionCompleted(ActionEventArgs<DataModelRecordListViewModel> args)

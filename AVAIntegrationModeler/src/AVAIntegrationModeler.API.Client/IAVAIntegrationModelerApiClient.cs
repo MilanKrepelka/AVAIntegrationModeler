@@ -103,6 +103,27 @@ public interface IAVAIntegrationModelerApiClient
   Task<byte[]> ExportDataModelRecords(Datasource datasource, List<Guid> recordIds, CancellationToken cancellationToken);
 
   /// <summary>
+  /// Exportuje záznamy datového modelu do XLSX souboru.
+  /// </summary>
+  /// <param name="datasource">Datový zdroj.</param>
+  /// <param name="modelId">Id datového modelu.</param>
+  /// <param name="cancellationToken">Token pro zrušení operace.</param>
+  /// <returns>Bajty XLSX souboru a název souboru.</returns>
+  Task<(byte[] Content, string FileName)> ExportDataModelRecordsToXls(Datasource datasource, Guid modelId, CancellationToken cancellationToken);
+
+  /// <summary>
+  /// Importuje záznamy datového modelu z XLSX souboru.
+  /// Existující záznamy (identifikované Id) jsou aktualizovány, nové jsou vytvořeny.
+  /// </summary>
+  /// <param name="datasource">Datový zdroj.</param>
+  /// <param name="modelId">Id datového modelu.</param>
+  /// <param name="fileContent">Bajty XLSX souboru.</param>
+  /// <param name="fileName">Název souboru.</param>
+  /// <param name="cancellationToken">Token pro zrušení operace.</param>
+  /// <returns>Výsledek importu se statistikami a případnými chybami.</returns>
+  Task<Result<ImportDataModelRecordsXlsResult>> ImportDataModelRecordsFromXls(Datasource datasource, Guid modelId, byte[] fileContent, string fileName, CancellationToken cancellationToken);
+
+  /// <summary>
   /// Importuje datový model z AVAPlace do lokální databáze.
   /// Pokud model se stejným kódem již existuje, provede aktualizaci (upsert).
   /// </summary>
