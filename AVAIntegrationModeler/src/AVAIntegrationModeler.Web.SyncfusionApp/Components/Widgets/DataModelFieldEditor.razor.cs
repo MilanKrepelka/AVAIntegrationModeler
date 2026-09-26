@@ -69,6 +69,15 @@ public partial class DataModelFieldEditor : ComponentBase
   private bool NeedsReferences =>
     _editingField?.FieldType is DataModelFieldType.LookupEntity or DataModelFieldType.NestedEntity;
 
+  private void ToggleReferencedModel(Guid modelId, bool isChecked)
+  {
+    if (_editingField is null) return;
+    if (isChecked && !_editingField.ReferencedEntityTypeIds.Contains(modelId))
+      _editingField.ReferencedEntityTypeIds.Add(modelId);
+    else if (!isChecked)
+      _editingField.ReferencedEntityTypeIds.Remove(modelId);
+  }
+
   protected override void OnParametersSet()
   {
     _previousFields = Fields;
