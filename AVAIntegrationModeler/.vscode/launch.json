@@ -1,0 +1,27 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Debug API",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/AVAIntegrationModeler.API/AVAIntegrationModeler.API.csproj"
+    },
+    {
+      "name": "Debug Web SyncfusionApp",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/AVAIntegrationModeler.Web.SyncfusionApp/AVAIntegrationModeler.Web.SyncfusionApp.csproj"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "Debug API + Web",
+      "configurations": [
+        "Debug API",
+        "Debug Web SyncfusionApp"
+      ],
+      "stopAll": true
+    }
+  ]
+}
