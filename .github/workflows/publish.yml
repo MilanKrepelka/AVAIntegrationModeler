@@ -1,0 +1,39 @@
+name: Publish
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish API
+        run: |
+          dotnet publish .\src\MyApp.Api\MyApp.Api.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained false `
+            -o .\publish\Api
+
+      - name: Publish Web
+        run: |
+          dotnet publish .\src\MyApp.Web\MyApp.Web.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained false `
+            -o .\publish\Web
+
+      - name: Create ZIP
+        run: |
+          Compress-Archive `
+            -Path .\publish\* `
+            -DestinationPath .\MyApp-win-x64.zip
