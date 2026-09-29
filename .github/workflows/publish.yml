@@ -1,39 +1,43 @@
-name: Publish
+name: .NET Build and Publish
 
 on:
-  workflow_dispatch:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
 
 jobs:
-  publish:
-    runs-on: windows-latest
+  build:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
+    - name: Checkout
+      uses: actions/checkout@v4
 
-      - name: Setup .NET
-        uses: actions/setup-dotnet@v4
-        with:
-          dotnet-version: '8.0.x'
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
 
-      - name: Publish API
-        run: |
-          dotnet publish .\src\MyApp.Api\MyApp.Api.csproj `
-            -c Release `
-            -r win-x64 `
-            --self-contained false `
-            -o .\publish\Api
+    - name: Restore dependencies
+      run: dotnet restore AVAIntegrationModeler/AVAIntegrationModeler.sln --configfile AVAIntegrationModeler/nuget.config
 
-      - name: Publish Web
-        run: |
-          dotnet publish .\src\MyApp.Web\MyApp.Web.csproj `
-            -c Release `
-            -r win-x64 `
-            --self-contained false `
-            -o .\publish\Web
+    - name: Build
+      run: dotnet build AVAIntegrationModeler/AVAIntegrationModeler.sln --no-restore --configuration Release
 
-      - name: Create ZIP
-        run: |
-          Compress-Archive `
-            -Path .\publish\* `
-            -DestinationPath .\MyApp-win-x64.zip
+    - name: Publish API
+      run: dotnet publish AVAIntegrationModeler/src/AVAIntegrationModeler.API/AVAIntegrationModeler.API.csproj --no-restore --configuration Release --output ./publish/API
+
+    - name: Publish Web
+      run: dotnet publish AVAIntegrationModeler/src/AVAIntegrationModeler.Web.SyncfusionApp/AVAIntegrationModeler.Web.SyncfusionApp.csproj --no-restore --configuration Release --output ./publish/Web
+
+    - name: Create ZIP
+      run: |
+        cd publish
+        zip -r ../AVAIntegrationModeler.zip .
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: AVAIntegrationModeler
+        path: AVAIntegrationModeler.zip
