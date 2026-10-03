@@ -1,0 +1,65 @@
+name: .NET Build and Publish
+
+on:
+  push:
+    branches: [ "main" ]
+    tags:
+      - 'v*'
+  pull_request:
+    branches: [ "main" ]
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: 9.0.x
+
+    - name: Restore dependencies
+      run: dotnet restore AVAIntegrationModeler/AVAIntegrationModeler.sln --configfile AVAIntegrationModeler/nuget.config
+
+    - name: Build
+      run: dotnet build AVAIntegrationModeler/AVAIntegrationModeler.sln --no-restore --configuration Release
+
+    - name: Publish API
+      run: |
+        dotnet publish \
+          AVAIntegrationModeler/src/AVAIntegrationModeler.API/AVAIntegrationModeler.API.csproj \
+          --no-restore \
+          --configuration Release \
+          --output ./publish/API
+
+    - name: Publish Web
+      run: |
+        dotnet publish \
+          AVAIntegrationModeler/src/AVAIntegrationModeler.Web.SyncfusionApp/AVAIntegrationModeler.Web.SyncfusionApp.csproj \
+          --no-restore \
+          --configuration Release \
+          --output ./publish/Web
+
+    - name: Create ZIP
+      run: |
+        cd publish
+        zip -r ../AVAIntegrationModeler.zip .
+
+    - name: Upload artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: AVAIntegrationModeler
+        path: AVAIntegrationModeler.zip
+
+    - name: Create GitHub Release
+      if: startsWith(github.ref, 'refs/tags/v')
+      uses: softprops/action-gh-release@v2
+      with:
+        files: AVAIntegrationModeler.zip
+        generate_release_notes: true
