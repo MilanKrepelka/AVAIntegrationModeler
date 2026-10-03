@@ -31,8 +31,15 @@
             <SfButton CssClass="e-primary" IconCss="e-icons e-plus" OnClick="AddNewRecord" Disabled="@(SelectedModelId == null)">
                 @Localization.SharedResources.DataModelRecords_AddRecord
             </SfButton>
-            <SfButton CssClass="e-outline" IconCss="e-icons e-export" Type="Button" OnClick="ExportAsync">
-                Export
+            <SfButton CssClass="e-outline" IconCss="e-icons e-export" Type="Button" OnClick="ExportAsync" Disabled="@(SelectedModelId == null)">
+                Export ZIP
+            </SfButton>
+            <SfButton CssClass="e-outline" IconCss="e-icons e-download" Type="Button" OnClick="ExportToXlsAsync" Disabled="@(SelectedModelId == null)">
+                Export XLS
+            </SfButton>
+            <InputFile id="xls-import-input" OnChange="ImportFromXlsAsync" accept=".xlsx" style="display:none" />
+            <SfButton CssClass="e-outline" IconCss="e-icons e-import" Type="Button" OnClick="OpenXlsFilePicker" Disabled="@(SelectedModelId == null || _importLoading)">
+                @(_importLoading ? "Importuji..." : "Import XLS")
             </SfButton>
         }
     </div>
@@ -41,6 +48,23 @@
     {
         <div class="alert alert-info" style="margin-bottom:8px">
             @Localization.SharedResources.DataModelRecords_AvaPlaceReadOnly
+        </div>
+    }
+
+    @if (_importResult is not null)
+    {
+        <div class="alert @(_importResult.Errors.Count == 0 ? "alert-success" : "alert-warning")" style="margin-bottom:8px">
+            <strong>Import XLS:</strong>
+            vytvořeno @_importResult.CreatedCount, aktualizováno @_importResult.UpdatedCount záznamů.
+            @if (_importResult.Errors.Count > 0)
+            {
+                <ul style="margin:4px 0 0 0">
+                    @foreach (var err in _importResult.Errors)
+                    {
+                        <li>Řádek @err.RowNumber: @err.Message</li>
+                    }
+                </ul>
+            }
         </div>
     }
 

@@ -147,4 +147,23 @@ public interface IIntegrationDataProvider
     /// <param name="cancelationToken">Token pro zrušení operace.</param>
     /// <returns>DataModelDTO nebo null pokud model neexistuje.</returns>
     Task<DataModelDTO?> GetDataModelByIdAsync(Guid modelId, CancellationToken cancelationToken = default);
+
+    /// <summary>
+    /// Vrátí markdown dokument pro daný datový model z DataService.
+    /// Odpovídá GET /api/v1/Process/MarkdownDocument/{modelId}?months={months}.
+    /// </summary>
+    /// <param name="modelId">Identifikátor datového modelu</param>
+    /// <param name="months">Počet měsíců pro generování dokumentu</param>
+    /// <param name="ct">Token pro zrušení operace</param>
+    /// <returns>Obsah markdown dokumentu jako řetězec</returns>
+    Task<string> GetDataModelMarkdownDocumentAsync(Guid modelId, int months, CancellationToken ct = default);
+
+    /// <summary>
+    /// Vrátí markdown dokument měsíčních rozdílů metadat z DataService.
+    /// Odpovídá GET /api/v1/Process/MonthlyMetadataDifferencesDocument?months={months}.
+    /// </summary>
+    /// <param name="months">Počet měsíců pro generování dokumentu</param>
+    /// <param name="ct">Token pro zrušení operace</param>
+    /// <returns>Obsah markdown dokumentu jako řetězec</returns>
+    Task<string> GetMonthlyMetadataDifferencesDocumentAsync(int months, CancellationToken ct = default);
 }

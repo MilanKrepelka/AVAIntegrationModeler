@@ -467,6 +467,124 @@ public class CustomDataServiceClientTests
   }
 
   // ---------------------------------------------------------------------------
+  // GetDataModelMarkdownDocumentAsync
+  // ---------------------------------------------------------------------------
+
+  /// <summary>
+  /// HTTP 200 s markdown obsahem — metoda vrátí obsah jako řetězec.
+  /// </summary>
+  [Fact]
+  public async Task GetDataModelMarkdownDocumentAsync_Success_ReturnsContent()
+  {
+    var markdown = "# Datový model\n\nObsah dokumentu.";
+    var response = new HttpResponseMessage(HttpStatusCode.OK)
+    {
+      Content = new StringContent(markdown, Encoding.UTF8, "text/markdown")
+    };
+    var client = CreateClient(response);
+
+    var result = await client.GetDataModelMarkdownDocumentAsync(Guid.NewGuid(), months: 12, CancellationToken.None);
+
+    result.ShouldBe(markdown);
+  }
+
+  /// <summary>
+  /// URL musí cílit na <c>Process/MarkdownDocument/{modelId}</c> s query param <c>months</c> a použít GET.
+  /// </summary>
+  [Fact]
+  public async Task GetDataModelMarkdownDocumentAsync_BuildsCorrectUrl()
+  {
+    var handler = new FakeHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.OK)
+    {
+      Content = new StringContent("# doc", Encoding.UTF8, "text/plain")
+    });
+    var client = CreateClient(handler);
+    var modelId = Guid.NewGuid();
+
+    await client.GetDataModelMarkdownDocumentAsync(modelId, months: 6, CancellationToken.None);
+
+    handler.LastRequest.ShouldNotBeNull();
+    handler.LastRequest!.Method.ShouldBe(HttpMethod.Get);
+    var uri = handler.LastRequest.RequestUri!.ToString();
+    uri.ShouldContain("Process/MarkdownDocument/");
+    uri.ShouldContain(modelId.ToString());
+    uri.ShouldContain("months=6");
+  }
+
+  /// <summary>
+  /// HTTP 500 musí způsobit <see cref="HttpRequestException"/>.
+  /// </summary>
+  [Fact]
+  public async Task GetDataModelMarkdownDocumentAsync_ServerError_Throws()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+    {
+      Content = new StringContent("chyba", Encoding.UTF8, "text/plain")
+    });
+
+    await Should.ThrowAsync<HttpRequestException>(() =>
+      client.GetDataModelMarkdownDocumentAsync(Guid.NewGuid(), months: 12, CancellationToken.None));
+  }
+
+  // ---------------------------------------------------------------------------
+  // GetMonthlyMetadataDifferencesDocumentAsync
+  // ---------------------------------------------------------------------------
+
+  /// <summary>
+  /// HTTP 200 s markdown obsahem — metoda vrátí obsah jako řetězec.
+  /// </summary>
+  [Fact]
+  public async Task GetMonthlyMetadataDifferencesDocumentAsync_Success_ReturnsContent()
+  {
+    var markdown = "# Rozdíly metadat\n\nObsah dokumentu.";
+    var response = new HttpResponseMessage(HttpStatusCode.OK)
+    {
+      Content = new StringContent(markdown, Encoding.UTF8, "text/markdown")
+    };
+    var client = CreateClient(response);
+
+    var result = await client.GetMonthlyMetadataDifferencesDocumentAsync(months: 12, CancellationToken.None);
+
+    result.ShouldBe(markdown);
+  }
+
+  /// <summary>
+  /// URL musí cílit na <c>Process/MonthlyMetadataDifferencesDocument</c> s query param <c>months</c> a použít GET.
+  /// </summary>
+  [Fact]
+  public async Task GetMonthlyMetadataDifferencesDocumentAsync_BuildsCorrectUrl()
+  {
+    var handler = new FakeHttpMessageHandler(new HttpResponseMessage(HttpStatusCode.OK)
+    {
+      Content = new StringContent("# doc", Encoding.UTF8, "text/plain")
+    });
+    var client = CreateClient(handler);
+
+    await client.GetMonthlyMetadataDifferencesDocumentAsync(months: 3, CancellationToken.None);
+
+    handler.LastRequest.ShouldNotBeNull();
+    handler.LastRequest!.Method.ShouldBe(HttpMethod.Get);
+    var uri = handler.LastRequest.RequestUri!.ToString();
+    uri.ShouldContain("Process/MonthlyMetadataDifferencesDocument");
+    uri.ShouldContain("months=3");
+  }
+
+  /// <summary>
+  /// HTTP 500 musí způsobit <see cref="HttpRequestException"/>.
+  /// </summary>
+  [Fact]
+  public async Task GetMonthlyMetadataDifferencesDocumentAsync_ServerError_Throws()
+  {
+    var client = CreateClient(new HttpResponseMessage(HttpStatusCode.InternalServerError)
+    {
+      Content = new StringContent("chyba", Encoding.UTF8, "text/plain")
+    });
+
+    await Should.ThrowAsync<HttpRequestException>(() =>
+      client.GetMonthlyMetadataDifferencesDocumentAsync(months: 12, CancellationToken.None));
+  }
+
+  // ---------------------------------------------------------------------------
   // Pomocné třídy
   // ---------------------------------------------------------------------------
 

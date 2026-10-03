@@ -86,6 +86,8 @@ public class DeploymentExportRealDbTests
     public Task<IEnumerable<IntegrationMapSummaryDTO>> GetIntegrationMapSummaryAsync(CancellationToken ct = default) => throw new NotImplementedException();
     public Task<IEnumerable<DataModelRecordDTO>> GetDataModelRecordsAsync(Guid modelId, CancellationToken ct = default) => throw new NotImplementedException();
     public Task<DataModelDTO?> GetDataModelByIdAsync(Guid modelId, CancellationToken ct = default) => throw new NotImplementedException();
+    public Task<string> GetDataModelMarkdownDocumentAsync(Guid modelId, int months, CancellationToken ct = default) => throw new NotImplementedException();
+    public Task<string> GetMonthlyMetadataDifferencesDocumentAsync(int months, CancellationToken ct = default) => throw new NotImplementedException();
   }
 
   /// <summary>

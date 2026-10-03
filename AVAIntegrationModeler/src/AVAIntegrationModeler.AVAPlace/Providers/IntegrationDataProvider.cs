@@ -604,4 +604,24 @@ public class IntegrationDataProvider : IIntegrationDataProvider
       }
     );
   }
+
+  /// <inheritdoc/>
+  public async Task<string> GetDataModelMarkdownDocumentAsync(Guid modelId, int months, CancellationToken ct = default)
+  {
+    return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, string>(
+      _serviceProvider,
+      tenantId,
+      async client => await client.GetDataModelMarkdownDocumentAsync(modelId, months, ct)
+    );
+  }
+
+  /// <inheritdoc/>
+  public async Task<string> GetMonthlyMetadataDifferencesDocumentAsync(int months, CancellationToken ct = default)
+  {
+    return await RTX.ExecuteInContextAsync<ICustomDataServiceClient, string>(
+      _serviceProvider,
+      tenantId,
+      async client => await client.GetMonthlyMetadataDifferencesDocumentAsync(months, ct)
+    );
+  }
 }

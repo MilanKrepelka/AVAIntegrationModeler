@@ -2,7 +2,6 @@
 @using AVAIntegrationModeler.Contracts.DTO
 @using Syncfusion.Blazor.Grids
 @using Syncfusion.Blazor.Popups
-@using Syncfusion.Blazor.DropDowns
 @using Syncfusion.Blazor.Inputs
 @using Syncfusion.Blazor.Buttons
 
@@ -42,7 +41,7 @@
     </SfGrid>
 </div>
 
-<SfDialog @bind-Visible="_isDialogOpen" Width="620px" ShowCloseIcon="true" IsModal="true">
+<SfDialog @bind-Visible="_isDialogOpen" Width="620px" MaxWidth="620px" ShowCloseIcon="true" IsModal="true" CssClass="field-editor-dialog">
     <DialogTemplates>
         <Header>@(_isNew ? "Přidat pole" : "Upravit pole")</Header>
         <Content>
@@ -66,15 +65,13 @@
                                     @bind-Value="_editingField.Description" Rows="2" CssClass="w-100" />
                     </div>
                     <div class="col-12">
-                        <SfDropDownList TItem="FieldTypeItem" TValue="DataModelFieldType"
-                                        DataSource="@FieldTypeOptions"
-                                        @bind-Value="_editingField.FieldType"
-                                        Placeholder="Typ pole" FloatLabelType="FloatLabelType.Always"
-                                        AllowFiltering="true"
-                                        FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
-                                        CssClass="w-100">
-                            <DropDownListFieldSettings Value="Value" Text="Text" />
-                        </SfDropDownList>
+                        <label class="form-label mb-1">Typ pole</label>
+                        <select class="form-select" @bind="_editingField.FieldType">
+                            @foreach (var ft in FieldTypeOptions)
+                            {
+                                <option value="@ft.Value">@ft.Text</option>
+                            }
+                        </select>
                     </div>
                     <div class="col-12 col-md-6">
                         <SfCheckBox @bind-Checked="_editingField.IsCollection" Label="Kolekce (více hodnot)" />
@@ -99,15 +96,19 @@
                     @if (NeedsReferences && AvailableModels.Count > 0)
                     {
                         <div class="col-12">
-                            <SfMultiSelect TItem="DataModelSummaryDTO" TValue="List<Guid>"
-                                           DataSource="@AvailableModels"
-                                           @bind-Value="_editingField.ReferencedEntityTypeIds"
-                                           Placeholder="Odkazované modely" FloatLabelType="FloatLabelType.Always"
-                                           AllowFiltering="true"
-                                           FilterType="Syncfusion.Blazor.DropDowns.FilterType.Contains"
-                                           CssClass="w-100">
-                                <MultiSelectFieldSettings Value="Id" Text="Code" />
-                            </SfMultiSelect>
+                            <label class="form-label mb-1">Odkazované modely</label>
+                            <div style="max-height:200px; overflow-y:auto; border:1px solid #dee2e6; border-radius:4px; padding:8px;">
+                                @foreach (var model in AvailableModels)
+                                {
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox"
+                                               id="ref-model-@model.Id"
+                                               checked="@_editingField.ReferencedEntityTypeIds.Contains(model.Id)"
+                                               @onchange="@(e => ToggleReferencedModel(model.Id, (bool)e.Value!))" />
+                                        <label class="form-check-label" for="ref-model-@model.Id">@model.Code</label>
+                                    </div>
+                                }
+                            </div>
                         </div>
                     }
                 </div>

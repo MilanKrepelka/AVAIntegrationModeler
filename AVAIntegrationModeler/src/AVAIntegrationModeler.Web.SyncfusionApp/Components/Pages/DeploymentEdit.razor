@@ -280,7 +280,14 @@
                 <SfButton CssClass="e-success e-outline" Type="Button" OnClick="UploadToAvaPlaceAsync" Disabled="@_avaPlaceLoading">
                     @(_avaPlaceLoading ? Localization.SharedResources.Deployments_Uploading : Localization.SharedResources.Deployments_UploadToAvaPlace)
                 </SfButton>
+                <SfButton CssClass="e-info" Type="Button" OnClick="ExportDocumentationAsync" Disabled="@_docsExportLoading">
+                    @(_docsExportLoading ? "Exportuji..." : "Export dokumentace")
+                </SfButton>
             </div>
+            @if (_docsExportError is not null)
+            {
+                <div class="alert alert-danger" style="margin-top:8px">@_docsExportError</div>
+            }
             @if (_avaPlaceMessage is not null)
             {
                 <div class="alert @(_avaPlaceSuccess ? "alert-success" : "alert-danger")" style="margin-top:8px; font-size:.875rem; white-space:pre-line">
