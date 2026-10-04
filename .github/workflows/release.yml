@@ -1,13 +1,9 @@
-name: Publish public artifact
-
 on:
   workflow_dispatch:
-  push:
-    tags:
-      - 'v*'
-
-permissions:
-  contents: write
+    inputs:
+      tag:
+        required: true
+        type: string
 
 jobs:
   build-and-release:
@@ -15,8 +11,10 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # ... tvůj build ...
-      # výstup: dist/AVAIntegrationModeler-win-x64.zip
+      - name: Create and push tag
+        run: |
+          git tag "${{ inputs.tag }}"
+          git push origin "${{ inputs.tag }}"
 
       - name: Create Release and upload asset
         uses: softprops/action-gh-release@v2
