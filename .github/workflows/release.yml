@@ -13,13 +13,45 @@ permissions:
 
 jobs:
   build-and-release:
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
+
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
 
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Publish API
+        run: |
+          dotnet publish .\AVAIntegrationModeler\src\AVAIntegrationModeler.API\AVAIntegrationModeler.API.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained false `
+            -o .\publish\API
+
+      - name: Publish Web Syncfusion App
+        run: |
+          dotnet publish .\AVAIntegrationModeler\src\AVAIntegrationModeler.Web.SyncfusionApp\AVAIntegrationModeler.Web.SyncfusionApp.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained false `
+            -o .\publish\Web.SyncfusionApp
+
+      - name: Create ZIP
+        run: |
+          New-Item -ItemType Directory -Force -Path .\dist | Out-Null
+          Compress-Archive `
+            -Path .\publish\* `
+            -DestinationPath .\dist\AVAIntegrationModeler-win-x64.zip `
+            -Force
+
       - name: Create and push tag
+        shell: bash
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
