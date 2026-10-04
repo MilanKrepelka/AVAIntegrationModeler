@@ -18,22 +18,22 @@ jobs:
 
       - name: Publish API
         run: |
-          dotnet publish .\src\MyApp.Api\MyApp.Api.csproj `
+          dotnet publish .\AVAIntegrationModeler\src\AVAIntegrationModeler.API\AVAIntegrationModeler.API.csproj `
             -c Release `
             -r win-x64 `
             --self-contained false `
-            -o .\publish\Api
+            -o .\publish\API
 
-      - name: Publish Web
+      - name: Publish Web Syncfusion App
         run: |
-          dotnet publish .\src\MyApp.Web\MyApp.Web.csproj `
+          dotnet publish .\AVAIntegrationModeler\src\AVAIntegrationModeler.Web.SyncfusionApp\AVAIntegrationModeler.Web.SyncfusionApp.csproj `
             -c Release `
             -r win-x64 `
             --self-contained false `
-            -o .\publish\Web
+            -o .\publish\Web.SyncfusionApp
 
       - name: Create ZIP
         run: |
           Compress-Archive `
             -Path .\publish\* `
-            -DestinationPath .\MyApp-win-x64.zip
+            -DestinationPath .\AVAIntegrationModeler-win-x64.zip
