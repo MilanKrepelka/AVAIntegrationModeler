@@ -212,6 +212,14 @@ public interface IAVAIntegrationModelerApiClient
   Task<Result> DeleteDeployment(string code, CancellationToken cancellationToken);
 
   /// <summary>
+  /// Ukončí vývoj nasazení — nastaví datum posledního nasazení na aktuální čas a nasazení uloží.
+  /// </summary>
+  /// <param name="deploymentCode">Kód nasazení.</param>
+  /// <param name="cancellationToken"><see cref="CancellationToken"/></param>
+  /// <returns>Aktualizované nasazení.</returns>
+  Task<Result<DeploymentDTO>> CompleteDeploymentDevelopment(string deploymentCode, CancellationToken cancellationToken);
+
+  /// <summary>
   /// Exportuje DataModely nasazení včetně jejich záznamů jako ZIP archív.
   /// </summary>
   Task<byte[]> ExportDeployment(string deploymentCode, CancellationToken cancellationToken);

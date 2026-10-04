@@ -319,6 +319,169 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
     }
   }
 
+  #region Wizard vývoje
+
+  /// <summary>
+  /// Položka textu kroku wizardu — volitelně s odkazem.
+  /// </summary>
+  /// <param name="Text">Text pokynu.</param>
+  /// <param name="Url">Volitelný odkaz zobrazený za textem.</param>
+  private sealed record WizardInstruction(string Text, string? Url = null);
+
+  /// <summary>
+  /// Krok wizardu vývoje — nadpis a seznam pokynů.
+  /// </summary>
+  /// <param name="Title">Nadpis kroku.</param>
+  /// <param name="Instructions">Pokyny zobrazené v kroku.</param>
+  private sealed record WizardStep(string Title, IReadOnlyList<WizardInstruction> Instructions);
+
+  /// <summary>
+  /// Definice kroků wizardu vývoje. Pořadí odpovídá indexu <see cref="_wizardStep"/>,
+  /// tlačítka akcí jednotlivých kroků jsou v šabloně podle indexu.
+  /// </summary>
+  private static readonly IReadOnlyList<WizardStep> WizardSteps =
+  [
+    new("Vytvoření vývojových větví",
+    [
+      new("Vytvoř pomocí skriptu PrepareFolders.cmd adresáře pro vývoj.")
+    ]),
+    new("Export modelů",
+    [
+      new("Exportuj modely a unified data do /IntegrationsDataModels/IntegrationsDataModels."),
+      new("Pomocí AI zkontroluj modely na logiku."),
+      new("Pomocí AI ověř, jestli v modelech nejsou překlepy."),
+      new("Pomocí AI ověř, jestli v unified data nejsou překlepy."),
+      new("V případě chyb oprav a exportuj znovu."),
+      new("Ověř rozdíly oproti databázi, jestli tam je všechno.")
+    ]),
+    new("Export dokumentace",
+    [
+      new("Nahraj modely a unified data do AVAPlace."),
+      new("Exportuj dokumentaci do /VDM/VDM."),
+      new("Commitni do aktuální větve pro vývoj."),
+      new("Udělej pull request do draft větve."),
+      new("Nech ověřit analytikem.")
+    ]),
+    new("Vytvoření pull requestů pro architekta",
+    [
+      new("Pokud jde o nové modely, nezapomeň dát patřičné řádky do globálních skriptů."),
+      new("Vytvoř pull request pro modely:", "https://asolcz.visualstudio.com/Plaza/_git/IntegrationDataModels/branches"),
+      new("Vytvoř pull request pro dokumentaci:", "https://asolcz.visualstudio.com/Docs/_git/VDM/branches")
+    ]),
+    new("Předání výsledku architektovi",
+    [
+      new("Přehoď vývojový tiket(y) na architekta.")
+    ])
+  ];
+
+  private bool _wizardActive;
+  private int _wizardStep;
+
+  private string? _completeMessage;
+  private bool _completeSuccess;
+  private bool _completeLoading;
+
+  private bool IsFirstWizardStep => _wizardStep == 0;
+  private bool IsLastWizardStep => _wizardStep == WizardSteps.Count - 1;
+
+  /// <summary>
+  /// Spustí wizard vývoje od prvního kroku.
+  /// </summary>
+  private void StartWizard()
+  {
+    _wizardActive = true;
+    _wizardStep = 0;
+    _completeMessage = null;
+  }
+
+  /// <summary>
+  /// Zavře wizard vývoje.
+  /// </summary>
+  private void CloseWizard() => _wizardActive = false;
+
+  /// <summary>
+  /// Přejde na další krok wizardu.
+  /// </summary>
+  private void NextWizardStep()
+  {
+    if (!IsLastWizardStep) _wizardStep++;
+  }
+
+  /// <summary>
+  /// Vrátí se na předchozí krok wizardu.
+  /// </summary>
+  private void PreviousWizardStep()
+  {
+    if (!IsFirstWizardStep) _wizardStep--;
+  }
+
+  /// <summary>
+  /// Přejde přímo na zvolený krok wizardu.
+  /// </summary>
+  /// <param name="step">Index kroku.</param>
+  private void GoToWizardStep(int step)
+  {
+    if (step >= 0 && step < WizardSteps.Count) _wizardStep = step;
+  }
+
+  /// <summary>
+  /// Ukončí vývoj — uloží aktuální stav formuláře a nastaví datum posledního nasazení na aktuální čas.
+  /// </summary>
+  private async Task CompleteDevelopmentAsync()
+  {
+    if (string.IsNullOrEmpty(deploymentCode) || _disposed) return;
+    _completeLoading = true;
+    _completeMessage = null;
+    await InvokeAsync(StateHasChanged);
+    try
+    {
+      var ct = _cts?.Token ?? CancellationToken.None;
+
+      // Nejprve uložit případné neuložené změny formuláře, aby se neztratily.
+      await SaveAsync();
+      if (_disposed) return;
+      if (!_saveSuccess)
+      {
+        _completeSuccess = false;
+        _completeMessage = $"Vývoj nebyl ukončen — nasazení se nepodařilo uložit: {_saveMessage}";
+        return;
+      }
+
+      var result = await ApiClient.CompleteDeploymentDevelopment(_edit.Code, ct);
+      if (_disposed) return;
+      _completeSuccess = result.IsSuccess;
+      if (result.IsSuccess)
+      {
+        _edit.LastDeploymentDateTime = result.Value.LastDeploymentDateTime;
+        _edit.LastSaveDateTime = result.Value.LastSaveDateTime;
+        _completeMessage = $"Vývoj nasazení {_edit.Code} byl ukončen.";
+      }
+      else
+      {
+        _completeMessage = result.IsInvalid()
+          ? string.Join(", ", result.ValidationErrors.Select(e => e.ErrorMessage))
+          : string.Join(", ", result.Errors);
+      }
+    }
+    catch (OperationCanceledException) { }
+    catch (Exception ex)
+    {
+      if (!_disposed)
+      {
+        _completeSuccess = false;
+        _completeMessage = $"Chyba při ukončení vývoje: {ex.Message}";
+      }
+    }
+    finally
+    {
+      _completeLoading = false;
+      if (!_disposed)
+        await InvokeAsync(StateHasChanged);
+    }
+  }
+
+  #endregion
+
   private void NavigateToModelChanges(Guid modelId)
     => NavigationManager.NavigateTo($"/datamodelchanges/{modelId}?returnUrl=/deploymentedit/{deploymentCode}");
 

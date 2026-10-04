@@ -113,6 +113,18 @@ public class Deployment : DomainEntityBase<Guid>, IAggregateRoot
   }
 
   /// <summary>
+  /// Ukončí vývoj nasazení — nastaví datum posledního nasazení i posledního uložení na zadaný okamžik.
+  /// </summary>
+  /// <param name="completedAtUtc">Okamžik ukončení vývoje (UTC).</param>
+  public Deployment CompleteDevelopment(DateTime completedAtUtc)
+  {
+    Guard.Against.Default(completedAtUtc, nameof(completedAtUtc));
+    LastDeploymentDateTime = completedAtUtc;
+    LastSaveDateTime = completedAtUtc;
+    return this;
+  }
+
+  /// <summary>
   /// Přidá datový model do nasazení. Duplikáty jsou ignorovány.
   /// </summary>
   /// <param name="dataModelId">Identifikátor datového modelu.</param>

@@ -197,4 +197,25 @@ public class DeploymentTests
 
     result.ShouldBeSameAs(dep);
   }
+
+  [Fact]
+  public void CompleteDevelopment_NastaviDatumPoslednihoNasazeniAUlozeni()
+  {
+    var dep = new Deployment(Guid.NewGuid(), "DEP-001");
+    var now = new DateTime(2026, 10, 4, 12, 30, 0, DateTimeKind.Utc);
+
+    dep.CompleteDevelopment(now);
+
+    dep.LastDeploymentDateTime.ShouldBe(now);
+    dep.LastSaveDateTime.ShouldBe(now);
+  }
+
+  [Fact]
+  public void CompleteDevelopment_VyhodiVyjimku_ProVychoziDatum()
+  {
+    var dep = new Deployment(Guid.NewGuid(), "DEP-001");
+
+    Should.Throw<ArgumentException>(() => dep.CompleteDevelopment(default));
+    dep.LastDeploymentDateTime.ShouldBeNull();
+  }
 }
