@@ -24,7 +24,7 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           tag_ref="refs/tags/${{ inputs.tag }}"
-          if git show-ref --tags --verify --quiet "$tag_ref"; then
+          if git ls-remote --exit-code --tags origin "$tag_ref" >/dev/null 2>&1; then
             echo "Tag '${{ inputs.tag }}' exists; skipping creation."
           else
             git tag "${{ inputs.tag }}"
