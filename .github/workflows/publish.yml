@@ -1,17 +1,11 @@
-name: .NET Build and Publish
+name: Publish
 
 on:
-  push:
-    tags:
-      - 'v*'   # např. v1.0.0
   workflow_dispatch:
 
-permissions:
-  contents: write   # nutné pro upload do release
-
 jobs:
-  build-and-release:
-    runs-on: ubuntu-latest
+  publish:
+    runs-on: windows-latest
 
     steps:
       - name: Checkout
@@ -20,23 +14,26 @@ jobs:
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
         with:
-          dotnet-version: '8.0.x' # uprav dle projektu
+          dotnet-version: '8.0.x'
 
-      - name: Restore
-        run: dotnet restore
+      - name: Publish API
+        run: |
+          dotnet publish .\src\MyApp.Api\MyApp.Api.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained false `
+            -o .\publish\Api
 
-      - name: Publish
-        run: dotnet publish -c Release -o publish
+      - name: Publish Web
+        run: |
+          dotnet publish .\src\MyApp.Web\MyApp.Web.csproj `
+            -c Release `
+            -r win-x64 `
+            --self-contained false `
+            -o .\publish\Web
 
       - name: Create ZIP
         run: |
-          cd publish
-          zip -r ../AVAIntegrationModeler.zip .
-
-      - name: Create Release (if missing) and upload asset
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          TAG="${GITHUB_REF_NAME}"
-          gh release view "$TAG" >/dev/null 2>&1 || gh release create "$TAG" --title "$TAG" --notes "Automated release $TAG"
-          gh release upload "$TAG" AVAIntegrationModeler.zip --clobber
+          Compress-Archive `
+            -Path .\publish\* `
+            -DestinationPath .\MyApp-win-x64.zip
