@@ -116,6 +116,12 @@
                                     <td>@(dm?.Name ?? "")</td>
                                     <td style="white-space:nowrap">
                                         <SfButton CssClass="e-small e-outline"
+                                                  IconCss="e-icons e-edit"
+                                                  Type="Button"
+                                                  title="Editovat datový model"
+                                                  OnClick="@(() => NavigateToModelEdit(id))">
+                                        </SfButton>
+                                        <SfButton CssClass="e-small e-outline"
                                                   IconCss="e-icons e-eye"
                                                   Type="Button"
                                                   title="@Localization.SharedResources.DataModels_CompareDbVsAvaPlace"
@@ -249,7 +255,13 @@
                                                 <span style="color:#6c757d">—</span>
                                             }
                                         </td>
-                                        <td>
+                                        <td style="white-space:nowrap">
+                                            <SfButton CssClass="e-small e-outline"
+                                                      IconCss="e-icons e-edit"
+                                                      Type="Button"
+                                                      title="Editovat datový model"
+                                                      OnClick="@(() => NavigateToModelEdit(item.DataModelId))">
+                                            </SfButton>
                                             <SfButton CssClass="e-small e-outline"
                                                       IconCss="e-icons e-eye"
                                                       Type="Button"

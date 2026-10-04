@@ -354,6 +354,7 @@ NavigationManager.NavigateTo($"/datamodeledit/Database?areaId={areaId}&returnUrl
 | `AreaMap.razor` | `DataModelEdit` (nový model) | `/areamap/{areaId}` |
 | `DataModelMap.razor` | `DataModelEdit` (edit modelu) | `/datamodelmap/{modelId}` |
 | `DeploymentEdit.razor` | `DataModelChanges` (oba výskyty) | `/deploymentedit/{deploymentCode}` |
+| `DeploymentEdit.razor` | `DataModelEdit` (edit modelu, obě tabulky) | `/deploymentedit/{deploymentCode}` |
 
 **Při přidávání nové stránky nebo nového navigačního tlačítka:** zkontroluj, zda cílová stránka má Zpět — pokud ano, přidej `returnUrl`. Chybějící `returnUrl` je bug, ne opomenutí.
 

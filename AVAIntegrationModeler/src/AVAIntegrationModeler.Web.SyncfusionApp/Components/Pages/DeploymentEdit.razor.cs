@@ -482,6 +482,13 @@ public partial class DeploymentEdit : ComponentBase, IDisposable
 
   #endregion
 
+  /// <summary>
+  /// Přejde na editaci datového modelu; tlačítko Zpět na editaci vrátí uživatele na toto nasazení.
+  /// </summary>
+  /// <param name="modelId">Identifikátor datového modelu.</param>
+  private void NavigateToModelEdit(Guid modelId)
+    => NavigationManager.NavigateTo($"/datamodeledit/Database/{modelId}?returnUrl=/deploymentedit/{Uri.EscapeDataString(deploymentCode ?? string.Empty)}");
+
   private void NavigateToModelChanges(Guid modelId)
     => NavigationManager.NavigateTo($"/datamodelchanges/{modelId}?returnUrl=/deploymentedit/{deploymentCode}");
 
