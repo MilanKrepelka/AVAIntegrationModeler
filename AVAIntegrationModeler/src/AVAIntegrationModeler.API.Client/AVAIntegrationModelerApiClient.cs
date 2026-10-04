@@ -808,6 +808,19 @@ public class AVAIntegrationModelerApiClient : IAVAIntegrationModelerApiClient
   }
 
   /// <inheritdoc/>
+  public async Task<Result<DeploymentDTO>> CompleteDeploymentDevelopment(string deploymentCode, CancellationToken cancellationToken)
+  {
+    _logger.LogDebug($"{nameof(CompleteDeploymentDevelopment)} starting. deploymentCode={deploymentCode}");
+    var fluent = new FluentClient(_httpClient);
+    var result = await fluent
+      .PostAsync($"deployments/{Uri.EscapeDataString(deploymentCode)}/complete-development")
+      .WithBody(new { DeploymentCode = deploymentCode })
+      .WithCancellationToken(cancellationToken)
+      .AsResult<DeploymentDTO>();
+    return result;
+  }
+
+  /// <inheritdoc/>
   public async Task<byte[]> ExportDeployment(string deploymentCode, CancellationToken cancellationToken)
   {
     _logger.LogDebug($"{nameof(ExportDeployment)} starting. deploymentCode={deploymentCode}");

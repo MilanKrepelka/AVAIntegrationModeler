@@ -116,6 +116,12 @@
                                     <td>@(dm?.Name ?? "")</td>
                                     <td style="white-space:nowrap">
                                         <SfButton CssClass="e-small e-outline"
+                                                  IconCss="e-icons e-edit"
+                                                  Type="Button"
+                                                  title="Editovat datový model"
+                                                  OnClick="@(() => NavigateToModelEdit(id))">
+                                        </SfButton>
+                                        <SfButton CssClass="e-small e-outline"
                                                   IconCss="e-icons e-eye"
                                                   Type="Button"
                                                   title="@Localization.SharedResources.DataModels_CompareDbVsAvaPlace"
@@ -158,25 +164,20 @@
             </div>
         }
 
-        @if (IsEditMode)
+        @* Přehled změn se načítá z průvodce vývojem; zde se zobrazí až po načtení.
+           Načítání a chyba se zde ukazují jen při zavřeném průvodci (jinak jsou v průvodci). *@
+        @if (IsEditMode && (_changesSummary is not null || (!_wizardActive && (_loadingSummary || _summaryError is not null))))
         {
             <div class="row" style="margin-top:24px">
                 <div class="col-12">
                     <h5>@Localization.SharedResources.Deployments_ChangesSummaryTitle</h5>
 
-                    @if (!_loadingSummary && _changesSummary is null && _summaryError is null)
-                    {
-                        <SfButton CssClass="e-outline e-small" Type="Button" OnClick="LoadChangesSummaryAsync">
-                            @Localization.SharedResources.Deployments_LoadChangesSummary
-                        </SfButton>
-                    }
-
-                    @if (_loadingSummary)
+                    @if (_loadingSummary && !_wizardActive)
                     {
                         <div class="text-muted" style="font-size:.875rem">@Localization.SharedResources.Common_Loading</div>
                     }
 
-                    @if (_summaryError is not null)
+                    @if (_summaryError is not null && !_wizardActive)
                     {
                         <div class="alert alert-danger" style="padding:.4rem .8rem; font-size:.875rem">@_summaryError</div>
                         <SfButton CssClass="e-outline e-small" Type="Button" OnClick="LoadChangesSummaryAsync">@Localization.SharedResources.Common_TryAgain</SfButton>
@@ -254,7 +255,13 @@
                                                 <span style="color:#6c757d">—</span>
                                             }
                                         </td>
-                                        <td>
+                                        <td style="white-space:nowrap">
+                                            <SfButton CssClass="e-small e-outline"
+                                                      IconCss="e-icons e-edit"
+                                                      Type="Button"
+                                                      title="Editovat datový model"
+                                                      OnClick="@(() => NavigateToModelEdit(item.DataModelId))">
+                                            </SfButton>
                                             <SfButton CssClass="e-small e-outline"
                                                       IconCss="e-icons e-eye"
                                                       Type="Button"
@@ -271,29 +278,116 @@
             </div>
         }
 
-        @if (IsEditMode)
+        @if (IsEditMode && !_wizardActive)
         {
-            <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap">
-                <SfButton CssClass="e-outline" Type="Button" OnClick="ExportAsync">
-                    @Localization.SharedResources.Deployments_ExportDataModels
-                </SfButton>
-                <SfButton CssClass="e-success e-outline" Type="Button" OnClick="UploadToAvaPlaceAsync" Disabled="@_avaPlaceLoading">
-                    @(_avaPlaceLoading ? Localization.SharedResources.Deployments_Uploading : Localization.SharedResources.Deployments_UploadToAvaPlace)
-                </SfButton>
-                <SfButton CssClass="e-info" Type="Button" OnClick="ExportDocumentationAsync" Disabled="@_docsExportLoading">
-                    @(_docsExportLoading ? "Exportuji..." : "Export dokumentace")
-                </SfButton>
+            <div style="margin-top:24px">
+                <SfButton CssClass="e-primary" IconCss="e-icons e-play" Type="Button" OnClick="StartWizard">Start vývoje</SfButton>
             </div>
-            @if (_docsExportError is not null)
-            {
-                <div class="alert alert-danger" style="margin-top:8px">@_docsExportError</div>
-            }
-            @if (_avaPlaceMessage is not null)
-            {
-                <div class="alert @(_avaPlaceSuccess ? "alert-success" : "alert-danger")" style="margin-top:8px; font-size:.875rem; white-space:pre-line">
-                    @_avaPlaceMessage
+        }
+
+        @if (IsEditMode && _wizardActive)
+        {
+            var step = WizardSteps[_wizardStep];
+            <div class="card dev-wizard" style="margin-top:24px">
+                <div class="card-header d-flex align-items-center">
+                    <strong>Průvodce vývojem</strong>
+                    <span class="text-muted" style="margin-left:8px; font-size:.875rem">krok @(_wizardStep + 1) z @WizardSteps.Count</span>
+                    <SfButton CssClass="e-flat e-small" IconCss="e-icons e-close" Type="Button" OnClick="CloseWizard" title="Zavřít průvodce" style="margin-left:auto"></SfButton>
                 </div>
-            }
+                <div class="card-body">
+                    <ol class="dev-wizard-steps">
+                        @for (var i = 0; i < WizardSteps.Count; i++)
+                        {
+                            var index = i;
+                            var css = index == _wizardStep ? "active" : index < _wizardStep ? "done" : "";
+                            <li class="@css" @onclick="() => GoToWizardStep(index)">
+                                <span class="dev-wizard-number">@(index + 1)</span>
+                                <span class="dev-wizard-title">@WizardSteps[index].Title</span>
+                            </li>
+                        }
+                    </ol>
+
+                    <h5 style="margin-top:16px">@(_wizardStep + 1). @step.Title</h5>
+                    <ul>
+                        @foreach (var instruction in step.Instructions)
+                        {
+                            <li>
+                                @instruction.Text
+                                @if (instruction.Url is not null)
+                                {
+                                    <text> </text><a href="@instruction.Url" target="_blank" rel="noopener noreferrer">@instruction.Url</a>
+                                }
+                            </li>
+                        }
+                    </ul>
+
+                    @switch (_wizardStep)
+                    {
+                        case 1:
+                            <div class="d-flex gap-2 flex-wrap">
+                                <SfButton CssClass="e-outline" Type="Button" OnClick="ExportAsync">@Localization.SharedResources.Deployments_ExportDataModels</SfButton>
+                                <SfButton CssClass="e-outline" Type="Button" OnClick="LoadChangesSummaryAsync" Disabled="@_loadingSummary">@Localization.SharedResources.Deployments_LoadChangesSummary</SfButton>
+                            </div>
+                            @if (_loadingSummary)
+                            {
+                                <div class="text-muted" style="margin-top:8px; font-size:.875rem">@Localization.SharedResources.Common_Loading</div>
+                            }
+                            @if (_summaryError is not null)
+                            {
+                                <div class="alert alert-danger" style="margin-top:8px; padding:.4rem .8rem; font-size:.875rem">@_summaryError</div>
+                            }
+                            @if (_changesSummary is { } ws)
+                            {
+                                <div style="margin-top:8px; display:flex; gap:12px; flex-wrap:wrap; font-size:.875rem">
+                                    <span style="color:#198754; font-weight:600">@string.Format(Localization.SharedResources.Deployments_StatusSameLabel, ws.ModelsSame)</span>
+                                    <span style="color:#dc3545; font-weight:600">@string.Format(Localization.SharedResources.Deployments_StatusDifferentLabel, ws.ModelsDifferent)</span>
+                                    <span style="color:#0d6efd; font-weight:600">@string.Format(Localization.SharedResources.Deployments_StatusOnlyDbLabel, ws.ModelsOnlyInDatabase)</span>
+                                    <span style="color:#6f42c1; font-weight:600">@string.Format(Localization.SharedResources.Deployments_StatusOnlyAvaLabel, ws.ModelsOnlyInAvaPlace)</span>
+                                    <span class="text-muted">Detail je v přehledu změn výše na stránce.</span>
+                                </div>
+                            }
+                            break;
+                        case 2:
+                            <div class="d-flex gap-2 flex-wrap">
+                                <SfButton CssClass="e-success e-outline" Type="Button" OnClick="UploadToAvaPlaceAsync" Disabled="@_avaPlaceLoading">
+                                    @(_avaPlaceLoading ? Localization.SharedResources.Deployments_Uploading : Localization.SharedResources.Deployments_UploadToAvaPlace)
+                                </SfButton>
+                                <SfButton CssClass="e-info" Type="Button" OnClick="ExportDocumentationAsync" Disabled="@_docsExportLoading">
+                                    @(_docsExportLoading ? "Exportuji..." : "Export dokumentace")
+                                </SfButton>
+                            </div>
+                            @if (_avaPlaceMessage is not null)
+                            {
+                                <div class="alert @(_avaPlaceSuccess ? "alert-success" : "alert-danger")" style="margin-top:8px; font-size:.875rem; white-space:pre-line">@_avaPlaceMessage</div>
+                            }
+                            @if (_docsExportError is not null)
+                            {
+                                <div class="alert alert-danger" style="margin-top:8px">@_docsExportError</div>
+                            }
+                            break;
+                        case 4:
+                            <SfButton CssClass="e-success" Type="Button" OnClick="CompleteDevelopmentAsync" Disabled="@_completeLoading">
+                                @(_completeLoading ? "Ukončuji..." : "Ukončení vývoje")
+                            </SfButton>
+                            @if (_completeMessage is not null)
+                            {
+                                <div class="alert @(_completeSuccess ? "alert-success" : "alert-danger")" style="margin-top:8px">@_completeMessage</div>
+                            }
+                            break;
+                    }
+                </div>
+                <div class="card-footer d-flex gap-2">
+                    <SfButton CssClass="e-outline" Type="Button" OnClick="PreviousWizardStep" Disabled="@IsFirstWizardStep">Předchozí</SfButton>
+                    @if (IsLastWizardStep)
+                    {
+                        <SfButton CssClass="e-outline" Type="Button" OnClick="CloseWizard" style="margin-left:auto">Zavřít</SfButton>
+                    }
+                    else
+                    {
+                        <SfButton CssClass="e-primary" Type="Button" OnClick="NextWizardStep" style="margin-left:auto">Další</SfButton>
+                    }
+                </div>
+            </div>
         }
 
         <div style="margin-top:16px; display:flex; gap:8px">
