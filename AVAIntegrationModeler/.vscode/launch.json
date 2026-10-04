@@ -1,0 +1,34 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "program": "${workspaceFolder}/src/AVAIntegrationModeler.API/bin/Debug/net9.0/AVAIntegrationModeler.API.dll",
+      "name": "API",
+      "type": "coreclr",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/src/AVAIntegrationModeler.API"
+    },
+    {
+      "program": "${workspaceFolder}/src/AVAIntegrationModeler.Web.SyncfusionApp/bin/Debug/net9.0/AVAIntegrationModeler.Web.SyncfusionApp.dll",
+      "name": "Web",
+      "type": "coreclr",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/src/AVAIntegrationModeler.Web.SyncfusionApp",
+      "console": "internalConsole",
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "API + Web",
+      "configurations": [
+        "API",
+        "Web"
+      ],
+      "stopAll": true
+    }
+  ]
+}
