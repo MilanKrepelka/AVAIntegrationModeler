@@ -158,25 +158,20 @@
             </div>
         }
 
-        @if (IsEditMode)
+        @* Přehled změn se načítá z průvodce vývojem; zde se zobrazí až po načtení.
+           Načítání a chyba se zde ukazují jen při zavřeném průvodci (jinak jsou v průvodci). *@
+        @if (IsEditMode && (_changesSummary is not null || (!_wizardActive && (_loadingSummary || _summaryError is not null))))
         {
             <div class="row" style="margin-top:24px">
                 <div class="col-12">
                     <h5>@Localization.SharedResources.Deployments_ChangesSummaryTitle</h5>
 
-                    @if (!_loadingSummary && _changesSummary is null && _summaryError is null)
-                    {
-                        <SfButton CssClass="e-outline e-small" Type="Button" OnClick="LoadChangesSummaryAsync">
-                            @Localization.SharedResources.Deployments_LoadChangesSummary
-                        </SfButton>
-                    }
-
-                    @if (_loadingSummary)
+                    @if (_loadingSummary && !_wizardActive)
                     {
                         <div class="text-muted" style="font-size:.875rem">@Localization.SharedResources.Common_Loading</div>
                     }
 
-                    @if (_summaryError is not null)
+                    @if (_summaryError is not null && !_wizardActive)
                     {
                         <div class="alert alert-danger" style="padding:.4rem .8rem; font-size:.875rem">@_summaryError</div>
                         <SfButton CssClass="e-outline e-small" Type="Button" OnClick="LoadChangesSummaryAsync">@Localization.SharedResources.Common_TryAgain</SfButton>
@@ -269,31 +264,6 @@
                     }
                 </div>
             </div>
-        }
-
-        @if (IsEditMode)
-        {
-            <div style="margin-top:16px; display:flex; gap:8px; flex-wrap:wrap">
-                <SfButton CssClass="e-outline" Type="Button" OnClick="ExportAsync">
-                    @Localization.SharedResources.Deployments_ExportDataModels
-                </SfButton>
-                <SfButton CssClass="e-success e-outline" Type="Button" OnClick="UploadToAvaPlaceAsync" Disabled="@_avaPlaceLoading">
-                    @(_avaPlaceLoading ? Localization.SharedResources.Deployments_Uploading : Localization.SharedResources.Deployments_UploadToAvaPlace)
-                </SfButton>
-                <SfButton CssClass="e-info" Type="Button" OnClick="ExportDocumentationAsync" Disabled="@_docsExportLoading">
-                    @(_docsExportLoading ? "Exportuji..." : "Export dokumentace")
-                </SfButton>
-            </div>
-            @if (_docsExportError is not null && !_wizardActive)
-            {
-                <div class="alert alert-danger" style="margin-top:8px">@_docsExportError</div>
-            }
-            @if (_avaPlaceMessage is not null && !_wizardActive)
-            {
-                <div class="alert @(_avaPlaceSuccess ? "alert-success" : "alert-danger")" style="margin-top:8px; font-size:.875rem; white-space:pre-line">
-                    @_avaPlaceMessage
-                </div>
-            }
         }
 
         @if (IsEditMode && !_wizardActive)
