@@ -5,8 +5,26 @@ using Syncfusion.Blazor.Grids;
 
 namespace AVAIntegrationModeler.Web.SyncfusionApp.Components.Widgets;
 
+/// <summary>
+/// Editační model pole datového modelu používaný v dialogu <see cref="DataModelFieldEditor"/>.
+/// </summary>
 public class DataModelFieldEditModel
 {
+  /// <summary>
+  /// Validační hláška pro chybějící název pole.
+  /// </summary>
+  public const string NameRequiredMessage = "Název pole je povinný.";
+
+  /// <summary>
+  /// Validační hláška pro chybějící popisek pole.
+  /// </summary>
+  public const string LabelRequiredMessage = "Popisek pole je povinný.";
+
+  /// <summary>
+  /// Validační hláška pro chybějící popis pole.
+  /// </summary>
+  public const string DescriptionRequiredMessage = "Popis pole je povinný.";
+
   public Guid Id { get; set; } = Guid.NewGuid();
   public string Name { get; set; } = string.Empty;
   public string Label { get; set; } = string.Empty;
@@ -19,6 +37,24 @@ public class DataModelFieldEditModel
   public List<Guid> ReferencedEntityTypeIds { get; set; } = [];
   public string ExpressionValue { get; set; } = string.Empty;
   public int? ExpressionOrder { get; set; }
+
+  /// <summary>
+  /// Vrátí validační chybu názvu pole, nebo prázdný řetězec, pokud je název vyplněný.
+  /// </summary>
+  public string GetNameError()
+    => string.IsNullOrWhiteSpace(Name) ? NameRequiredMessage : string.Empty;
+
+  /// <summary>
+  /// Vrátí validační chybu popisku pole, nebo prázdný řetězec, pokud je popisek vyplněný.
+  /// </summary>
+  public string GetLabelError()
+    => string.IsNullOrWhiteSpace(Label) ? LabelRequiredMessage : string.Empty;
+
+  /// <summary>
+  /// Vrátí validační chybu popisu pole, nebo prázdný řetězec, pokud je popis vyplněný.
+  /// </summary>
+  public string GetDescriptionError()
+    => string.IsNullOrWhiteSpace(Description) ? DescriptionRequiredMessage : string.Empty;
 }
 
 public partial class DataModelFieldEditor : ComponentBase
@@ -39,6 +75,8 @@ public partial class DataModelFieldEditor : ComponentBase
   private bool _isNew;
   private bool _isDialogOpen;
   private string _nameError = string.Empty;
+  private string _labelError = string.Empty;
+  private string _descriptionError = string.Empty;
 
   private static readonly List<FieldTypeItem> FieldTypeOptions =
     Enum.GetValues<DataModelFieldType>()
@@ -88,6 +126,8 @@ public partial class DataModelFieldEditor : ComponentBase
     _editingField = new DataModelFieldEditModel();
     _isNew = true;
     _nameError = string.Empty;
+    _labelError = string.Empty;
+    _descriptionError = string.Empty;
     _isDialogOpen = true;
   }
 
@@ -110,6 +150,8 @@ public partial class DataModelFieldEditor : ComponentBase
     };
     _isNew = false;
     _nameError = string.Empty;
+    _labelError = string.Empty;
+    _descriptionError = string.Empty;
     _isDialogOpen = true;
   }
 
@@ -127,13 +169,11 @@ public partial class DataModelFieldEditor : ComponentBase
   {
     if (_editingField is null) return;
 
-    if (string.IsNullOrWhiteSpace(_editingField.Name))
-    {
-      _nameError = "Název pole je povinný.";
+    _nameError = _editingField.GetNameError();
+    _labelError = _editingField.GetLabelError();
+    _descriptionError = _editingField.GetDescriptionError();
+    if (_nameError.Length > 0 || _labelError.Length > 0 || _descriptionError.Length > 0)
       return;
-    }
-
-    _nameError = string.Empty;
 
     if (!NeedsReferences)
       _editingField.ReferencedEntityTypeIds.Clear();
@@ -178,5 +218,7 @@ public partial class DataModelFieldEditor : ComponentBase
     _isDialogOpen = false;
     _editingField = null;
     _nameError = string.Empty;
+    _labelError = string.Empty;
+    _descriptionError = string.Empty;
   }
 }

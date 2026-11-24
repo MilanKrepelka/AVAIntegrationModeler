@@ -57,12 +57,20 @@
                         }
                     </div>
                     <div class="col-12 col-md-6">
-                        <SfTextBox Placeholder="Popisek" FloatLabelType="FloatLabelType.Always"
+                        <SfTextBox Placeholder="Popisek *" FloatLabelType="FloatLabelType.Always"
                                    @bind-Value="_editingField.Label" CssClass="w-100" />
+                        @if (!string.IsNullOrEmpty(_labelError))
+                        {
+                            <small class="text-danger">@_labelError</small>
+                        }
                     </div>
                     <div class="col-12">
-                        <SfTextArea Placeholder="Popis" FloatLabelType="FloatLabelType.Always"
+                        <SfTextArea Placeholder="Popis *" FloatLabelType="FloatLabelType.Always"
                                     @bind-Value="_editingField.Description" Rows="2" CssClass="w-100" />
+                        @if (!string.IsNullOrEmpty(_descriptionError))
+                        {
+                            <small class="text-danger">@_descriptionError</small>
+                        }
                     </div>
                     <div class="col-12">
                         <label class="form-label mb-1">Typ pole</label>
